@@ -17,7 +17,7 @@ from sklearn.utils.validation import check_is_fitted, check_random_state, check_
 from ..base import BaseEstimator, ExplainerMixin
 from ..distance import pairwise_subsequence_distance
 from ..transform._sax import SAX
-from ..transform._shapelet import RandomShapeletTransform, ShapeletMixin
+from ..transform._shapelet import RandomShapeletMixin, ShapeletTransform
 from ..utils.validation import check_array, check_option
 
 try:
@@ -813,7 +813,7 @@ class ShapeletImportance(ExplainerMixin, PermuteImportance):
 
     _parameter_constraints: dict = {
         **PermuteImportance._parameter_constraints,
-        **ShapeletMixin._parameter_constraints,
+        **RandomShapeletMixin._parameter_constraints,
     }
 
     def __init__(
@@ -874,7 +874,7 @@ class ShapeletImportance(ExplainerMixin, PermuteImportance):
         X, y = self._validate_data(X, y, reset=False)
 
         random_state = check_random_state(self.random_state)
-        self.shapelet_transform_ = RandomShapeletTransform(
+        self.shapelet_transform_ = ShapeletTransform(
             n_shapelets=self.n_shapelets,
             metric=self.metric,
             min_shapelet_size=self.min_shapelet_size,

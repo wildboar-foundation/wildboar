@@ -20,7 +20,7 @@ from sklearn.utils._param_validation import HasMethods, Interval, StrOptions
 from sklearn.utils.validation import check_is_fitted, check_scalar
 
 from ..base import BaseEstimator
-from ..transform._shapelet import ShapeletMixin
+from ..transform._shapelet import RandomShapeletMixin
 from ..tree import (
     ExtraShapeletTreeClassifier,
     ExtraShapeletTreeRegressor,
@@ -271,7 +271,9 @@ class BaggingClassifier(BaseBagging, SklearnBaggingClassifier):
         base_estimator="deprecated",
     ):
         super().__init__(
-            estimator=ShapeletTreeClassifier() if estimator is None else estimator,
+            estimator=ShapeletTreeClassifier(strategy="random")
+            if estimator is None
+            else estimator,
             n_estimators=n_estimators,
             max_samples=max_samples,
             bootstrap=bootstrap,
@@ -532,6 +534,8 @@ class ShapeletForestClassifier(BaseShapeletForestClassifier):
         **ForestMixin._parameter_constraints,
         **ShapeletTreeClassifier._parameter_constraints,
     }
+    _parameter_constraints.pop("shapelet_size")
+    _parameter_constraints.pop("sample_size")
 
     def __init__(  # noqa: PLR0913 # noqa: PLR0913
         self,
@@ -557,7 +561,7 @@ class ShapeletForestClassifier(BaseShapeletForestClassifier):
         random_state=None,
     ):
         super().__init__(
-            estimator=ShapeletTreeClassifier(),
+            estimator=ShapeletTreeClassifier(strategy="random"),
             estimator_params=(
                 "max_depth",
                 "n_shapelets",
@@ -815,7 +819,9 @@ class BaggingRegressor(BaseBagging, SklearnBaggingRegressor):
         base_estimator="deprecated",
     ):
         super().__init__(
-            estimator=ShapeletTreeRegressor() if estimator is None else estimator,
+            estimator=ShapeletTreeRegressor(strategy="random")
+            if estimator is None
+            else estimator,
             n_estimators=n_estimators,
             max_samples=max_samples,
             bootstrap=bootstrap,
@@ -1082,7 +1088,7 @@ class ShapeletForestRegressor(BaseShapeletForestRegressor):
         random_state=None,
     ):
         super().__init__(
-            estimator=ShapeletTreeRegressor(),
+            estimator=ShapeletTreeRegressor(strategy="random"),
             estimator_params=(
                 "max_depth",
                 "n_shapelets",
@@ -1527,7 +1533,7 @@ class IsolationShapeletForest(OutlierMixin, ForestMixin, BaseBagging):
 
     _parameter_constraints: dict = {
         **ForestMixin._parameter_constraints,
-        **ShapeletMixin._parameter_constraints,
+        **RandomShapeletMixin._parameter_constraints,
         "contamination": [StrOptions({"auto"}), Interval(Real, 0, 0.5, closed="right")],
         "max_samples": [
             None,

@@ -241,9 +241,7 @@ class BaseTreeClassifier(ClassifierMixin, BaseTree, metaclass=ABCMeta):
         """
         self._validate_params()
         if check_input:
-            x, y = self._validate_data(
-                x, y, allow_3d=True, ensure_ts_array=True, dtype=float
-            )
+            x, y = self._validate_data(x, y, allow_3d=True, dtype=float)
             check_classification_targets(y)
         else:
             x = self._validate_not_check_input(x)

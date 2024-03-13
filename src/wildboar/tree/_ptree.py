@@ -7,7 +7,7 @@ import warnings
 import numpy as np
 from sklearn.utils._param_validation import Interval, StrOptions
 
-from wildboar.utils.validation import check_option
+from wildboar.utils.validation import _check_ts_array, check_option
 
 from ..distance._distance import _METRICS
 from ..distance._multi_metric import make_metrics
@@ -269,7 +269,7 @@ class ProximityTreeClassifier(BaseTreeClassifier):
         PivotSampler = _PIVOT_SAMPLER[self.pivot_sample]
         MetricSampler = _METRICS_SAMPLER[self.metric_sample]
         tree_builder = TreeBuilder(
-            x,
+            _check_ts_array(x),
             sample_weights,
             PivotSampler(),
             MetricSampler(len(metrics), weights=weights),

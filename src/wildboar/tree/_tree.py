@@ -16,7 +16,7 @@ from ..tree._ctree import (
     TreeAttributeGenerator,
     TreeBuilder,
 )
-from ..utils.validation import check_option
+from ..utils.validation import _check_ts_array, check_option
 from ._base import BaseTree, BaseTreeClassifier, BaseTreeRegressor
 
 CLF_CRITERION = {"gini": GiniCriterion, "entropy": EntropyCriterion}
@@ -54,7 +54,7 @@ class BaseFeatureTreeRegressor(FeatureTreeMixin, BaseTreeRegressor):
     ):
         Criterion = REG_CRITERION[self.criterion]
         return TreeBuilder(
-            x,
+            _check_ts_array(x),
             sample_weights,
             generator,
             Criterion(y),
@@ -64,9 +64,11 @@ class BaseFeatureTreeRegressor(FeatureTreeMixin, BaseTreeRegressor):
             min_sample_split=self.min_samples_split,
             min_sample_leaf=self.min_samples_leaf,
             min_impurity_decrease=self.min_impurity_decrease,
-            impurity_equality_tolerance=self.impurity_equality_tolerance
-            if self.impurity_equality_tolerance is not None
-            else -1,  # Disable maximizing gap
+            impurity_equality_tolerance=(
+                self.impurity_equality_tolerance
+                if self.impurity_equality_tolerance is not None
+                else -1
+            ),  # Disable maximizing gap
         )
 
 
@@ -88,7 +90,7 @@ class BaseFeatureTreeClassifier(FeatureTreeMixin, BaseTreeClassifier):
     ):
         Criterion = CLF_CRITERION[self.criterion]
         return TreeBuilder(
-            x,
+            _check_ts_array(x),
             sample_weights,
             generator,
             Criterion(y, self.n_classes_),
@@ -98,9 +100,11 @@ class BaseFeatureTreeClassifier(FeatureTreeMixin, BaseTreeClassifier):
             min_sample_split=self.min_samples_split,
             min_sample_leaf=self.min_samples_leaf,
             min_impurity_decrease=self.min_impurity_decrease,
-            impurity_equality_tolerance=self.impurity_equality_tolerance
-            if self.impurity_equality_tolerance is not None
-            else -1,  # Disable maximizing gap
+            impurity_equality_tolerance=(
+                self.impurity_equality_tolerance
+                if self.impurity_equality_tolerance is not None
+                else -1
+            ),  # Disable maximizing gap
         )
 
 
@@ -123,6 +127,8 @@ class ShapeletTreeRegressor(DynamicTreeMixin, ShapeletMixin, BaseFeatureTreeRegr
 
     Parameters
     ----------
+    n_shapelets : int, optional
+        The number of shapelets to sample at each node.
     max_depth : int, optional
         The maximum depth of the tree. If `None` the tree is
         expanded until all leaves are pure or until all leaves contain less
@@ -142,8 +148,29 @@ class ShapeletTreeRegressor(DynamicTreeMixin, ShapeletMixin, BaseFeatureTreeRegr
         - If None, we never consider the separation gap.
 
         .. versionadded:: 1.3
-    n_shapelets : int, optional
-        The number of shapelets to sample at each node.
+    strategy : {"best", "random"}, optional
+        The strategy for selecting shapelets.
+
+        - If "random", `n_shapelets` shapelets are randomly selected in the
+          range defined by `min_shapelet_size` and `max_shapelet_size`
+        - If "best", `n_shapelets` shapelets are selected per input sample
+          of the size determined by `shapelet_size`.
+
+        .. versionadded:: 1.3
+            Add support for the "best" strategy. The default will change to
+            "best" in 1.4.
+    shapelet_size : int, float or array-like, optional
+        The shapelet size if `strategy="best"`.
+
+        - If int, the exact shapelet size.
+        - If float, a fraction of the number of input timestep.
+        - If array-like, a list of float or int.
+
+        .. versionadded:: 1.3
+    sample_size : float, optional
+        The size of the sample to determine the shapelets, if `shapelet_size="best"`.
+
+        .. versionadded:: 1.3
     min_shapelet_size : float, optional
         The minimum length of a shapelets expressed as a fraction of
         *n_timestep*.
@@ -162,7 +189,7 @@ class ShapeletTreeRegressor(DynamicTreeMixin, ShapeletMixin, BaseFeatureTreeRegr
         - if `alpha > 0`, the number of sampled shapelets increase from `1`
             towards `n_shapelets` with increased depth.
         - if `None`, the number of sampled shapelets are the same
-            independeth of depth.
+            independent of depth.
     metric : str or list, optional
         - If `str`, the distance metric used to identify the best
             shapelet.
@@ -172,12 +199,12 @@ class ShapeletTreeRegressor(DynamicTreeMixin, ShapeletMixin, BaseFeatureTreeRegr
             specification. A parameter grid specification is a dict with two
             mandatory and one optional key-value pairs defining the lower and
             upper bound on the values and number of values in the grid. For
-            example, to specifiy a grid over the argument `r` with 10
+            example, to specify a grid over the argument `r` with 10
             values in the range 0 to 1, we would give the following
             specification: `dict(min_r=0, max_r=1, num_r=10)`.
 
             Read more about metric specifications in the `User guide
-            <metric_specification>`__
+            <metric_specification>`__.
 
         .. versionchanged:: 1.2
             Added support for multi-metric shapelet transform
@@ -204,6 +231,35 @@ class ShapeletTreeRegressor(DynamicTreeMixin, ShapeletMixin, BaseFeatureTreeRegr
     ----------
     tree_ : Tree
         The internal tree representation
+
+    Notes
+    -----
+    When `strategy` is set to `"best"`, the shapelet tree is constructed by
+    selecting the top `n_shapelets` per sample. The initial construction of the
+    matrix profile for each sample may be computationally intensive for large
+    datasets. To balance accuracy and computational efficiency, the
+    `sample_size` parameter can be adjusted to determine the number of samples
+    utilized to compute the minimum distance annotation.
+
+    The significance of shapelets is determined by the difference between the
+    ab-join of a label with any other label and the self-join of the label,
+    selecting the shapelets with the greatest absolute values. This method is
+    detailed in the work of Zhu et al. (2020).
+
+    When `strategy` is set to `"random"`, the shapelet tree is constructed by
+    randomly sampling `n_shapelets` within the range defined by
+    `min_shapelet_size` and `max_shapelet_size`. This method is detailed in the
+    work of Karlsson et al. (2016).
+
+    References
+    ----------
+    Zhu, Y., et al. 2020.
+        The Swiss army knife of time series data mining: ten useful things you
+        can do with the matrix profile and ten lines of code. Data Mining and
+        Knowledge Discovery, 34, pp.949-979.
+    Karlsson, I., Papapetrou, P. and Boström, H., 2016.
+        Generalized random shapelet forests. Data mining and knowledge
+        discovery, 30, pp.1053-1085.
     """
 
     _parameter_constraints: dict = {
@@ -213,15 +269,18 @@ class ShapeletTreeRegressor(DynamicTreeMixin, ShapeletMixin, BaseFeatureTreeRegr
         "random_state": ["random_state"],
     }
 
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         *,
+        n_shapelets="log2",
         max_depth=None,
         min_samples_split=2,
         min_samples_leaf=1,
         min_impurity_decrease=0.0,
         impurity_equality_tolerance=None,
-        n_shapelets="log2",
+        strategy="warn",
+        shapelet_size=0.1,
+        sample_size=1.0,
         min_shapelet_size=0,
         max_shapelet_size=1,
         alpha=None,
@@ -239,6 +298,9 @@ class ShapeletTreeRegressor(DynamicTreeMixin, ShapeletMixin, BaseFeatureTreeRegr
         )
         self.random_state = random_state
         self.n_shapelets = n_shapelets
+        self.strategy = strategy
+        self.shapelet_size = shapelet_size
+        self.sample_size = sample_size
         self.min_shapelet_size = min_shapelet_size
         self.max_shapelet_size = max_shapelet_size
         self.metric = metric
@@ -300,6 +362,9 @@ class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
     _parameter_constraints: dict = {**ShapeletTreeRegressor._parameter_constraints}
     _parameter_constraints.pop("alpha")
     _parameter_constraints.pop("impurity_equality_tolerance")
+    _parameter_constraints.pop("shapelet_size")
+    _parameter_constraints.pop("sample_size")
+    _parameter_constraints.pop("strategy")
 
     def __init__(
         self,
@@ -322,6 +387,7 @@ class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
             min_samples_leaf=min_samples_leaf,
             min_impurity_decrease=min_impurity_decrease,
             n_shapelets=n_shapelets,
+            strategy="random",
             min_shapelet_size=min_shapelet_size,
             max_shapelet_size=max_shapelet_size,
             metric=metric,
@@ -335,7 +401,7 @@ class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
     ):
         Criterion = check_option(REG_CRITERION, self.criterion, "criterion")
         return ExtraTreeBuilder(
-            x,
+            _check_ts_array(x),
             sample_weights,
             generator,
             Criterion(y),
@@ -357,8 +423,15 @@ class ShapeletTreeClassifier(
 
     Parameters
     ----------
-    n_shapelets : int, optional
-        The number of shapelets to sample at each node.
+    n_shapelets : int or {"log2", "sqrt", "auto"}, optional
+        The number of shapelets in the resulting transform.
+
+        - if, "auto" the number of shapelets depend on the value of `strategy`.
+          For "best" the number is 1; and for "random" it is 1000.
+        - if, "log2", the number of shaplets is the log2 of the total possible
+          number of shapelets.
+        - if, "sqrt", the number of shaplets is the square root of the total
+          possible number of shapelets.
     max_depth : int, optional
         The maximum depth of the tree. If `None` the tree is expanded until all
         leaves are pure or until all leaves contain less than `min_samples_split`
@@ -378,6 +451,29 @@ class ShapeletTreeClassifier(
         - If None, we never consider the separation gap.
 
         .. versionadded:: 1.3
+    strategy : {"best", "random"}, optional
+        The strategy for selecting shapelets.
+
+        - If "random", `n_shapelets` shapelets are randomly selected in the
+          range defined by `min_shapelet_size` and `max_shapelet_size`
+        - If "best", `n_shapelets` shapelets are selected per input sample
+          of the size determined by `shapelet_size`.
+
+        .. versionadded:: 1.3
+            Add support for the "best" strategy. The default will change to
+            "best" in 1.4.
+    shapelet_size : int, float or array-like, optional
+        The shapelet size if `strategy="best"`.
+
+        - If int, the exact shapelet size.
+        - If float, a fraction of the number of input timestep.
+        - If array-like, a list of float or int.
+
+        .. versionadded:: 1.3
+    sample_size : float, optional
+        The size of the sample to determine the shapelets, if `shapelet_size="best"`.
+
+        .. versionadded:: 1.3
     min_shapelet_size : float, optional
         The minimum length of a sampled shapelet expressed as a fraction, computed
         as `min(ceil(X.shape[-1] * min_shapelet_size), 2)`.
@@ -394,12 +490,31 @@ class ShapeletTreeClassifier(
           `n_shapelets` towards 1 with increased depth.
         - if :math:`alpha > 0`, the number of sampled shapelets increase from
           `1` towards `n_shapelets` with increased depth.
-        - if `None`, the number of sampled shapelets are the same independeth
+        - if `None`, the number of sampled shapelets are the same independent
           of depth.
-    metric : {"euclidean", "scaled_euclidean", "dtw", "scaled_dtw"}, optional
-        Distance metric used to identify the best shapelet.
+    metric : str or list, optional
+        - If `str`, the distance metric used to identify the best
+            shapelet.
+        - If `list`, multiple metrics specified as a list of
+            tuples, where the first element of the tuple is a metric name and
+            the second element a dictionary with a parameter grid
+            specification. A parameter grid specification is a dict with two
+            mandatory and one optional key-value pairs defining the lower and
+            upper bound on the values and number of values in the grid. For
+            example, to specify a grid over the argument `r` with 10
+            values in the range 0 to 1, we would give the following
+            specification: `dict(min_r=0, max_r=1, num_r=10)`.
+
+            Read more about metric specifications in the `User guide
+            <metric_specification>`__.
+
+        .. versionchanged:: 1.2
+            Added support for multi-metric shapelet transform
     metric_params : dict, optional
-        Parameters for the distance measure.
+        Parameters for the distance measure. Ignored unless metric is a string.
+
+        Read more about the parameters in the `User guide
+        <list_of_subsequence_metrics>`__.
     criterion : {"entropy", "gini"}, optional
         The criterion used to evaluate the utility of a split.
     class_weight : dict or "balanced", optional
@@ -428,6 +543,35 @@ class ShapeletTreeClassifier(
     --------
     ShapeletTreeRegressor : A shapelet tree regressor.
     ExtraShapeletTreeClassifier : An extra random shapelet tree classifier.
+
+    Notes
+    -----
+    When `strategy` is set to `"best"`, the shapelet tree is constructed by
+    selecting the top `n_shapelets` per sample. The initial construction of the
+    matrix profile for each sample may be computationally intensive for large
+    datasets. To balance accuracy and computational efficiency, the
+    `sample_size` parameter can be adjusted to determine the number of samples
+    utilized to compute the minimum distance annotation.
+
+    The significance of shapelets is determined by the difference between the
+    ab-join of a label with any other label and the self-join of the label,
+    selecting the shapelets with the greatest absolute values. This method is
+    detailed in the work of Zhu et al. (2020).
+
+    When `strategy` is set to `"random"`, the shapelet tree is constructed by
+    randomly sampling `n_shapelets` within the range defined by
+    `min_shapelet_size` and `max_shapelet_size`. This method is detailed in the
+    work of Karlsson et al. (2016).
+
+    References
+    ----------
+    Zhu, Y., et al. 2020.
+        The Swiss army knife of time series data mining: ten useful things you
+        can do with the matrix profile and ten lines of code. Data Mining and
+        Knowledge Discovery, 34, pp.949-979.
+    Karlsson, I., Papapetrou, P. and Boström, H., 2016.
+        Generalized random shapelet forests. Data mining and knowledge
+        discovery, 30, pp.1053-1085.
     """
 
     _parameter_constraints: dict = {
@@ -437,7 +581,7 @@ class ShapeletTreeClassifier(
         "random_state": ["random_state"],
     }
 
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         *,
         n_shapelets="log2",
@@ -446,6 +590,9 @@ class ShapeletTreeClassifier(
         min_samples_leaf=1,
         min_impurity_decrease=0.0,
         impurity_equality_tolerance=None,
+        strategy="warn",
+        shapelet_size=0.1,
+        sample_size=1.0,
         min_shapelet_size=0.0,
         max_shapelet_size=1.0,
         alpha=None,
@@ -464,6 +611,9 @@ class ShapeletTreeClassifier(
         )
         self.random_state = random_state
         self.n_shapelets = n_shapelets
+        self.strategy = strategy
+        self.shapelet_size = shapelet_size
+        self.sample_size = sample_size
         self.min_shapelet_size = min_shapelet_size
         self.max_shapelet_size = max_shapelet_size
         self.metric = metric
@@ -529,6 +679,9 @@ class ExtraShapeletTreeClassifier(ShapeletTreeClassifier):
     _parameter_constraints: dict = {**ShapeletTreeClassifier._parameter_constraints}
     _parameter_constraints.pop("alpha")
     _parameter_constraints.pop("impurity_equality_tolerance")
+    _parameter_constraints.pop("shapelet_size")
+    _parameter_constraints.pop("sample_size")
+    _parameter_constraints.pop("strategy")
 
     def __init__(
         self,
@@ -552,6 +705,7 @@ class ExtraShapeletTreeClassifier(ShapeletTreeClassifier):
             min_samples_leaf=min_samples_leaf,
             min_impurity_decrease=min_impurity_decrease,
             n_shapelets=n_shapelets,
+            strategy="random",
             min_shapelet_size=min_shapelet_size,
             max_shapelet_size=max_shapelet_size,
             metric=metric,
@@ -566,7 +720,7 @@ class ExtraShapeletTreeClassifier(ShapeletTreeClassifier):
     ):
         Criterion = check_option(CLF_CRITERION, self.criterion, "criterion")
         return ExtraTreeBuilder(
-            x,
+            _check_ts_array(x),
             sample_weights,
             generator,
             Criterion(y, self.n_classes_),

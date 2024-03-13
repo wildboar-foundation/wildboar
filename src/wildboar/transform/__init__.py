@@ -19,12 +19,14 @@ from ._shapelet import (
     CastorTransform,
     DilatedShapeletTransform,
     RandomShapeletTransform,
+    ShapeletTransform,
 )
 
 __all__ = [
     "convolve",
     "symbolic_aggregate_approximation",
     "piecewice_aggregate_approximation",
+    "ShapeletTransform",
     "RandomShapeletTransform",
     "RocketTransform",
     "IntervalTransform",

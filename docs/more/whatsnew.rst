@@ -83,6 +83,14 @@ Wildboar 1.2 introduces several new models.
        a (small) non negative float.
      - |Feature| Add support for plotting decision trees using the
        :func:`~wildboar.tree.plot_tree` function.
+     - |Feature| Add support for different strategies when constructing
+       shapelet trees. When `strategy="best"`, we use the matrix profile
+       to find the best shapelets per sample in the sizes determined by the
+       `shapelet_size` parameter. We can tune the trade-off between accuracy
+       and computational cost by setting the `sample_size` parameter. The tree
+       defaults to `strategy="random"` to retain backward compatibility. The
+       default value will change to `strategy="best"` in 1.4 and we issue a
+       deprecation warning.
 
 
   .. grid-item-card::
@@ -92,3 +100,12 @@ Wildboar 1.2 introduces several new models.
 
      - |API| Deprecate the "sample" argument for `intervals` in interval-based
        transformations. To sub-sample intervals, set `sample_size` to a float.
+     - |API| Deprecate :class:`~wildboar.transform.RandomShapeletTransform`
+       which will be removed in 1.4. Use
+       :class:`~wildboar.transform.ShapeletTransform` with `strategy="random"`
+       to keep the current behavior after 1.4.
+     - |Feature| Add a new class :class:`~wildboar.transform.ShapeletTransform` that
+       accept an additional parameter `strategy` which can be set to `"random"`
+       or `"best"`. If set to `"best"` we use the matrix profile to find the best
+       shapelets per sample to use in the transformation. The shapelet size is
+       determined by the `shapelet_size` parameter.

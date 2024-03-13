@@ -132,6 +132,60 @@ cdef class ShapeletAttributeGenerator(AttributeGenerator):
         attribute.attribute = s
         return 0
 
+cdef class FixedShapeletAttributeGenerator(ShapeletAttributeGenerator):
+    cdef const Py_ssize_t[:, :] shapelet_start
+    cdef const Py_ssize_t[:, :] shapelet_length
+
+    def __init__(
+        self,
+        SubsequenceMetric metric,
+        const Py_ssize_t[:, :] shapelet_start,
+        const Py_ssize_t[:, :] shapelet_length,
+    ):
+        super().__init__(metric)
+        self.shapelet_start = shapelet_start
+        self.shapelet_length = shapelet_length
+
+    def __reduce__(self):
+        return self.__class__, (
+            self.metric,
+            self.shapelet_start.base,
+            self.shapelet_length.base
+        )
+
+    cdef Py_ssize_t get_n_attributes(
+        self, Py_ssize_t *samples, Py_ssize_t n_samples
+    ) noexcept nogil:
+        return n_samples * self.shapelet_start.shape[1]
+
+    cdef Py_ssize_t next_attribute(
+        self,
+        Py_ssize_t attribute_id,
+        TSArray X,
+        Py_ssize_t *samples,
+        Py_ssize_t n_samples,
+        Attribute *transient,
+        uint32_t *random_seed
+    ) noexcept nogil:
+        cdef Py_ssize_t sample_index = samples[attribute_id % n_samples]
+        cdef Py_ssize_t shapelet_index = attribute_id % self.shapelet_start.shape[1]
+        cdef Py_ssize_t shapelet_start = self.shapelet_start[sample_index, shapelet_index]
+        cdef Py_ssize_t shapelet_length = self.shapelet_length[sample_index, shapelet_index]
+        cdef SubsequenceView *v = <SubsequenceView*> malloc(sizeof(SubsequenceView))
+
+        transient.dim = 0
+        self.metric.init_transient(
+            X,
+            v,
+            sample_index,
+            shapelet_start,
+            shapelet_length,
+            0,
+        )
+        transient.attribute = v
+        return 1
+
+
 cdef class RandomShapeletAttributeGenerator(ShapeletAttributeGenerator):
 
     cdef Py_ssize_t n_shapelets

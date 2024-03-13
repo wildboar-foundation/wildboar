@@ -21,8 +21,8 @@ from wildboar.utils.estimator_checks import check_estimator
 @pytest.mark.parametrize(
     "clf",
     [
-        ShapeletTreeClassifier(n_shapelets=10),
-        ShapeletTreeRegressor(n_shapelets=10),
+        ShapeletTreeClassifier(strategy="random", n_shapelets=10),
+        ShapeletTreeRegressor(strategy="random", n_shapelets=10),
         ExtraShapeletTreeClassifier(n_shapelets=10),
         ExtraShapeletTreeRegressor(n_shapelets=10),
     ],
@@ -33,9 +33,36 @@ def test_check_estimator(clf):
     check_estimator(clf)
 
 
+def test_shapelet_tree_strategy_best():
+    X, y = load_gun_point()
+    t = ShapeletTreeClassifier(
+        strategy="best",
+        shapelet_size=0.1,
+        sample_size=0.1,
+        n_shapelets=1,
+        metric="scaled_euclidean",
+        random_state=1,
+    ).fit(X, y)
+    expected_left = np.array([1, 2, -1, 4, -1, -1, 7, -1, 9, -1, 11, -1, -1])
+    expected_right = np.array([6, 3, -1, 5, -1, -1, 8, -1, 10, -1, 12, -1, -1])
+
+    # fmt: off
+    expected_threshold = np.array(
+            [0.78738805, 2.23066515, 0.        , 1.83841356, 0.        ,
+             0.        , 2.67736822, 0.        , 2.71344458, 0.        ,
+             0.45726085, 0.        , 0.        ]
+    )
+    # fmt: on
+    assert_almost_equal(t.tree_.left, expected_left)
+    assert_almost_equal(t.tree_.right, expected_right)
+    assert_almost_equal(
+        t.tree_.threshold[t.tree_.left != -1], expected_threshold[expected_left != -1]
+    )
+
+
 def test_shapelet_tree_apply():
     x_train, x_test, y_train, y_test = load_gun_point(False)
-    f = ShapeletTreeClassifier(n_shapelets=10, random_state=123)
+    f = ShapeletTreeClassifier(n_shapelets=10, strategy="random", random_state=123)
     f.fit(x_test, y_test)
     actual_apply = f.apply(x_train)
     # fmt:off
@@ -52,7 +79,7 @@ def test_shapelet_tree_apply():
 
 def test_shapelet_tree_decision_path():
     x_train, x_test, y_train, y_test = load_gun_point(False)
-    f = ShapeletTreeClassifier(n_shapelets=10, random_state=123)
+    f = ShapeletTreeClassifier(n_shapelets=10, strategy="random", random_state=123)
     f.fit(x_test, y_test)
     actual_decision_path = f.decision_path(x_train)
     expected_decision_path = np.zeros((50, 21), dtype=bool)
@@ -366,7 +393,9 @@ def test_extra_tree_regressor():
 
 def test_impurity_equality_tolerance():
     X_train, X_test, y_train, y_test = load_gun_point(merge_train_test=False)
-    f = ShapeletTreeClassifier(impurity_equality_tolerance=0.1, random_state=1)
+    f = ShapeletTreeClassifier(
+        impurity_equality_tolerance=0.1, strategy="random", random_state=1
+    )
     f.fit(X_train, y_train)
     actual_apply = f.apply(X_test)
     # fmt:off
@@ -388,7 +417,8 @@ def test_impurity_equality_tolerance():
 @pytest.mark.parametrize(
     "clf",
     [
-        ShapeletTreeClassifier(),
+        ShapeletTreeClassifier(strategy="random"),
+        ShapeletTreeClassifier(strategy="best"),
         ExtraShapeletTreeClassifier(),
         ShapeletTreeClassifier(impurity_equality_tolerance=0.0),
     ],

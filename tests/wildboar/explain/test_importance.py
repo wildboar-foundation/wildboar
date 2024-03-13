@@ -38,7 +38,7 @@ def test_is_explainer(explainer):
 
 def test_interval_importance():
     x_train, x_test, y_train, y_test = load_two_lead_ecg(False)
-    clf = ShapeletTreeClassifier(n_shapelets=1000, random_state=123)
+    clf = ShapeletTreeClassifier(n_shapelets=1000, strategy="random", random_state=123)
     clf.fit(x_train, y_train)
 
     imp = IntervalImportance(scoring="accuracy", random_state=123)
@@ -54,7 +54,7 @@ def test_interval_importance():
 
 def test_amplitude_importance():
     x_train, x_test, y_train, y_test = load_two_lead_ecg(False)
-    clf = ShapeletTreeClassifier(n_shapelets=1000, random_state=123)
+    clf = ShapeletTreeClassifier(n_shapelets=1000, strategy="random", random_state=123)
     clf.fit(x_train, y_train)
 
     imp = AmplitudeImportance(scoring="accuracy", random_state=123)
@@ -68,7 +68,7 @@ def test_amplitude_importance():
 
 def test_shapelet_importance():
     x_train, x_test, y_train, y_test = load_two_lead_ecg(False)
-    clf = ShapeletTreeClassifier(n_shapelets=1000, random_state=123)
+    clf = ShapeletTreeClassifier(n_shapelets=1000, strategy="random", random_state=123)
     clf.fit(x_train, y_train)
 
     imp = ShapeletImportance(scoring="accuracy", random_state=123)
