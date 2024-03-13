@@ -145,8 +145,8 @@ smallest distances.
    clf.score(X_test, y_test)
 
 
-Castor classifier
-=================
+Castor transform
+================
 
 Castor (Competing diAlated Shapelet TransfORm) [#samsten]_ is a transformation
 technique for time series data. Analogous to Hydra, Castor enables shapelets to

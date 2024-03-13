@@ -1,0 +1,395 @@
+
+**************************
+:py:mod:`wildboar.segment`
+**************************
+
+.. py:module:: wildboar.segment
+
+.. autoapi-nested-parse::
+
+   
+   Segment time series into regions.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   wildboar.segment.FlussSegmenter
+
+
+
+
+.. py:class:: FlussSegmenter(n_segments=1, *, window=1.0, exclude=0.2, boundary=0.1, metric='euclidean', metric_params=None, n_jobs=None)
+
+
+
+
+   
+   Segmenter using the MatrixProfile and corrected ARC curve.
+
+   Compute the Fast Low-cost Unipotent Semantic Segmentation (FLUSS)
+   as described by Gharghabi (2017).
+
+   :Parameters:
+
+       **n_segments** : int, optional
+           The number of segments.
+
+       **window** : int or float, optional
+           The window size.
+           
+           - if int, the exact window size.
+           - if float, the window size expressed as a fraction of the time series
+             length.
+
+       **exclude** : int or float, optional
+           The exclusion zone.
+           
+           - if float, expressed as a fraction of the window size.
+           - if int, exact size.
+
+       **boundary** : float, optional
+           The boundary of the ignored region around each segment expressed as a
+           fraction of the window size.
+
+       **metric** : str or callable, optional
+           The distance metric
+           
+           See ``_METRICS.keys()`` for a list of supported metrics.
+
+       **metric_params** : dict, optional
+           Parameters to the metric.
+           
+           Read more about the parameters in the
+           :ref:`User guide <list_of_metrics>`.
+
+       **n_jobs** : int, optional
+           The number of parallel jobs to compute the matrix profile.
+
+
+
+
+
+
+
+
+
+
+   .. rubric:: References
+
+   Gharghabi, Shaghayegh, et al. (2017)
+       Matrix profile VIII: domain agnostic online semantic segmentation at superhuman
+       performance levels. In proceedings of International Conference on Data Mining
+
+   .. only:: latex
+
+      
+
+
+   :Attributes:
+
+       **labels_** : list of shape (n_samples, )
+           A list of n_samples lists with the start index of the segment.
+
+
+   ..
+       !! processed by numpydoc !!
+   .. py:method:: fit(X, y=None)
+
+      
+      Fit the segmenter.
+
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_timesteps)
+              The samples.
+
+          **y** : ignored, optional
+              Ignored.
+
+      :Returns:
+
+          self
+              The estimator.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: fit_transform(X, y=None, **fit_params)
+
+      
+      Fit to data, then transform it.
+
+      Fits transformer to `X` and `y` with optional parameters `fit_params`
+      and returns a transformed version of `X`.
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_features)
+              Input samples.
+
+          **y** :  array-like of shape (n_samples,) or (n_samples, n_outputs),                 default=None
+              Target values (None for unsupervised transformations).
+
+          **\*\*fit_params** : dict
+              Additional fit parameters.
+
+      :Returns:
+
+          **X_new** : ndarray array of shape (n_samples, n_features_new)
+              Transformed array.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: predict(X)
+
+      
+      Predict the position with the change point.
+
+      The predicted segmentation is based on the  closest sample from the
+      training data.
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_timesteps)
+              The input data.
+
+      :Returns:
+
+          csr_array of shape (n_samples, n_timesteps)
+              A boolean array with the start of the change point set to True.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_output(*, transform=None)
+
+      
+      Set output container.
+
+      See :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py`
+      for an example on how to use the API.
+
+      :Parameters:
+
+          **transform** : {"default", "pandas"}, default=None
+              Configure output of `transform` and `fit_transform`.
+              
+              - `"default"`: Default output format of a transformer
+              - `"pandas"`: DataFrame output
+              - `"polars"`: Polars output
+              - `None`: Transform configuration is unchanged
+              
+              .. versionadded:: 1.4
+                  `"polars"` option was added.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: transform(X)
+
+      
+      Transform X such that each segment is labeled with a unique label.
+
+      The predicted segmentation is based on the  closest sample from the
+      training data.
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_timesteps)
+              The input data.
+
+      :Returns:
+
+          ndarray of shape (n_samples, n_timesteps)
+              An array with the segments annotated with a label.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+

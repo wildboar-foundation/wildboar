@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>wildboar.distance &#8212; Wildboar 1.3.0.dev36+gdaccf9bb4 documentation</title>
+    <title>wildboar.distance &#8212; Wildboar 1.3.0.dev49+g088161d3b documentation</title>
   
   
   
@@ -41,7 +41,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script src="../../../_static/documentation_options.js?v=96c7a2d8"></script>
+    <script src="../../../_static/documentation_options.js?v=ac91c5ad"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -416,6 +416,7 @@ document.write(`
 <li class="toctree-l1"><a class="reference internal" href="../linear_model/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.linear_model</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../metrics/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.metrics</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../model_selection/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.model_selection</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../segment/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.segment</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../transform/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.transform</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tree/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.tree</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils</span></code></a></li>
@@ -517,25 +518,22 @@ examples.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.distance.distance_profile" title="wildboar.distance.distance_profile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">distance_profile</span></code></a>(y, x, *[, dilation, padding, dim, ...])</p></td>
 <td><p>Compute the distance profile.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.distance.matrix_profile" title="wildboar.distance.matrix_profile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">matrix_profile</span></code></a>(x[, y, window, dim, exclude, n_jobs, ...])</p></td>
-<td><p>Compute the matrix profile.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.distance.paired_distance" title="wildboar.distance.paired_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">paired_distance</span></code></a>(x, y, *[, dim, metric, metric_params, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.distance.paired_distance" title="wildboar.distance.paired_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">paired_distance</span></code></a>(x, y, *[, dim, metric, metric_params, ...])</p></td>
 <td><p>Compute the distance between the i:th time series.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.distance.paired_subsequence_distance" title="wildboar.distance.paired_subsequence_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">paired_subsequence_distance</span></code></a>(y, x, *[, dim, metric, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.distance.paired_subsequence_distance" title="wildboar.distance.paired_subsequence_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">paired_subsequence_distance</span></code></a>(y, x, *[, dim, metric, ...])</p></td>
 <td><p>Minimum subsequence distance between the i:th subsequence and time series.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.distance.paired_subsequence_match" title="wildboar.distance.paired_subsequence_match"><code class="xref py py-obj docutils literal notranslate"><span class="pre">paired_subsequence_match</span></code></a>(y, x[, threshold, dim, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.distance.paired_subsequence_match" title="wildboar.distance.paired_subsequence_match"><code class="xref py py-obj docutils literal notranslate"><span class="pre">paired_subsequence_match</span></code></a>(y, x[, threshold, dim, ...])</p></td>
 <td><p>Find matching subsequnces.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.distance.pairwise_distance" title="wildboar.distance.pairwise_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pairwise_distance</span></code></a>(x[, y, dim, metric, metric_params, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.distance.pairwise_distance" title="wildboar.distance.pairwise_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pairwise_distance</span></code></a>(x[, y, dim, metric, metric_params, ...])</p></td>
 <td><p>Compute the distance between subsequences and time series.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.distance.pairwise_subsequence_distance" title="wildboar.distance.pairwise_subsequence_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pairwise_subsequence_distance</span></code></a>(y, x, *[, dim, metric, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.distance.pairwise_subsequence_distance" title="wildboar.distance.pairwise_subsequence_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pairwise_subsequence_distance</span></code></a>(y, x, *[, dim, metric, ...])</p></td>
 <td><p>Minimum subsequence distance between subsequences and time series.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.distance.subsequence_match" title="wildboar.distance.subsequence_match"><code class="xref py py-obj docutils literal notranslate"><span class="pre">subsequence_match</span></code></a>(y, x[, threshold, dim, metric, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.distance.subsequence_match" title="wildboar.distance.subsequence_match"><code class="xref py py-obj docutils literal notranslate"><span class="pre">subsequence_match</span></code></a>(y, x[, threshold, dim, metric, ...])</p></td>
 <td><p>Find matching subsequnces.</p></td>
 </tr>
 </tbody>
@@ -1526,70 +1524,6 @@ implication.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="wildboar.distance.matrix_profile">
-<span class="sig-prename descclassname"><span class="pre">wildboar.distance.</span></span><span class="sig-name descname"><span class="pre">matrix_profile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/distance/_matrix_profile.py#L12-L149"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.matrix_profile" title="Link to this definition">#</a></dt>
-<dd><p>Compute the matrix profile.</p>
-<ul class="simple">
-<li><p>If only <code class="docutils literal notranslate"><span class="pre">x</span></code> is given, compute the similarity self-join of every subsequence in
-<code class="docutils literal notranslate"><span class="pre">x</span></code> of size <code class="docutils literal notranslate"><span class="pre">window</span></code> to its nearest neighbor in <cite>x</cite> excluding trivial matches
-according to the <code class="docutils literal notranslate"><span class="pre">exclude</span></code> parameter.</p></li>
-<li><p>If both <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> are given, compute the similarity join of every
-subsequenec in <code class="docutils literal notranslate"><span class="pre">y</span></code> of size <code class="docutils literal notranslate"><span class="pre">window</span></code> to its nearest neighbor in <code class="docutils literal notranslate"><span class="pre">x</span></code> excluding
-matches according to the <code class="docutils literal notranslate"><span class="pre">exclude</span></code> parameter.</p></li>
-</ul>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>x</strong><span class="classifier">array-like of shape (n_timestep, ), (n_samples, xn_timestep) or         (n_samples, n_dim, xn_timestep)</span></dt><dd><p>The first time series.</p>
-</dd>
-<dt><strong>y</strong><span class="classifier">array-like of shape (n_timestep, ), (n_samples, yn_timestep) or         (n_samples, n_dim, yn_timestep), optional</span></dt><dd><p>The optional second time series. y is broadcast to the shape of x if possible.</p>
-</dd>
-<dt><strong>window</strong><span class="classifier">int or float, optional</span></dt><dd><p>The subsequence size, by default 5</p>
-<ul class="simple">
-<li><p>if float, a fraction of <cite>y.shape[-1]</cite>.</p></li>
-<li><p>if int, the exact subsequence size.</p></li>
-</ul>
-</dd>
-<dt><strong>dim</strong><span class="classifier">int, optional</span></dt><dd><p>The dim to compute the matrix profile for, by default 0.</p>
-</dd>
-<dt><strong>exclude</strong><span class="classifier">int or float, optional</span></dt><dd><p>The size of the exclusion zone. The default exclusion zone is  0.2 for
-similarity self-join and 0.0 for similarity join.</p>
-<ul class="simple">
-<li><p>if float, expressed as a fraction of the windows size.</p></li>
-<li><p>if int, exact size (0 &gt;= exclude &lt; window).</p></li>
-</ul>
-</dd>
-<dt><strong>n_jobs</strong><span class="classifier">int, optional</span></dt><dd><p>The number of jobs to use when computing the profile.</p>
-</dd>
-<dt><strong>return_index</strong><span class="classifier">bool, optional</span></dt><dd><p>Return the matrix profile index.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>mp</strong><span class="classifier">ndarray of shape (profile_size, ) or (n_samples, profile_size)</span></dt><dd><p>The matrix profile.</p>
-</dd>
-<dt><strong>mpi</strong><span class="classifier">ndarray of shape (profile_size, ) or (n_samples, profile_size), optional</span></dt><dd><p>The matrix profile index.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-<p class="rubric">Notes</p>
-<p>The <cite>profile_size</cite> depends on the input.</p>
-<ul class="simple">
-<li><p>If <cite>y</cite> is <cite>None</cite>, <cite>profile_size</cite> is  <code class="docutils literal notranslate"><span class="pre">x.shape[-1]</span> <span class="pre">-</span> <span class="pre">window</span> <span class="pre">+</span> <span class="pre">1</span></code></p></li>
-<li><p>If <cite>y</cite> is not <cite>None</cite>, <cite>profile_size</cite> is <code class="docutils literal notranslate"><span class="pre">y.shape[-1]</span> <span class="pre">-</span> <span class="pre">window</span> <span class="pre">+</span> <span class="pre">1</span></code></p></li>
-</ul>
-<p class="rubric">References</p>
-<dl class="simple">
-<dt>Yeh, C. C. M. et al. (2016).</dt><dd><p>Matrix profile I: All pairs similarity joins for time series: a unifying view
-that includes motifs, discords and shapelets. In 2016 IEEE 16th international
-conference on data mining (ICDM)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="wildboar.distance.paired_distance">
 <span class="sig-prename descclassname"><span class="pre">wildboar.distance.</span></span><span class="sig-name descname"><span class="pre">paired_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'warn'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/distance/_distance.py#L836-L939"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.paired_distance" title="Link to this definition">#</a></dt>
 <dd><p>Compute the distance between the i:th time series.</p>
@@ -2052,7 +1986,6 @@ implication.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.distance.argmin_distance"><code class="docutils literal notranslate"><span class="pre">argmin_distance</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.distance.argmin_subsequence_distance"><code class="docutils literal notranslate"><span class="pre">argmin_subsequence_distance</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.distance.distance_profile"><code class="docutils literal notranslate"><span class="pre">distance_profile</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.distance.matrix_profile"><code class="docutils literal notranslate"><span class="pre">matrix_profile</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.distance.paired_distance"><code class="docutils literal notranslate"><span class="pre">paired_distance</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.distance.paired_subsequence_distance"><code class="docutils literal notranslate"><span class="pre">paired_subsequence_distance</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.distance.paired_subsequence_match"><code class="docutils literal notranslate"><span class="pre">paired_subsequence_match</span></code></a></li>

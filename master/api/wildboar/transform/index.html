@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>wildboar.transform &#8212; Wildboar 1.3.0.dev36+gdaccf9bb4 documentation</title>
+    <title>wildboar.transform &#8212; Wildboar 1.3.0.dev49+g088161d3b documentation</title>
   
   
   
@@ -41,7 +41,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script src="../../../_static/documentation_options.js?v=96c7a2d8"></script>
+    <script src="../../../_static/documentation_options.js?v=ac91c5ad"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -60,7 +60,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="wildboar.tree" href="../tree/index.html" />
-    <link rel="prev" title="wildboar.model_selection" href="../model_selection/index.html" />
+    <link rel="prev" title="wildboar.segment" href="../segment/index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -416,6 +416,7 @@ document.write(`
 <li class="toctree-l1"><a class="reference internal" href="../linear_model/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.linear_model</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../metrics/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.metrics</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../model_selection/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.model_selection</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../segment/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.segment</span></code></a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.transform</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tree/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.tree</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils</span></code></a></li>
@@ -526,6 +527,9 @@ document.write(`
 <tr class="row-even"><td><p><a class="reference internal" href="#wildboar.transform.SAX" title="wildboar.transform.SAX"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SAX</span></code></a></p></td>
 <td><p>Symbolic aggregate approximation.</p></td>
 </tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.transform.ShapeletTransform" title="wildboar.transform.ShapeletTransform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ShapeletTransform</span></code></a></p></td>
+<td><p>Shapelet Transform.</p></td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -546,7 +550,7 @@ document.write(`
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.transform.CastorTransform">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform.</span></span><span class="sig-name descname"><span class="pre">CastorTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_shapelets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize_prob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">11</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">soft_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">soft_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">soft_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/transform/_shapelet.py#L232-L322"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.CastorTransform" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform.</span></span><span class="sig-name descname"><span class="pre">CastorTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_shapelets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize_prob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">11</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">soft_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">soft_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">soft_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/transform/_shapelet.py#L389-L479"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.CastorTransform" title="Link to this definition">#</a></dt>
 <dd><p>Competing Dialated Shapelet Transform.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1065,7 +1069,7 @@ possible to update each component of a nested object.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.transform.DilatedShapeletTransform">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform.</span></span><span class="sig-name descname"><span class="pre">DilatedShapeletTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_shapelets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize_prob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/transform/_shapelet.py#L325-L416"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.DilatedShapeletTransform" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform.</span></span><span class="sig-name descname"><span class="pre">DilatedShapeletTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_shapelets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize_prob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/transform/_shapelet.py#L482-L573"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.DilatedShapeletTransform" title="Link to this definition">#</a></dt>
 <dd><p>Dilated shapelet transform.</p>
 <p>Transform time series to a representation consisting of three
 values per shapelet: minimum dilated distance, the index of
@@ -2652,7 +2656,7 @@ possible to update each component of a nested object.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.transform.RandomShapeletTransform">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform.</span></span><span class="sig-name descname"><span class="pre">RandomShapeletTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_shapelets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/transform/_shapelet.py#L419-L514"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.RandomShapeletTransform" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform.</span></span><span class="sig-name descname"><span class="pre">RandomShapeletTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_shapelets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/transform/_shapelet.py#L577-L676"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.RandomShapeletTransform" title="Link to this definition">#</a></dt>
 <dd><p>Random shapelet tranform.</p>
 <p>Transform a time series to the distances to a selection of random
 shapelets.</p>
@@ -3306,6 +3310,287 @@ possible to update each component of a nested object.</p>
 
 </dd></dl>
 
+<dl class="py class">
+<dt class="sig sig-object py" id="wildboar.transform.ShapeletTransform">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform.</span></span><span class="sig-name descname"><span class="pre">ShapeletTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_shapelets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'random'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/transform/_shapelet.py#L679-L818"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.ShapeletTransform" title="Link to this definition">#</a></dt>
+<dd><p>Shapelet Transform.</p>
+<p>Transform a time series to the distances to a selection of shapelets. The
+transform is unsupervised if <cite>strategy=”random”</cite> and supervised if
+<cite>strategy=”best”</cite>.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>n_shapelets</strong><span class="classifier">int or {“log2”, “sqrt”, “auto”}, optional</span></dt><dd><p>The number of shapelets in the resulting transform.</p>
+<ul class="simple">
+<li><p>if, “auto” the number of shapelets depend on the value of <cite>strategy</cite>.
+For “best” the number is 1; and for “random” it is 1000.</p></li>
+<li><p>if, “log2”, the number of shaplets is the log2 of the total possible
+number of shapelets.</p></li>
+<li><p>if, “sqrt”, the number of shaplets is the square root of the total
+possible number of shapelets.</p></li>
+</ul>
+</dd>
+<dt><strong>metric</strong><span class="classifier">str or list, optional</span></dt><dd><ul class="simple">
+<li><p>If str, the distance metric used to identify the best shapelet.</p></li>
+<li><dl class="simple">
+<dt>If list, multiple metrics specified as a list of tuples, where the first</dt><dd><p>element of the tuple is a metric name and the second element a dictionary
+with a parameter grid specification. A parameter grid specification is a
+dict with two mandatory and one optional key-value pairs defining the
+lower and upper bound on the values and number of values in the grid. For
+example, to specify a grid over the argument ‘r’ with 10 values in the
+range 0 to 1, we would give the following specification: <code class="docutils literal notranslate"><span class="pre">dict(min_r=0,</span>
+<span class="pre">max_r=1,</span> <span class="pre">num_r=10)</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Read more about the metrics and their parameters in the
+<a class="reference internal" href="../../../guide/metrics.html#list-of-subsequence-metrics"><span class="std std-ref">User guide</span></a>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Multiple metrics are only supported if <cite>strategy=”random”</cite>.</p>
+</div>
+</dd>
+<dt><strong>metric_params</strong><span class="classifier">dict, optional</span></dt><dd><p>Parameters for the distance measure. Ignored unless metric is a string.</p>
+<p>Read more about the parameters in the <a class="reference internal" href="../../../guide/metrics.html#list-of-subsequence-metrics"><span class="std std-ref">User guide</span></a>.</p>
+</dd>
+<dt><strong>strategy</strong><span class="classifier">{“best”, “random”}, optional</span></dt><dd><p>The strategy for selecting shapelets.</p>
+<ul class="simple">
+<li><p>If “random”, <cite>n_shapelets</cite> shapelets are randomly selected in the
+range defined by <cite>min_shapelet_size</cite> and <cite>max_shapelet_size</cite></p></li>
+<li><p>If “best”, <cite>n_shapelets</cite> shapelets are selected per input sample
+of the size determined by <cite>shapelet_size</cite>.</p></li>
+</ul>
+<p>If strategy is set to “best”, the transformation is supervised and requires
+<cite>y</cite>.</p>
+</dd>
+<dt><strong>shapelet_size</strong><span class="classifier">int, float or array-like, optional</span></dt><dd><p>The shapelet size if <cite>strategy=”best”</cite>.</p>
+<ul class="simple">
+<li><p>If int, the exact shapelet size.</p></li>
+<li><p>If float, a fraction of the number of input timestep.</p></li>
+<li><p>If array-like, a list of float or int.</p></li>
+</ul>
+</dd>
+<dt><strong>sample_size</strong><span class="classifier">float, optional</span></dt><dd><p>The size of the sample to determine the shapelets, if <cite>shapelet_size=”best”</cite>.</p>
+</dd>
+<dt><strong>min_shapelet_size</strong><span class="classifier">float, optional</span></dt><dd><p>Minimum shapelet size.</p>
+</dd>
+<dt><strong>max_shapelet_size</strong><span class="classifier">float, optional</span></dt><dd><p>Maximum shapelet size.</p>
+</dd>
+<dt><strong>random_state</strong><span class="classifier">int or RandomState, optional</span></dt><dd><ul class="simple">
+<li><p>If <cite>int</cite>, <cite>random_state</cite> is the seed used by the random number generator</p></li>
+<li><p>If <cite>RandomState</cite> instance, <cite>random_state</cite> is the random number generator</p></li>
+<li><dl class="simple">
+<dt>If <cite>None</cite>, the random number generator is the <cite>RandomState</cite> instance used</dt><dd><p>by <cite>np.random</cite>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+<dt><strong>n_jobs</strong><span class="classifier">int, optional</span></dt><dd><p>The number of jobs to run in parallel. None means 1 and -1 means using all
+processors.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<dl class="simple">
+<dt>Wistuba, Martin, Josif Grabocka, and Lars Schmidt-Thieme.</dt><dd><p>Ultra-fast shapelets for time series classification. arXiv preprint
+arXiv:1503.05018 (2015).</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Transform each time series to the minimum DTW distance to each shapelet</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">wildboar.dataset</span> <span class="kn">import</span> <span class="n">load_gunpoint</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">wildboar.transform</span> <span class="kn">import</span> <span class="n">ShapeletTransform</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">ShapeletTransform</span><span class="p">(</span><span class="n">metric</span><span class="o">=</span><span class="s2">&quot;dtw&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Transform each time series to the either the minimum DTW distance, with r randomly
+set set between 0 and 1 or ERP distance with g between 0 and 1.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">ShapeletTransform</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">metric</span><span class="o">=</span><span class="p">[</span>
+<span class="gp">... </span>        <span class="p">(</span><span class="s2">&quot;dtw&quot;</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="n">min_r</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">max_r</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)),</span>
+<span class="gp">... </span>        <span class="p">(</span><span class="s2">&quot;erp&quot;</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="n">min_g</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">max_g</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)),</span>
+<span class="gp">... </span>    <span class="p">]</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Transform each time series to the scaled euclidean distance between the most
+promising shapelet of size 38:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">ShapeletTransform</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">,</span> <span class="n">shapelet_size</span><span class="o">=</span><span class="mi">38</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>embedding_</strong><span class="classifier">Embedding</span></dt><dd><p>The underlying embedding object.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.transform.ShapeletTransform.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/transform/_base.py#L55-L79"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.ShapeletTransform.fit" title="Link to this definition">#</a></dt>
+<dd><p>Fit the transform.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)</span></dt><dd><p>The time series dataset.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">None, optional</span></dt><dd><p>For compatibility.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>BaseAttributeTransform</dt><dd><p>This object.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.transform.ShapeletTransform.fit_transform">
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/transform.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.ShapeletTransform.fit_transform" title="Link to this definition">#</a></dt>
+<dd><p>Fit the embedding and return the transform of x.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)</span></dt><dd><p>The time series dataset.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">None, optional</span></dt><dd><p>For compatibility.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray of shape (n_samples, n_outputs)</dt><dd><p>The embedding.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.transform.ShapeletTransform.get_metadata_routing">
+<span class="sig-name descname"><span class="pre">get_metadata_routing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/transform.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.ShapeletTransform.get_metadata_routing" title="Link to this definition">#</a></dt>
+<dd><p>Get metadata routing of this object.</p>
+<p>Please check <a class="reference external" href="https://scikit-learn.org/stable/metadata_routing.html#metadata-routing" title="(in scikit-learn v1.4)"><span class="xref std std-ref">User Guide</span></a> on how the routing
+mechanism works.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>routing</strong><span class="classifier">MetadataRequest</span></dt><dd><p>A <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.utils.metadata_routing.MetadataRequest.html#sklearn.utils.metadata_routing.MetadataRequest" title="(in scikit-learn v1.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetadataRequest</span></code></a> encapsulating
+routing information.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.transform.ShapeletTransform.get_params">
+<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/transform.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.ShapeletTransform.get_params" title="Link to this definition">#</a></dt>
+<dd><p>Get parameters for this estimator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deep</strong><span class="classifier">bool, default=True</span></dt><dd><p>If True, will return the parameters for this estimator and
+contained subobjects that are estimators.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>params</strong><span class="classifier">dict</span></dt><dd><p>Parameter names mapped to their values.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.transform.ShapeletTransform.set_output">
+<span class="sig-name descname"><span class="pre">set_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/transform.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.ShapeletTransform.set_output" title="Link to this definition">#</a></dt>
+<dd><p>Set output container.</p>
+<p>See <a class="reference external" href="https://scikit-learn.org/stable/auto_examples/miscellaneous/plot_set_output.html#sphx-glr-auto-examples-miscellaneous-plot-set-output-py" title="(in scikit-learn v1.4)"><span>Introducing the set_output API</span></a>
+for an example on how to use the API.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>transform</strong><span class="classifier">{“default”, “pandas”}, default=None</span></dt><dd><p>Configure output of <cite>transform</cite> and <cite>fit_transform</cite>.</p>
+<ul class="simple">
+<li><p><cite>“default”</cite>: Default output format of a transformer</p></li>
+<li><p><cite>“pandas”</cite>: DataFrame output</p></li>
+<li><p><cite>“polars”</cite>: Polars output</p></li>
+<li><p><cite>None</cite>: Transform configuration is unchanged</p></li>
+</ul>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.4: </span><cite>“polars”</cite> option was added.</p>
+</div>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.transform.ShapeletTransform.set_params">
+<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/transform.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.ShapeletTransform.set_params" title="Link to this definition">#</a></dt>
+<dd><p>Set the parameters of this estimator.</p>
+<p>The method works on simple estimators as well as on nested objects
+(such as <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it’s
+possible to update each component of a nested object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>**params</strong><span class="classifier">dict</span></dt><dd><p>Estimator parameters.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.transform.ShapeletTransform.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/transform.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.ShapeletTransform.transform" title="Link to this definition">#</a></dt>
+<dd><p>Transform the dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)</span></dt><dd><p>The time series dataset.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray of shape (n_samples, n_outputs)</dt><dd><p>The transformation.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.transform.convolve">
 <span class="sig-prename descclassname"><span class="pre">wildboar.transform.</span></span><span class="sig-name descname"><span class="pre">convolve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dilation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/transform/_conv.py#L9-L69"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.convolve" title="Link to this definition">#</a></dt>
@@ -3432,12 +3717,12 @@ distributed bins or <code class="docutils literal notranslate"><span class="pre"
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../model_selection/index.html"
+       href="../segment/index.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.model_selection</span></code></p>
+        <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.segment</span></code></p>
       </div>
     </a>
     <a class="right-next"
@@ -3597,6 +3882,16 @@ distributed bins or <code class="docutils literal notranslate"><span class="pre"
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.transform.SAX.get_params"><code class="docutils literal notranslate"><span class="pre">SAX.get_params</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.transform.SAX.set_output"><code class="docutils literal notranslate"><span class="pre">SAX.set_output</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.transform.SAX.set_params"><code class="docutils literal notranslate"><span class="pre">SAX.set_params</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.transform.ShapeletTransform"><code class="docutils literal notranslate"><span class="pre">ShapeletTransform</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.transform.ShapeletTransform.fit"><code class="docutils literal notranslate"><span class="pre">ShapeletTransform.fit</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.transform.ShapeletTransform.fit_transform"><code class="docutils literal notranslate"><span class="pre">ShapeletTransform.fit_transform</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.transform.ShapeletTransform.get_metadata_routing"><code class="docutils literal notranslate"><span class="pre">ShapeletTransform.get_metadata_routing</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.transform.ShapeletTransform.get_params"><code class="docutils literal notranslate"><span class="pre">ShapeletTransform.get_params</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.transform.ShapeletTransform.set_output"><code class="docutils literal notranslate"><span class="pre">ShapeletTransform.set_output</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.transform.ShapeletTransform.set_params"><code class="docutils literal notranslate"><span class="pre">ShapeletTransform.set_params</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.transform.ShapeletTransform.transform"><code class="docutils literal notranslate"><span class="pre">ShapeletTransform.transform</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.transform.convolve"><code class="docutils literal notranslate"><span class="pre">convolve</span></code></a></li>

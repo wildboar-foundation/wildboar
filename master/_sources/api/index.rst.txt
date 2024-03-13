@@ -65,6 +65,10 @@ API Reference
 
 
 
+   /api/wildboar/segment/index
+
+
+
    /api/wildboar/transform/index
 
 
