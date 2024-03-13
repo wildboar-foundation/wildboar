@@ -76,3 +76,24 @@ def test_make_metrics():
             ]
         ),
     )
+    metrics, weights = make_metrics(dict(spec))
+
+    assert len(metrics) == 1 + 10
+    assert_almost_equal(
+        weights,
+        np.array(
+            [
+                0.5,
+                0.05,
+                0.05,
+                0.05,
+                0.05,
+                0.05,
+                0.05,
+                0.05,
+                0.05,
+                0.05,
+                0.05,
+            ]
+        ),
+    )
