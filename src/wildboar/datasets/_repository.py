@@ -631,7 +631,13 @@ class RepositoryCollection:
     def __getitem__(self, key):
         if not self._initialized:
             self._initialized = True
-            self.refresh(timeout=3)
+            self.refresh(timeout=10)
+            if len(self.repositories) == 0:
+                warnings.warn(
+                    "Initial repository refresh timed out. "
+                    "Please use `refresh_repositories` to initialize the repositories.",
+                    UserWarning,
+                )
 
         repository = next(
             (repository for repository in self.repositories if repository.name == key),

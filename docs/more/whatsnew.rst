@@ -54,6 +54,16 @@ Wildboar 1.2 introduces several new models.
 
   .. grid-item-card::
 
+     :mod:`wildboar.datasets`
+     ^^^
+
+     - |Fix| Increase the timeout upon first use. We also issue a better error
+       message to alert the user to use
+       :func:`~wildboar.datasets.refresh_repositories` to refresh the
+       repositories.
+
+  .. grid-item-card::
+
      :mod:`wildboar.distance`
      ^^^
 
