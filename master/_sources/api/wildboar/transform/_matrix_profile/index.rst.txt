@@ -19,6 +19,11 @@ Classes
 
 
 
+
+.. raw:: html
+
+   <br />
+
 .. py:class:: MatrixProfileTransform(window=0.1, exclude=None, n_jobs=None)
 
 

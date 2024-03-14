@@ -20,6 +20,11 @@ Classes
 
 
 
+
+.. raw:: html
+
+   <br />
+
 .. py:class:: RocketMixin
 
 

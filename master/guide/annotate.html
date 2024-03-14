@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Annotate &#8212; Wildboar 1.3.0.dev49+g088161d3b documentation</title>
+    <title>Annotate &#8212; Wildboar 1.3.0.dev56+gb6bf824b5 documentation</title>
   
   
   
@@ -41,7 +41,7 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script src="../_static/documentation_options.js?v=ac91c5ad"></script>
+    <script src="../_static/documentation_options.js?v=4c68f6a6"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -426,6 +426,7 @@ document.write(`
 <li class="toctree-l3"><a class="reference internal" href="unsupervised/outlier/generation.html">Outlier detection benchmarks</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="unsupervised/segmentation.html">Segmentation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="unsupervised/transform.html">Time series transform</a></li>
 </ul>
 </li>
@@ -489,6 +490,203 @@ document.write(`
                   
   <section id="annotate">
 <span id="guide-annotate"></span><h1>Annotate<a class="headerlink" href="#annotate" title="Link to this heading">#</a></h1>
+<section id="matrixprofile">
+<h2>MatrixProfile<a class="headerlink" href="#matrixprofile" title="Link to this heading">#</a></h2>
+<p>The matrix profile is a data structure and accompanying algorithms that provide
+valuable insights into time series data. It was introduced by Yeh et al (2016),
+and is designed to solve various time
+series problems in a computationally efficient manner.</p>
+<p>Recall that a time series is a sequence of data points typically measured at
+successive points in time, spaced at uniform time intervals. Examples include
+daily stock prices, monthly rainfall amounts, yearly temperatures, etc. In the
+context of time series, a subsequence is a contiguous portion of the time
+series. For example, if you have daily temperature readings for a year, a
+subsequence might be the temperatures from June 1 to June 30.</p>
+<p>One of the primary applications of the matrix profile is motif discovery. A
+motif in time series analysis is a pattern (or subsequence) that occurs
+frequently. Identifying motifs can be crucial for understanding repetitive
+behaviors or trends in the data. The matrix profile can also help in detecting
+anomalies, which are subsequences that differ significantly from the rest of
+the time series. These can indicate errors, extraordinary events, or other
+significant deviations from the norm. Beyond motif discovery and anomaly
+detection, the matrix profile can be used for tasks such as time series
+forecasting, clustering, classification, and segmentation.</p>
+<p>In summary, the matrix profile is a powerful tool for time series analysis that
+can help uncover patterns, detect anomalies, and perform various other
+analytical tasks on sequential data.</p>
+<section id="matrixprofile-data-structure">
+<h3>MatrixProfile data structure<a class="headerlink" href="#matrixprofile-data-structure" title="Link to this heading">#</a></h3>
+<p>The matrix profile itself is a vector that stores the z-normalized Euclidean
+distance between each subsequence within a time series and its nearest,
+non-trivial match. A non-trivial match is the most similar subsequence that is
+not trivially similar (i.e., not overlapping significantly with the subsequence
+in question). The original algorithm to compute the matrix profile, STOMP
+(Scalable Time series Ordered-search Matrix Profile), and its subsequent
+improvements like STAMP (Scalable Time series Anytime Matrix Profile) and
+SCRIMP (Scalable Column-wise Recomputation of the Matrix Profile), allow for
+efficient computation of the matrix profile even for very large datasets.</p>
+<p>The Matrix Profile Index (MPI) is a data structure that accompanies the Matrix
+Profile, which is a novel algorithmic technique used for time series data
+analysis. The Matrix Profile itself is a vector that stores the z-normalized
+Euclidean distance of each subsequence within a time series to its nearest
+neighbor. This information is extremely useful for various time series tasks
+such as anomaly detection, motif discovery (finding repeated patterns), and
+discord discovery (finding unusual patterns).</p>
+<p>The Matrix Profile Index is a companion vector to the Matrix Profile and it
+stores the indices of the nearest neighbors. Each element of the Matrix Profile
+Index corresponds to an element in the Matrix Profile and indicates the
+location within the time series of the nearest neighbor for that subsequence.</p>
+<p>Together, the Matrix Profile and Matrix Profile Index provide a powerful tool
+for understanding the structure and patterns within time series data. They
+enable efficient solutions to many time series problems and are particularly
+useful because they can be computed in a relatively efficient manner, often
+allowing for scalability to very large datasets.</p>
+<p>To exemplify the use of the matrix profile, we first load a time series and
+plot it:</p>
+<div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">from</span> <span class="nn">wildboar.utils.plot</span> <span class="kn">import</span> <span class="n">plot_time_domain</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span>
+    <span class="s2">&quot;https://drive.google.com/uc?export=download&amp;id=1DYG3rwW_zpd-7lcgYeL0Y2nHtkr2Fi0O&quot;</span>
+<span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="mi">20000</span><span class="p">:</span><span class="mi">30000</span><span class="p">]</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">plot_time_domain</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="sd-card sd-sphinx-override sd-w-auto sd-m-auto sd-shadow-none sd-text-center docutils">
+<div class="sd-card-body docutils">
+<img alt="../_images/annotate-1.png" class="only-light card-image align-center" src="../_images/annotate-1.png" />
+<img alt="../_images/annotate-2.png" class="only-dark card-image align-center" src="../_images/annotate-2.png" />
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>We can import <a class="reference internal" href="../api/wildboar/distance/index.html#wildboar.distance.matrix_profile" title="wildboar.distance.matrix_profile"><code class="xref py py-func docutils literal notranslate"><span class="pre">matrix_profile</span></code></a> to compute the matrix
+profile for the time series:</p>
+<div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wildboar.distance</span> <span class="kn">import</span> <span class="n">matrix_profile</span>
+
+<span class="n">mp</span><span class="p">,</span> <span class="n">mpi</span> <span class="o">=</span> <span class="n">matrix_profile</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">return_index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;paired&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">matrix_profile</span></code>-function returns the matrix profile (<code class="docutils literal notranslate"><span class="pre">mp</span></code>) and
+optionally the matrix profile index if requested (if we set
+<code class="docutils literal notranslate"><span class="pre">return_index=True</span></code>).</p>
+<div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plot_time_domain</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">plot_time_domain</span><span class="p">(</span><span class="n">mp</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="sd-card sd-sphinx-override sd-w-auto sd-m-auto sd-shadow-none sd-text-center docutils">
+<div class="sd-card-body docutils">
+<img alt="../_images/annotate-5.png" class="only-light card-image align-center" src="../_images/annotate-5.png" />
+<img alt="../_images/annotate-6.png" class="only-dark card-image align-center" src="../_images/annotate-6.png" />
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>If we plot the matrix profile and the time series, we can observe that the
+minimum MP value is at 1374 and the maximum value is at
+4902. We can then use the MPI to discover that the MPI of
+1374 is at <code class="docutils literal notranslate"><span class="pre">mpi[mp.argmin()]</span></code>, that is at
+2155.</p>
+<p>We can plot the sub-sequences to observe the (dis)similarity:</p>
+<div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="sd-card sd-sphinx-override sd-w-auto sd-m-auto sd-shadow-none sd-text-center docutils">
+<div class="sd-card-body docutils">
+<img alt="../_images/annotate-7.png" class="only-light card-image align-center" src="../_images/annotate-7.png" />
+<img alt="../_images/annotate-8.png" class="only-dark card-image align-center" src="../_images/annotate-8.png" />
+</div>
+</div>
+</div>
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 sd-align-major-center sd-text-center docutils">
+<p><a class="reference download internal" download="" href="../_downloads/52e5b66579affc2a42b4a0160b64d2f0/annotate-7.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">source</span></code></a></p>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="motif-discovery">
+<h2>Motif discovery<a class="headerlink" href="#motif-discovery" title="Link to this heading">#</a></h2>
+<p>Motif discovery in time series refers to the process of identifying patterns or
+sub-sequences that recur within a longer time series data set. These motifs are
+significant because they often represent a behavior or feature that occurs
+repeatedly over time. The discovery of these motifs can provide insights into
+the underlying system that generated the time series, enabling better
+understanding, prediction, and anomaly detection. The process typically
+involves searching for subsequences that are similar to each other based on a
+predefined similarity threshold, which can be done using various algorithms
+such as brute force search, hashing, or more sophisticated methods like matrix
+profiles.</p>
+<p>In Wildboar, we implement the approach described by Yeh (2016) <a class="footnote-reference brackets" href="#mp" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>
+in the function <a class="reference internal" href="../api/wildboar/annotate/index.html#wildboar.annotate.motifs" title="wildboar.annotate.motifs"><code class="xref py py-func docutils literal notranslate"><span class="pre">motifs</span></code></a>. The function uses the matrix
+profile identify the time series which has the closest neighbors and selects
+those as motif candidates.</p>
+<div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wildboar.annotate</span> <span class="kn">import</span> <span class="n">motifs</span>
+
+<span class="n">motif_indices</span> <span class="o">=</span> <span class="n">motifs</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">mp</span><span class="o">=</span><span class="n">mp</span><span class="p">,</span> <span class="n">max_motifs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_distance</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sd-mt-0 execute-return highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">array</span><span class="p">([</span><span class="mi">1374</span><span class="p">,</span> <span class="mi">2155</span><span class="p">,</span> <span class="mi">1568</span><span class="p">,</span> <span class="mi">2356</span><span class="p">])]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<p>We can plot the motifs:</p>
+<div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="sd-card sd-sphinx-override sd-w-auto sd-m-auto sd-shadow-none sd-text-center docutils">
+<div class="sd-card-body docutils">
+<img alt="../_images/annotate-11.png" class="only-light card-image align-center" src="../_images/annotate-11.png" />
+<img alt="../_images/annotate-12.png" class="only-dark card-image align-center" src="../_images/annotate-12.png" />
+</div>
+</div>
+</div>
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 sd-align-major-center sd-text-center docutils">
+<p><a class="reference download internal" download="" href="../_downloads/397bb12c336b9f39f0603e0b8df3eea0/annotate-11.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">source</span></code></a></p>
+</div>
+</div>
+</div>
+</section>
+<section id="reference">
+<h2>Reference<a class="headerlink" href="#reference" title="Link to this heading">#</a></h2>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="mp" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>Yeh, C. C. M. et al. (2016). Matrix profile I: All pairs similarity
+joins for time series: a unifying view that includes motifs, discords and
+shapelets. In 2016 IEEE 16th international conference on data mining (ICDM)</p>
+</aside>
+</aside>
+</section>
 </section>
 
 
@@ -528,6 +726,23 @@ document.write(`
               
                 <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#matrixprofile">MatrixProfile</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#matrixprofile-data-structure">MatrixProfile data structure</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#motif-discovery">Motif discovery</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reference">Reference</a></li>
+</ul>
+  </nav></div>
 
   <div class="sidebar-secondary-item">
 

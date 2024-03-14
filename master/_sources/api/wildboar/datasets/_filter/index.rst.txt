@@ -22,6 +22,11 @@ Functions
 
 
 
+
+.. raw:: html
+
+   <br />
+
 .. py:function:: make_dict_filter(filter)
 
    

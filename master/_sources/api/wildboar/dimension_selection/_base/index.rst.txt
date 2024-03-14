@@ -20,6 +20,11 @@ Classes
 
 
 
+
+.. raw:: html
+
+   <br />
+
 .. py:class:: BaseDistanceSelector(*, sample=None, metric='euclidean', metric_params=None, n_jobs=None, random_state=None)
 
 

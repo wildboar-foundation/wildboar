@@ -76,6 +76,11 @@ Functions
 
 
 
+
+.. raw:: html
+
+   <br />
+
 .. py:class:: Bundle(*, key, version, name, tag=None, arrays=None, description=None, collections=None)
 
 

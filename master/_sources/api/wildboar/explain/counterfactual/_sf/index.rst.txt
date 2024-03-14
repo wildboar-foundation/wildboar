@@ -19,6 +19,11 @@ Classes
 
 
 
+
+.. raw:: html
+
+   <br />
+
 .. py:class:: ShapeletForestCounterfactual(*, cost='euclidean', aggregation='mean', epsilon=1.0, batch_size=0.1, max_paths=1.0, verbose=False, random_state=None)
 
 

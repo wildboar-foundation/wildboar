@@ -19,6 +19,11 @@ Classes
 
 
 
+
+.. raw:: html
+
+   <br />
+
 .. py:class:: SequentialDimensionSelector(estimator, *, n_dims='auto', cv=5, scoring=None, direction='forward', tol=None)
 
 

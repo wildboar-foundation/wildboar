@@ -19,6 +19,11 @@ Classes
 
 
 
+
+.. raw:: html
+
+   <br />
+
 .. py:class:: NativeGuideCounterfactual(*, metric='euclidean', metric_params=None, importance='interval', target='predict', window=2, max_iter=100, random_state=None, n_jobs=None)
 
 

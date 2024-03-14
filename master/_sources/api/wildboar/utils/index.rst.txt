@@ -41,6 +41,11 @@ Functions
 
 
 
+
+.. raw:: html
+
+   <br />
+
 .. py:function:: check_X_y(x, y, *, dtype=float, order='C', copy=False, ensure_2d=True, ensure_ts_array=False, allow_3d=False, allow_nd=False, force_all_finite=True, multi_output=False, ensure_min_samples=1, ensure_min_timesteps=1, ensure_min_dims=1, allow_eos=False, y_numeric=False, y_contiguous=True, estimator=None)
 
    

@@ -19,6 +19,11 @@ Functions
 
 
 
+
+.. raw:: html
+
+   <br />
+
 .. py:function:: check_estimator(estimator, generate_only=False, ignore=None, skip_scikit=False)
 
    

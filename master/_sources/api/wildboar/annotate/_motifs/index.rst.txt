@@ -19,7 +19,12 @@ Functions
 
 
 
-.. py:function:: motifs(x, mp=None, *, window='auto', exclude=0.2, max_distance='auto', max_neighbours=10, min_neighbours=1, max_motif=1, return_distance=False)
+
+.. raw:: html
+
+   <br />
+
+.. py:function:: motifs(x, mp=None, *, window='auto', exclude=0.2, max_distance='auto', max_neighbors=10, min_neighbors=1, max_motifs=1, return_distance=False)
 
    
    Find motifs.
@@ -47,17 +52,17 @@ Functions
        **max_distance** : str, optional
            The maximum distance between motifs.
 
-       **max_neighbours** : int, optional
-           The maximum number of neighbours
+       **max_neighbors** : int, optional
+           The maximum number of neighbours.
 
-       **min_neighbours** : int, optional
-           The minimum number of neighbours
+       **min_neighbors** : int, optional
+           The minimum number of neighbours.
 
-       **max_motif** : int, optional
+       **max_motifs** : int, optional
            The maximum number of motifs to return.
 
        **return_distance** : bool, optional
-           Return the distance from main to neighbours
+           Return the distance from main to neighbours.
 
    :Returns:
 

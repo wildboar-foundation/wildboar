@@ -54,6 +54,11 @@ Functions
 
 
 
+
+.. raw:: html
+
+   <br />
+
 .. py:class:: KNeighborsCounterfactual(method='auto', random_state=None)
 
 

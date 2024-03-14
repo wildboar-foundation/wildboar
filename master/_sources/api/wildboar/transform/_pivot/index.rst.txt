@@ -21,6 +21,11 @@ Classes
 
 
 
+
+.. raw:: html
+
+   <br />
+
 .. py:class:: PivotMixin
 
 

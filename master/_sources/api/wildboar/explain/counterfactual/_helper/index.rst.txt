@@ -29,6 +29,11 @@ Functions
 
 
 
+
+.. raw:: html
+
+   <br />
+
 .. py:class:: PredictEvaluator(estimator)
 
 

@@ -21,6 +21,11 @@ Classes
 
 
 
+
+.. raw:: html
+
+   <br />
+
 .. py:class:: FeatureTransform(*, summarizer='catch22', n_jobs=None)
 
 

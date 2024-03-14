@@ -32,6 +32,11 @@ Functions
 
 
 
+
+.. raw:: html
+
+   <br />
+
 .. py:class:: MetricOptions(add=None, *, remove=None, deprecated=None)
 
 

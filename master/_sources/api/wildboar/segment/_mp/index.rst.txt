@@ -19,6 +19,11 @@ Classes
 
 
 
+
+.. raw:: html
+
+   <br />
+
 .. py:class:: FlussSegmenter(n_segments=1, *, window=1.0, exclude=0.2, boundary=0.1, metric='euclidean', metric_params=None, n_jobs=None)
 
 

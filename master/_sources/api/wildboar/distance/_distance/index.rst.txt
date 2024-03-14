@@ -27,6 +27,11 @@ Functions
 
 
 
+
+.. raw:: html
+
+   <br />
+
 .. py:function:: argmin_distance(x, y=None, *, dim=0, k=1, metric='euclidean', metric_params=None, sorted=False, return_distance=False, n_jobs=None)
 
    

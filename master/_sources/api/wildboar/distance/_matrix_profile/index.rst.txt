@@ -20,6 +20,11 @@ Functions
 
 
 
+
+.. raw:: html
+
+   <br />
+
 .. py:function:: matrix_profile(X, Y=None, *, dim=0, window=5, exclude=None, kind='warn', return_index=False, n_jobs=None)
 
    

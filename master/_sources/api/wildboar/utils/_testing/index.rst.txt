@@ -20,6 +20,11 @@ Functions
 
 
 
+
+.. raw:: html
+
+   <br />
+
 .. py:function:: assert_exhaustive_parameter_checks(estimator: wildboar.base.BaseEstimator)
 
    

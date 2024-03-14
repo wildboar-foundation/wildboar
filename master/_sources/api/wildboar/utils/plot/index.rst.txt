@@ -25,6 +25,11 @@ Functions
 
 
 
+
+.. raw:: html
+
+   <br />
+
 .. py:function:: plot_frequency_domain(x, y=None, *, ax=None, n_samples=100, jitter=False, sample_spacing=1, frequency=False, cmap='Dark2')
 
    

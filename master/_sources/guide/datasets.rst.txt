@@ -119,8 +119,8 @@ samples, timesteps, labels and dataset names. We specify filters with the
 
 ::
 
-                        ┌── Operator specification
-            ┌───────────┴───────────┐
+                          ┌── Operator specification
+              ┌───────────┴───────────┐
    (attribute)[<|<=|>|>=|=|~=](\d+|\w+)
    └────┬────┘└───────┬──────┘└───┬───┘
       │             │           └── A number or (part of) a dataset name

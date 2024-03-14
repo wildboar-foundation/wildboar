@@ -21,6 +21,11 @@ Classes
 
 
 
+
+.. raw:: html
+
+   <br />
+
 .. py:class:: KMeans(n_clusters=8, *, metric='euclidean', r=1.0, g=None, init='random', n_init='auto', max_iter=300, tol=0.001, verbose=0, random_state=None)
 
 

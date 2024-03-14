@@ -21,6 +21,11 @@ Functions
 
 
 
+
+.. raw:: html
+
+   <br />
+
 .. py:function:: array_or_scalar(optional_f=None, squeeze=True)
 
    

@@ -55,6 +55,11 @@ Classes
 
 
 
+
+.. raw:: html
+
+   <br />
+
 .. py:class:: BaggingClassifier(estimator=None, n_estimators=10, *, max_samples=1.0, bootstrap=True, oob_score=False, class_weight=None, warm_start=False, n_jobs=None, random_state=None, verbose=0, base_estimator='deprecated')
 
 

@@ -51,6 +51,11 @@ Functions
 
 
 
+
+.. raw:: html
+
+   <br />
+
 .. py:class:: AmplitudeImportance(scoring=None, n_intervals='sqrt', window=None, binning='normal', n_bins=4, n_repeat=1, random_state=None)
 
 

@@ -32,6 +32,11 @@ Functions
 
 
 
+
+.. raw:: html
+
+   <br />
+
 .. py:function:: density_outliers(x, *, n_outliers=0.05, method='dbscan', eps=2.0, min_sample=5, metric='euclidean', max_eps=np.inf, random_state=None)
 
    

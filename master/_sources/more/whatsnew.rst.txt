@@ -82,6 +82,14 @@ Wildboar 1.2 introduces several new models.
 
   .. grid-item-card::
 
+     :mod:`wildboar.linear_model`
+     ^^^
+
+     - |Enhancement| Add parameter validation to all models in the
+       :mod:`wildboar.linear_model` module.
+
+  .. grid-item-card::
+
      :mod:`wildboar.tree`
      ^^^
 

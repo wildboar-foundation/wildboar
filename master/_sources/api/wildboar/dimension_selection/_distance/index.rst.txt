@@ -21,6 +21,11 @@ Classes
 
 
 
+
+.. raw:: html
+
+   <br />
+
 .. py:class:: SelectDimensionPercentile(score_func=f_classif, *, sample=None, percentile=10, metric='euclidean', metric_params=None, n_jobs=None, random_state=None)
 
 

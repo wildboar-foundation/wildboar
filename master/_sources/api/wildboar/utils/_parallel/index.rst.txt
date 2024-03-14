@@ -19,6 +19,11 @@ Functions
 
 
 
+
+.. raw:: html
+
+   <br />
+
 .. py:function:: run_in_parallel(work, n_jobs=-1, **parallel_args)
 
    
