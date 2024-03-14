@@ -1,10 +1,12 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
+import numbers
+
 import numpy as np
 from sklearn.pipeline import make_pipeline, make_union
 from sklearn.utils import check_random_state
+from sklearn.utils._param_validation import Interval
 
-from ..datasets.preprocess import SparseScaler
 from ..transform import DiffTransform, HydraTransform
 from ._transform import TransformRidgeClassifierCV
 
@@ -69,6 +71,12 @@ class HydraClassifier(TransformRidgeClassifierCV):
         time series classification. Data Mining and Knowledge Discovery
     """
 
+    _parameter_constraints = {
+        **TransformRidgeClassifierCV._parameter_constraints,
+        **HydraTransform._parameter_constraints,
+        "order": [Interval(numbers.Integral, 0, None, closed="left")],
+    }
+
     def __init__(
         self,
         *,
@@ -103,13 +111,6 @@ class HydraClassifier(TransformRidgeClassifierCV):
         self.sampling = sampling
         self.sampling_params = sampling_params
         self.order = order
-
-    def _build_pipeline(self):
-        pipeline = super()._build_pipeline()
-        if self.normalize == "sparse":
-            pipeline[1] = ("normalize", SparseScaler())
-
-        return pipeline
 
     def _get_transform(self, random_state):
         if self.order is not None and self.order > 0 and self.n_groups > 1:

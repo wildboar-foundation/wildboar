@@ -1,27 +1,46 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
+import numbers
 from abc import ABCMeta, abstractmethod
 
 import numpy as np
-from sklearn.base import ClassifierMixin, RegressorMixin
+from sklearn.base import ClassifierMixin, RegressorMixin, _fit_context
 from sklearn.linear_model import RidgeClassifierCV, RidgeCV
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
+from sklearn.utils._param_validation import StrOptions
 from sklearn.utils.extmath import softmax
+from sklearn.utils.metaestimators import available_if
 from sklearn.utils.validation import check_is_fitted, check_random_state
 
 from ..base import BaseEstimator
+from ..datasets.preprocess import SparseScaler
+
+
+def _transform_has_attr(attr):
+    def check(self):
+        return hasattr(self.pipe_["transform"], "embedding_")
+
+    return check
 
 
 class BaseTransformEstimator(BaseEstimator, metaclass=ABCMeta):
+    _parameter_constraints = {
+        "random_state": ["random_state"],
+        "n_jobs": [None, numbers.Integral],
+    }
+
     def __init__(self, *, random_state=None, n_jobs=None):
         self.random_state = random_state
         self.n_jobs = n_jobs
 
+    @_fit_context(prefer_skip_nested_validation=True)
     def fit(self, x, y, sample_weight=None):
         x, y = self._validate_data(x, y, dtype=float, allow_3d=True)
         self.pipe_ = Pipeline(self._build_pipeline())
+
+        # TODO: apply sample weights to the transform
         self.pipe_.fit(x, y, estimator__sample_weight=sample_weight)
         return self
 
@@ -41,17 +60,26 @@ class BaseTransformEstimator(BaseEstimator, metaclass=ABCMeta):
         pass
 
 
+def _pipe_has(attr):
+    def check(self):
+        hasattr(self.pipe_, attr)
+
+    return check
+
+
 class BaseTransformClassifier(ClassifierMixin, BaseTransformEstimator):
     def predict(self, x):
         check_is_fitted(self)
         x = self._validate_data(x, dtype=float, allow_3d=True)
         return self.pipe_.predict(x)
 
+    @available_if(_pipe_has("predict_proba"))
     def predict_proba(self, x):
         check_is_fitted(self)
         x = self._validate_data(x, dtype=float, allow_3d=True)
         return self.pipe_.predict_proba(x)
 
+    @available_if(_pipe_has("predict_log_proba"))
     def predict_log_proba(self, x):
         check_is_fitted(self)
         x = self._validate_data(x, dtype=float, allow_3d=True)
@@ -73,6 +101,7 @@ class BaseTransformRegressor(RegressorMixin, BaseTransformEstimator):
         x = self._validate_data(x, dtype=float, allow_3d=True)
         return self.pipe_.predict(x)
 
+    @available_if(_pipe_has("decision_function"))
     def decision_function(self, x):
         check_is_fitted(self)
         x = self._validate_data(x, dtype=float, allow_3d=True)
@@ -80,6 +109,13 @@ class BaseTransformRegressor(RegressorMixin, BaseTransformEstimator):
 
 
 class TransformRidgeClassifierCV(BaseTransformClassifier):
+    _parameter_constraints = {
+        **BaseTransformEstimator._parameter_constraints,
+        **RidgeClassifierCV._parameter_constraints,
+        "normalize": [bool, StrOptions({"sparse"})],
+    }
+    _parameter_constraints.pop("store_cv_values")
+
     def __init__(
         self,
         *,
@@ -113,8 +149,10 @@ class TransformRidgeClassifierCV(BaseTransformClassifier):
 
     def _build_pipeline(self):
         pipeline = super()._build_pipeline()
-        if self.normalize is not False:
+        if self.normalize is True:
             pipeline.insert(1, ("normalize", StandardScaler()))
+        elif self.normalize == "sparse":
+            pipeline.insert(1, ("normalize", SparseScaler()))
 
         return pipeline
 
@@ -126,8 +164,27 @@ class TransformRidgeClassifierCV(BaseTransformClassifier):
             decision_2d = decision
         return softmax(decision_2d, copy=False)
 
+    def _more_tags(self):
+        return {
+            "_xfail_checks": {
+                "check_sample_weights_invariance": (
+                    "zero sample_weight is not equivalent to removing samples"
+                ),
+                "_check_sample_weights_invariance_samples_order": ("test"),
+            }
+        }
+
 
 class TransformRidgeCV(BaseTransformRegressor):
+    _parameter_constraints = {
+        **BaseTransformEstimator._parameter_constraints,
+        **RidgeCV._parameter_constraints,
+        "normalize": [bool, StrOptions({"sparse"})],
+    }
+
+    for param in ("store_cv_values", "alpha_per_target"):
+        _parameter_constraints.pop(param)
+
     def __init__(
         self,
         *,
@@ -161,7 +218,19 @@ class TransformRidgeCV(BaseTransformRegressor):
 
     def _build_pipeline(self):
         pipeline = super()._build_pipeline()
-        if self.normalize:
-            pipeline.insert(1, StandardScaler())
+        if self.normalize is True:
+            pipeline.insert(1, ("normalize", StandardScaler()))
+        elif self.normalize == "sparse":
+            pipeline.insert(1, ("normalize", SparseScaler()))
 
         return pipeline
+
+    def _more_tags(self):
+        return {
+            "_xfail_checks": {
+                "check_sample_weights_invariance": (
+                    "zero sample_weight is not equivalent to removing samples"
+                ),
+                "_check_sample_weights_invariance_samples_order": ("test"),
+            }
+        }

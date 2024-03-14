@@ -6,19 +6,92 @@ import numpy as np
 from joblib import effective_n_jobs
 from sklearn.pipeline import make_pipeline, make_union
 from sklearn.utils import check_random_state
+from sklearn.utils._param_validation import Interval
 
-from ..datasets.preprocess import SparseScaler
 from ..transform import (
     CastorTransform,
     DiffTransform,
     DilatedShapeletTransform,
-    RandomShapeletTransform,
+    ShapeletTransform,
 )
+from ..transform._shapelet import RandomShapeletMixin
 from ._transform import TransformRidgeClassifierCV, TransformRidgeCV
 
 
 class RandomShapeletClassifier(TransformRidgeClassifierCV):
-    """A classifier that uses random shapelets."""
+    """
+    A classifier that uses random shapelets.
+
+    Parameters
+    ----------
+    n_shapelets : int or {"log2", "sqrt", "auto"}, optional
+        The number of shapelets in the resulting transform.
+
+        - if, "auto" the number of shapelets depend on the value of `strategy`.
+          For "best" the number is 1; and for "random" it is 1000.
+        - if, "log2", the number of shaplets is the log2 of the total possible
+          number of shapelets.
+        - if, "sqrt", the number of shaplets is the square root of the total
+          possible number of shapelets.
+    metric : str or list, optional
+        - If str, the distance metric used to identify the best shapelet.
+        - If list, multiple metrics specified as a list of tuples, where the first
+            element of the tuple is a metric name and the second element a dictionary
+            with a parameter grid specification. A parameter grid specification is a
+            dict with two mandatory and one optional key-value pairs defining the
+            lower and upper bound on the values and number of values in the grid. For
+            example, to specify a grid over the argument 'r' with 10 values in the
+            range 0 to 1, we would give the following specification: ``dict(min_r=0,
+            max_r=1, num_r=10)``.
+
+        Read more about the metrics and their parameters in the
+        :ref:`User guide <list_of_subsequence_metrics>`.
+    metric_params : dict, optional
+        Parameters for the distance measure. Ignored unless metric is a string.
+
+        Read more about the parameters in the :ref:`User guide
+        <list_of_subsequence_metrics>`.
+    min_shapelet_size : float, optional
+        Minimum shapelet size.
+    max_shapelet_size : float, optional
+        Maximum shapelet size.
+    alphas : array-like of shape (n_alphas,), optional
+        Array of alpha values to try.
+    fit_intercept : bool, optional
+        Whether to calculate the intercept for this model.
+    normalize : bool, optional
+        Standardize before fitting.
+    scoring : str, callable, optional
+        A string or a scorer callable object with signature
+        `scorer(estimator, X, y)`.
+    cv : int, cross-validation generator or an iterable, optional
+        Determines the cross-validation splitting strategy.
+    class_weight : dict or 'balanced', optional
+        Weights associated with classes in the form `{class_label: weight}`.
+    random_state : int or RandomState, optional
+        Controls the random sampling of kernels.
+
+        - If `int`, `random_state` is the seed used by the random number
+          generator.
+        - If :class:`numpy.random.RandomState` instance, `random_state` is
+          the random number generator.
+        - If `None`, the random number generator is the
+          :class:`numpy.random.RandomState` instance used by
+          :func:`numpy.random`.
+    n_jobs : int, optional
+        The number of parallel jobs.
+
+    References
+    ----------
+    Wistuba, Martin, Josif Grabocka, and Lars Schmidt-Thieme.
+        Ultra-fast shapelets for time series classification. arXiv preprint
+        arXiv:1503.05018 (2015).
+    """
+
+    _parameter_constraints = {
+        **TransformRidgeClassifierCV._parameter_constraints,
+        **RandomShapeletMixin._parameter_constraints,
+    }
 
     def __init__(
         self,
@@ -34,8 +107,8 @@ class RandomShapeletClassifier(TransformRidgeClassifierCV):
         scoring=None,
         cv=None,
         class_weight=None,
-        n_jobs=None,
         random_state=None,
+        n_jobs=None,
     ):
         super().__init__(
             alphas=alphas,
@@ -54,9 +127,10 @@ class RandomShapeletClassifier(TransformRidgeClassifierCV):
         self.max_shapelet_size = max_shapelet_size
 
     def _get_transform(self, random_state):
-        return RandomShapeletTransform(
+        return ShapeletTransform(
             self.n_shapelets,
             metric=self.metric,
+            strategy="random",
             metric_params=self.metric_params,
             min_shapelet_size=self.min_shapelet_size,
             max_shapelet_size=self.max_shapelet_size,
@@ -66,7 +140,88 @@ class RandomShapeletClassifier(TransformRidgeClassifierCV):
 
 
 class RandomShapeletRegressor(TransformRidgeCV):
-    """A regressor that uses random shapelets."""
+    """
+    A regressor that uses random shapelets.
+
+    Parameters
+    ----------
+    n_shapelets : int or {"log2", "sqrt", "auto"}, optional
+        The number of shapelets in the resulting transform.
+
+        - if, "auto" the number of shapelets depend on the value of `strategy`.
+          For "best" the number is 1; and for "random" it is 1000.
+        - if, "log2", the number of shaplets is the log2 of the total possible
+          number of shapelets.
+        - if, "sqrt", the number of shaplets is the square root of the total
+          possible number of shapelets.
+    metric : str or list, optional
+        - If str, the distance metric used to identify the best shapelet.
+        - If list, multiple metrics specified as a list of tuples, where the first
+            element of the tuple is a metric name and the second element a dictionary
+            with a parameter grid specification. A parameter grid specification is a
+            dict with two mandatory and one optional key-value pairs defining the
+            lower and upper bound on the values and number of values in the grid. For
+            example, to specify a grid over the argument 'r' with 10 values in the
+            range 0 to 1, we would give the following specification: ``dict(min_r=0,
+            max_r=1, num_r=10)``.
+
+        Read more about the metrics and their parameters in the
+        :ref:`User guide <list_of_subsequence_metrics>`.
+    metric_params : dict, optional
+        Parameters for the distance measure. Ignored unless metric is a string.
+
+        Read more about the parameters in the :ref:`User guide
+        <list_of_subsequence_metrics>`.
+    min_shapelet_size : float, optional
+        Minimum shapelet size.
+    max_shapelet_size : float, optional
+        Maximum shapelet size.
+    alphas : array-like of shape (n_alphas,), optional
+        Array of alpha values to try.
+    fit_intercept : bool, optional
+        Whether to calculate the intercept for this model.
+    normalize : bool, optional
+        Standardize before fitting.
+    scoring : str, callable, optional
+        A string or a scorer callable object with signature
+        `scorer(estimator, X, y)`.
+    cv : int, cross-validation generator or an iterable, optional
+        Determines the cross-validation splitting strategy.
+    gcv_mode : {'auto', 'svd', 'eigen'}, optional
+        Flag indicating which strategy to use when performing
+        Leave-One-Out Cross-Validation. Options are::
+
+            'auto' : use 'svd' if n_samples > n_features, otherwise use 'eigen'
+            'svd' : force use of singular value decomposition of X when X is
+                dense, eigenvalue decomposition of X^T.X when X is sparse.
+            'eigen' : force computation via eigendecomposition of X.X^T
+
+        The 'auto' mode is the default and is intended to pick the cheaper
+        option of the two depending on the shape of the training data.
+    random_state : int or RandomState, optional
+        Controls the random sampling of kernels.
+
+        - If `int`, `random_state` is the seed used by the random number
+          generator.
+        - If :class:`numpy.random.RandomState` instance, `random_state` is
+          the random number generator.
+        - If `None`, the random number generator is the
+          :class:`numpy.random.RandomState` instance used by
+          :func:`numpy.random`.
+    n_jobs : int, optional
+        The number of parallel jobs.
+
+    References
+    ----------
+    Wistuba, Martin, Josif Grabocka, and Lars Schmidt-Thieme.
+        Ultra-fast shapelets for time series classification. arXiv preprint
+        arXiv:1503.05018 (2015).
+    """
+
+    _parameter_constraints = {
+        **TransformRidgeCV._parameter_constraints,
+        **RandomShapeletMixin._parameter_constraints,
+    }
 
     def __init__(
         self,
@@ -82,8 +237,8 @@ class RandomShapeletRegressor(TransformRidgeCV):
         scoring=None,
         cv=None,
         gcv_mode=None,
-        n_jobs=None,
         random_state=None,
+        n_jobs=None,
     ):
         super().__init__(
             alphas=alphas,
@@ -102,9 +257,10 @@ class RandomShapeletRegressor(TransformRidgeCV):
         self.max_shapelet_size = max_shapelet_size
 
     def _get_transform(self, random_state):
-        return RandomShapeletTransform(
+        return ShapeletTransform(
             self.n_shapelets,
             metric=self.metric,
+            strategy="random",
             metric_params=self.metric_params,
             min_shapelet_size=self.min_shapelet_size,
             max_shapelet_size=self.max_shapelet_size,
@@ -177,6 +333,12 @@ class DilatedShapeletClassifier(TransformRidgeClassifierCV):
         Random Dilated Shapelet Transform: A New Approach for Time Series Shapelets
         Pattern Recognition and Artificial Intelligence, 2022
     """
+
+    _parameter_constraints = {
+        **TransformRidgeClassifierCV._parameter_constraints,
+        **DilatedShapeletTransform._parameter_constraints,
+    }
+    _parameter_constraints.pop("ignore_y")
 
     def __init__(  # noqa: PLR0913
         self,
@@ -307,6 +469,13 @@ class CastorClassifier(TransformRidgeClassifierCV):
         The number of parallel jobs.
     """
 
+    _parameter_constraints = {
+        **TransformRidgeClassifierCV._parameter_constraints,
+        **CastorTransform._parameter_constraints,
+        "order": [Interval(numbers.Integral, 0, None, closed="left")],
+    }
+    _parameter_constraints.pop("ignore_y")
+
     def __init__(  # noqa: PLR0913
         self,
         n_groups=64,
@@ -353,13 +522,6 @@ class CastorClassifier(TransformRidgeClassifierCV):
         self.soft_max = soft_max
         self.soft_threshold = soft_threshold
         self.order = order
-
-    def _build_pipeline(self):
-        pipeline = super()._build_pipeline()
-        if self.normalize == "sparse":
-            pipeline[1] = ("normalize", SparseScaler())
-
-        return pipeline
 
     def _get_transform(self, random_state):  # noqa: PLR0912
         random_state = check_random_state(random_state)

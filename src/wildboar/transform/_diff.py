@@ -12,7 +12,7 @@ class DiffTransform(TransformerMixin, BaseEstimator):
         self.order = order
 
     def fit(self, X, y=None):
-        self._validate_data(X, allow_3d=True)
+        self._validate_data(X, ensure_min_timesteps=2, allow_3d=True)
         self.order_ = self.order
         return self
 
