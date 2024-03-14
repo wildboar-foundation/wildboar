@@ -200,7 +200,6 @@ cdef class _FlatMatrixProfile:
         self.meanT = meanT
         self.stdT = stdT
 
-
     @property
     def n_work(self):
         return self.Q.shape[0]

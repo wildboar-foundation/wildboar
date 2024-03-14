@@ -73,7 +73,6 @@ class BaseSegmenter(TransformerMixin, BaseEstimator):
             closest = argmin_distance(
                 X[i], self._fit_X, metric=self.metric, metric_params=self.metric_params
             )
-            print(closest)
             labels = self.labels_[closest[0, 0]]
 
             for start in labels:

@@ -20,9 +20,9 @@ def motifs(  # noqa: PLR0912, PLR0915
     window="auto",
     exclude=0.2,
     max_distance="auto",
-    max_neighbours=10,
-    min_neighbours=1,
-    max_motif=1,
+    max_neighbors=10,
+    min_neighbors=1,
+    max_motifs=1,
     return_distance=False,
 ):
     """Find motifs.
@@ -44,14 +44,14 @@ def motifs(  # noqa: PLR0912, PLR0915
         The size of the exclusion zone.
     max_distance : str, optional
         The maximum distance between motifs.
-    max_neighbours : int, optional
-        The maximum number of neighbours
-    min_neighbours : int, optional
-        The minimum number of neighbours
-    max_motif : int, optional
+    max_neighbors : int, optional
+        The maximum number of neighbours.
+    min_neighbors : int, optional
+        The minimum number of neighbours.
+    max_motifs : int, optional
         The maximum number of motifs to return.
     return_distance : bool, optional
-        Return the distance from main to neighbours
+        Return the distance from main to neighbours.
 
     Returns
     -------
@@ -99,8 +99,8 @@ def motifs(  # noqa: PLR0912, PLR0915
             "matrix profile must be an ndarray, not %r" % type(mp).__qualname__
         )
 
-    if max_neighbours is None:
-        max_neighbours = x.shape[-1]
+    if max_neighbors is None:
+        max_neighbors = x.shape[-1]
 
     if isinstance(max_distance, str):
         max_distance = check_option(_THRESHOLD, max_distance, "max_distance")
@@ -140,7 +140,7 @@ def motifs(  # noqa: PLR0912, PLR0915
         if callable(max_distance):
             cutoff = max_distance(mp[i])
 
-        while len(motif_index) < max_motif and not np.all(np.isinf(mp)):
+        while len(motif_index) < max_motifs and not np.all(np.isinf(mp)):
             candidate = np.argmin(mp[i])
             if mp[i, candidate] > cutoff:
                 break
@@ -156,18 +156,18 @@ def motifs(  # noqa: PLR0912, PLR0915
                 x[i],
                 threshold=max_distance,
                 metric="scaled_euclidean",
-                max_matches=max_neighbours,
+                max_matches=max_neighbors,
                 exclude=exclude,
                 return_distance=True,
             )
 
-            if match_idx.size > min_neighbours:
-                motif_index.append(match_idx[:max_neighbours])
-                motif_distance.append(match_dist[:max_neighbours])
+            if match_idx.size > min_neighbors:
+                motif_index.append(match_idx[:max_neighbors])
+                motif_distance.append(match_dist[:max_neighbors])
                 # The first match is always the same as candidate
                 # so we can exclude all the matches from the matrix
                 # profile
-                for j in match_idx[:max_neighbours]:
+                for j in match_idx[:max_neighbors]:
                     start = max(0, j - exclude)
                     end = min(mp.shape[-1], j + exclude)
                     mp[i, start:end] = np.inf

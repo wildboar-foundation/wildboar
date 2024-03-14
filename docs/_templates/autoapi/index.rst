@@ -3,8 +3,7 @@ API Reference
 #############
 
 .. toctree::
-   :hidden:
-   :maxdepth: 3
+   :maxdepth: 2
 
 {% for obj in pages|sort(attribute='name') %}
   {% set display = "utils" not in obj.name or obj._should_skip %}

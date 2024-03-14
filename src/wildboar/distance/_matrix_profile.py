@@ -225,7 +225,13 @@ def matrix_profile(  # noqa: PLR0912
                 X, Y = Y, X
 
         return paired_matrix_profile(
-            X, Y, window=window, dim=dim, exclude=exclude, n_jobs=n_jobs
+            X,
+            Y,
+            window=window,
+            dim=dim,
+            exclude=exclude,
+            n_jobs=n_jobs,
+            return_index=return_index,
         )
     else:
         if Y is None:

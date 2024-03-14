@@ -732,7 +732,7 @@ CARD_TEMPLATE = """
     {% if images %}
     .. grid-item::
         :columns: 12
-        {% if images|length > 0 %}
+        {% if images|length > 1 %}
         .. card-carousel:: {{ carousel }}
         {% for light, dark in images %}
             .. card::

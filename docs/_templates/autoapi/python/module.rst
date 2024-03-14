@@ -75,6 +75,11 @@ Attributes
 {% endif %}
 {% endblock %}
 {% endif %}
+
+.. raw:: html
+
+   <br />
+
 {% for obj_item in visible_children %}
 {{ obj_item.render()|indent(0) }}
 {% endfor %}
