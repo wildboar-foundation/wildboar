@@ -16,7 +16,13 @@ class _UnivariateDistanceSelector(BaseDistanceSelector):
     def __init__(
         self, score_func, *, sample, metric, metric_params, n_jobs, random_state
     ):
-        super().__init__(metric=metric, metric_params=metric_params, n_jobs=n_jobs)
+        super().__init__(
+            metric=metric,
+            sample=sample,
+            random_state=random_state,
+            metric_params=metric_params,
+            n_jobs=n_jobs,
+        )
         self.score_func = score_func
 
     def _check_params(self):

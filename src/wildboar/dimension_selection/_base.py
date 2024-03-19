@@ -160,8 +160,6 @@ class BaseDistanceSelector(
                 idx = idx[: self.sample]
             else:
                 raise ValueError("sample must be int or float")
-
-            print(len(idx))
             Y = X[idx, :, :]
 
         distance = pairwise_distance(
