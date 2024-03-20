@@ -3,7 +3,7 @@ pytest-benchmark
 networkx
 pre-commit
 flake8==6.0.0
-black==23.1.0
+black==24.3.0
 cython>=3.0.2
 setuptools_scm[toml]>=6.2
 setuptools>=48.0
