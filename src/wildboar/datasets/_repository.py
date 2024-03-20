@@ -3,6 +3,7 @@
 
 import base64
 import hashlib
+import json
 import os
 import pickle
 import re
@@ -10,19 +11,14 @@ import sys
 import warnings
 import zipfile
 from abc import ABCMeta, abstractmethod
+from urllib.error import URLError
+from urllib.request import urlopen, urlretrieve
 
 import numpy as np
 from sklearn.utils.fixes import parse_version
 
 from .. import EOS
 from .. import __version__ as wildboar_version
-
-try:
-    import requests
-except ModuleNotFoundError as e:
-    from ..utils import _soft_dependency_error
-
-    _soft_dependency_error(e, context="wildboar.datasets")
 
 DEFAULT_TAG = "default"
 
@@ -178,18 +174,15 @@ def _download_hash_file(cached_hash, hash_url, filename):
     filename : str
         The filename of the bundle.
     """
-    with open(cached_hash, "w") as f:
-        response = requests.get(hash_url)
+    with open(cached_hash, "wb") as f:
         try:
-            response.raise_for_status()
-        except requests.exceptions.HTTPError as e:
-            f.close()
+            with urlopen(hash_url, timeout=5) as response:
+                f.write(response.read())
+        except URLError as e:
             os.remove(cached_hash)
             raise ValueError(
                 "Downloading %s.sha1 failed. Try another version or tag." % filename
             ) from e
-
-        f.write(response.text)
 
 
 _SIZE_NAMES = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
@@ -253,42 +246,21 @@ def _download_bundle_file(cached_bundle, bundle_url, filename, progress):
     progress : bool
         Show progress bar
     """
-    with open(cached_bundle, "wb") as f:
-        response = requests.get(bundle_url, stream=True)
-        try:
-            response.raise_for_status()
-        except requests.exceptions.HTTPError as e:
-            f.close()
-            os.remove(cached_bundle)
-            raise ValueError(
-                "Downloading %s.zip failed. Try another version or tag." % filename
-            ) from e
 
-        total_length = response.headers.get("content-length")
-        if total_length is None:  # no content length header
-            f.write(response.content)
-        else:
-            length = 0
-            total_length = int(total_length)
+    if progress:
 
-            if progress:
-                total_size, total_type = _convert_size(total_length)
-                print(
-                    f"Downloading {filename}.zip "
-                    f"({total_size} {_SIZE_NAMES[total_type]})",
-                    file=sys.stderr,
-                )
+        def reporthook(blocknum, bs, size):
+            _print_progress(blocknum * bs, size)
+    else:
+        reporthook = None
 
-            for data in response.iter_content(chunk_size=4096):
-                length += len(data)
-                f.write(data)
-                if progress:
-                    _print_progress(
-                        length,
-                        total_length,
-                        prefix="  ",
-                        unfill="-",
-                    )
+    try:
+        urlretrieve(bundle_url, cached_bundle, reporthook=reporthook)
+    except URLError as e:
+        os.remove(cached_bundle)
+        raise ValueError(
+            "Downloading %s.zip failed. Try another version or tag." % filename
+        ) from e
 
 
 class Repository(metaclass=ABCMeta):
@@ -483,7 +455,7 @@ class Repository(metaclass=ABCMeta):
         try:
             self._refresh(timeout)
             self._active = True
-        except requests.ConnectionError:
+        except URLError:
             self._active = False
 
     @abstractmethod
@@ -582,20 +554,24 @@ class JSONRepository(Repository):
         return self._bundles
 
     def _refresh(self, timeout):
-        json = requests.get(self.repo_url, timeout=timeout).json()
-        self._wildboar_requires = json["wildboar_requires"]
-        self._name = _validate_repository_name(json["name"])
+        try:
+            json_data = json.load(urlopen(self.repo_url, timeout=timeout))
+        except json.JSONDecodeError as e:
+            raise RuntimeError("Cannot parse the repository") from e
+
+        self._wildboar_requires = json_data["wildboar_requires"]
+        self._name = _validate_repository_name(json_data["name"])
         self._version = _validate_version(
-            json["version"], max_version=JSONRepository.supported_version
+            json_data["version"], max_version=JSONRepository.supported_version
         )
         if parse_version(self.wildboar_requires) > parse_version(wildboar_version):
             raise ValueError(
                 "The repository requires wildboar >=%s, got %s"
                 % (self.wildboar_requires, wildboar_version),
             )
-        self._bundle_url = _validate_url(json["bundle_url"])
+        self._bundle_url = _validate_url(json_data["bundle_url"])
         bundles = {}
-        for bundle_json in json["bundles"]:
+        for bundle_json in json_data["bundles"]:
             key = _validate_bundle_key(bundle_json["key"])
             if key in bundles:
                 warnings.warn("duplicate dataset %s (ignoring)" % key, UserWarning)

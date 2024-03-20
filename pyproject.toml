@@ -38,10 +38,6 @@ outliers = [
   "networkx",
 ]
 
-datasets = [
-  "requests"
-]
-
 [tool.setuptools_scm]
 write_to = "src/wildboar/version.py"
 version_scheme = "release-branch-semver"
