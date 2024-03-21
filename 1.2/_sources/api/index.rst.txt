@@ -299,8 +299,6 @@ examples.
     - Compute the k:th closest subsequences.
   * - :py:obj:`~wildboar.distance.distance_profile`
     - Compute the distance profile.
-  * - :py:obj:`~wildboar.distance.matrix_profile`
-    - Compute the matrix profile.
   * - :py:obj:`~wildboar.distance.paired_distance`
     - Compute the distance between the i:th time series.
   * - :py:obj:`~wildboar.distance.paired_subsequence_distance`

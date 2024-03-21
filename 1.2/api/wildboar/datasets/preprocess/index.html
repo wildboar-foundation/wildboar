@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>wildboar.datasets.preprocess &#8212; Wildboar 1.2.0b5 documentation</title>
+    <title>wildboar.datasets.preprocess &#8212; Wildboar 1.2.0b6 documentation</title>
   
   
   
@@ -41,7 +41,7 @@
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../../../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script src="../../../../_static/documentation_options.js?v=d430f296"></script>
+    <script src="../../../../_static/documentation_options.js?v=e3c878fc"></script>
     <script src="../../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -499,7 +499,7 @@ document.write(`
 </table>
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.datasets.preprocess.maxabs_scale">
-<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.preprocess.</span></span><span class="sig-name descname"><span class="pre">maxabs_scale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b5/src/wildboar/datasets/preprocess.py#L94-L110"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.preprocess.maxabs_scale" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.preprocess.</span></span><span class="sig-name descname"><span class="pre">maxabs_scale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets/preprocess.py#L94-L110"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.preprocess.maxabs_scale" title="Link to this definition">#</a></dt>
 <dd><p>Scale each time series by its maximum absolute value.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -519,7 +519,7 @@ document.write(`
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.datasets.preprocess.minmax_scale">
-<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.preprocess.</span></span><span class="sig-name descname"><span class="pre">minmax_scale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b5/src/wildboar/datasets/preprocess.py#L65-L91"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.preprocess.minmax_scale" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.preprocess.</span></span><span class="sig-name descname"><span class="pre">minmax_scale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets/preprocess.py#L65-L91"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.preprocess.minmax_scale" title="Link to this definition">#</a></dt>
 <dd><p>Scale x along the time dimension.</p>
 <p>Each time series is scaled such that each value is between min and max.</p>
 <dl class="field-list simple">
@@ -544,7 +544,7 @@ document.write(`
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.datasets.preprocess.named_preprocess">
-<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.preprocess.</span></span><span class="sig-name descname"><span class="pre">named_preprocess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b5/src/wildboar/datasets/preprocess.py#L26-L40"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.preprocess.named_preprocess" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.preprocess.</span></span><span class="sig-name descname"><span class="pre">named_preprocess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets/preprocess.py#L26-L40"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.preprocess.named_preprocess" title="Link to this definition">#</a></dt>
 <dd><p>Get a named preprocessor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -564,7 +564,7 @@ document.write(`
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.datasets.preprocess.standardize">
-<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.preprocess.</span></span><span class="sig-name descname"><span class="pre">standardize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b5/src/wildboar/datasets/preprocess.py#L43-L62"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.preprocess.standardize" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.preprocess.</span></span><span class="sig-name descname"><span class="pre">standardize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets/preprocess.py#L43-L62"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.preprocess.standardize" title="Link to this definition">#</a></dt>
 <dd><p>Scale x along the time dimension.</p>
 <p>The resulting array will have zero mean and unit standard deviation.</p>
 <dl class="field-list simple">
@@ -585,7 +585,7 @@ document.write(`
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.datasets.preprocess.truncate">
-<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.preprocess.</span></span><span class="sig-name descname"><span class="pre">truncate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_shortest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b5/src/wildboar/datasets/preprocess.py#L113-L139"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.preprocess.truncate" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.preprocess.</span></span><span class="sig-name descname"><span class="pre">truncate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_shortest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets/preprocess.py#L113-L139"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.preprocess.truncate" title="Link to this definition">#</a></dt>
 <dd><p>Truncate x to the shortest sequence.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
