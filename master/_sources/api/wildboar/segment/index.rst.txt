@@ -49,7 +49,6 @@ Classes
 
 
 
-
    
    Segmenter using the MatrixProfile and corrected ARC curve.
 
@@ -120,6 +119,7 @@ Classes
 
    ..
        !! processed by numpydoc !!
+
    .. py:method:: fit(X, y=None)
 
       
@@ -153,6 +153,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: fit_transform(X, y=None, **fit_params)
 
@@ -193,6 +194,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: get_metadata_routing()
 
       
@@ -222,6 +224,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -254,6 +257,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: predict(X)
 
@@ -288,6 +292,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: set_output(*, transform=None)
 
       
@@ -298,7 +303,7 @@ Classes
 
       :Parameters:
 
-          **transform** : {"default", "pandas"}, default=None
+          **transform** : {"default", "pandas", "polars"}, default=None
               Configure output of `transform` and `fit_transform`.
               
               - `"default"`: Default output format of a transformer
@@ -328,6 +333,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: set_params(**params)
 
@@ -363,6 +369,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: transform(X)
 

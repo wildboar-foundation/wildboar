@@ -66,7 +66,6 @@ Functions
 
 
 
-
    
    An extra shapelet tree classifier.
 
@@ -143,6 +142,7 @@ Functions
 
    ..
        !! processed by numpydoc !!
+
    .. py:method:: apply(x, check_input=True)
 
       
@@ -195,6 +195,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: decision_path(x, check_input=True)
 
       
@@ -230,6 +231,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: fit(x, y, sample_weight=None, check_input=True)
 
@@ -274,6 +276,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: get_metadata_routing()
 
       
@@ -303,6 +306,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -335,6 +339,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: predict(x, check_input=True)
 
@@ -370,6 +375,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: predict_proba(x, check_input=True)
 
@@ -408,6 +414,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: score(X, y, sample_weight=None)
 
@@ -449,6 +456,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: set_params(**params)
 
       
@@ -486,7 +494,6 @@ Functions
 
 
 .. py:class:: ExtraShapeletTreeRegressor(*, n_shapelets=1, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='squared_error', random_state=None)
-
 
 
 
@@ -561,6 +568,7 @@ Functions
 
    ..
        !! processed by numpydoc !!
+
    .. py:method:: apply(x, check_input=True)
 
       
@@ -613,6 +621,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: decision_path(x, check_input=True)
 
       
@@ -648,6 +657,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: fit(x, y, sample_weight=None, check_input=True)
 
@@ -692,6 +702,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: get_metadata_routing()
 
       
@@ -721,6 +732,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -753,6 +765,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: predict(x, check_input=True)
 
@@ -788,6 +801,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: score(X, y, sample_weight=None)
 
@@ -845,6 +859,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: set_params(**params)
 
       
@@ -882,7 +897,6 @@ Functions
 
 
 .. py:class:: IntervalTreeClassifier(n_intervals='sqrt', *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='entropy', intervals='fixed', sample_size=None, min_size=0.0, max_size=1.0, summarizer='mean_var_slope', class_weight=None, random_state=None)
-
 
 
 
@@ -977,6 +991,7 @@ Functions
 
    ..
        !! processed by numpydoc !!
+
    .. py:method:: apply(x, check_input=True)
 
       
@@ -1029,6 +1044,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: decision_path(x, check_input=True)
 
       
@@ -1064,6 +1080,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: fit(x, y, sample_weight=None, check_input=True)
 
@@ -1108,6 +1125,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: get_metadata_routing()
 
       
@@ -1137,6 +1155,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -1169,6 +1188,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: predict(x, check_input=True)
 
@@ -1204,6 +1224,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: predict_proba(x, check_input=True)
 
@@ -1242,6 +1263,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: score(X, y, sample_weight=None)
 
@@ -1283,6 +1305,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: set_params(**params)
 
       
@@ -1320,7 +1343,6 @@ Functions
 
 
 .. py:class:: IntervalTreeRegressor(n_intervals='sqrt', *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='squared_error', intervals='fixed', sample_size=None, min_size=0.0, max_size=1.0, summarizer='mean_var_slope', random_state=None)
-
 
 
 
@@ -1408,6 +1430,7 @@ Functions
 
    ..
        !! processed by numpydoc !!
+
    .. py:method:: apply(x, check_input=True)
 
       
@@ -1460,6 +1483,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: decision_path(x, check_input=True)
 
       
@@ -1495,6 +1519,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: fit(x, y, sample_weight=None, check_input=True)
 
@@ -1539,6 +1564,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: get_metadata_routing()
 
       
@@ -1568,6 +1594,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -1600,6 +1627,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: predict(x, check_input=True)
 
@@ -1635,6 +1663,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: score(X, y, sample_weight=None)
 
@@ -1692,6 +1721,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: set_params(**params)
 
       
@@ -1729,7 +1759,6 @@ Functions
 
 
 .. py:class:: PivotTreeClassifier(n_pivot='sqrt', *, metrics='all', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, impurity_equality_tolerance=None, criterion='entropy', class_weight=None, random_state=None)
-
 
 
 
@@ -1805,6 +1834,7 @@ Functions
 
    ..
        !! processed by numpydoc !!
+
    .. py:method:: apply(x, check_input=True)
 
       
@@ -1857,6 +1887,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: decision_path(x, check_input=True)
 
       
@@ -1892,6 +1923,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: fit(x, y, sample_weight=None, check_input=True)
 
@@ -1936,6 +1968,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: get_metadata_routing()
 
       
@@ -1965,6 +1998,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -1997,6 +2031,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: predict(x, check_input=True)
 
@@ -2032,6 +2067,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: predict_proba(x, check_input=True)
 
@@ -2070,6 +2106,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: score(X, y, sample_weight=None)
 
@@ -2111,6 +2148,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: set_params(**params)
 
       
@@ -2148,7 +2186,6 @@ Functions
 
 
 .. py:class:: ProximityTreeClassifier(n_pivot=1, *, criterion='entropy', pivot_sample='label', metric_sample='weighted', metric='auto', metric_params=None, metric_factories=None, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, class_weight=None, random_state=None)
-
 
 
 
@@ -2268,6 +2305,7 @@ Functions
 
    ..
        !! processed by numpydoc !!
+
    .. py:method:: apply(x, check_input=True)
 
       
@@ -2320,6 +2358,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: decision_path(x, check_input=True)
 
       
@@ -2355,6 +2394,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: fit(x, y, sample_weight=None, check_input=True)
 
@@ -2399,6 +2439,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: get_metadata_routing()
 
       
@@ -2428,6 +2469,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -2460,6 +2502,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: predict(x, check_input=True)
 
@@ -2495,6 +2538,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: predict_proba(x, check_input=True)
 
@@ -2533,6 +2577,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: score(X, y, sample_weight=None)
 
@@ -2573,6 +2618,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: set_params(**params)
 
@@ -2614,7 +2660,6 @@ Functions
 
 
 
-
    
    A tree classifier that uses random convolutions as features.
 
@@ -2639,6 +2684,7 @@ Functions
 
    ..
        !! processed by numpydoc !!
+
    .. py:method:: apply(x, check_input=True)
 
       
@@ -2691,6 +2737,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: decision_path(x, check_input=True)
 
       
@@ -2726,6 +2773,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: fit(x, y, sample_weight=None, check_input=True)
 
@@ -2770,6 +2818,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: get_metadata_routing()
 
       
@@ -2799,6 +2848,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -2831,6 +2881,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: predict(x, check_input=True)
 
@@ -2866,6 +2917,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: predict_proba(x, check_input=True)
 
@@ -2904,6 +2956,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: score(X, y, sample_weight=None)
 
@@ -2945,6 +2998,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: set_params(**params)
 
       
@@ -2985,7 +3039,6 @@ Functions
 
 
 
-
    
    A tree regressor that uses random convolutions as features.
 
@@ -3010,6 +3063,7 @@ Functions
 
    ..
        !! processed by numpydoc !!
+
    .. py:method:: apply(x, check_input=True)
 
       
@@ -3062,6 +3116,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: decision_path(x, check_input=True)
 
       
@@ -3097,6 +3152,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: fit(x, y, sample_weight=None, check_input=True)
 
@@ -3141,6 +3197,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: get_metadata_routing()
 
       
@@ -3170,6 +3227,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -3202,6 +3260,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: predict(x, check_input=True)
 
@@ -3237,6 +3296,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: score(X, y, sample_weight=None)
 
@@ -3294,6 +3354,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: set_params(**params)
 
       
@@ -3331,7 +3392,6 @@ Functions
 
 
 .. py:class:: ShapeletTreeClassifier(*, n_shapelets='log2', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, impurity_equality_tolerance=None, strategy='warn', shapelet_size=0.1, sample_size=1.0, min_shapelet_size=0.0, max_shapelet_size=1.0, alpha=None, metric='euclidean', metric_params=None, criterion='entropy', class_weight=None, random_state=None)
-
 
 
 
@@ -3528,6 +3588,7 @@ Functions
 
    ..
        !! processed by numpydoc !!
+
    .. py:method:: apply(x, check_input=True)
 
       
@@ -3580,6 +3641,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: decision_path(x, check_input=True)
 
       
@@ -3615,6 +3677,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: fit(x, y, sample_weight=None, check_input=True)
 
@@ -3659,6 +3722,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: get_metadata_routing()
 
       
@@ -3688,6 +3752,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -3720,6 +3785,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: predict(x, check_input=True)
 
@@ -3755,6 +3821,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: predict_proba(x, check_input=True)
 
@@ -3793,6 +3860,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: score(X, y, sample_weight=None)
 
@@ -3834,6 +3902,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: set_params(**params)
 
       
@@ -3871,7 +3940,6 @@ Functions
 
 
 .. py:class:: ShapeletTreeRegressor(*, n_shapelets='log2', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, impurity_equality_tolerance=None, strategy='warn', shapelet_size=0.1, sample_size=1.0, min_shapelet_size=0, max_shapelet_size=1, alpha=None, metric='euclidean', metric_params=None, criterion='squared_error', random_state=None)
-
 
 
 
@@ -4046,6 +4114,7 @@ Functions
 
    ..
        !! processed by numpydoc !!
+
    .. py:method:: apply(x, check_input=True)
 
       
@@ -4098,6 +4167,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: decision_path(x, check_input=True)
 
       
@@ -4133,6 +4203,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: fit(x, y, sample_weight=None, check_input=True)
 
@@ -4177,6 +4248,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: get_metadata_routing()
 
       
@@ -4206,6 +4278,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -4238,6 +4311,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: predict(x, check_input=True)
 
@@ -4273,6 +4347,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: score(X, y, sample_weight=None)
 
@@ -4329,6 +4404,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: set_params(**params)
 

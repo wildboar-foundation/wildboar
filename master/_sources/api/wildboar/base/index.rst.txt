@@ -44,7 +44,6 @@ Functions
 
 
 
-
    
    Base estimator for all Wildboar estimators.
 
@@ -65,6 +64,7 @@ Functions
 
    ..
        !! processed by numpydoc !!
+
    .. py:method:: get_metadata_routing()
 
       
@@ -94,6 +94,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -126,6 +127,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: set_params(**params)
 
@@ -165,7 +167,6 @@ Functions
 
 .. py:class:: CounterfactualMixin
 
-
    
    Mixin class for counterfactual explainer.
 
@@ -186,6 +187,7 @@ Functions
 
    ..
        !! processed by numpydoc !!
+
    .. py:method:: score(x, y)
 
       
@@ -223,7 +225,6 @@ Functions
 
 .. py:class:: ExplainerMixin
 
-
    
    Mixin class for all explainers in wildboar.
 
@@ -244,6 +245,7 @@ Functions
 
    ..
        !! processed by numpydoc !!
+
    .. py:method:: fit_explain(estimator, x=None, y=None, **kwargs)
 
       
@@ -283,6 +285,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: plot(x=None, y=None, ax=None)
 

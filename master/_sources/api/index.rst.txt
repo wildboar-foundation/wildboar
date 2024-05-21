@@ -6,16 +6,13 @@ API Reference
    :maxdepth: 2
 
 
+   /api/wildboar/index
 
    /api/wildboar/annotate/index
-
-
 
    /api/wildboar/base/index
 
    /api/wildboar/datasets/index
-
-
 
    /api/wildboar/datasets/outlier/index
 
@@ -23,76 +20,29 @@ API Reference
 
    /api/wildboar/dimension_selection/index
 
-
-
-
-
    /api/wildboar/distance/index
-
-
-
-
-
 
    /api/wildboar/distance/dtw/index
 
    /api/wildboar/ensemble/index
 
-
-
    /api/wildboar/explain/index
-
 
    /api/wildboar/explain/counterfactual/index
 
-
-
-
-
-
    /api/wildboar/linear_model/index
-
-
-
-
 
    /api/wildboar/metrics/index
 
-
-
    /api/wildboar/model_selection/index
-
-
 
    /api/wildboar/segment/index
 
-
-
    /api/wildboar/transform/index
-
-
-
-
-
-
-
-
-
-
 
    /api/wildboar/tree/index
 
-
-
-
-
    /api/wildboar/utils/index
 
-
-
-
-
    /api/wildboar/utils/plot/index
-
-
 

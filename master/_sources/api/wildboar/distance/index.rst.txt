@@ -56,7 +56,9 @@ Functions
    wildboar.distance.argmin_distance
    wildboar.distance.argmin_subsequence_distance
    wildboar.distance.distance_profile
+   wildboar.distance.matrix_profile
    wildboar.distance.paired_distance
+   wildboar.distance.paired_matrix_profile
    wildboar.distance.paired_subsequence_distance
    wildboar.distance.paired_subsequence_match
    wildboar.distance.pairwise_distance
@@ -71,7 +73,6 @@ Functions
    <br />
 
 .. py:class:: KMeans(n_clusters=8, *, metric='euclidean', r=1.0, g=None, init='random', n_init='auto', max_iter=300, tol=0.001, verbose=0, random_state=None)
-
 
 
 
@@ -137,6 +138,7 @@ Functions
 
    ..
        !! processed by numpydoc !!
+
    .. py:method:: fit(x, y=None)
 
       
@@ -170,6 +172,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: fit_predict(X, y=None, **kwargs)
 
@@ -210,6 +213,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: fit_transform(X, y=None, **fit_params)
 
       
@@ -249,6 +253,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: get_metadata_routing()
 
       
@@ -278,6 +283,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -311,6 +317,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: predict(x)
 
       
@@ -342,6 +349,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: set_output(*, transform=None)
 
       
@@ -352,7 +360,7 @@ Functions
 
       :Parameters:
 
-          **transform** : {"default", "pandas"}, default=None
+          **transform** : {"default", "pandas", "polars"}, default=None
               Configure output of `transform` and `fit_transform`.
               
               - `"default"`: Default output format of a transformer
@@ -382,6 +390,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: set_params(**params)
 
@@ -418,6 +427,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: transform(x)
 
       
@@ -451,7 +461,6 @@ Functions
 
 
 .. py:class:: KMedoids(n_clusters=8, metric='euclidean', metric_params=None, init='random', n_init='auto', algorithm='fast', max_iter=30, tol=0.0001, verbose=0, n_jobs=None, random_state=None)
-
 
 
 
@@ -528,6 +537,7 @@ Functions
 
    ..
        !! processed by numpydoc !!
+
    .. py:method:: fit(x, y=None)
 
       
@@ -561,6 +571,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: fit_predict(X, y=None, **kwargs)
 
@@ -601,6 +612,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: fit_transform(X, y=None, **fit_params)
 
       
@@ -640,6 +652,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: get_metadata_routing()
 
       
@@ -669,6 +682,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -702,6 +716,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: predict(x)
 
       
@@ -733,6 +748,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: set_output(*, transform=None)
 
       
@@ -743,7 +759,7 @@ Functions
 
       :Parameters:
 
-          **transform** : {"default", "pandas"}, default=None
+          **transform** : {"default", "pandas", "polars"}, default=None
               Configure output of `transform` and `fit_transform`.
               
               - `"default"`: Default output format of a transformer
@@ -773,6 +789,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: set_params(**params)
 
@@ -809,6 +826,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: transform(x)
 
       
@@ -842,7 +860,6 @@ Functions
 
 
 .. py:class:: KNeighborsClassifier(n_neighbors=5, *, metric='euclidean', metric_params=None, n_jobs=None)
-
 
 
 
@@ -886,6 +903,7 @@ Functions
 
    ..
        !! processed by numpydoc !!
+
    .. py:method:: fit(x, y)
 
       
@@ -920,6 +938,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: get_metadata_routing()
 
       
@@ -949,6 +968,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -982,6 +1002,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: predict(x)
 
       
@@ -1013,6 +1034,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: predict_proba(x)
 
       
@@ -1043,6 +1065,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: score(X, y, sample_weight=None)
 
@@ -1084,6 +1107,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: set_params(**params)
 
       
@@ -1121,7 +1145,6 @@ Functions
 
 
 .. py:class:: MDS(n_components=2, *, metric=True, n_init=4, max_iter=300, verbose=0, eps=0.001, n_jobs=None, random_state=None, dissimilarity='euclidean', dissimilarity_params=None, normalized_stress='warn')
-
 
 
 
@@ -1198,6 +1221,7 @@ Functions
 
    ..
        !! processed by numpydoc !!
+
    .. py:method:: get_metadata_routing()
 
       
@@ -1227,6 +1251,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -1259,6 +1284,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: set_params(**params)
 
@@ -1537,6 +1563,86 @@ Functions
    ..
        !! processed by numpydoc !!
 
+.. py:function:: matrix_profile(X, Y=None, *, dim=0, window=5, exclude=None, kind='warn', return_index=False, n_jobs=None)
+
+   
+   Compute the matrix profile of every subsequence in X.
+
+   If Y is given compute the metrix profile of every subsequence in X finding
+   the minimum distance in any time series in Y; othervise finding the minimum
+   distance in any time series in X. The former corresponds to a self-join and
+   the latter to an AB join.
+
+   The output approximately corresponds to that of
+   :func:`~wildboar.distance.matrix_profile` where `X.flatten()` but without
+   computing the distance where two time series overlap. The outputs exactly
+   correspond when ``X.shape[0] == 1``.
+
+   :Parameters:
+
+       **X** : array-like of shape (x_samples, x_timestep)
+           The time series for which the matrix profile is computed.
+
+       **Y** : array-like of shape (y_samples, y_timestep), optional
+           The time series used to annotate `X`. If None, `X` is used to annotate.
+
+       **dim** : int, optional
+           The dimension.
+
+       **window** : int or float, optional
+           The window size.
+           
+           - If float, the window size is a fraction of `x_timestep`.
+           - If int, the window size is exact.
+
+       **exclude** : int or float, optional
+           The exclusion zone.
+           
+           - If float, the exclusion zone is a fraction of `window`.
+           - If int, the exclusion zone is exact.
+           - If None, the exclusion zone is determined automatically. If Y is None,
+             (self-join) the value is `0.2`, otherwise (AB-join) the value is
+             `0.0`.
+
+       **kind** : {"paired", "default"}, optional
+           The kind of matrix profile.
+           
+           - if "paired", compute the matrix profile for each time series in X
+             optionally annotated with each time series in Y.
+           - if "default", compute the matrix profile for every subsequence in
+             every time series in X optional annotated with every time series in
+             Y.
+
+       **return_index** : bool, optional
+           Return the matrix profile index.
+
+       **n_jobs** : int, optional
+           The number of parallel jobs.
+
+   :Returns:
+
+       **mp** : ndarray of shape (x_samples, profile_size)
+           The matrix profile.
+
+       **(mpi_sample, mpi_start)** : ndarray of shape (x_samples, profile_size), optional
+           The matrix profile index sample and start positions. Returned if
+           `return_index=True`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
 .. py:function:: paired_distance(x, y, *, dim='warn', metric='euclidean', metric_params=None, n_jobs=None)
 
    
@@ -1589,6 +1695,84 @@ Functions
 
 
 
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: paired_matrix_profile(X, Y=None, *, window=5, dim=0, exclude=None, n_jobs=-1, return_index=False)
+
+   
+   Compute the matrix profile.
+
+   - If only `X` is given, compute the similarity self-join of every subsequence in
+     `X` of size ``window`` to its nearest neighbor in `X` excluding trivial matches
+     according to the `exclude` parameter.
+   - If both `X` and `Y` are given, compute the similarity join of every
+     subsequenec in `X` of size `window` to its nearest neighbor in `Y` excluding
+     matches according to the `exclude` parameter.
+
+   :Parameters:
+
+       **X** : array-like of shape (n_timestep, ), (n_samples, x_timestep) or         (n_samples, n_dim, x_timestep)
+           The first time series.
+
+       **Y** : array-like of shape (n_timestep, ), (n_samples, y_timestep) or         (n_samples, n_dim, y_timestep), optional
+           The optional second time series. Y is broadcast to the shape of X if possible.
+
+       **window** : int or float, optional
+           The subsequence size, by default 5
+           
+           - if float, a fraction of y_timestep
+           - if int, the exact subsequence size.
+
+       **dim** : int, optional
+           The dim to compute the matrix profile for, by default 0.
+
+       **exclude** : int or float, optional
+           The size of the exclusion zone. The default exclusion zone is  0.2 for
+           similarity self-join and 0.0 for similarity join.
+           
+           - if float, expressed as a fraction of the windows size.
+           - if int, exact size (0 >= exclude < window).
+
+       **n_jobs** : int, optional
+           The number of jobs to use when computing the profile.
+
+       **return_index** : bool, optional
+           Return the matrix profile index.
+
+   :Returns:
+
+       **mp** : ndarray of shape (profile_size, ) or (n_samples, profile_size)
+           The matrix profile.
+
+       **mpi** : ndarray of shape (profile_size, ) or (n_samples, profile_size), optional
+           The matrix profile index.
+
+
+
+
+
+
+
+
+   .. rubric:: Notes
+
+   The `profile_size` is  ``X.shape[-1] - window + 1``.
+
+   .. rubric:: References
+
+   Yeh, C. C. M. et al. (2016).
+       Matrix profile I: All pairs similarity joins for time series: a unifying view
+       that includes motifs, discords and shapelets. In 2016 IEEE 16th international
+       conference on data mining (ICDM)
+
+   .. only:: latex
+
+      
 
 
 

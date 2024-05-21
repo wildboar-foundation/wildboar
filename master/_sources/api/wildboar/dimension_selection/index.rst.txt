@@ -53,7 +53,6 @@ Classes
 
 
 
-
    
    Distance selector that removes dimensions with low variance.
 
@@ -124,6 +123,7 @@ Classes
 
    ..
        !! processed by numpydoc !!
+
    .. py:method:: fit(X, y=None)
 
       
@@ -157,6 +157,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: fit_transform(X, y=None, **fit_params)
 
@@ -197,6 +198,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: get_dimensions(indices=False)
 
       
@@ -228,6 +230,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: get_metadata_routing()
 
       
@@ -257,6 +260,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -290,6 +294,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: inverse_transform(X)
 
       
@@ -322,6 +327,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: set_output(*, transform=None)
 
       
@@ -332,7 +338,7 @@ Classes
 
       :Parameters:
 
-          **transform** : {"default", "pandas"}, default=None
+          **transform** : {"default", "pandas", "polars"}, default=None
               Configure output of `transform` and `fit_transform`.
               
               - `"default"`: Default output format of a transformer
@@ -362,6 +368,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: set_params(**params)
 
@@ -398,6 +405,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: transform(X)
 
       
@@ -431,7 +439,6 @@ Classes
 
 
 .. py:class:: SelectDimensionPercentile(score_func=f_classif, *, sample=None, percentile=10, metric='euclidean', metric_params=None, n_jobs=None, random_state=None)
-
 
 
 
@@ -517,6 +524,7 @@ Classes
 
    ..
        !! processed by numpydoc !!
+
    .. py:method:: fit(X, y=None)
 
       
@@ -550,6 +558,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: fit_transform(X, y=None, **fit_params)
 
@@ -590,6 +599,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: get_dimensions(indices=False)
 
       
@@ -621,6 +631,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: get_metadata_routing()
 
       
@@ -650,6 +661,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -683,6 +695,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: inverse_transform(X)
 
       
@@ -715,6 +728,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: set_output(*, transform=None)
 
       
@@ -725,7 +739,7 @@ Classes
 
       :Parameters:
 
-          **transform** : {"default", "pandas"}, default=None
+          **transform** : {"default", "pandas", "polars"}, default=None
               Configure output of `transform` and `fit_transform`.
               
               - `"default"`: Default output format of a transformer
@@ -755,6 +769,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: set_params(**params)
 
@@ -791,6 +806,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: transform(X)
 
       
@@ -824,7 +840,6 @@ Classes
 
 
 .. py:class:: SelectDimensionSignificance(score_func=f_classif, *, sample=None, alpha=0.05, method='fpr', metric='euclidean', metric_params=None, random_state=None, n_jobs=None)
-
 
 
 
@@ -907,6 +922,7 @@ Classes
 
    ..
        !! processed by numpydoc !!
+
    .. py:method:: fit(X, y=None)
 
       
@@ -940,6 +956,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: fit_transform(X, y=None, **fit_params)
 
@@ -980,6 +997,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: get_dimensions(indices=False)
 
       
@@ -1011,6 +1029,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: get_metadata_routing()
 
       
@@ -1040,6 +1059,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -1073,6 +1093,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: inverse_transform(X)
 
       
@@ -1105,6 +1126,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: set_output(*, transform=None)
 
       
@@ -1115,7 +1137,7 @@ Classes
 
       :Parameters:
 
-          **transform** : {"default", "pandas"}, default=None
+          **transform** : {"default", "pandas", "polars"}, default=None
               Configure output of `transform` and `fit_transform`.
               
               - `"default"`: Default output format of a transformer
@@ -1145,6 +1167,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: set_params(**params)
 
@@ -1181,6 +1204,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: transform(X)
 
       
@@ -1214,7 +1238,6 @@ Classes
 
 
 .. py:class:: SelectDimensionTopK(score_func=f_classif, *, sample=None, k=None, metric='euclidean', metric_params=None, random_state=None, n_jobs=None)
-
 
 
 
@@ -1290,6 +1313,7 @@ Classes
 
    ..
        !! processed by numpydoc !!
+
    .. py:method:: fit(X, y=None)
 
       
@@ -1323,6 +1347,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: fit_transform(X, y=None, **fit_params)
 
@@ -1363,6 +1388,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: get_dimensions(indices=False)
 
       
@@ -1394,6 +1420,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: get_metadata_routing()
 
       
@@ -1423,6 +1450,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -1456,6 +1484,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: inverse_transform(X)
 
       
@@ -1488,6 +1517,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: set_output(*, transform=None)
 
       
@@ -1498,7 +1528,7 @@ Classes
 
       :Parameters:
 
-          **transform** : {"default", "pandas"}, default=None
+          **transform** : {"default", "pandas", "polars"}, default=None
               Configure output of `transform` and `fit_transform`.
               
               - `"default"`: Default output format of a transformer
@@ -1528,6 +1558,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: set_params(**params)
 
@@ -1564,6 +1595,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: transform(X)
 
       
@@ -1597,7 +1629,6 @@ Classes
 
 
 .. py:class:: SequentialDimensionSelector(estimator, *, n_dims='auto', cv=5, scoring=None, direction='forward', tol=None)
-
 
 
 
@@ -1671,6 +1702,7 @@ Classes
 
    ..
        !! processed by numpydoc !!
+
    .. py:method:: fit(X, y)
 
       
@@ -1704,6 +1736,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: fit_transform(X, y=None, **fit_params)
 
@@ -1744,6 +1777,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: get_dimensions(indices=False)
 
       
@@ -1775,6 +1809,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: get_metadata_routing()
 
       
@@ -1804,6 +1839,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -1837,6 +1873,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: inverse_transform(X)
 
       
@@ -1869,6 +1906,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: set_output(*, transform=None)
 
       
@@ -1879,7 +1917,7 @@ Classes
 
       :Parameters:
 
-          **transform** : {"default", "pandas"}, default=None
+          **transform** : {"default", "pandas", "polars"}, default=None
               Configure output of `transform` and `fit_transform`.
               
               - `"default"`: Default output format of a transformer
@@ -1909,6 +1947,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: set_params(**params)
 
@@ -1944,6 +1983,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: transform(X)
 
