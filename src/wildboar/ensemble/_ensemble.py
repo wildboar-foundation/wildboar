@@ -839,10 +839,7 @@ class BaggingRegressor(BaseBagging, SklearnBaggingRegressor):
             max_samples=self.max_samples,
             max_depth=self.max_depth,
             sample_weight=sample_weight,
-<<<<<<< HEAD
-=======
             check_input=False,
->>>>>>> c7ab42773 (Fix bugs introduced with scikit-learn 1.5.)
         )
         return self
 
