@@ -3,9 +3,12 @@ from abc import ABCMeta, abstractmethod
 from copy import deepcopy
 
 import numpy as np
-from sklearn.utils import _is_arraylike_not_scalar
 from sklearn.utils._param_validation import Interval, StrOptions
-from sklearn.utils.validation import check_is_fitted, check_random_state
+from sklearn.utils.validation import (
+    _is_arraylike_not_scalar,
+    check_is_fitted,
+    check_random_state,
+)
 
 from ...base import BaseEstimator, CounterfactualMixin, ExplainerMixin
 from ...distance import argmin_distance

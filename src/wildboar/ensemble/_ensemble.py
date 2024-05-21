@@ -298,9 +298,19 @@ class BaggingClassifier(BaseBagging, SklearnBaggingClassifier):
                 sample_weight = class_weight
 
         self._fit(
-            x, y, self.max_samples, self.max_depth, sample_weight, check_input=True
+            x,
+            y,
+            max_samples=self.max_samples,
+            max_depth=self.max_depth,
+            sample_weight=sample_weight,
+            check_input=True,
         )
         return self
+
+    def _get_estimator(self):
+        if self.estimator is None:
+            return ShapeletTreeClassifier(strategy="random")
+        return self.estimator
 
 
 class BaseForestClassifier(ForestMixin, BaggingClassifier, metaclass=ABCMeta):
@@ -351,7 +361,14 @@ class BaseForestClassifier(ForestMixin, BaggingClassifier, metaclass=ABCMeta):
         sample_weight=None,
         check_input=False,
     ):
-        return super()._fit(X, y, max_samples, max_depth, sample_weight, False)
+        return super()._fit(
+            X,
+            y,
+            max_samples=max_samples,
+            max_depth=max_depth,
+            sample_weight=sample_weight,
+            check_input=False,
+        )
 
     def _parallel_args(self):
         return {"prefer": "threads"}
@@ -836,8 +853,20 @@ class BaggingRegressor(BaseBagging, SklearnBaggingRegressor):
     def fit(self, x, y, sample_weight=None):
         x, y = self._validate_data(x, y, allow_3d=True, dtype=float, y_numeric=True)
 
-        super()._fit(x, y, self.max_samples, self.max_depth, sample_weight)
+        super()._fit(
+            x,
+            y,
+            max_samples=self.max_samples,
+            max_depth=self.max_depth,
+            sample_weight=sample_weight,
+            check_input=False,
+        )
         return self
+
+    def _get_estimator(self):
+        if self.estimator is None:
+            return ShapeletTreeRegressor(strategy="random")
+        return self.estimator
 
 
 class BaseForestRegressor(ForestMixin, BaggingRegressor, metaclass=ABCMeta):
@@ -1584,6 +1613,9 @@ class IsolationShapeletForest(OutlierMixin, ForestMixin, BaseBagging):
         self.min_samples_split = min_samples_split
         self.contamination = contamination
         self.max_samples = max_samples
+
+    def _get_estimator(self):
+        return self.estimator
 
     def _set_oob_score(self, x, y):
         raise NotImplementedError("OOB score not supported")
