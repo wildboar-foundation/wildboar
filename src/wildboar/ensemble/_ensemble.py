@@ -305,6 +305,11 @@ class BaggingClassifier(BaseBagging, SklearnBaggingClassifier):
         )
         return self
 
+    def _get_estimator(self):
+        if self.estimator is None:
+            return ShapeletTreeClassifier(strategy="random")
+        return self.estimator
+
 
 class BaseForestClassifier(ForestMixin, BaggingClassifier, metaclass=ABCMeta):
     @abstractmethod
@@ -834,8 +839,17 @@ class BaggingRegressor(BaseBagging, SklearnBaggingRegressor):
             max_samples=self.max_samples,
             max_depth=self.max_depth,
             sample_weight=sample_weight,
+<<<<<<< HEAD
+=======
+            check_input=False,
+>>>>>>> c7ab42773 (Fix bugs introduced with scikit-learn 1.5.)
         )
         return self
+
+    def _get_estimator(self):
+        if self.estimator is None:
+            return ShapeletTreeRegressor(strategy="random")
+        return self.estimator
 
 
 class BaseForestRegressor(ForestMixin, BaggingRegressor, metaclass=ABCMeta):
