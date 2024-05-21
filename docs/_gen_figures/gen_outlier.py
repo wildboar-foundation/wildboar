@@ -37,11 +37,11 @@ def plot_inlier_outlier(
 
     ax[1].set_title("Distribution")
 
-    ax[1].bar(label, value, color=plt.cm.get_cmap(lut=2).colors)
+    ax[1].bar(label, value, color=plt.get_cmap(lut=2).colors)
 
     ax[2].set_title("Time series")
     plot.plot_time_domain(
-        x_outlier, y=y_outlier, ax=ax[2], n_samples=10, cmap=plt.cm.get_cmap(lut=2)
+        x_outlier, y=y_outlier, ax=ax[2], n_samples=10, cmap=plt.get_cmap(lut=2)
     )
 
 
@@ -53,7 +53,7 @@ def make_projection(*, x, x_outlier):
 
 
 def plot_projection(*, original_projection, outlier_projection, y_outlier, ax):
-    cmap = plt.cm.get_cmap(lut=3)
+    cmap = plt.get_cmap(lut=3)
     ax.scatter(
         original_projection[:, 0],
         original_projection[:, 1],

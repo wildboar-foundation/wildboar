@@ -3,17 +3,17 @@
 """
 Plotting utilities.
 """
+
 import numpy as np
 from sklearn.utils import column_or_1d, resample
 
 from ..utils.validation import check_array
 
 try:
-    import matplotlib.pylab as plt
-    from matplotlib.cm import get_cmap
     from matplotlib.collections import LineCollection
     from matplotlib.colors import Normalize
     from matplotlib.lines import Line2D
+    from matplotlib.pyplot import get_cmap, subplots
 except ModuleNotFoundError as e:
     from ..utils import DependencyMissing
 
@@ -106,7 +106,7 @@ def plot_time_domain(
     >>> plot_time_domain(X, y, n_sample=10)
     """
     if ax is None:
-        fig, ax = plt.subplots()
+        fig, ax = subplots()
 
     x = check_array(np.atleast_2d(x), input_name="x", allow_3d=False, order=None)
     if y is not None:
@@ -203,7 +203,7 @@ def plot_frequency_domain(
     >>> plot_frequency_domain(X, y, n_sample=10)
     """
     if ax is None:
-        fig, ax = plt.subplots()
+        fig, ax = subplots()
 
     x = check_array(x, allow_3d=False, order=None)
     if y is not None:

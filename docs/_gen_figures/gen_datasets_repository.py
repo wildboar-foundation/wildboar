@@ -1,6 +1,6 @@
 import numpy as np
 from light_dark import mk_light_dark
-from matplotlib.cm import get_cmap
+from matplotlib.pyplot import get_cmap
 from wildboar.utils.variable_len import is_end_of_series
 from wildboar.datasets import load_dataset, load_gun_point
 from wildboar.datasets.preprocess import minmax_scale, truncate

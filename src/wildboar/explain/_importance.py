@@ -21,9 +21,8 @@ from ..transform._shapelet import RandomShapeletMixin, ShapeletTransform
 from ..utils.validation import check_array, check_option
 
 try:
-    from matplotlib.axes import Axes
-    from matplotlib.cm import ScalarMappable, get_cmap
-    from matplotlib.pylab import subplots
+    from matplotlib.cm import ScalarMappable
+    from matplotlib.pyplot import get_cmap, subplots
 
     from ..utils.plot import MidpointNormalize, plot_frequency_domain, plot_time_domain
 except ModuleNotFoundError as e:
@@ -35,7 +34,6 @@ except ModuleNotFoundError as e:
     subplots = matplotlib_missing
     MidpointNormalize = matplotlib_missing
     plot_time_domain = matplotlib_missing
-    Axes = matplotlib_missing
 
 Importance = namedtuple("Importance", ["mean", "std", "full"])
 
