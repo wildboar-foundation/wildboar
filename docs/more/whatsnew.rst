@@ -40,9 +40,9 @@ Wildboar 1.2 introduces several new models.
 - :class:`linear_model.DilatedShapeletClassifier`: a new shapelet based
   classifier as described by Guillaume et al., (2022).
 - :class:`transform.CastorTransform`: a new shapelet based transform using
-  competing shapelets.
+  competing shapelets introduced in Samsten and Lee (2024).
 - :class:`linear_model.CastorClassifier`: a new shapelet based classifier using
-  competing shapelets.
+  competing shapelets introduced in Samsten and Lee (2024).
 
 Changelog
 ---------
