@@ -61,7 +61,6 @@ Classes
 
 
 
-
    
    A bagging classifier.
 
@@ -144,35 +143,6 @@ Classes
 
    ..
        !! processed by numpydoc !!
-   .. py:property:: estimators_samples_
-
-      
-      The subset of drawn samples for each base estimator.
-
-      Returns a dynamically generated list of indices identifying
-      the samples used for fitting each member of the ensemble, i.e.,
-      the in-bag samples.
-
-      Note: the list is re-created at each call to the property in order
-      to reduce the object memory footprint by not storing the sampling
-      data. Thus fetching the property may be slower than expected.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      ..
-          !! processed by numpydoc !!
 
    .. py:method:: decision_function(X)
 
@@ -209,6 +179,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: fit(x, y, sample_weight=None)
 
       
@@ -230,6 +201,17 @@ Classes
               Note that this is supported only if the base estimator supports
               sample weighting.
 
+          **\*\*fit_params** : dict
+              Parameters to pass to the underlying estimators.
+              
+              .. versionadded:: 1.5
+              
+                  Only available if `enable_metadata_routing=True`,
+                  which can be set by using
+                  ``sklearn.set_config(enable_metadata_routing=True)``.
+                  See :ref:`Metadata Routing User Guide <metadata_routing>` for
+                  more details.
+
       :Returns:
 
           **self** : object
@@ -249,6 +231,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_metadata_routing()
 
@@ -279,6 +262,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -311,6 +295,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: predict(X)
 
@@ -347,6 +332,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: predict_log_proba(X)
 
       
@@ -382,6 +368,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: predict_proba(X)
 
@@ -421,6 +408,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: score(X, y, sample_weight=None)
 
@@ -462,6 +450,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: set_params(**params)
 
       
@@ -498,8 +487,37 @@ Classes
           !! processed by numpydoc !!
 
 
-.. py:class:: BaggingRegressor(estimator=None, n_estimators=100, *, max_samples=1.0, bootstrap=True, oob_score=False, warm_start=False, n_jobs=None, random_state=None, verbose=0, base_estimator='deprecated')
+   .. py:property:: estimators_samples_
+      
+      The subset of drawn samples for each base estimator.
 
+      Returns a dynamically generated list of indices identifying
+      the samples used for fitting each member of the ensemble, i.e.,
+      the in-bag samples.
+
+      Note: the list is re-created at each call to the property in order
+      to reduce the object memory footprint by not storing the sampling
+      data. Thus fetching the property may be slower than expected.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+.. py:class:: BaggingRegressor(estimator=None, n_estimators=100, *, max_samples=1.0, bootstrap=True, oob_score=False, warm_start=False, n_jobs=None, random_state=None, verbose=0, base_estimator='deprecated')
 
 
 
@@ -577,35 +595,6 @@ Classes
 
    ..
        !! processed by numpydoc !!
-   .. py:property:: estimators_samples_
-
-      
-      The subset of drawn samples for each base estimator.
-
-      Returns a dynamically generated list of indices identifying
-      the samples used for fitting each member of the ensemble, i.e.,
-      the in-bag samples.
-
-      Note: the list is re-created at each call to the property in order
-      to reduce the object memory footprint by not storing the sampling
-      data. Thus fetching the property may be slower than expected.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      ..
-          !! processed by numpydoc !!
 
    .. py:method:: fit(x, y, sample_weight=None)
 
@@ -628,6 +617,17 @@ Classes
               Note that this is supported only if the base estimator supports
               sample weighting.
 
+          **\*\*fit_params** : dict
+              Parameters to pass to the underlying estimators.
+              
+              .. versionadded:: 1.5
+              
+                  Only available if `enable_metadata_routing=True`,
+                  which can be set by using
+                  ``sklearn.set_config(enable_metadata_routing=True)``.
+                  See :ref:`Metadata Routing User Guide <metadata_routing>` for
+                  more details.
+
       :Returns:
 
           **self** : object
@@ -647,6 +647,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_metadata_routing()
 
@@ -677,6 +678,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -709,6 +711,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: predict(X)
 
@@ -743,6 +746,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: score(X, y, sample_weight=None)
 
@@ -800,6 +804,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: set_params(**params)
 
       
@@ -836,33 +841,7 @@ Classes
           !! processed by numpydoc !!
 
 
-.. py:class:: BaseBagging(estimator=None, n_estimators=10, *, max_samples=1.0, bootstrap=True, oob_score=False, warm_start=False, n_jobs=None, random_state=None, verbose=0, base_estimator='deprecated')
-
-
-
-
-   
-   Base estimator for Wildboar ensemble estimators.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   ..
-       !! processed by numpydoc !!
    .. py:property:: estimators_samples_
-
       
       The subset of drawn samples for each base estimator.
 
@@ -891,6 +870,32 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
+.. py:class:: BaseBagging(estimator=None, n_estimators=10, *, max_samples=1.0, bootstrap=True, oob_score=False, warm_start=False, n_jobs=None, random_state=None, verbose=0, base_estimator='deprecated')
+
+
+
+   
+   Base estimator for Wildboar ensemble estimators.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
    .. py:method:: fit(x, y, sample_weight=None)
 
       
@@ -912,6 +917,17 @@ Classes
               Note that this is supported only if the base estimator supports
               sample weighting.
 
+          **\*\*fit_params** : dict
+              Parameters to pass to the underlying estimators.
+              
+              .. versionadded:: 1.5
+              
+                  Only available if `enable_metadata_routing=True`,
+                  which can be set by using
+                  ``sklearn.set_config(enable_metadata_routing=True)``.
+                  See :ref:`Metadata Routing User Guide <metadata_routing>` for
+                  more details.
+
       :Returns:
 
           **self** : object
@@ -931,6 +947,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_metadata_routing()
 
@@ -961,6 +978,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -994,6 +1012,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: set_params(**params)
 
       
@@ -1030,8 +1049,37 @@ Classes
           !! processed by numpydoc !!
 
 
-.. py:class:: ElasticEnsembleClassifier(n_neighbors=1, *, metric='auto', n_jobs=None)
+   .. py:property:: estimators_samples_
+      
+      The subset of drawn samples for each base estimator.
 
+      Returns a dynamically generated list of indices identifying
+      the samples used for fitting each member of the ensemble, i.e.,
+      the in-bag samples.
+
+      Note: the list is re-created at each call to the property in order
+      to reduce the object memory footprint by not storing the sampling
+      data. Thus fetching the property may be slower than expected.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+.. py:class:: ElasticEnsembleClassifier(n_neighbors=1, *, metric='auto', n_jobs=None)
 
 
 
@@ -1105,6 +1153,7 @@ Classes
 
    ..
        !! processed by numpydoc !!
+
    .. py:method:: fit(x, y)
 
       
@@ -1139,6 +1188,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: get_metadata_routing()
 
       
@@ -1168,6 +1218,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -1201,6 +1252,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: predict(x)
 
       
@@ -1232,6 +1284,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: predict_proba(x)
 
       
@@ -1262,6 +1315,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: score(X, y, sample_weight=None)
 
@@ -1303,6 +1357,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: set_params(**params)
 
       
@@ -1340,7 +1395,6 @@ Classes
 
 
 .. py:class:: ExtraShapeletTreesClassifier(n_estimators=100, *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='entropy', oob_score=False, bootstrap=True, warm_start=False, class_weight=None, n_jobs=None, random_state=None)
-
 
 
 
@@ -1465,35 +1519,6 @@ Classes
 
    ..
        !! processed by numpydoc !!
-   .. py:property:: estimators_samples_
-
-      
-      The subset of drawn samples for each base estimator.
-
-      Returns a dynamically generated list of indices identifying
-      the samples used for fitting each member of the ensemble, i.e.,
-      the in-bag samples.
-
-      Note: the list is re-created at each call to the property in order
-      to reduce the object memory footprint by not storing the sampling
-      data. Thus fetching the property may be slower than expected.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      ..
-          !! processed by numpydoc !!
 
    .. py:method:: decision_function(X)
 
@@ -1530,6 +1555,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: fit(x, y, sample_weight=None)
 
       
@@ -1551,6 +1577,17 @@ Classes
               Note that this is supported only if the base estimator supports
               sample weighting.
 
+          **\*\*fit_params** : dict
+              Parameters to pass to the underlying estimators.
+              
+              .. versionadded:: 1.5
+              
+                  Only available if `enable_metadata_routing=True`,
+                  which can be set by using
+                  ``sklearn.set_config(enable_metadata_routing=True)``.
+                  See :ref:`Metadata Routing User Guide <metadata_routing>` for
+                  more details.
+
       :Returns:
 
           **self** : object
@@ -1570,6 +1607,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_metadata_routing()
 
@@ -1600,6 +1638,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -1632,6 +1671,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: predict(X)
 
@@ -1668,6 +1708,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: predict_log_proba(X)
 
       
@@ -1703,6 +1744,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: predict_proba(X)
 
@@ -1742,6 +1784,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: score(X, y, sample_weight=None)
 
@@ -1783,6 +1826,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: set_params(**params)
 
       
@@ -1819,8 +1863,37 @@ Classes
           !! processed by numpydoc !!
 
 
-.. py:class:: ExtraShapeletTreesRegressor(n_estimators=100, *, max_depth=None, min_samples_split=2, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, criterion='squared_error', oob_score=False, bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
+   .. py:property:: estimators_samples_
+      
+      The subset of drawn samples for each base estimator.
 
+      Returns a dynamically generated list of indices identifying
+      the samples used for fitting each member of the ensemble, i.e.,
+      the in-bag samples.
+
+      Note: the list is re-created at each call to the property in order
+      to reduce the object memory footprint by not storing the sampling
+      data. Thus fetching the property may be slower than expected.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+.. py:class:: ExtraShapeletTreesRegressor(n_estimators=100, *, max_depth=None, min_samples_split=2, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, criterion='squared_error', oob_score=False, bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
 
 
 
@@ -1933,35 +2006,6 @@ Classes
 
    ..
        !! processed by numpydoc !!
-   .. py:property:: estimators_samples_
-
-      
-      The subset of drawn samples for each base estimator.
-
-      Returns a dynamically generated list of indices identifying
-      the samples used for fitting each member of the ensemble, i.e.,
-      the in-bag samples.
-
-      Note: the list is re-created at each call to the property in order
-      to reduce the object memory footprint by not storing the sampling
-      data. Thus fetching the property may be slower than expected.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      ..
-          !! processed by numpydoc !!
 
    .. py:method:: fit(x, y, sample_weight=None)
 
@@ -1984,6 +2028,17 @@ Classes
               Note that this is supported only if the base estimator supports
               sample weighting.
 
+          **\*\*fit_params** : dict
+              Parameters to pass to the underlying estimators.
+              
+              .. versionadded:: 1.5
+              
+                  Only available if `enable_metadata_routing=True`,
+                  which can be set by using
+                  ``sklearn.set_config(enable_metadata_routing=True)``.
+                  See :ref:`Metadata Routing User Guide <metadata_routing>` for
+                  more details.
+
       :Returns:
 
           **self** : object
@@ -2003,6 +2058,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_metadata_routing()
 
@@ -2033,6 +2089,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -2065,6 +2122,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: predict(X)
 
@@ -2099,6 +2157,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: score(X, y, sample_weight=None)
 
@@ -2156,6 +2215,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: set_params(**params)
 
       
@@ -2192,33 +2252,7 @@ Classes
           !! processed by numpydoc !!
 
 
-.. py:class:: IntervalForestClassifier(n_estimators=100, *, n_intervals='sqrt', intervals='fixed', summarizer='mean_var_std', sample_size=0.5, min_size=0.0, max_size=1.0, oob_score=False, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0, criterion='entropy', bootstrap=True, warm_start=False, n_jobs=None, class_weight=None, random_state=None)
-
-
-
-
-   
-   An ensemble of interval tree classifiers.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   ..
-       !! processed by numpydoc !!
    .. py:property:: estimators_samples_
-
       
       The subset of drawn samples for each base estimator.
 
@@ -2246,6 +2280,32 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
+
+.. py:class:: IntervalForestClassifier(n_estimators=100, *, n_intervals='sqrt', intervals='fixed', summarizer='mean_var_std', sample_size=0.5, min_size=0.0, max_size=1.0, oob_score=False, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0, criterion='entropy', bootstrap=True, warm_start=False, n_jobs=None, class_weight=None, random_state=None)
+
+
+
+   
+   An ensemble of interval tree classifiers.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
    .. py:method:: decision_function(X)
 
@@ -2282,6 +2342,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: fit(x, y, sample_weight=None)
 
       
@@ -2303,6 +2364,17 @@ Classes
               Note that this is supported only if the base estimator supports
               sample weighting.
 
+          **\*\*fit_params** : dict
+              Parameters to pass to the underlying estimators.
+              
+              .. versionadded:: 1.5
+              
+                  Only available if `enable_metadata_routing=True`,
+                  which can be set by using
+                  ``sklearn.set_config(enable_metadata_routing=True)``.
+                  See :ref:`Metadata Routing User Guide <metadata_routing>` for
+                  more details.
+
       :Returns:
 
           **self** : object
@@ -2322,6 +2394,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_metadata_routing()
 
@@ -2352,6 +2425,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -2384,6 +2458,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: predict(X)
 
@@ -2420,6 +2495,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: predict_log_proba(X)
 
       
@@ -2455,6 +2531,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: predict_proba(X)
 
@@ -2494,6 +2571,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: score(X, y, sample_weight=None)
 
@@ -2535,6 +2613,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: set_params(**params)
 
       
@@ -2571,33 +2650,7 @@ Classes
           !! processed by numpydoc !!
 
 
-.. py:class:: IntervalForestRegressor(n_estimators=100, *, n_intervals='sqrt', intervals='fixed', summarizer='auto', sample_size=0.5, min_size=0.0, max_size=1.0, oob_score=False, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0, criterion='squared_error', bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
-
-
-
-
-   
-   An ensemble of interval tree regressors.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   ..
-       !! processed by numpydoc !!
    .. py:property:: estimators_samples_
-
       
       The subset of drawn samples for each base estimator.
 
@@ -2626,6 +2679,32 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
+.. py:class:: IntervalForestRegressor(n_estimators=100, *, n_intervals='sqrt', intervals='fixed', summarizer='auto', sample_size=0.5, min_size=0.0, max_size=1.0, oob_score=False, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0, criterion='squared_error', bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
+
+
+
+   
+   An ensemble of interval tree regressors.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
    .. py:method:: fit(x, y, sample_weight=None)
 
       
@@ -2647,6 +2726,17 @@ Classes
               Note that this is supported only if the base estimator supports
               sample weighting.
 
+          **\*\*fit_params** : dict
+              Parameters to pass to the underlying estimators.
+              
+              .. versionadded:: 1.5
+              
+                  Only available if `enable_metadata_routing=True`,
+                  which can be set by using
+                  ``sklearn.set_config(enable_metadata_routing=True)``.
+                  See :ref:`Metadata Routing User Guide <metadata_routing>` for
+                  more details.
+
       :Returns:
 
           **self** : object
@@ -2666,6 +2756,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_metadata_routing()
 
@@ -2696,6 +2787,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -2728,6 +2820,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: predict(X)
 
@@ -2762,6 +2855,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: score(X, y, sample_weight=None)
 
@@ -2819,6 +2913,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: set_params(**params)
 
       
@@ -2855,8 +2950,37 @@ Classes
           !! processed by numpydoc !!
 
 
-.. py:class:: IsolationShapeletForest(n_estimators=100, *, n_shapelets=1, bootstrap=False, n_jobs=None, min_shapelet_size=0, max_shapelet_size=1, min_samples_split=2, max_samples='auto', contamination='auto', warm_start=False, metric='euclidean', metric_params=None, random_state=None)
+   .. py:property:: estimators_samples_
+      
+      The subset of drawn samples for each base estimator.
 
+      Returns a dynamically generated list of indices identifying
+      the samples used for fitting each member of the ensemble, i.e.,
+      the in-bag samples.
+
+      Note: the list is re-created at each call to the property in order
+      to reduce the object memory footprint by not storing the sampling
+      data. Thus fetching the property may be slower than expected.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+.. py:class:: IsolationShapeletForest(n_estimators=100, *, n_shapelets=1, bootstrap=False, n_jobs=None, min_shapelet_size=0, max_shapelet_size=1, min_samples_split=2, max_samples='auto', contamination='auto', warm_start=False, metric='euclidean', metric_params=None, random_state=None)
 
 
 
@@ -2984,35 +3108,6 @@ Classes
 
    ..
        !! processed by numpydoc !!
-   .. py:property:: estimators_samples_
-
-      
-      The subset of drawn samples for each base estimator.
-
-      Returns a dynamically generated list of indices identifying
-      the samples used for fitting each member of the ensemble, i.e.,
-      the in-bag samples.
-
-      Note: the list is re-created at each call to the property in order
-      to reduce the object memory footprint by not storing the sampling
-      data. Thus fetching the property may be slower than expected.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      ..
-          !! processed by numpydoc !!
 
    .. py:method:: fit(x, y=None, sample_weight=None)
 
@@ -3035,6 +3130,17 @@ Classes
               Note that this is supported only if the base estimator supports
               sample weighting.
 
+          **\*\*fit_params** : dict
+              Parameters to pass to the underlying estimators.
+              
+              .. versionadded:: 1.5
+              
+                  Only available if `enable_metadata_routing=True`,
+                  which can be set by using
+                  ``sklearn.set_config(enable_metadata_routing=True)``.
+                  See :ref:`Metadata Routing User Guide <metadata_routing>` for
+                  more details.
+
       :Returns:
 
           **self** : object
@@ -3054,6 +3160,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: fit_predict(X, y=None, **kwargs)
 
@@ -3095,6 +3202,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: get_metadata_routing()
 
       
@@ -3124,6 +3232,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -3156,6 +3265,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: set_params(**params)
 
@@ -3193,33 +3303,7 @@ Classes
           !! processed by numpydoc !!
 
 
-.. py:class:: PivotForestClassifier(n_estimators=100, *, n_pivot='sqrt', metrics='all', oob_score=False, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0, criterion='entropy', bootstrap=True, warm_start=False, n_jobs=None, class_weight=None, random_state=None)
-
-
-
-
-   
-   An ensemble of interval tree classifiers.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   ..
-       !! processed by numpydoc !!
    .. py:property:: estimators_samples_
-
       
       The subset of drawn samples for each base estimator.
 
@@ -3247,6 +3331,32 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
+
+.. py:class:: PivotForestClassifier(n_estimators=100, *, n_pivot='sqrt', metrics='all', oob_score=False, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0, criterion='entropy', bootstrap=True, warm_start=False, n_jobs=None, class_weight=None, random_state=None)
+
+
+
+   
+   An ensemble of interval tree classifiers.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
    .. py:method:: decision_function(X)
 
@@ -3283,6 +3393,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: fit(x, y, sample_weight=None)
 
       
@@ -3304,6 +3415,17 @@ Classes
               Note that this is supported only if the base estimator supports
               sample weighting.
 
+          **\*\*fit_params** : dict
+              Parameters to pass to the underlying estimators.
+              
+              .. versionadded:: 1.5
+              
+                  Only available if `enable_metadata_routing=True`,
+                  which can be set by using
+                  ``sklearn.set_config(enable_metadata_routing=True)``.
+                  See :ref:`Metadata Routing User Guide <metadata_routing>` for
+                  more details.
+
       :Returns:
 
           **self** : object
@@ -3323,6 +3445,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_metadata_routing()
 
@@ -3353,6 +3476,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -3385,6 +3509,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: predict(X)
 
@@ -3421,6 +3546,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: predict_log_proba(X)
 
       
@@ -3456,6 +3582,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: predict_proba(X)
 
@@ -3495,6 +3622,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: score(X, y, sample_weight=None)
 
@@ -3536,6 +3664,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: set_params(**params)
 
       
@@ -3572,8 +3701,37 @@ Classes
           !! processed by numpydoc !!
 
 
-.. py:class:: ProximityForestClassifier(n_estimators=100, *, n_pivot=1, pivot_sample='label', metric_sample='weighted', metric='auto', metric_params=None, metric_factories=None, oob_score=False, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0, criterion='entropy', bootstrap=True, warm_start=False, n_jobs=None, class_weight=None, random_state=None)
+   .. py:property:: estimators_samples_
+      
+      The subset of drawn samples for each base estimator.
 
+      Returns a dynamically generated list of indices identifying
+      the samples used for fitting each member of the ensemble, i.e.,
+      the in-bag samples.
+
+      Note: the list is re-created at each call to the property in order
+      to reduce the object memory footprint by not storing the sampling
+      data. Thus fetching the property may be slower than expected.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+.. py:class:: ProximityForestClassifier(n_estimators=100, *, n_pivot=1, pivot_sample='label', metric_sample='weighted', metric='auto', metric_params=None, metric_factories=None, oob_score=False, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0, criterion='entropy', bootstrap=True, warm_start=False, n_jobs=None, class_weight=None, random_state=None)
 
 
 
@@ -3697,35 +3855,6 @@ Classes
 
    ..
        !! processed by numpydoc !!
-   .. py:property:: estimators_samples_
-
-      
-      The subset of drawn samples for each base estimator.
-
-      Returns a dynamically generated list of indices identifying
-      the samples used for fitting each member of the ensemble, i.e.,
-      the in-bag samples.
-
-      Note: the list is re-created at each call to the property in order
-      to reduce the object memory footprint by not storing the sampling
-      data. Thus fetching the property may be slower than expected.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      ..
-          !! processed by numpydoc !!
 
    .. py:method:: decision_function(X)
 
@@ -3762,6 +3891,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: fit(x, y, sample_weight=None)
 
       
@@ -3783,6 +3913,17 @@ Classes
               Note that this is supported only if the base estimator supports
               sample weighting.
 
+          **\*\*fit_params** : dict
+              Parameters to pass to the underlying estimators.
+              
+              .. versionadded:: 1.5
+              
+                  Only available if `enable_metadata_routing=True`,
+                  which can be set by using
+                  ``sklearn.set_config(enable_metadata_routing=True)``.
+                  See :ref:`Metadata Routing User Guide <metadata_routing>` for
+                  more details.
+
       :Returns:
 
           **self** : object
@@ -3802,6 +3943,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_metadata_routing()
 
@@ -3832,6 +3974,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -3864,6 +4007,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: predict(X)
 
@@ -3900,6 +4044,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: predict_log_proba(X)
 
       
@@ -3935,6 +4080,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: predict_proba(X)
 
@@ -3974,6 +4120,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: score(X, y, sample_weight=None)
 
@@ -4015,6 +4162,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: set_params(**params)
 
       
@@ -4051,8 +4199,37 @@ Classes
           !! processed by numpydoc !!
 
 
-.. py:class:: RocketForestClassifier(n_estimators=100, *, n_kernels=10, oob_score=False, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, sampling='normal', sampling_params=None, kernel_size=None, min_size=None, max_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, criterion='entropy', bootstrap=True, warm_start=False, class_weight=None, n_jobs=None, random_state=None)
+   .. py:property:: estimators_samples_
+      
+      The subset of drawn samples for each base estimator.
 
+      Returns a dynamically generated list of indices identifying
+      the samples used for fitting each member of the ensemble, i.e.,
+      the in-bag samples.
+
+      Note: the list is re-created at each call to the property in order
+      to reduce the object memory footprint by not storing the sampling
+      data. Thus fetching the property may be slower than expected.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+.. py:class:: RocketForestClassifier(n_estimators=100, *, n_kernels=10, oob_score=False, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, sampling='normal', sampling_params=None, kernel_size=None, min_size=None, max_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, criterion='entropy', bootstrap=True, warm_start=False, class_weight=None, n_jobs=None, random_state=None)
 
 
 
@@ -4076,35 +4253,6 @@ Classes
 
    ..
        !! processed by numpydoc !!
-   .. py:property:: estimators_samples_
-
-      
-      The subset of drawn samples for each base estimator.
-
-      Returns a dynamically generated list of indices identifying
-      the samples used for fitting each member of the ensemble, i.e.,
-      the in-bag samples.
-
-      Note: the list is re-created at each call to the property in order
-      to reduce the object memory footprint by not storing the sampling
-      data. Thus fetching the property may be slower than expected.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      ..
-          !! processed by numpydoc !!
 
    .. py:method:: decision_function(X)
 
@@ -4141,6 +4289,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: fit(x, y, sample_weight=None)
 
       
@@ -4162,6 +4311,17 @@ Classes
               Note that this is supported only if the base estimator supports
               sample weighting.
 
+          **\*\*fit_params** : dict
+              Parameters to pass to the underlying estimators.
+              
+              .. versionadded:: 1.5
+              
+                  Only available if `enable_metadata_routing=True`,
+                  which can be set by using
+                  ``sklearn.set_config(enable_metadata_routing=True)``.
+                  See :ref:`Metadata Routing User Guide <metadata_routing>` for
+                  more details.
+
       :Returns:
 
           **self** : object
@@ -4181,6 +4341,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_metadata_routing()
 
@@ -4211,6 +4372,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -4243,6 +4405,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: predict(X)
 
@@ -4279,6 +4442,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: predict_log_proba(X)
 
       
@@ -4314,6 +4478,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: predict_proba(X)
 
@@ -4353,6 +4518,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: score(X, y, sample_weight=None)
 
@@ -4394,6 +4560,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: set_params(**params)
 
       
@@ -4430,8 +4597,37 @@ Classes
           !! processed by numpydoc !!
 
 
-.. py:class:: RocketForestRegressor(n_estimators=100, *, n_kernels=10, oob_score=False, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, sampling='normal', sampling_params=None, kernel_size=None, min_size=None, max_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, criterion='squared_error', bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
+   .. py:property:: estimators_samples_
+      
+      The subset of drawn samples for each base estimator.
 
+      Returns a dynamically generated list of indices identifying
+      the samples used for fitting each member of the ensemble, i.e.,
+      the in-bag samples.
+
+      Note: the list is re-created at each call to the property in order
+      to reduce the object memory footprint by not storing the sampling
+      data. Thus fetching the property may be slower than expected.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+.. py:class:: RocketForestRegressor(n_estimators=100, *, n_kernels=10, oob_score=False, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, sampling='normal', sampling_params=None, kernel_size=None, min_size=None, max_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, criterion='squared_error', bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
 
 
 
@@ -4546,35 +4742,6 @@ Classes
 
    ..
        !! processed by numpydoc !!
-   .. py:property:: estimators_samples_
-
-      
-      The subset of drawn samples for each base estimator.
-
-      Returns a dynamically generated list of indices identifying
-      the samples used for fitting each member of the ensemble, i.e.,
-      the in-bag samples.
-
-      Note: the list is re-created at each call to the property in order
-      to reduce the object memory footprint by not storing the sampling
-      data. Thus fetching the property may be slower than expected.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      ..
-          !! processed by numpydoc !!
 
    .. py:method:: fit(x, y, sample_weight=None)
 
@@ -4597,6 +4764,17 @@ Classes
               Note that this is supported only if the base estimator supports
               sample weighting.
 
+          **\*\*fit_params** : dict
+              Parameters to pass to the underlying estimators.
+              
+              .. versionadded:: 1.5
+              
+                  Only available if `enable_metadata_routing=True`,
+                  which can be set by using
+                  ``sklearn.set_config(enable_metadata_routing=True)``.
+                  See :ref:`Metadata Routing User Guide <metadata_routing>` for
+                  more details.
+
       :Returns:
 
           **self** : object
@@ -4616,6 +4794,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_metadata_routing()
 
@@ -4646,6 +4825,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -4678,6 +4858,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: predict(X)
 
@@ -4712,6 +4893,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: score(X, y, sample_weight=None)
 
@@ -4769,6 +4951,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: set_params(**params)
 
       
@@ -4805,8 +4988,37 @@ Classes
           !! processed by numpydoc !!
 
 
-.. py:class:: ShapeletForestClassifier(n_estimators=100, *, n_shapelets='log2', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, alpha=None, metric='euclidean', metric_params=None, criterion='entropy', oob_score=False, bootstrap=True, warm_start=False, class_weight=None, n_jobs=None, random_state=None)
+   .. py:property:: estimators_samples_
+      
+      The subset of drawn samples for each base estimator.
 
+      Returns a dynamically generated list of indices identifying
+      the samples used for fitting each member of the ensemble, i.e.,
+      the in-bag samples.
+
+      Note: the list is re-created at each call to the property in order
+      to reduce the object memory footprint by not storing the sampling
+      data. Thus fetching the property may be slower than expected.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+.. py:class:: ShapeletForestClassifier(n_estimators=100, *, n_shapelets='log2', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, alpha=None, metric='euclidean', metric_params=None, criterion='entropy', oob_score=False, bootstrap=True, warm_start=False, class_weight=None, n_jobs=None, random_state=None)
 
 
 
@@ -4949,35 +5161,6 @@ Classes
 
    ..
        !! processed by numpydoc !!
-   .. py:property:: estimators_samples_
-
-      
-      The subset of drawn samples for each base estimator.
-
-      Returns a dynamically generated list of indices identifying
-      the samples used for fitting each member of the ensemble, i.e.,
-      the in-bag samples.
-
-      Note: the list is re-created at each call to the property in order
-      to reduce the object memory footprint by not storing the sampling
-      data. Thus fetching the property may be slower than expected.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      ..
-          !! processed by numpydoc !!
 
    .. py:method:: decision_function(X)
 
@@ -5014,6 +5197,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: fit(x, y, sample_weight=None)
 
       
@@ -5035,6 +5219,17 @@ Classes
               Note that this is supported only if the base estimator supports
               sample weighting.
 
+          **\*\*fit_params** : dict
+              Parameters to pass to the underlying estimators.
+              
+              .. versionadded:: 1.5
+              
+                  Only available if `enable_metadata_routing=True`,
+                  which can be set by using
+                  ``sklearn.set_config(enable_metadata_routing=True)``.
+                  See :ref:`Metadata Routing User Guide <metadata_routing>` for
+                  more details.
+
       :Returns:
 
           **self** : object
@@ -5054,6 +5249,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_metadata_routing()
 
@@ -5084,6 +5280,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -5116,6 +5313,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: predict(X)
 
@@ -5152,6 +5350,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: predict_log_proba(X)
 
       
@@ -5187,6 +5386,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: predict_proba(X)
 
@@ -5226,6 +5426,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: score(X, y, sample_weight=None)
 
@@ -5267,6 +5468,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: set_params(**params)
 
       
@@ -5303,8 +5505,37 @@ Classes
           !! processed by numpydoc !!
 
 
-.. py:class:: ShapeletForestEmbedding(n_estimators=100, *, n_shapelets=1, max_depth=5, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='squared_error', bootstrap=True, warm_start=False, n_jobs=None, sparse_output=True, random_state=None)
+   .. py:property:: estimators_samples_
+      
+      The subset of drawn samples for each base estimator.
 
+      Returns a dynamically generated list of indices identifying
+      the samples used for fitting each member of the ensemble, i.e.,
+      the in-bag samples.
+
+      Note: the list is re-created at each call to the property in order
+      to reduce the object memory footprint by not storing the sampling
+      data. Thus fetching the property may be slower than expected.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+.. py:class:: ShapeletForestEmbedding(n_estimators=100, *, n_shapelets=1, max_depth=5, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='squared_error', bootstrap=True, warm_start=False, n_jobs=None, sparse_output=True, random_state=None)
 
 
 
@@ -5424,35 +5655,6 @@ Classes
 
    ..
        !! processed by numpydoc !!
-   .. py:property:: estimators_samples_
-
-      
-      The subset of drawn samples for each base estimator.
-
-      Returns a dynamically generated list of indices identifying
-      the samples used for fitting each member of the ensemble, i.e.,
-      the in-bag samples.
-
-      Note: the list is re-created at each call to the property in order
-      to reduce the object memory footprint by not storing the sampling
-      data. Thus fetching the property may be slower than expected.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      ..
-          !! processed by numpydoc !!
 
    .. py:method:: fit(x, y=None, sample_weight=None)
 
@@ -5475,6 +5677,17 @@ Classes
               Note that this is supported only if the base estimator supports
               sample weighting.
 
+          **\*\*fit_params** : dict
+              Parameters to pass to the underlying estimators.
+              
+              .. versionadded:: 1.5
+              
+                  Only available if `enable_metadata_routing=True`,
+                  which can be set by using
+                  ``sklearn.set_config(enable_metadata_routing=True)``.
+                  See :ref:`Metadata Routing User Guide <metadata_routing>` for
+                  more details.
+
       :Returns:
 
           **self** : object
@@ -5494,6 +5707,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_metadata_routing()
 
@@ -5524,6 +5738,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -5556,6 +5771,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: predict(X)
 
@@ -5590,6 +5806,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: score(X, y, sample_weight=None)
 
@@ -5647,6 +5864,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: set_params(**params)
 
       
@@ -5683,8 +5901,37 @@ Classes
           !! processed by numpydoc !!
 
 
-.. py:class:: ShapeletForestRegressor(n_estimators=100, *, n_shapelets='log2', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, alpha=None, metric='euclidean', metric_params=None, criterion='squared_error', oob_score=False, bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
+   .. py:property:: estimators_samples_
+      
+      The subset of drawn samples for each base estimator.
 
+      Returns a dynamically generated list of indices identifying
+      the samples used for fitting each member of the ensemble, i.e.,
+      the in-bag samples.
+
+      Note: the list is re-created at each call to the property in order
+      to reduce the object memory footprint by not storing the sampling
+      data. Thus fetching the property may be slower than expected.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+.. py:class:: ShapeletForestRegressor(n_estimators=100, *, n_shapelets='log2', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, alpha=None, metric='euclidean', metric_params=None, criterion='squared_error', oob_score=False, bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
 
 
 
@@ -5817,35 +6064,6 @@ Classes
 
    ..
        !! processed by numpydoc !!
-   .. py:property:: estimators_samples_
-
-      
-      The subset of drawn samples for each base estimator.
-
-      Returns a dynamically generated list of indices identifying
-      the samples used for fitting each member of the ensemble, i.e.,
-      the in-bag samples.
-
-      Note: the list is re-created at each call to the property in order
-      to reduce the object memory footprint by not storing the sampling
-      data. Thus fetching the property may be slower than expected.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      ..
-          !! processed by numpydoc !!
 
    .. py:method:: fit(x, y, sample_weight=None)
 
@@ -5868,6 +6086,17 @@ Classes
               Note that this is supported only if the base estimator supports
               sample weighting.
 
+          **\*\*fit_params** : dict
+              Parameters to pass to the underlying estimators.
+              
+              .. versionadded:: 1.5
+              
+                  Only available if `enable_metadata_routing=True`,
+                  which can be set by using
+                  ``sklearn.set_config(enable_metadata_routing=True)``.
+                  See :ref:`Metadata Routing User Guide <metadata_routing>` for
+                  more details.
+
       :Returns:
 
           **self** : object
@@ -5887,6 +6116,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_metadata_routing()
 
@@ -5917,6 +6147,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -5949,6 +6180,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: predict(X)
 
@@ -5983,6 +6215,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: score(X, y, sample_weight=None)
 
@@ -6040,6 +6273,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: set_params(**params)
 
       
@@ -6059,6 +6293,36 @@ Classes
 
           **self** : estimator instance
               Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:property:: estimators_samples_
+      
+      The subset of drawn samples for each base estimator.
+
+      Returns a dynamically generated list of indices identifying
+      the samples used for fitting each member of the ensemble, i.e.,
+      the in-bag samples.
+
+      Note: the list is re-created at each call to the property in order
+      to reduce the object memory footprint by not storing the sampling
+      data. Thus fetching the property may be slower than expected.
+
+
 
 
 

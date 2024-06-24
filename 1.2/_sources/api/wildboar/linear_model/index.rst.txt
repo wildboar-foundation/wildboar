@@ -52,7 +52,6 @@ Classes
 
 
 
-
    
    A dictionary based method using dilated competing shapelets.
 
@@ -158,6 +157,7 @@ Classes
 
    ..
        !! processed by numpydoc !!
+
    .. py:method:: get_metadata_routing()
 
       
@@ -187,6 +187,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -219,6 +220,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: score(X, y, sample_weight=None)
 
@@ -260,6 +262,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: set_params(**params)
 
       
@@ -297,7 +300,6 @@ Classes
 
 
 .. py:class:: DilatedShapeletClassifier(n_shapelets=1000, *, metric='euclidean', metric_params=None, normalize_prob=0.8, min_shapelet_size=None, max_shapelet_size=None, shapelet_size=None, lower=0.05, upper=0.1, alphas=(0.1, 1.0, 10.0), fit_intercept=True, scoring=None, cv=None, class_weight=None, normalize=True, random_state=None, n_jobs=None)
-
 
 
 
@@ -399,6 +401,7 @@ Classes
 
    ..
        !! processed by numpydoc !!
+
    .. py:method:: get_metadata_routing()
 
       
@@ -428,6 +431,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -460,6 +464,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: score(X, y, sample_weight=None)
 
@@ -501,6 +506,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: set_params(**params)
 
       
@@ -538,7 +544,6 @@ Classes
 
 
 .. py:class:: HydraClassifier(*, n_groups=64, n_kernels=8, kernel_size=9, sampling='normal', sampling_params=None, order=1, alphas=(0.1, 1.0, 10.0), fit_intercept=True, scoring=None, cv=None, class_weight=None, normalize='sparse', n_jobs=None, random_state=None)
-
 
 
 
@@ -632,6 +637,7 @@ Classes
 
    ..
        !! processed by numpydoc !!
+
    .. py:method:: get_metadata_routing()
 
       
@@ -661,6 +667,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -693,6 +700,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: score(X, y, sample_weight=None)
 
@@ -733,6 +741,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: set_params(**params)
 
@@ -774,7 +783,6 @@ Classes
 
 
 
-
    
    A classifier that uses random shapelets.
 
@@ -795,6 +803,7 @@ Classes
 
    ..
        !! processed by numpydoc !!
+
    .. py:method:: get_metadata_routing()
 
       
@@ -824,6 +833,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -856,6 +866,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: score(X, y, sample_weight=None)
 
@@ -896,6 +907,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: set_params(**params)
 
@@ -937,7 +949,6 @@ Classes
 
 
 
-
    
    A regressor that uses random shapelets.
 
@@ -958,6 +969,7 @@ Classes
 
    ..
        !! processed by numpydoc !!
+
    .. py:method:: get_metadata_routing()
 
       
@@ -987,6 +999,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -1019,6 +1032,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: score(X, y, sample_weight=None)
 
@@ -1075,6 +1089,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: set_params(**params)
 
@@ -1116,7 +1131,6 @@ Classes
 
 
 
-
    
    Implements the ROCKET classifier.
 
@@ -1137,6 +1151,7 @@ Classes
 
    ..
        !! processed by numpydoc !!
+
    .. py:method:: get_metadata_routing()
 
       
@@ -1166,6 +1181,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -1198,6 +1214,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: score(X, y, sample_weight=None)
 
@@ -1239,6 +1256,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: set_params(**params)
 
       
@@ -1279,7 +1297,6 @@ Classes
 
 
 
-
    
    Implements the ROCKET regressor.
 
@@ -1300,6 +1317,7 @@ Classes
 
    ..
        !! processed by numpydoc !!
+
    .. py:method:: get_metadata_routing()
 
       
@@ -1329,6 +1347,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -1361,6 +1380,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: score(X, y, sample_weight=None)
 
@@ -1417,6 +1437,7 @@ Classes
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: set_params(**params)
 

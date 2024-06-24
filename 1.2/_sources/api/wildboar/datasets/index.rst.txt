@@ -88,7 +88,6 @@ Functions
 
 .. py:class:: Bundle(*, key, version, name, tag=None, arrays=None, description=None, collections=None)
 
-
    
    Base class for handling dataset bundles.
 
@@ -131,6 +130,7 @@ Functions
 
    ..
        !! processed by numpydoc !!
+
    .. py:method:: get_collection(collection)
 
       
@@ -161,6 +161,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_filename(version=None, tag=None, ext=None)
 
@@ -199,6 +200,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: list(archive, collection=None)
 
       
@@ -232,6 +234,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: load(name, archive)
 
@@ -281,7 +284,6 @@ Functions
 
 
 
-
    
    A repository is a collection of bundles.
 
@@ -302,113 +304,6 @@ Functions
 
    ..
        !! processed by numpydoc !!
-   .. py:property:: download_url
-
-      
-      The url template for downloading bundles.
-
-
-
-      :Returns:
-
-          str
-              The download url.
-
-
-
-
-
-
-
-
-
-
-
-
-
-      ..
-          !! processed by numpydoc !!
-
-   .. py:property:: name
-
-      
-      Name of the repository.
-
-
-
-      :Returns:
-
-          str
-              The name of the repository.
-
-
-
-
-
-
-
-
-
-
-
-
-
-      ..
-          !! processed by numpydoc !!
-
-   .. py:property:: version
-
-      
-      The repository version.
-
-
-
-      :Returns:
-
-          str
-              The version of the repository.
-
-
-
-
-
-
-
-
-
-
-
-
-
-      ..
-          !! processed by numpydoc !!
-
-   .. py:property:: wildboar_requires
-
-      
-      The minimum required wildboar version.
-
-
-
-      :Returns:
-
-          str
-              The min version.
-
-
-
-
-
-
-
-
-
-
-
-
-
-      ..
-          !! processed by numpydoc !!
 
    .. py:method:: get_bundle(key)
 
@@ -441,6 +336,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: get_bundles()
 
       
@@ -468,6 +364,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: refresh(timeout=None)
 
       
@@ -492,8 +389,115 @@ Functions
           !! processed by numpydoc !!
 
 
-.. py:class:: NpBundle(*, key, version, name, tag=None, arrays=None, description=None, collections=None)
+   .. py:property:: download_url
+      
+      The url template for downloading bundles.
 
+
+
+      :Returns:
+
+          str
+              The download url.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:property:: name
+      
+      Name of the repository.
+
+
+
+      :Returns:
+
+          str
+              The name of the repository.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:property:: version
+      
+      The repository version.
+
+
+
+      :Returns:
+
+          str
+              The version of the repository.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:property:: wildboar_requires
+      
+      The minimum required wildboar version.
+
+
+
+      :Returns:
+
+          str
+              The min version.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+.. py:class:: NpBundle(*, key, version, name, tag=None, arrays=None, description=None, collections=None)
 
 
 
@@ -517,6 +521,7 @@ Functions
 
    ..
        !! processed by numpydoc !!
+
    .. py:method:: get_collection(collection)
 
       
@@ -547,6 +552,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_filename(version=None, tag=None, ext=None)
 
@@ -585,6 +591,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: list(archive, collection=None)
 
       
@@ -618,6 +625,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: load(name, archive)
 
@@ -665,7 +673,6 @@ Functions
 
 .. py:class:: Repository
 
-
    
    A repository is a collection of bundles.
 
@@ -686,117 +693,6 @@ Functions
 
    ..
        !! processed by numpydoc !!
-   .. py:property:: download_url
-      :abstractmethod:
-
-      
-      The url template for downloading bundles.
-
-
-
-      :Returns:
-
-          str
-              The download url.
-
-
-
-
-
-
-
-
-
-
-
-
-
-      ..
-          !! processed by numpydoc !!
-
-   .. py:property:: name
-      :abstractmethod:
-
-      
-      Name of the repository.
-
-
-
-      :Returns:
-
-          str
-              The name of the repository.
-
-
-
-
-
-
-
-
-
-
-
-
-
-      ..
-          !! processed by numpydoc !!
-
-   .. py:property:: version
-      :abstractmethod:
-
-      
-      The repository version.
-
-
-
-      :Returns:
-
-          str
-              The version of the repository.
-
-
-
-
-
-
-
-
-
-
-
-
-
-      ..
-          !! processed by numpydoc !!
-
-   .. py:property:: wildboar_requires
-      :abstractmethod:
-
-      
-      The minimum required wildboar version.
-
-
-
-      :Returns:
-
-          str
-              The min version.
-
-
-
-
-
-
-
-
-
-
-
-
-
-      ..
-          !! processed by numpydoc !!
 
    .. py:method:: get_bundle(key)
 
@@ -829,8 +725,10 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: get_bundles()
       :abstractmethod:
+
 
       
       Get all bundles.
@@ -857,6 +755,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: refresh(timeout=None)
 
       
@@ -864,6 +763,122 @@ Functions
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:property:: download_url
+      :abstractmethod:
+
+      
+      The url template for downloading bundles.
+
+
+
+      :Returns:
+
+          str
+              The download url.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:property:: name
+      :abstractmethod:
+
+      
+      Name of the repository.
+
+
+
+      :Returns:
+
+          str
+              The name of the repository.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:property:: version
+      :abstractmethod:
+
+      
+      The repository version.
+
+
+
+      :Returns:
+
+          str
+              The version of the repository.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:property:: wildboar_requires
+      :abstractmethod:
+
+      
+      The minimum required wildboar version.
+
+
+
+      :Returns:
+
+          str
+              The min version.
 
 
 

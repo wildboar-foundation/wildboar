@@ -67,7 +67,6 @@ Functions
 
 
 
-
    
    Compute the importance of equi-probable amplitude intervals.
 
@@ -91,6 +90,7 @@ Functions
 
    ..
        !! processed by numpydoc !!
+
    .. py:method:: fit_explain(estimator, x=None, y=None, **kwargs)
 
       
@@ -131,6 +131,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: get_metadata_routing()
 
       
@@ -160,6 +161,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -192,6 +194,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: plot(x=None, y=None, *, ax=None, n_samples=100, scoring=None, preprocess=True, k=None, show_bins=False, show_grid=True)
 
@@ -259,6 +262,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: set_params(**params)
 
       
@@ -299,7 +303,6 @@ Functions
 
 
 
-
    
    Mixin class for all explainers in wildboar.
 
@@ -320,6 +323,7 @@ Functions
 
    ..
        !! processed by numpydoc !!
+
    .. py:method:: fit_explain(estimator, x=None, y=None, **kwargs)
 
       
@@ -360,6 +364,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: get_metadata_routing()
 
       
@@ -389,6 +394,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -422,6 +428,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: plot(x=None, y=None, ax=None)
 
       
@@ -448,6 +455,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: set_params(**params)
 
@@ -486,7 +494,6 @@ Functions
 
 
 .. py:class:: IntervalImportance(*, scoring=None, n_repeat=5, n_intervals='sqrt', window=None, random_state=None)
-
 
 
 
@@ -542,6 +549,7 @@ Functions
 
    ..
        !! processed by numpydoc !!
+
    .. py:method:: fit_explain(estimator, x=None, y=None, **kwargs)
 
       
@@ -582,6 +590,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: get_metadata_routing()
 
       
@@ -611,6 +620,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -644,6 +654,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: plot(x=None, y=None, *, ax=None, scoring=None, k=None, n_samples=100, show_grid=True)
 
       
@@ -670,6 +681,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: set_params(**params)
 
@@ -708,7 +720,6 @@ Functions
 
 
 .. py:class:: ShapeletImportance(scoring=None, n_repeat=1, n_shapelets=10, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, random_state=None)
-
 
 
 
@@ -771,6 +782,7 @@ Functions
 
    ..
        !! processed by numpydoc !!
+
    .. py:method:: fit_explain(estimator, x=None, y=None, **kwargs)
 
       
@@ -811,6 +823,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: get_metadata_routing()
 
       
@@ -840,6 +853,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -873,6 +887,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: plot(X=None, y=None, k=None, scoring=None, kernel_scale=0.25, ax=None)
 
       
@@ -899,6 +914,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: set_params(**params)
 

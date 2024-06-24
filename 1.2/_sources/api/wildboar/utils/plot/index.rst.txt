@@ -1,11 +1,16 @@
-:orphan:
-
 
 *****************************
 :py:mod:`wildboar.utils.plot`
 *****************************
 
 .. py:module:: wildboar.utils.plot
+
+.. autoapi-nested-parse::
+
+   Plotting utilities.
+
+   ..
+       !! processed by numpydoc !!
 
 
 Module Contents
@@ -31,7 +36,6 @@ Functions
 
 
 .. py:class:: MidpointNormalize(vmin=None, vmax=None, midpoint=None)
-
 
 
 
@@ -65,6 +69,7 @@ Functions
 
    ..
        !! processed by numpydoc !!
+
    .. py:method:: autoscale(A)
 
       
@@ -88,10 +93,11 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: autoscale_None(A)
 
       
-      If vmin or vmax are not set, use the min/max of *A* to set them.
+      If *vmin* or *vmax* are not set, use the min/max of *A* to set them.
 
 
 
@@ -111,14 +117,49 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
+   .. py:method:: inverse(value)
+
+      
+      Maps the normalized value (i.e., index in the colormap) back to image
+      data value.
+
+
+      :Parameters:
+
+          **value**
+              Normalized value.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
    .. py:method:: process_value(value)
       :staticmethod:
+
 
       
       Homogenize the input *value* for easy and efficient normalization.
 
       *value* can be a scalar or sequence.
 
+      :Parameters:
+
+          **value**
+              Data to normalize.
 
       :Returns:
 
@@ -149,10 +190,11 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: scaled()
 
       
-      Return whether vmin and vmax are set.
+      Return whether *vmin* and *vmax* are both set.
 
 
 

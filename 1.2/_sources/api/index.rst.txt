@@ -72,8 +72,6 @@ See the :ref:`annotation section in the User Guide
     - Find change regimes in a time series.
 
 
-
-
 :py:mod:`wildboar.base`
 ~~~~~~~~~~~~~~~~~~~~~~~
 Base classes for all estimators.
@@ -188,8 +186,6 @@ more details and examples.
     - Change the global cache directory.
 
 
-
-
 :py:mod:`wildboar.datasets.outlier`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Utilities for generating synthetic outlier datasets.
@@ -299,6 +295,8 @@ examples.
     - Compute the k:th closest subsequences.
   * - :py:obj:`~wildboar.distance.distance_profile`
     - Compute the distance profile.
+  * - :py:obj:`~wildboar.distance.matrix_profile`
+    - Compute the matrix profile.
   * - :py:obj:`~wildboar.distance.paired_distance`
     - Compute the distance between the i:th time series.
   * - :py:obj:`~wildboar.distance.paired_subsequence_distance`
@@ -311,11 +309,6 @@ examples.
     - Minimum subsequence distance between subsequences and time series.
   * - :py:obj:`~wildboar.distance.subsequence_match`
     - Find matching subsequnces.
-
-
-
-
-
 
 
 :py:mod:`wildboar.distance.dtw`
@@ -421,8 +414,6 @@ Ensemble methods for classification, regression and outlier detection.
 
 
 
-
-
 :py:mod:`wildboar.explain`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -468,7 +459,6 @@ Explanation methods for classifiers and regressors.
 
   * - :py:obj:`~wildboar.explain.plot_importances`
     - Plot the importances as a boxplot.
-
 
 
 :py:mod:`wildboar.explain.counterfactual`
@@ -520,10 +510,6 @@ methods for generating counterfactual explanations.
     - Compute the proximity of the counterfactuals.
 
 
-
-
-
-
 :py:mod:`wildboar.linear_model`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -566,10 +552,6 @@ Linear methods for both classification and regression.
     - Implements the ROCKET classifier.
   * - :py:obj:`~wildboar.linear_model.RocketRegressor`
     - Implements the ROCKET regressor.
-
-
-
-
 
 
 
@@ -620,8 +602,6 @@ Evaluation metrics.
     - Compute validity score.
 
 
-
-
 :py:mod:`wildboar.model_selection`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -661,8 +641,6 @@ Methods for model selection.
 
   * - :py:obj:`~wildboar.model_selection.outlier_train_test_split`
     - Outlier training and testing split from classification dataset.
-
-
 
 
 :py:mod:`wildboar.transform`
@@ -736,16 +714,6 @@ Transform raw time series to tabular representations.
     - Symbolic aggregate approximation.
 
 
-
-
-
-
-
-
-
-
-
-
 :py:mod:`wildboar.tree`
 ~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -797,9 +765,6 @@ Tree-based estimators for classification and regression.
 
 
 
-
-
-
 :py:mod:`wildboar.utils`
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -833,12 +798,6 @@ Utility functions.
     - Input validation on time-series.
   * - :py:obj:`~wildboar.utils.check_X_y`
     - Check both X and y.
-
-
-
-
-
-
 
 
 

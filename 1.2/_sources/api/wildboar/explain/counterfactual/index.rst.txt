@@ -59,7 +59,6 @@ Functions
 
 
 
-
    
    Fit a counterfactual explainer to a k-nearest neighbors classifier.
 
@@ -109,6 +108,7 @@ Functions
 
    ..
        !! processed by numpydoc !!
+
    .. py:method:: fit_explain(estimator, x=None, y=None, **kwargs)
 
       
@@ -149,6 +149,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: get_metadata_routing()
 
       
@@ -178,6 +179,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -211,6 +213,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: plot(x=None, y=None, ax=None)
 
       
@@ -237,6 +240,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: score(x, y)
 
@@ -271,6 +275,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: set_params(**params)
 
@@ -309,7 +314,6 @@ Functions
 
 
 .. py:class:: PrototypeCounterfactual(metric='euclidean', *, r=1.0, g=0.05, max_iter=100, step_size=0.1, n_prototypes='auto', target='predict', method='sample', min_shapelet_size=0.0, max_shapelet_size=1.0, random_state=None, verbose=False)
-
 
 
 
@@ -354,6 +358,7 @@ Functions
 
    ..
        !! processed by numpydoc !!
+
    .. py:method:: fit_explain(estimator, x=None, y=None, **kwargs)
 
       
@@ -394,6 +399,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: get_metadata_routing()
 
       
@@ -423,6 +429,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -456,6 +463,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: plot(x=None, y=None, ax=None)
 
       
@@ -482,6 +490,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: score(x, y)
 
@@ -516,6 +525,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: set_params(**params)
 
@@ -554,7 +564,6 @@ Functions
 
 
 .. py:class:: ShapeletForestCounterfactual(*, cost='euclidean', aggregation='mean', epsilon=1.0, batch_size=0.1, max_paths=1.0, verbose=False, random_state=None)
-
 
 
 
@@ -633,6 +642,7 @@ Functions
 
    ..
        !! processed by numpydoc !!
+
    .. py:method:: fit_explain(estimator, x=None, y=None, **kwargs)
 
       
@@ -673,6 +683,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: get_metadata_routing()
 
       
@@ -702,6 +713,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: get_params(deep=True)
 
@@ -735,6 +747,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
+
    .. py:method:: plot(x=None, y=None, ax=None)
 
       
@@ -761,6 +774,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: score(x, y)
 
@@ -795,6 +809,7 @@ Functions
 
       ..
           !! processed by numpydoc !!
+
 
    .. py:method:: set_params(**params)
 

@@ -8,50 +8,50 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>wildboar.datasets &#8212; Wildboar 1.2.0b6 documentation</title>
+    <title>wildboar.datasets &#8212; Wildboar 1.2.0 documentation</title>
   
   
   
   <script data-cfasync="false">
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "auto";
-    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "auto";
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
-<link href="../../../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
 
   
-  <link href="../../../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+  <link href="../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=11f2bc40" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=eafc0fe6" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=fd3f3429" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/tabs.css?v=4c969af8" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=87e54e7c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css?v=584e34e5" />
     <link rel="stylesheet" type="text/css" href="../../../_static/css/pygments-override.css?v=9e853fe2" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
-  <script src="../../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
+  <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
-    <script src="../../../_static/documentation_options.js?v=e3c878fc"></script>
-    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/documentation_options.js?v=6efca38a"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../../_static/tabs.js?v=3ee01567"></script>
     <script src="../../../_static/toggleprompt.js?v=5801b3bb"></script>
-    <script src="../../../_static/design-tabs.js?v=36754332"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/wildboar/datasets/index';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.15.2';
+        DOCUMENTATION_OPTIONS.theme_version = '0.15.3';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://wildboar.dev/_versions.json';
         DOCUMENTATION_OPTIONS.theme_switcher_version_match = '1.2';
         DOCUMENTATION_OPTIONS.show_version_warning_banner = true;
@@ -68,27 +68,23 @@
 
   
   
-  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
-    <i class="fa-solid fa-arrow-up"></i>
-    Back to top
-  </button>
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
   <input type="checkbox"
           class="sidebar-toggle"
-          name="__primary"
-          id="__primary"/>
-  <label class="overlay overlay-primary" for="__primary"></label>
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
   
   <input type="checkbox"
           class="sidebar-toggle"
-          name="__secondary"
-          id="__secondary"/>
-  <label class="overlay overlay-secondary" for="__secondary"></label>
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
   
   <div class="search-button__wrapper">
     <div class="search-button__overlay"></div>
@@ -110,12 +106,17 @@
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
 </form></div>
   </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <label class="sidebar-toggle primary-toggle" for="__primary">
+  <button class="sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
-  </label>
+  </button>
   
   
   <div class="col-lg-3 navbar-header-items__start">
@@ -177,40 +178,40 @@ document.write(`
 <nav class="navbar-nav">
   <ul class="bd-navbar-elements navbar-nav">
     
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../install.html">
-                        Install
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../../install.html">
+    Install
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../guide.html">
-                        User Guide
-                      </a>
-                    </li>
-                
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../index.html">
-                        API
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../../guide.html">
+    User Guide
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../examples.html">
-                        Examples
-                      </a>
-                    </li>
-                
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../more/whatsnew.html">
-                        What’s new
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../index.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../../more/whatsnew.html">
+    What’s new
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -294,9 +295,9 @@ document.write(`
   
 
   
-    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+    <button class="sidebar-toggle secondary-toggle" aria-label="On this page">
       <span class="fa-solid fa-outdent"></span>
-    </label>
+    </button>
   
 </div>
 
@@ -317,46 +318,49 @@ document.write(`
     
       <div class="sidebar-header-items__center">
         
-          <div class="navbar-item">
+          
+          
+            <div class="navbar-item">
 <nav class="navbar-nav">
   <ul class="bd-navbar-elements navbar-nav">
     
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../install.html">
-                        Install
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../../install.html">
+    Install
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../guide.html">
-                        User Guide
-                      </a>
-                    </li>
-                
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../index.html">
-                        API
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../../guide.html">
+    User Guide
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../examples.html">
-                        Examples
-                      </a>
-                    </li>
-                
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../../more/whatsnew.html">
-                        What’s new
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../index.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../../more/whatsnew.html">
+    What’s new
+  </a>
+</li>
+
   </ul>
 </nav></div>
+          
         
       </div>
     
@@ -430,13 +434,13 @@ document.write(`
 
       </div>
       
-      <main id="main-content" class="bd-main">
+      <main id="main-content" class="bd-main" role="main">
         
         
           <div class="bd-content">
             <div class="bd-article-container">
               
-              <div class="bd-header-article">
+              <div class="bd-header-article d-print-none">
 <div class="header-article-items header-article__inner">
   
     <div class="header-article-items__start">
@@ -445,7 +449,7 @@ document.write(`
 
 
 
-<nav aria-label="Breadcrumb">
+<nav aria-label="Breadcrumb" class="d-print-none">
   <ul class="bd-breadcrumbs">
     
     <li class="breadcrumb-item breadcrumb-home">
@@ -495,7 +499,7 @@ more details and examples.</p>
 </section>
 <section id="classes">
 <h3>Classes<a class="headerlink" href="#classes" title="Link to this heading">#</a></h3>
-<table class="autosummary longtable table autosummary">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.datasets.Bundle" title="wildboar.datasets.Bundle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Bundle</span></code></a></p></td>
 <td><p>Base class for handling dataset bundles.</p></td>
@@ -511,10 +515,11 @@ more details and examples.</p>
 </tr>
 </tbody>
 </table>
+</div>
 </section>
 <section id="functions">
 <h3>Functions<a class="headerlink" href="#functions" title="Link to this heading">#</a></h3>
-<table class="autosummary longtable table autosummary">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.datasets.clear_cache" title="wildboar.datasets.clear_cache"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clear_cache</span></code></a>([repository, cache_dir, keep_last_version])</p></td>
 <td><p>Clear the cache by deleting cached datasets.</p></td>
@@ -563,9 +568,10 @@ more details and examples.</p>
 </tr>
 </tbody>
 </table>
+</div>
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.datasets.Bundle">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">Bundle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arrays</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collections</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets/_repository.py#L741-L1007"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.Bundle" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">Bundle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arrays</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collections</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/datasets/_repository.py#L741-L1007"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.Bundle" title="Link to this definition">#</a></dt>
 <dd><p>Base class for handling dataset bundles.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -589,7 +595,7 @@ more details and examples.</p>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.datasets.Bundle.get_collection">
-<span class="sig-name descname"><span class="pre">get_collection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">collection</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets/_repository.py#L807-L827"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.Bundle.get_collection" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_collection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">collection</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/datasets/_repository.py#L807-L827"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.Bundle.get_collection" title="Link to this definition">#</a></dt>
 <dd><p>Get a dataset collection.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -609,7 +615,7 @@ more details and examples.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.datasets.Bundle.get_filename">
-<span class="sig-name descname"><span class="pre">get_filename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets/_repository.py#L782-L805"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.Bundle.get_filename" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_filename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/datasets/_repository.py#L782-L805"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.Bundle.get_filename" title="Link to this definition">#</a></dt>
 <dd><p>Get the cache name of the bundle.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -633,7 +639,7 @@ more details and examples.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.datasets.Bundle.list">
-<span class="sig-name descname"><span class="pre">list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">archive</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets/_repository.py#L829-L858"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.Bundle.list" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">archive</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/datasets/_repository.py#L829-L858"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.Bundle.list" title="Link to this definition">#</a></dt>
 <dd><p>List all datasets in this bundle.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -655,7 +661,7 @@ more details and examples.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.datasets.Bundle.load">
-<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">archive</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets/_repository.py#L860-L964"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.Bundle.load" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">archive</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/datasets/_repository.py#L860-L964"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.Bundle.load" title="Link to this definition">#</a></dt>
 <dd><p>Load a dataset from the bundle.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -685,67 +691,11 @@ more details and examples.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.datasets.JSONRepository">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">JSONRepository</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets/_repository.py#L526-L622"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.JSONRepository" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">JSONRepository</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/datasets/_repository.py#L526-L622"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.JSONRepository" title="Link to this definition">#</a></dt>
 <dd><p>A repository is a collection of bundles.</p>
-<dl class="py property">
-<dt class="sig sig-object py" id="wildboar.datasets.JSONRepository.download_url">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">download_url</span></span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.JSONRepository.download_url" title="Link to this definition">#</a></dt>
-<dd><p>The url template for downloading bundles.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt>str</dt><dd><p>The download url.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="wildboar.datasets.JSONRepository.name">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.JSONRepository.name" title="Link to this definition">#</a></dt>
-<dd><p>Name of the repository.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt>str</dt><dd><p>The name of the repository.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="wildboar.datasets.JSONRepository.version">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">version</span></span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.JSONRepository.version" title="Link to this definition">#</a></dt>
-<dd><p>The repository version.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt>str</dt><dd><p>The version of the repository.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="wildboar.datasets.JSONRepository.wildboar_requires">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">wildboar_requires</span></span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.JSONRepository.wildboar_requires" title="Link to this definition">#</a></dt>
-<dd><p>The minimum required wildboar version.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt>str</dt><dd><p>The min version.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.datasets.JSONRepository.get_bundle">
-<span class="sig-name descname"><span class="pre">get_bundle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets/_repository.py#L353-L370"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.JSONRepository.get_bundle" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_bundle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/datasets/_repository.py#L353-L370"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.JSONRepository.get_bundle" title="Link to this definition">#</a></dt>
 <dd><p>Get a bundle with the specified key.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -765,7 +715,7 @@ more details and examples.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.datasets.JSONRepository.get_bundles">
-<span class="sig-name descname"><span class="pre">get_bundles</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets/_repository.py#L553-L554"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.JSONRepository.get_bundles" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_bundles</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/datasets/_repository.py#L553-L554"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.JSONRepository.get_bundles" title="Link to this definition">#</a></dt>
 <dd><p>Get all bundles.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -779,19 +729,75 @@ more details and examples.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.datasets.JSONRepository.refresh">
-<span class="sig-name descname"><span class="pre">refresh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets/_repository.py#L453-L459"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.JSONRepository.refresh" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">refresh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/datasets/_repository.py#L453-L459"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.JSONRepository.refresh" title="Link to this definition">#</a></dt>
 <dd><p>Refresh the repository.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="wildboar.datasets.JSONRepository.download_url">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">download_url</span></span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/datasets.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.JSONRepository.download_url" title="Link to this definition">#</a></dt>
+<dd><p>The url template for downloading bundles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>str</dt><dd><p>The download url.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="wildboar.datasets.JSONRepository.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/datasets.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.JSONRepository.name" title="Link to this definition">#</a></dt>
+<dd><p>Name of the repository.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>str</dt><dd><p>The name of the repository.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="wildboar.datasets.JSONRepository.version">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">version</span></span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/datasets.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.JSONRepository.version" title="Link to this definition">#</a></dt>
+<dd><p>The repository version.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>str</dt><dd><p>The version of the repository.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="wildboar.datasets.JSONRepository.wildboar_requires">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">wildboar_requires</span></span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/datasets.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.JSONRepository.wildboar_requires" title="Link to this definition">#</a></dt>
+<dd><p>The minimum required wildboar version.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>str</dt><dd><p>The min version.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.datasets.NpBundle">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">NpBundle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arrays</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collections</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets/_repository.py#L1010-L1027"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.NpBundle" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">NpBundle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arrays</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collections</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/datasets/_repository.py#L1010-L1027"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.NpBundle" title="Link to this definition">#</a></dt>
 <dd><p>Bundle of numpy binary files.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.datasets.NpBundle.get_collection">
-<span class="sig-name descname"><span class="pre">get_collection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">collection</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets/_repository.py#L807-L827"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.NpBundle.get_collection" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_collection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">collection</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/datasets/_repository.py#L807-L827"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.NpBundle.get_collection" title="Link to this definition">#</a></dt>
 <dd><p>Get a dataset collection.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -811,7 +817,7 @@ more details and examples.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.datasets.NpBundle.get_filename">
-<span class="sig-name descname"><span class="pre">get_filename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets/_repository.py#L782-L805"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.NpBundle.get_filename" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_filename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/datasets/_repository.py#L782-L805"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.NpBundle.get_filename" title="Link to this definition">#</a></dt>
 <dd><p>Get the cache name of the bundle.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -835,7 +841,7 @@ more details and examples.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.datasets.NpBundle.list">
-<span class="sig-name descname"><span class="pre">list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">archive</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets/_repository.py#L829-L858"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.NpBundle.list" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">archive</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/datasets/_repository.py#L829-L858"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.NpBundle.list" title="Link to this definition">#</a></dt>
 <dd><p>List all datasets in this bundle.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -857,7 +863,7 @@ more details and examples.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.datasets.NpBundle.load">
-<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">archive</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets/_repository.py#L860-L964"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.NpBundle.load" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">archive</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/datasets/_repository.py#L860-L964"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.NpBundle.load" title="Link to this definition">#</a></dt>
 <dd><p>Load a dataset from the bundle.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -887,67 +893,11 @@ more details and examples.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.datasets.Repository">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">Repository</span></span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets/_repository.py#L266-L463"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.Repository" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">Repository</span></span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/datasets/_repository.py#L266-L463"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.Repository" title="Link to this definition">#</a></dt>
 <dd><p>A repository is a collection of bundles.</p>
-<dl class="py property">
-<dt class="sig sig-object py" id="wildboar.datasets.Repository.download_url">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">download_url</span></span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.Repository.download_url" title="Link to this definition">#</a></dt>
-<dd><p>The url template for downloading bundles.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt>str</dt><dd><p>The download url.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="wildboar.datasets.Repository.name">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.Repository.name" title="Link to this definition">#</a></dt>
-<dd><p>Name of the repository.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt>str</dt><dd><p>The name of the repository.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="wildboar.datasets.Repository.version">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">version</span></span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.Repository.version" title="Link to this definition">#</a></dt>
-<dd><p>The repository version.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt>str</dt><dd><p>The version of the repository.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="wildboar.datasets.Repository.wildboar_requires">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">wildboar_requires</span></span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.Repository.wildboar_requires" title="Link to this definition">#</a></dt>
-<dd><p>The minimum required wildboar version.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt>str</dt><dd><p>The min version.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.datasets.Repository.get_bundle">
-<span class="sig-name descname"><span class="pre">get_bundle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets/_repository.py#L353-L370"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.Repository.get_bundle" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_bundle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/datasets/_repository.py#L353-L370"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.Repository.get_bundle" title="Link to this definition">#</a></dt>
 <dd><p>Get a bundle with the specified key.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -967,7 +917,7 @@ more details and examples.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.datasets.Repository.get_bundles">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_bundles</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets/_repository.py#L337-L347"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.Repository.get_bundles" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_bundles</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/datasets/_repository.py#L337-L347"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.Repository.get_bundles" title="Link to this definition">#</a></dt>
 <dd><p>Get all bundles.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -981,15 +931,71 @@ more details and examples.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.datasets.Repository.refresh">
-<span class="sig-name descname"><span class="pre">refresh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets/_repository.py#L453-L459"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.Repository.refresh" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">refresh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/datasets/_repository.py#L453-L459"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.Repository.refresh" title="Link to this definition">#</a></dt>
 <dd><p>Refresh the repository.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="wildboar.datasets.Repository.download_url">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">download_url</span></span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/datasets.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.Repository.download_url" title="Link to this definition">#</a></dt>
+<dd><p>The url template for downloading bundles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>str</dt><dd><p>The download url.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="wildboar.datasets.Repository.name">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/datasets.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.Repository.name" title="Link to this definition">#</a></dt>
+<dd><p>Name of the repository.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>str</dt><dd><p>The name of the repository.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="wildboar.datasets.Repository.version">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">version</span></span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/datasets.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.Repository.version" title="Link to this definition">#</a></dt>
+<dd><p>The repository version.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>str</dt><dd><p>The version of the repository.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="wildboar.datasets.Repository.wildboar_requires">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">wildboar_requires</span></span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/datasets.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.Repository.wildboar_requires" title="Link to this definition">#</a></dt>
+<dd><p>The minimum required wildboar version.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>str</dt><dd><p>The min version.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.datasets.clear_cache">
-<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">clear_cache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repository</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_last_version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets/__init__.py#L603-L625"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.clear_cache" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">clear_cache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repository</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_last_version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/datasets/__init__.py#L603-L625"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.clear_cache" title="Link to this definition">#</a></dt>
 <dd><p>Clear the cache by deleting cached datasets.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1010,7 +1016,7 @@ more details and examples.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.datasets.get_bundles">
-<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">get_bundles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repository</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets/__init__.py#L700-L726"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.get_bundles" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">get_bundles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repository</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/datasets/__init__.py#L700-L726"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.get_bundles" title="Link to this definition">#</a></dt>
 <dd><p>Get all bundles in the repository.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1019,12 +1025,12 @@ more details and examples.</p>
 </dd>
 <dt><strong>refresh</strong><span class="classifier">bool, optional</span></dt><dd><p>Refresh the repository.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 1.1.</span></p>
+<p><span class="versionmodified added">Added in version 1.1.</span></p>
 </div>
 </dd>
 <dt><strong>timeout</strong><span class="classifier">float, optional</span></dt><dd><p>Timeout for json request.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 1.1.</span></p>
+<p><span class="versionmodified added">Added in version 1.1.</span></p>
 </div>
 </dd>
 </dl>
@@ -1040,7 +1046,7 @@ more details and examples.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.datasets.get_repository">
-<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">get_repository</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repository</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets/__init__.py#L629-L643"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.get_repository" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">get_repository</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repository</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/datasets/__init__.py#L629-L643"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.get_repository" title="Link to this definition">#</a></dt>
 <dd><p>Get repository by name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1060,7 +1066,7 @@ more details and examples.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.datasets.install_repository">
-<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">install_repository</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repository</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets/__init__.py#L647-L674"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.install_repository" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">install_repository</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repository</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/datasets/__init__.py#L647-L674"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.install_repository" title="Link to this definition">#</a></dt>
 <dd><p>Install repository.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1069,17 +1075,17 @@ more details and examples.</p>
 </dd>
 <dt><strong>refresh</strong><span class="classifier">bool, optional</span></dt><dd><p>Refresh the repository.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 1.1.</span></p>
+<p><span class="versionmodified added">Added in version 1.1.</span></p>
 </div>
 </dd>
 <dt><strong>timeout</strong><span class="classifier">float, optional</span></dt><dd><p>Timeout for json request.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 1.1.</span></p>
+<p><span class="versionmodified added">Added in version 1.1.</span></p>
 </div>
 </dd>
 <dt><strong>cache_dir</strong><span class="classifier">str, optional</span></dt><dd><p>Cache directory.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 1.1.</span></p>
+<p><span class="versionmodified added">Added in version 1.1.</span></p>
 </div>
 </dd>
 </dl>
@@ -1089,7 +1095,7 @@ more details and examples.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.datasets.list_bundles">
-<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">list_bundles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repository</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets/__init__.py#L729-L757"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.list_bundles" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">list_bundles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repository</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/datasets/__init__.py#L729-L757"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.list_bundles" title="Link to this definition">#</a></dt>
 <dd><p>Get a list of all bundle names in the specified repository.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1098,12 +1104,12 @@ more details and examples.</p>
 </dd>
 <dt><strong>refresh</strong><span class="classifier">bool, optional</span></dt><dd><p>Refresh the repository.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 1.1.</span></p>
+<p><span class="versionmodified added">Added in version 1.1.</span></p>
 </div>
 </dd>
 <dt><strong>timeout</strong><span class="classifier">float, optional</span></dt><dd><p>Timeout for json request.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 1.1.</span></p>
+<p><span class="versionmodified added">Added in version 1.1.</span></p>
 </div>
 </dd>
 </dl>
@@ -1125,7 +1131,7 @@ more details and examples.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.datasets.list_collections">
-<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">list_collections</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repository</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets/__init__.py#L760-L789"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.list_collections" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">list_collections</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repository</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/datasets/__init__.py#L760-L789"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.list_collections" title="Link to this definition">#</a></dt>
 <dd><p>List the collections of the repository.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1154,7 +1160,7 @@ more details and examples.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.datasets.list_datasets">
-<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">list_datasets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repository</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'wildboar/ucr'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">create_cache_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets/__init__.py#L538-L599"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.list_datasets" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">list_datasets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repository</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'wildboar/ucr'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">create_cache_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/datasets/__init__.py#L538-L599"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.list_datasets" title="Link to this definition">#</a></dt>
 <dd><p>List the datasets in the repository.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1176,12 +1182,12 @@ more details and examples.</p>
 </dd>
 <dt><strong>refresh</strong><span class="classifier">bool, optional</span></dt><dd><p>Refresh the repository.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 1.1.</span></p>
+<p><span class="versionmodified added">Added in version 1.1.</span></p>
 </div>
 </dd>
 <dt><strong>timeout</strong><span class="classifier">float, optional</span></dt><dd><p>Timeout for json request.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 1.1.</span></p>
+<p><span class="versionmodified added">Added in version 1.1.</span></p>
 </div>
 </dd>
 </dl>
@@ -1197,24 +1203,24 @@ more details and examples.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.datasets.list_repositories">
-<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">list_repositories</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets/__init__.py#L792-L830"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.list_repositories" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">list_repositories</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/datasets/__init__.py#L792-L830"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.list_repositories" title="Link to this definition">#</a></dt>
 <dd><p>List the key of all installed repositories.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
 <dt><strong>refresh</strong><span class="classifier">bool, optional</span></dt><dd><p>Refresh all repositories.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 1.1.</span></p>
+<p><span class="versionmodified added">Added in version 1.1.</span></p>
 </div>
 </dd>
 <dt><strong>timeout</strong><span class="classifier">float, optional</span></dt><dd><p>Timeout for json request.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 1.1.</span></p>
+<p><span class="versionmodified added">Added in version 1.1.</span></p>
 </div>
 </dd>
 <dt><strong>cache_dir</strong><span class="classifier">str, optional</span></dt><dd><p>Cache directory.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 1.1.</span></p>
+<p><span class="versionmodified added">Added in version 1.1.</span></p>
 </div>
 </dd>
 </dl>
@@ -1241,7 +1247,7 @@ but still pending repositories.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.datasets.load_dataset">
-<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">load_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repository</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'wildboar/ucr'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preprocess</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contiguous</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">merge_train_test</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">create_cache_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_extras</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets/__init__.py#L348-L534"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.load_dataset" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">load_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repository</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'wildboar/ucr'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preprocess</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contiguous</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">merge_train_test</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">create_cache_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_extras</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/datasets/__init__.py#L348-L534"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.load_dataset" title="Link to this definition">#</a></dt>
 <dd><p>Load a dataset from a repository.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1275,22 +1281,22 @@ preprocessed dataset.</p></li>
 </dd>
 <dt><strong>return_extras</strong><span class="classifier">bool, optional</span></dt><dd><p>Return optional extras.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 1.1.</span></p>
+<p><span class="versionmodified added">Added in version 1.1.</span></p>
 </div>
 </dd>
 <dt><strong>force</strong><span class="classifier">bool, optional</span></dt><dd><p>Force re-download of already cached bundle.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 1.0.4.</span></p>
+<p><span class="versionmodified added">Added in version 1.0.4.</span></p>
 </div>
 </dd>
 <dt><strong>refresh</strong><span class="classifier">bool, optional</span></dt><dd><p>Refresh the repository.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 1.1.</span></p>
+<p><span class="versionmodified added">Added in version 1.1.</span></p>
 </div>
 </dd>
 <dt><strong>timeout</strong><span class="classifier">float, optional</span></dt><dd><p>Timeout for json request.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 1.1.</span></p>
+<p><span class="versionmodified added">Added in version 1.1.</span></p>
 </div>
 </dd>
 </dl>
@@ -1339,7 +1345,7 @@ preprocessed dataset.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.datasets.load_datasets">
-<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">load_datasets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repository</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'wildboar/ucr'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">create_cache_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets/__init__.py#L227-L345"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.load_datasets" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">load_datasets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repository</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'wildboar/ucr'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">create_cache_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/datasets/__init__.py#L227-L345"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.load_datasets" title="Link to this definition">#</a></dt>
 <dd><p>Load all datasets as a generator.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1426,7 +1432,7 @@ optional extra (or <code class="docutils literal notranslate"><span class="pre">
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.datasets.load_gun_point">
-<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">load_gun_point</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">merge_train_test</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets/__init__.py#L189-L224"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.load_gun_point" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">load_gun_point</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">merge_train_test</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/datasets/__init__.py#L189-L224"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.load_gun_point" title="Link to this definition">#</a></dt>
 <dd><p>Load the GunPoint dataset.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1465,7 +1471,7 @@ optional extra (or <code class="docutils literal notranslate"><span class="pre">
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.datasets.load_synthetic_control">
-<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">load_synthetic_control</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">merge_train_test</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets/__init__.py#L111-L146"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.load_synthetic_control" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">load_synthetic_control</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">merge_train_test</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/datasets/__init__.py#L111-L146"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.load_synthetic_control" title="Link to this definition">#</a></dt>
 <dd><p>Load the Synthetic_Control dataset.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1504,7 +1510,7 @@ optional extra (or <code class="docutils literal notranslate"><span class="pre">
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.datasets.load_two_lead_ecg">
-<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">load_two_lead_ecg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">merge_train_test</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets/__init__.py#L150-L185"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.load_two_lead_ecg" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">load_two_lead_ecg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">merge_train_test</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/datasets/__init__.py#L150-L185"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.load_two_lead_ecg" title="Link to this definition">#</a></dt>
 <dd><p>Load the TwoLeadECG dataset.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1543,7 +1549,7 @@ optional extra (or <code class="docutils literal notranslate"><span class="pre">
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.datasets.refresh_repositories">
-<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">refresh_repositories</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repository</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets/__init__.py#L678-L696"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.refresh_repositories" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">refresh_repositories</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repository</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/datasets/__init__.py#L678-L696"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.refresh_repositories" title="Link to this definition">#</a></dt>
 <dd><p>Refresh the installed repositories.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1552,12 +1558,12 @@ optional extra (or <code class="docutils literal notranslate"><span class="pre">
 </dd>
 <dt><strong>timeout</strong><span class="classifier">float, optional</span></dt><dd><p>Timeout for request.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 1.1.</span></p>
+<p><span class="versionmodified added">Added in version 1.1.</span></p>
 </div>
 </dd>
 <dt><strong>cache_dir</strong><span class="classifier">str, optional</span></dt><dd><p>Cache directory.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 1.1.</span></p>
+<p><span class="versionmodified added">Added in version 1.1.</span></p>
 </div>
 </dd>
 </dl>
@@ -1567,7 +1573,7 @@ optional extra (or <code class="docutils literal notranslate"><span class="pre">
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.datasets.set_cache_dir">
-<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">set_cache_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cache_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b6/src/wildboar/datasets/__init__.py#L90-L103"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.set_cache_dir" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">set_cache_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cache_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/datasets/__init__.py#L90-L103"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.set_cache_dir" title="Link to this definition">#</a></dt>
 <dd><p>Change the global cache directory.</p>
 <p>If called without arguments, the cache directory is reset to the default
 directory.</p>
@@ -1592,7 +1598,7 @@ directory.</p>
               
               
               
-                <footer class="prev-next-footer">
+                <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
 </div>
@@ -1625,13 +1631,13 @@ directory.</p>
 </ul>
 </li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.JSONRepository"><code class="docutils literal notranslate"><span class="pre">JSONRepository</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.JSONRepository.get_bundle"><code class="docutils literal notranslate"><span class="pre">JSONRepository.get_bundle</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.JSONRepository.get_bundles"><code class="docutils literal notranslate"><span class="pre">JSONRepository.get_bundles</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.JSONRepository.refresh"><code class="docutils literal notranslate"><span class="pre">JSONRepository.refresh</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.JSONRepository.download_url"><code class="docutils literal notranslate"><span class="pre">JSONRepository.download_url</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.JSONRepository.name"><code class="docutils literal notranslate"><span class="pre">JSONRepository.name</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.JSONRepository.version"><code class="docutils literal notranslate"><span class="pre">JSONRepository.version</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.JSONRepository.wildboar_requires"><code class="docutils literal notranslate"><span class="pre">JSONRepository.wildboar_requires</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.JSONRepository.get_bundle"><code class="docutils literal notranslate"><span class="pre">JSONRepository.get_bundle</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.JSONRepository.get_bundles"><code class="docutils literal notranslate"><span class="pre">JSONRepository.get_bundles</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.JSONRepository.refresh"><code class="docutils literal notranslate"><span class="pre">JSONRepository.refresh</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.NpBundle"><code class="docutils literal notranslate"><span class="pre">NpBundle</span></code></a><ul class="nav section-nav flex-column">
@@ -1642,13 +1648,13 @@ directory.</p>
 </ul>
 </li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.Repository"><code class="docutils literal notranslate"><span class="pre">Repository</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.Repository.get_bundle"><code class="docutils literal notranslate"><span class="pre">Repository.get_bundle</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.Repository.get_bundles"><code class="docutils literal notranslate"><span class="pre">Repository.get_bundles</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.Repository.refresh"><code class="docutils literal notranslate"><span class="pre">Repository.refresh</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.Repository.download_url"><code class="docutils literal notranslate"><span class="pre">Repository.download_url</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.Repository.name"><code class="docutils literal notranslate"><span class="pre">Repository.name</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.Repository.version"><code class="docutils literal notranslate"><span class="pre">Repository.version</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.Repository.wildboar_requires"><code class="docutils literal notranslate"><span class="pre">Repository.wildboar_requires</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.Repository.get_bundle"><code class="docutils literal notranslate"><span class="pre">Repository.get_bundle</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.Repository.get_bundles"><code class="docutils literal notranslate"><span class="pre">Repository.get_bundles</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.Repository.refresh"><code class="docutils literal notranslate"><span class="pre">Repository.refresh</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.clear_cache"><code class="docutils literal notranslate"><span class="pre">clear_cache</span></code></a></li>
@@ -1695,8 +1701,8 @@ directory.</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
-<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+  <script src="../../../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1716,7 +1722,7 @@ directory.</p>
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     <br/>
   </p>
 </div>
@@ -1729,7 +1735,7 @@ directory.</p>
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.2.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.3.
 </p></div>
       
     </div>

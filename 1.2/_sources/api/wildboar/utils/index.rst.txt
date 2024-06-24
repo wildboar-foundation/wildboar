@@ -36,6 +36,7 @@ Submodules
    :titlesonly:
    :maxdepth: 1
 
+   plot/index.rst
    variable_len/index.rst
 
 
