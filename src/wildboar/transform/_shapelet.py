@@ -323,7 +323,7 @@ class DilatedShapeletMixin:
             _, y, samples_per_label = np.unique(
                 np.array(y), return_inverse=True, return_counts=True
             )
-            samples = np.argsort(y)
+            samples = np.argsort(y, kind="stable")
         else:
             samples = None
             samples_per_label = None
@@ -365,7 +365,7 @@ class CastorMixin:
             _, y, samples_per_label = np.unique(
                 np.array(y), return_inverse=True, return_counts=True
             )
-            samples = np.argsort(y)
+            samples = np.argsort(y, kind="stable")
         else:
             samples = None
             samples_per_label = None
