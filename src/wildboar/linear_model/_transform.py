@@ -80,13 +80,6 @@ class BaseTransformRegressor(RegressorMixin, BaseTransformEstimator):
 
 
 class TransformRidgeClassifierCV(BaseTransformClassifier):
-    _parameter_constraints = {
-        **BaseTransformEstimator._parameter_constraints,
-        **RidgeClassifierCV._parameter_constraints,
-        "normalize": [bool, StrOptions({"sparse"})],
-    }
-    _parameter_constraints.pop("store_cv_values")
-    _parameter_constraints.pop("store_cv_results")
 
     def __init__(
         self,
@@ -136,14 +129,6 @@ class TransformRidgeClassifierCV(BaseTransformClassifier):
 
 
 class TransformRidgeCV(BaseTransformRegressor):
-    _parameter_constraints = {
-        **BaseTransformEstimator._parameter_constraints,
-        **RidgeCV._parameter_constraints,
-        "normalize": [bool, StrOptions({"sparse"})],
-    }
-
-    for param in ("store_cv_values", "store_cv_results", "alpha_per_target"):
-        _parameter_constraints.pop(param)
 
     def __init__(
         self,
