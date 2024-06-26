@@ -57,9 +57,9 @@ def standardize(x):
         The standardized samples.
     """
     x = check_array(x, allow_3d=True, force_all_finite="allow-nan")
-    return (x - np.nanmean(x, axis=-1, keepdims=True)) / np.nanstd(
-        x, axis=-1, keepdims=True
-    )
+    std = np.nanstd(x, axis=-1, keepdims=True)
+    std[std == 0] = 1  # Avoid division by zero
+    return (x - np.nanmean(x, axis=-1, keepdims=True)) / std
 
 
 def minmax_scale(x, min=0, max=1):

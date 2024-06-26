@@ -62,6 +62,8 @@ Wildboar 1.2 introduces several new models.
        :func:`~wildboar.datasets.refresh_repositories` to refresh the
        repositories.
 
+     - |Fix| Avoid division by zero in :func:`~wildboar.datasets.preprocess.standardize`.
+
   .. grid-item-card::
 
      :mod:`wildboar.distance`
