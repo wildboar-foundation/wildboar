@@ -129,3 +129,5 @@ Wildboar 1.2 introduces several new models.
        or `"best"`. If set to `"best"` we use the matrix profile to find the best
        shapelets per sample to use in the transformation. The shapelet size is
        determined by the `shapelet_size` parameter.
+     - |API| Deprecate the ``estimate`` parameter in :class:`~wildboar.transform.SAX`.
+       The same behavior can be had using ``scale=True`` (default).

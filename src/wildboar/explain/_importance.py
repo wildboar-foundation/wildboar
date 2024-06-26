@@ -568,7 +568,7 @@ class AmplitudeImportance(ExplainerMixin, PermuteImportance):
             window=self.window,
             binning=self.binning,
             n_bins=self.n_bins,
-            estimate=True,
+            scale=True,
         ).fit(X)
         self.x_sax_ = self.sax_.transform(X)
         random_state = check_random_state(self.random_state)

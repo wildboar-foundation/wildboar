@@ -7,6 +7,7 @@ Symbolic aggregate approximation and piecewice aggregate approximation.
 
 import abc
 import numbers
+import warnings
 
 import numpy as np
 from scipy.stats import norm, uniform
@@ -14,7 +15,7 @@ from sklearn.base import TransformerMixin, check_is_fitted
 from sklearn.utils._param_validation import Interval, StrOptions
 from sklearn.utils.validation import check_scalar
 
-from wildboar.utils.validation import check_array, check_option
+from wildboar.utils.validation import check_array
 
 from ..base import BaseEstimator
 from ._interval import IntervalTransform
@@ -154,6 +155,15 @@ class SAX(TransformerMixin, BaseEstimator):
 
         - :func:`datasets.preprocess.normalize` when `binning="normal"`.
         - :func:`datasets.preprocess.minmax_scale`. when `binning="uniform"`.
+
+    scale : bool, optional
+        Ensure that the input is correctly scaled.
+
+        If `scale=False`, it is assumed that each time series is
+        preprocessed using:
+
+        - :func:`datasets.preprocess.normalize` when `binning="normal"`.
+        - :func:`datasets.preprocess.minmax_scale` when `binning="uniform"`.
     """
 
     _parameter_constraints: dict = {
@@ -165,7 +175,8 @@ class SAX(TransformerMixin, BaseEstimator):
         "window": [None, Interval(numbers.Integral, 1, None, closed="left")],
         "n_bins": [Interval(numbers.Integral, 1, None, closed="left")],
         "binning": [StrOptions({"normal", "uniform"})],
-        "estimate": ["boolean"],
+        "estimate": [StrOptions({"deprecated"}), "boolean"],
+        "scale": ["boolean"],
     }
 
     def __init__(
@@ -175,18 +186,29 @@ class SAX(TransformerMixin, BaseEstimator):
         window=None,
         n_bins=4,
         binning="normal",
-        estimate=True,
+        estimate="deprecated",
+        scale=True,
     ):
         self.n_intervals = n_intervals
         self.window = window
         self.n_bins = n_bins
         self.binning = binning
         self.estimate = estimate
+        self.scale = scale
 
     def fit(self, x, y=None):
         self._validate_params()
         x = self._validate_data(x, dtype=float)
-        self.binning_ = check_option(_BINNING, self.binning, "binning")(self.n_bins)
+        self.binning_ = _BINNING[self.binning](self.n_bins)
+        if self.estimate != "deprecated":
+            warnings.warn(
+                "estimate is deprecated and will be removed in 1.4", FutureWarning
+            )
+            self.scale_ = self.estimate
+        else:
+            self.scale_ = self.scale
+
+        self.thresholds_ = self.binning_.get_thresholds()
         self.bins_ = np.arange(self.n_bins, dtype=np.min_scalar_type(self.n_bins))
         self.paa_ = PAA(n_intervals=self.n_intervals, window=self.window).fit(x)
         return self
@@ -194,20 +216,17 @@ class SAX(TransformerMixin, BaseEstimator):
     def transform(self, x):
         check_is_fitted(self)
         x = self._validate_data(x, reset=False, dtype=float)
+        if self.scale_:
+            x = self.binning_.scale(x)
         x_paa = self.paa_.transform(x)
-        thresholds = self.binning_.get_thresholds(x, estimate=self.estimate)
-        x_out = np.empty(x_paa.shape, dtype=np.min_scalar_type(self.n_bins))
-        for i, (sample, threshold) in enumerate(zip(x_paa, thresholds)):
-            x_out[i] = np.digitize(sample, threshold)
-        return x_out
+        return np.digitize(x_paa, self.thresholds_).astype(
+            np.min_scalar_type(self.n_bins)
+        )
 
     def inverse_transform(self, x):
         check_is_fitted(self)
-        if self.estimate:
-            raise ValueError("Unable to inverse_transform with estimate=True")
-
         x = check_array(x, dtype=np.min_scalar_type(self.n_bins))
-        thresholds = self.binning_.get_thresholds()
+        thresholds = self.thresholds_
         thresholds = np.hstack(
             [thresholds[0], (thresholds[:-1] + thresholds[1:]) / 2, thresholds[-1]]
         )
