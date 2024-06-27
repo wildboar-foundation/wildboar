@@ -75,5 +75,6 @@ cdef double cosine_similarity(
     const double *T,
     Py_ssize_t t_length,
     Py_ssize_t *index,
-) nogil
+) noexcept nogil
+
 
