@@ -288,13 +288,13 @@ cdef class Metric:
 
     # Compute the distance between X[i] and Y[j].
     # If possible, the computation should be aborted if
-    # the distance >= lower_bound. To disable the upper bound
+    # the distance >= threshold. To disable the upper bound
     # one can pass INFINITY.
     #
     # `lower_bound` has the initial best-so-far distance on entry.
-    #  - If distance < lower_bound, `lower_bound` is the actual distance on
+    #  - If distance < threshold, `threshold` is the actual distance on
     #    exit and True is returned.
-    #  - Otherwise, `lower_bound` is unchanged and the return value is
+    #  - Otherwise, `threshold` is unchanged and the return value is
     #    False
     cdef bint eadistance(
         self,
@@ -303,7 +303,7 @@ cdef class Metric:
         TSArray Y,
         Py_ssize_t y_index,
         Py_ssize_t dim,
-        double *lower_bound,
+        double *threshold,
     ) noexcept nogil
 
     cdef bint _eadistance(
@@ -312,7 +312,7 @@ cdef class Metric:
         Py_ssize_t x_len,
         const double *y,
         Py_ssize_t y_len,
-        double *upper_bound,
+        double *threshold,
     ) noexcept nogil
 
 
