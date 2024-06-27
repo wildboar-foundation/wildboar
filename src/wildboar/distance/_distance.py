@@ -1109,6 +1109,7 @@ def argmin_distance(
     k=1,
     metric="euclidean",
     metric_params=None,
+    lower_bound=None,
     sorted=False,
     return_distance=False,
     n_jobs=None,
@@ -1118,23 +1119,24 @@ def argmin_distance(
 
     Parameters
     ----------
-    x : univariate time-series or multivariate time-series
+    x : array-like of shape (x_samples, x_timestep)
         The needle.
-    y : univariate time-series or multivariate time-series, optional
+    y : array-like of shape (y_samples, y_timestep), optional
         The haystack.
     dim : int, optional
         The dimension where the distance is computed.
     k : int, optional
         The number of closest samples.
     metric : str, optional
-        The distance metric
-
-        See ``_METRICS.keys()`` for a list of supported metrics.
+        The distance metric. See ``_METRICS.keys()`` for a list of supported
+        metrics.
     metric_params : dict, optional
-        Parameters to the metric.
-
-        Read more about the parameters in the
+        Parameters to the metric. Read more about the parameters in the
         :ref:`User guide <list_of_metrics>`.
+    lower_bound : array-like of shape (x_samples, y_samples), optional
+        Lower bound on the distance metric. Read more about supported lower
+        bounds in the `User Guide <lower_bound>`__.
+
     sorted : bool, optional
         Sort the indicies from smallest to largest distance.
     return_distance : bool, optional
@@ -1151,8 +1153,11 @@ def argmin_distance(
 
     Warnings
     --------
-    Passing a callable to the `metric` parameter has a significant performance
-    implication.
+    - Passing a callable to the ``metric`` parameter has a significant
+      performance implication.
+
+    - Assigning an invalid value to the parameter ``lower_bound`` will yield an
+      incorrect outcome.
 
     Examples
     --------
@@ -1164,6 +1169,23 @@ def argmin_distance(
             [1, 2]]),
      array([[ 8.24621125,  4.79583152],
             [10.24695077, 10.        ]]))
+
+    Using a lower bound:
+
+    >>> from wildboar.datasets import load_basic_motions
+    >>> from wildboar.distance import argmin_distance
+    >>> from wildboar.distance.lb import DtwKeoghLowerBound
+    >>> X, y = load_basic_motions()
+    >>> X = X.reshape(X.shape[0], -1)
+    >>> lbkeogh = DtwKeoghLowerBound(r=1.0).fit(X[30:])
+    >>> argmin_distance(
+    ...     X[:30],
+    ...     X[30:],
+    ...     metric="dtw",
+    ...     metric_params={"r": 1.0},
+    ...     lower_bound=lbkeogh.transform(X[:30])
+    ... )
+
     """
     metric_params = metric_params if metric_params is not None else {}
     metric = check_metric(metric)(**metric_params)
@@ -1189,10 +1211,21 @@ def argmin_distance(
             % (x.shape[-1], y.shape[-1])
         )
 
+    if lower_bound is not None:
+        lower_bound = check_array(lower_bound, ensure_2d=False)
+        lower_bound = np.atleast_2d(lower_bound)
+
+        if x.shape[0] != lower_bound.shape[0] or y.shape[0] != lower_bound.shape[1]:
+            raise ValueError(
+                "The lower bound must be of shape (x.shape[0], y.shape[0]), got ({}, {})".format(
+                    *lower_bound.shape
+                )
+            )
+
     n_dims = x.shape[1] if x.ndim == 3 else 1
     k = min(k, y.shape[0])
     if 0 <= dim < 1:
-        indices, distances = _argmin_distance(x, y, dim, metric, k, n_jobs)
+        indices, distances = _argmin_distance(x, y, dim, metric, k, lower_bound, n_jobs)
 
         if sorted:
             sort = np.argsort(distances, axis=1)

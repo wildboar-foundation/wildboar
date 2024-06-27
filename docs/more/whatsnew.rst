@@ -42,6 +42,16 @@ Wildboar 1.2 introduces several new models.
   - :class:`~wildboar.dimension_selection.SelectDimensionPercentile`: only retain
     the dimensions with a `p-value` below the specified alpha level.
 
+- Add a new module :mod:`~wildboar.distance.lb` for distance lower bounds. The module
+  contains four lower bounds.
+
+  - :class:`~wildboar.distance.lb.DtwKeoghLowerBound`: lower bounds dynamic time warping.
+  - :class:`~wildboar.distance.lb.DtwKimLowerBound`: lower bounds dynamic time warping.
+  - :class:`~wildboar.distance.lb.SaxLowerBound`: lower bounds z-normalized
+    Euclidean distance.
+  - :class:`~wildboar.distance.lb.PaaLowerBound`: lower bounds z-normalized
+    Euclidean distance.
+
 .. grid:: 1
   :gutter: 2
 

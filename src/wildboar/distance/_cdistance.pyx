@@ -1268,6 +1268,7 @@ def _singleton_pairwise_distance(
 
 cdef class _ArgMinBatch:
     cdef double[:, :] distances
+    cdef double[:, :] lower_bound
     cdef Py_ssize_t[:, :] indices
 
     cdef TSArray x
@@ -1281,6 +1282,7 @@ cdef class _ArgMinBatch:
         TSArray y,
         Metric metric,
         Py_ssize_t dim,
+        double[:, :] lower_bound,
         double[:, :] distances,
         Py_ssize_t[:, :] indices
     ):
@@ -1288,6 +1290,7 @@ cdef class _ArgMinBatch:
         self.y = y
         self.metric = metric
         self.dim = dim
+        self.lower_bound = lower_bound
         self.distances = distances
         self.indices = indices
 
@@ -1303,7 +1306,9 @@ cdef class _ArgMinBatch:
         cdef Py_ssize_t y_samples = self.y.shape[0]
         cdef Heap heap = Heap(k)
         cdef HeapElement e
-        cdef Metric metric = deepcopy(self.metric)
+        cdef Metric metric = self.metric
+        if batch_size != self.x.shape[0]:
+            metric = deepcopy(self.metric)
 
         with nogil:
             metric.reset(self.x, self.y)
@@ -1311,14 +1316,27 @@ cdef class _ArgMinBatch:
                 distance = INFINITY
                 heap.reset()
 
-                for j in range(y_samples):
-                    if metric.eadistance(self.x, i, self.y, j, self.dim, &distance):
-                        heap.push(j, distance)
+                if self.lower_bound is None:
+                    for j in range(y_samples):
+                        if metric.eadistance(self.x, i, self.y, j, self.dim, &distance):
+                            heap.push(j, distance)
 
-                        if heap.isfull():
-                            distance = heap.maxvalue()
-                        else:
-                            distance = INFINITY
+                            if heap.isfull():
+                                distance = heap.maxvalue()
+                            else:
+                                distance = INFINITY
+                else:
+                    for j in range(y_samples):
+                        if self.lower_bound[i, j] >= distance:
+                            continue
+
+                        if metric.eadistance(self.x, i, self.y, j, self.dim, &distance):
+                            heap.push(j, distance)
+
+                            if heap.isfull():
+                                distance = heap.maxvalue()
+                            else:
+                                distance = INFINITY
 
                 for j in range(k):
                     e = heap.getelement(j)
@@ -1332,6 +1350,7 @@ def _argmin_distance(
     Py_ssize_t dim,
     Metric metric,
     Py_ssize_t k,
+    double[:, :] lower_bound,
     n_jobs
 ):
 
@@ -1347,6 +1366,7 @@ def _argmin_distance(
             y,
             metric,
             dim,
+            lower_bound,
             values,
             indices,
         ),
