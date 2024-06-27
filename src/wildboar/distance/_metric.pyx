@@ -7,8 +7,6 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
-cimport scipy.linalg.cython_blas as blas
-cimport scipy.linalg.cython_lapack as lapack
 from libc.math cimport INFINITY, M_PI, acos, cos, fabs, pow, sqrt, isinf
 from libc.stdlib cimport free, malloc
 
