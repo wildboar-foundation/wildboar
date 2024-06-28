@@ -7,6 +7,7 @@ from ._distance import (
     SelectDimensionSignificance,
     SelectDimensionTopK,
 )
+from ._ecp import ECSSelector
 from ._sequential import SequentialDimensionSelector
 from ._variance import DistanceVarianceThreshold
 
@@ -16,4 +17,5 @@ __all__ = [
     "SelectDimensionPercentile",
     "SelectDimensionSignificance",
     "SelectDimensionTopK",
+    "ECSSelector",
 ]

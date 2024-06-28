@@ -41,6 +41,10 @@ Wildboar 1.2 introduces several new models.
     the specified top `k` dimensions with the highest score.
   - :class:`~wildboar.dimension_selection.SelectDimensionPercentile`: only retain
     the dimensions with a `p-value` below the specified alpha level.
+  - :class:`~wildboar.dimension_selection.ECSSelector`: Select time series
+    dimensions based on the sum of distances between pairs of classes.
+
+
 
 - Add a new module :mod:`~wildboar.distance.lb` for distance lower bounds. The module
   contains four lower bounds.
