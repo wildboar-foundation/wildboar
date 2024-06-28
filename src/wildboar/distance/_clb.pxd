@@ -8,9 +8,9 @@ ctypedef fused sax_t:
     uint32_t
 
 cdef double sax_distance(
-    sax_t *x,
-    sax_t *y,
-    double *breakpoints,
+    const sax_t *x,
+    const sax_t *y,
+    const double *breakpoints,
     Py_ssize_t m,
     Py_ssize_t n,
 ) noexcept nogil

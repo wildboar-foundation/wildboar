@@ -12,9 +12,9 @@ from libc.math cimport sqrt
 
 
 cdef double sax_distance(
-    sax_t *x,
-    sax_t *y,
-    double *breakpoints,
+    const sax_t *x,
+    const sax_t *y,
+    const double *breakpoints,
     Py_ssize_t m,
     Py_ssize_t n,
 ) noexcept nogil:
@@ -34,7 +34,7 @@ cdef double sax_distance(
     return sqrt(n / m) * sqrt(dist)
 
 
-def pairwise_sax_distance(sax_t[:, :] X, sax_t[:, :] Y, double[:] breakpoints, Py_ssize_t n):
+def pairwise_sax_distance(const sax_t[:, :] X, const sax_t[:, :] Y, const double[:] breakpoints, Py_ssize_t n):
     cdef double[:, :] dist = np.empty((X.shape[0], Y.shape[0]), dtype=float)
     cdef Py_ssize_t i, j
     cdef Py_ssize_t m = X.shape[1]
