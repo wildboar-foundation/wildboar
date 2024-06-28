@@ -6,7 +6,7 @@ import numbers
 
 import numpy as np
 from sklearn.base import _fit_context
-from sklearn.validation._parameter_constraints import Interval, StrOptions
+from sklearn.utils._param_validation import Interval, StrOptions
 
 from ..base import BaseEstimator
 from ..distance._distance import pairwise_distance
