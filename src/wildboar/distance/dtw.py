@@ -178,6 +178,9 @@ def dtw_envelop(x, *, r=1.0):
     """
     x = check_array(x, ravel_1d=True, ensure_2d=False, dtype=float, input_name="x")
     warp_size = _compute_warp_size(x.shape[0], r)
+    if warp_size == x.shape[0]:
+        warp_size -= 1
+
     return _dtw_envelop(x, warp_size)
 
 
@@ -237,8 +240,7 @@ def dtw_lb_keogh(x, y=None, *, lower=None, upper=None, r=1.0):
             "lower (%d), upper (%d) and x (%d) have the same number of timesteps"
             % (lower.shape[0], upper.shape[0], x.shape[0])
         )
-    warp_size = _compute_warp_size(x.shape[0], r)
-    return _dtw_lb_keogh(x, lower, upper, warp_size)
+    return _dtw_lb_keogh(x, lower, upper)
 
 
 def dtw_alignment(x, y, *, r=1.0, weight=None, out=None):

@@ -67,7 +67,7 @@ class SaxLowerBound(TransformerMixin, BaseEstimator):
         self.n_bins = n_bins
 
     @_fit_context(prefer_skip_nested_validation=True)
-    def fit(self, X):
+    def fit(self, X, y=None):
         """
         Fit the lower bound for time series.
 
@@ -75,6 +75,8 @@ class SaxLowerBound(TransformerMixin, BaseEstimator):
         ----------
         X : array-like of shape (n_samples, n_timestep)
             The time series to query.
+        y : ignored, optional
+            For API compatibility.
 
         Returns
         -------
@@ -151,7 +153,7 @@ class PaaLowerBound(TransformerMixin, BaseEstimator):
         self.n_intervals = n_intervals
 
     @_fit_context(prefer_skip_nested_validation=True)
-    def fit(self, X):
+    def fit(self, X, y=None):
         """
         Fit the lower bound for time series.
 
@@ -159,6 +161,8 @@ class PaaLowerBound(TransformerMixin, BaseEstimator):
         ----------
         X : array-like of shape (n_samples, n_timestep)
             The time series to query.
+        y : ignored, optional
+            For API compatibility.
 
         Returns
         -------
@@ -198,7 +202,7 @@ class DtwKimLowerBound(TransformerMixin, BaseEstimator):
     The bound is very fast to compute but ineffective.
     """
 
-    def fit(self, X):
+    def fit(self, X, y=None):
         """
         Fit the lower bound for time series.
 
@@ -206,6 +210,8 @@ class DtwKimLowerBound(TransformerMixin, BaseEstimator):
         ----------
         X : array-like of shape (n_samples, n_timestep)
             The time series to query.
+        y : ignored, optional
+            For API compatibility.
 
         Returns
         -------
@@ -237,6 +243,7 @@ class DtwKimLowerBound(TransformerMixin, BaseEstimator):
             return v * v
 
         out = np.empty((Y.shape[0], self.X_.shape[0]), dtype=float)
+        n_timesteps = self.X_.shape[-1]
 
         for i in range(Y.shape[0]):
             x0 = self.X_[:, 0]
@@ -244,57 +251,61 @@ class DtwKimLowerBound(TransformerMixin, BaseEstimator):
             y0 = Y[i, 0]
             y0_ = Y[i, -1]
 
-            x1 = self.X_[:, 1]
-            x1_ = self.X_[:, -2]
-            y1 = Y[i, 1]
-            y1_ = Y[i, -2]
-
-            x2 = self.X_[:, 2]
-            x2_ = self.X_[:, -3]
-            y2 = Y[i, 2]
-            y2_ = Y[i, -3]
-
             d = dist(x0, y0) + dist(x0_, y0_)
-            d += np.minimum(
-                dist(x1, y0),
-                np.minimum(
-                    dist(x0, y1),
-                    dist(x1, y1),
-                ),
-            )
-            d += np.minimum(
-                dist(x1_, y1),
-                np.minimum(
-                    dist(x0_, y1_),
-                    dist(x1_, y1_),
-                ),
-            )
-            d += np.minimum(
-                dist(x0, y2),
-                np.minimum(
-                    dist(x1, y2),
+
+            if n_timesteps > 1:
+                x1 = self.X_[:, 1]
+                x1_ = self.X_[:, -2]
+                y1 = Y[i, 1]
+                y1_ = Y[i, -2]
+
+                d += np.minimum(
+                    dist(x1, y0),
                     np.minimum(
-                        dist(x2, y2),
-                        np.minimum(
-                            dist(x2, y1),
-                            dist(x2, y0),
-                        ),
+                        dist(x0, y1),
+                        dist(x1, y1),
                     ),
-                ),
-            )
-            d += np.minimum(
-                dist(x0_, y2_),
-                np.minimum(
-                    dist(x1_, y2_),
+                )
+                d += np.minimum(
+                    dist(x1_, y1),
                     np.minimum(
-                        dist(x2_, y2_),
-                        np.minimum(
-                            dist(x2_, y1_),
-                            dist(x2_, y0_),
-                        ),
+                        dist(x0_, y1_),
+                        dist(x1_, y1_),
                     ),
-                ),
-            )
+                )
+
+                if n_timesteps > 2:
+                    x2 = self.X_[:, 2]
+                    x2_ = self.X_[:, -3]
+                    y2 = Y[i, 2]
+                    y2_ = Y[i, -3]
+
+                    d += np.minimum(
+                        dist(x0, y2),
+                        np.minimum(
+                            dist(x1, y2),
+                            np.minimum(
+                                dist(x2, y2),
+                                np.minimum(
+                                    dist(x2, y1),
+                                    dist(x2, y0),
+                                ),
+                            ),
+                        ),
+                    )
+                    d += np.minimum(
+                        dist(x0_, y2_),
+                        np.minimum(
+                            dist(x1_, y2_),
+                            np.minimum(
+                                dist(x2_, y2_),
+                                np.minimum(
+                                    dist(x2_, y1_),
+                                    dist(x2_, y0_),
+                                ),
+                            ),
+                        ),
+                    )
             out[i, :] = d
 
         return out
@@ -345,7 +356,7 @@ class DtwKeoghLowerBound(TransformerMixin, BaseEstimator):
         self.kind = kind
 
     @_fit_context(prefer_skip_nested_validation=True)
-    def fit(self, X):
+    def fit(self, X, y=None):
         """
         Fit the lower bound for time series.
 
@@ -353,17 +364,24 @@ class DtwKeoghLowerBound(TransformerMixin, BaseEstimator):
         ----------
         X : array-like of shape (n_samples, n_timestep)
             The time series to query.
+        y : ignored, optional
+            For API compatibility.
 
         Returns
         -------
         self
             The estimator.
         """
-        self.X_ = self._validate_data(X)
-        self.lower_ = np.empty((X.shape[0], X.shape[1]), dtype=float)
-        self.upper_ = np.empty((X.shape[0], X.shape[1]), dtype=float)
-        for i in range(X.shape[0]):
-            lower, upper = _dtw_envelop(X[i, :], _compute_warp_size(X.shape[1], self.r))
+        self.X_ = self._validate_data(X, ensure_ts_array=True)
+        n_samples, n_dims, n_timesteps = self.X_.shape
+        self.lower_ = np.empty((n_samples, n_timesteps), dtype=float)
+        self.upper_ = np.empty((n_samples, n_timesteps), dtype=float)
+        warp_size = _compute_warp_size(n_timesteps, self.r)
+        if warp_size == n_timesteps:
+            warp_size -= 1
+
+        for i in range(n_samples):
+            lower, upper = _dtw_envelop(self.X_[i, 0, :], warp_size)
             self.lower_[i] = lower
             self.upper_[i] = upper
 
@@ -384,23 +402,29 @@ class DtwKeoghLowerBound(TransformerMixin, BaseEstimator):
             The estimator.
         """
         check_is_fitted(self)
-        Y = self._validate_data(X, reset=False)
-        out = np.empty((Y.shape[0], self.X_.shape[0]), dtype=float)
-        r = _compute_warp_size(Y.shape[1], self.r)
+        Y = self._validate_data(X, reset=False, ensure_ts_array=True)
+        y_samples, n_dims, n_timesteps = Y.shape
+        x_samples = self.X_.shape[0]
+
+        out = np.empty((y_samples, self.X_.shape[0]), dtype=float)
+        warp_size = _compute_warp_size(n_timesteps, self.r)
+        if warp_size == n_timesteps:
+            warp_size -= 1
+
         compute_left = self.kind == "both" or self.kind == "left"
         compute_right = self.kind == "both" or self.kind == "right"
-        for i in range(Y.shape[0]):
+        for i in range(y_samples):
             if compute_right:
-                lower, upper = _dtw_envelop(Y[i], r)
+                lower, upper = _dtw_envelop(Y[i, 0], warp_size)
 
-            for j in range(self.X_.shape[0]):
+            for j in range(x_samples):
                 if compute_left:
-                    dist1, _ = _dtw_lb_keogh(Y[i], self.lower_[j], self.upper_[j], r)
+                    dist1, _ = _dtw_lb_keogh(Y[i, 0], self.lower_[j], self.upper_[j])
                 else:
                     dist1 = -np.inf
 
                 if compute_right:
-                    dist2, _ = _dtw_lb_keogh(self.X_[j], lower, upper, r)
+                    dist2, _ = _dtw_lb_keogh(self.X_[j, 0], lower, upper)
                 else:
                     dist2 = -np.inf
 

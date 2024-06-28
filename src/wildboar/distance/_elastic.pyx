@@ -141,8 +141,9 @@ cdef void find_min_max(
             deque_pop_front(dl)
 
     for i in range(length, length + r + 1):
-        upper[i - r - 1] = T[deque_front(du)]
-        lower[i - r - 1] = T[deque_front(dl)]
+        k = i - r - 1
+        upper[k] = T[deque_front(du)]
+        lower[k] = T[deque_front(dl)]
 
         if i - deque_front(du) >= 2 * r + 1:
             deque_pop_front(du)
@@ -1069,7 +1070,7 @@ def _dtw_alignment(
 
 
 def _dtw_envelop(const double[::1] x, Py_ssize_t r):
-    if not 0 < r <= x.shape[0]:
+    if not 0 <= r < x.shape[0]:
         raise ValueError("invalid r")
 
     cdef Deque du
@@ -1088,11 +1089,8 @@ def _dtw_envelop(const double[::1] x, Py_ssize_t r):
 
 
 def _dtw_lb_keogh(
-    const double[::1] x, double[::1] lower, double[::1] upper, Py_ssize_t r
+    const double[::1] x, const double[::1] lower, const double[::1] upper,
 ):
-    if not 0 < r <= x.shape[0]:
-        raise ValueError("invalid r")
-
     cdef Py_ssize_t i
     cdef Py_ssize_t length = x.shape[0]
     cdef double[:] cb = np.empty(length, dtype=float)
