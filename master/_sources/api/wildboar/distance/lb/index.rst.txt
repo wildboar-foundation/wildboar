@@ -1,0 +1,1196 @@
+
+******************************
+:py:mod:`wildboar.distance.lb`
+******************************
+
+.. py:module:: wildboar.distance.lb
+
+.. autoapi-nested-parse::
+
+   Lower bounds for distance metrics.
+
+   ..
+       !! processed by numpydoc !!
+
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   wildboar.distance.lb.DtwKeoghLowerBound
+   wildboar.distance.lb.DtwKimLowerBound
+   wildboar.distance.lb.PaaLowerBound
+   wildboar.distance.lb.SaxLowerBound
+
+
+
+
+
+.. raw:: html
+
+   <br />
+
+.. py:class:: DtwKeoghLowerBound(r=1.0, *, kind='both')
+
+
+
+   
+   Lower bound for dynamic time warping.
+
+   Implements the LB_Keogh algorithm for efficient similarity search in time series data.
+   This method approximates distances between sequences by comparing their
+   upper and lower bounds, enhancing performance by reducing computational
+   overhead.
+
+   :Parameters:
+
+       **r** : float
+           The warp window for DTW.
+
+       **kind** : {"both", "left", "right"}
+           - If "both", compute the bound for both sides and take the maximum.
+           - If "left", compute the bound only for the query.
+           - If "right", compute the bound only for the data.
+
+
+
+
+
+
+
+
+
+
+
+   .. rubric:: Examples
+
+   >>> from wildboar.datasets import load_gun_point
+   >>> from wildboar.distance import argmin_distance
+   >>> from wildboar.distance.lb import DtwKeoghLowerBound
+   >>> X, y = load_gun_point()
+   >>> lbkeogh = DtwKeoghLowerBound(r=0.1).fit(X[30:])
+   >>> argmin_distance(
+   ...     X[:30],  # query
+   ...     X[30:],  # database
+   ...     metric="dtw",
+   ...     metric_params={"r": 0.1},
+   ...     lower_bound=lbkeogh.transform(X[:30])
+   ... )
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+   .. py:method:: fit(X, y=None)
+
+      
+      Fit the lower bound for time series.
+
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_timestep)
+              The time series to query.
+
+          **y** : ignored, optional
+              For API compatibility.
+
+      :Returns:
+
+          self
+              The estimator.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: fit_transform(X, y=None, **fit_params)
+
+      
+      Fit to data, then transform it.
+
+      Fits transformer to `X` and `y` with optional parameters `fit_params`
+      and returns a transformed version of `X`.
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_features)
+              Input samples.
+
+          **y** :  array-like of shape (n_samples,) or (n_samples, n_outputs),                 default=None
+              Target values (None for unsupervised transformations).
+
+          **\*\*fit_params** : dict
+              Additional fit parameters.
+
+      :Returns:
+
+          **X_new** : ndarray array of shape (n_samples, n_features_new)
+              Transformed array.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: set_output(*, transform=None)
+
+      
+      Set output container.
+
+      See :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py`
+      for an example on how to use the API.
+
+      :Parameters:
+
+          **transform** : {"default", "pandas", "polars"}, default=None
+              Configure output of `transform` and `fit_transform`.
+              
+              - `"default"`: Default output format of a transformer
+              - `"pandas"`: DataFrame output
+              - `"polars"`: Polars output
+              - `None`: Transform configuration is unchanged
+              
+              .. versionadded:: 1.4
+                  `"polars"` option was added.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: transform(X)
+
+      
+      Fit the lower bound for time series.
+
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_timestep)
+              The time series to query.
+
+      :Returns:
+
+          self
+              The estimator.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+.. py:class:: DtwKimLowerBound
+
+
+
+   
+   Lower bound for Dynamic time warping computed in constant time.
+
+   The bound is very fast to compute but ineffective.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+   .. py:method:: fit(X, y=None)
+
+      
+      Fit the lower bound for time series.
+
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_timestep)
+              The time series to query.
+
+          **y** : ignored, optional
+              For API compatibility.
+
+      :Returns:
+
+          self
+              The estimator.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: fit_transform(X, y=None, **fit_params)
+
+      
+      Fit to data, then transform it.
+
+      Fits transformer to `X` and `y` with optional parameters `fit_params`
+      and returns a transformed version of `X`.
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_features)
+              Input samples.
+
+          **y** :  array-like of shape (n_samples,) or (n_samples, n_outputs),                 default=None
+              Target values (None for unsupervised transformations).
+
+          **\*\*fit_params** : dict
+              Additional fit parameters.
+
+      :Returns:
+
+          **X_new** : ndarray array of shape (n_samples, n_features_new)
+              Transformed array.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: set_output(*, transform=None)
+
+      
+      Set output container.
+
+      See :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py`
+      for an example on how to use the API.
+
+      :Parameters:
+
+          **transform** : {"default", "pandas", "polars"}, default=None
+              Configure output of `transform` and `fit_transform`.
+              
+              - `"default"`: Default output format of a transformer
+              - `"pandas"`: DataFrame output
+              - `"polars"`: Polars output
+              - `None`: Transform configuration is unchanged
+              
+              .. versionadded:: 1.4
+                  `"polars"` option was added.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: transform(X)
+
+      
+      Compute lower bound for query.
+
+
+      :Parameters:
+
+          **X** : array-like of shape (n_queries, n_timesteps)
+              The query.
+
+      :Returns:
+
+          ndarray of shape (n_queries, n_samples)
+              The lower bound of the distance between the i:th
+              query and the j:th in database sample.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+.. py:class:: PaaLowerBound(*, window=None, n_intervals='sqrt')
+
+
+
+   
+   Lower bound for the Euclidean distance between z-normalized time series.
+
+   The lower bound is computed based on PAA.
+
+   :Parameters:
+
+       **window** : int, optional
+           The size of an interval. If `window`, is given then `n_intervals` is ignored.
+
+       **n_intervals** : {"sqrt", "log2"}, int or float, optional
+           The number of intervals.
+
+
+
+
+
+
+
+
+
+
+
+   .. rubric:: Examples
+
+   >>> from wildboar.datasets import load_gun_point
+   >>> from wildboar.distance import argmin_distance
+   >>> from wildboar.distance.lb import PaaLowerBound
+   >>> X, y = load_gun_point()
+   >>> lbpaa = PaaLowerBound().fit(X[30:])
+   >>> argmin_distance(X[:30], X[30:], lower_bound=lbpaa.transform(X[:30]))
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+   .. py:method:: fit(X, y=None)
+
+      
+      Fit the lower bound for time series.
+
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_timestep)
+              The time series to query.
+
+          **y** : ignored, optional
+              For API compatibility.
+
+      :Returns:
+
+          self
+              The estimator.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: fit_transform(X, y=None, **fit_params)
+
+      
+      Fit to data, then transform it.
+
+      Fits transformer to `X` and `y` with optional parameters `fit_params`
+      and returns a transformed version of `X`.
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_features)
+              Input samples.
+
+          **y** :  array-like of shape (n_samples,) or (n_samples, n_outputs),                 default=None
+              Target values (None for unsupervised transformations).
+
+          **\*\*fit_params** : dict
+              Additional fit parameters.
+
+      :Returns:
+
+          **X_new** : ndarray array of shape (n_samples, n_features_new)
+              Transformed array.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: set_output(*, transform=None)
+
+      
+      Set output container.
+
+      See :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py`
+      for an example on how to use the API.
+
+      :Parameters:
+
+          **transform** : {"default", "pandas", "polars"}, default=None
+              Configure output of `transform` and `fit_transform`.
+              
+              - `"default"`: Default output format of a transformer
+              - `"pandas"`: DataFrame output
+              - `"polars"`: Polars output
+              - `None`: Transform configuration is unchanged
+              
+              .. versionadded:: 1.4
+                  `"polars"` option was added.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: transform(X)
+
+      
+      Compute lower bound for query.
+
+
+      :Parameters:
+
+          **X** : array-like of shape (n_queries, n_timesteps)
+              The query.
+
+      :Returns:
+
+          ndarray of shape (n_queries, n_samples)
+              The lower bound of the distance between the i:th
+              query and the j:th in database sample.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+.. py:class:: SaxLowerBound(*, window=None, n_intervals='sqrt', n_bins=10)
+
+
+
+   
+   Lower bound for the Euclidean distance between z-normalized time series.
+
+   The lower bound is computed based on SAX.
+
+   :Parameters:
+
+       **window** : int, optional
+           The size of an interval. If `window`, is given then `n_intervals` is ignored.
+
+       **n_intervals** : {"sqrt", "log2"}, int or float, optional
+           The number of intervals.
+
+       **n_bins** : int, optional
+           The number of bins.
+
+
+
+
+
+
+
+
+
+
+
+   .. rubric:: Examples
+
+   >>> from wildboar.datasets import load_gun_point
+   >>> from wildboar.distance import argmin_distance
+   >>> from wildboar.distance.lb import SaxLowerBound
+   >>> X, y = load_gun_point()
+   >>> lbsax = SaxLowerBound(n_bins=20).fit(X[30:])
+   >>> argmin_distance(X[:30], X[30:], lower_bound=lbsax.transform(X[:30]))
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+   .. py:method:: fit(X, y=None)
+
+      
+      Fit the lower bound for time series.
+
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_timestep)
+              The time series to query.
+
+          **y** : ignored, optional
+              For API compatibility.
+
+      :Returns:
+
+          self
+              The estimator.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: fit_transform(X, y=None, **fit_params)
+
+      
+      Fit to data, then transform it.
+
+      Fits transformer to `X` and `y` with optional parameters `fit_params`
+      and returns a transformed version of `X`.
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_features)
+              Input samples.
+
+          **y** :  array-like of shape (n_samples,) or (n_samples, n_outputs),                 default=None
+              Target values (None for unsupervised transformations).
+
+          **\*\*fit_params** : dict
+              Additional fit parameters.
+
+      :Returns:
+
+          **X_new** : ndarray array of shape (n_samples, n_features_new)
+              Transformed array.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: set_output(*, transform=None)
+
+      
+      Set output container.
+
+      See :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py`
+      for an example on how to use the API.
+
+      :Parameters:
+
+          **transform** : {"default", "pandas", "polars"}, default=None
+              Configure output of `transform` and `fit_transform`.
+              
+              - `"default"`: Default output format of a transformer
+              - `"pandas"`: DataFrame output
+              - `"polars"`: Polars output
+              - `None`: Transform configuration is unchanged
+              
+              .. versionadded:: 1.4
+                  `"polars"` option was added.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: transform(X)
+
+      
+      Compute lower bound for query.
+
+
+      :Parameters:
+
+          **X** : array-like of shape (n_queries, n_timesteps)
+              The query.
+
+      :Returns:
+
+          ndarray of shape (n_queries, n_samples)
+              The lower bound of the distance between the i:th
+              query and the j:th in database sample.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+

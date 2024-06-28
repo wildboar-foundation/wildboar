@@ -72,7 +72,7 @@
 
    .. grid-item-card::
       :padding: 2
-      :link: api/wildboar/index
+      :link: api/index
       :link-type: doc
       :text-align: center
 

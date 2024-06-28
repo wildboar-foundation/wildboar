@@ -24,6 +24,8 @@ API Reference
 
    /api/wildboar/distance/dtw/index
 
+   /api/wildboar/distance/lb/index
+
    /api/wildboar/ensemble/index
 
    /api/wildboar/explain/index

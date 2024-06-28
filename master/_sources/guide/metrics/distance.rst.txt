@@ -236,6 +236,51 @@ series that would never be among the closest.
 The output of both calls are equivalent but the latter is roughly three times
 faster for most metrics.
 
+.. _lower_bound:
+
+The :func:`argmin_distance` function accepts a parameter called
+``lower_bound``, which takes an array containing pairwise lower bounds between
+time series. The user can select the specific lower bounds to include in this
+array, depending on needs or the specific distance measures. This flexibility
+allows the user to tailor the estimation process to be as efficient as possible
+by choosing an appropriate level of simplicity or complexity for the lower
+bounds.
+
+.. execute::
+   :context:
+   :show-return:
+
+   from wildboar.distance.lb import DtwKeoghLowerBound
+
+   lb_keogh = DtwKeoghLowerBound(r=0.1).fit(X[11:300])
+   argmin_distance(
+      X[0:10],
+      X[11:300],
+      metric="dtw",
+      metric_params={"r": 0.1},
+      lower_bound=lb_keogh.transform(X[0:10]),
+   )
+
+.. list-table:: Lower bounds and supported metric.
+   :widths: 30 20 40
+   :header-rows: 1
+
+   * - Lower bound
+     - Metric
+     - Comment
+   * - :class:`~wildboar.distance.lb.DtwKeoghLowerBound`
+     - ``"dtw"``
+     -
+   * - :class:`~wildboar.distance.lb.DtwKimLowerBound`
+     - ``"dtw"``
+     -
+   * - :class:`~wildboar.distance.lb.SaxLowerBound`
+     - ``"euclidean"``
+     - Requires z-normalization
+   * - :class:`~wildboar.distance.lb.PaaLowerBound`
+     - ``"euclidean"``
+     - Requires z-normalization
+
 .. _multivariate_support:
 
 Multivariate support

@@ -3957,7 +3957,7 @@ Functions
           !! processed by numpydoc !!
 
 
-.. py:class:: SAX(*, n_intervals='sqrt', window=None, n_bins=4, binning='normal', estimate=True)
+.. py:class:: SAX(*, n_intervals='sqrt', window=None, n_bins=4, binning='normal', estimate='deprecated', scale=True)
 
 
 
@@ -3996,6 +3996,15 @@ Functions
            
            - :func:`datasets.preprocess.normalize` when `binning="normal"`.
            - :func:`datasets.preprocess.minmax_scale`. when `binning="uniform"`.
+
+       **scale** : bool, optional
+           Ensure that the input is correctly scaled.
+           
+           If `scale=False`, it is assumed that each time series is
+           preprocessed using:
+           
+           - :func:`datasets.preprocess.normalize` when `binning="normal"`.
+           - :func:`datasets.preprocess.minmax_scale` when `binning="uniform"`.
 
 
 
