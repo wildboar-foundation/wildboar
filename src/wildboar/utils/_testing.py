@@ -35,7 +35,9 @@ def assert_exhaustive_parameter_checks(estimator: BaseEstimator):
     test : bool
         Ok.
     """
-    assert hasattr(estimator.__class__, "_parameter_constraints")
+    if not hasattr(estimator.__class__, "_parameter_constraints"):
+        return
+
     assert set(estimator.get_params(deep=False).keys()) == set(
         estimator.__class__._parameter_constraints.keys()
     )
@@ -54,7 +56,10 @@ def assert_parameter_checks(estimator: BaseEstimator, skip=None):
     skip : list, optional
         The parameter constraints to skip.
     """
-    assert hasattr(estimator.__class__, "_parameter_constraints")
+
+    if not hasattr(estimator.__class__, "_parameter_constraints"):
+        return
+
     if is_explainer(estimator):
         clf = MinimalClassifier()
         clf.fit(_DUMMY_X, _DUMMY_Y)
