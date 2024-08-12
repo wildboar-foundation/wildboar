@@ -237,7 +237,7 @@ def fit(AttributeGenerator generator, TSArray X, object random_state):
             )
             generator.free_transient(&transient)
             embedding.set_attribute(i, persistent)
-
+    free(samples)
     return embedding
 
 
