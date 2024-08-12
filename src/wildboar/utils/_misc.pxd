@@ -37,8 +37,12 @@ ctypedef fused double_or_int:
     Py_ssize_t
     double
 
-cdef void argsort(
+cdef void pairsort(
     double_or_int *values, Py_ssize_t *order, Py_ssize_t length
+) noexcept nogil
+
+cdef void argsort(
+    const double_or_int *values, Py_ssize_t *samples, Py_ssize_t n
 ) noexcept nogil
 
 cdef int realloc_array(

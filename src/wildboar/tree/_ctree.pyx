@@ -20,7 +20,7 @@ from ..distance._cdistance cimport Metric
 
 from ..transform._attr_gen cimport Attribute, AttributeGenerator
 from ..utils cimport TSArray
-from ..utils._misc cimport List, argsort, safe_realloc, isclose
+from ..utils._misc cimport List, pairsort, safe_realloc, isclose
 from ..utils._rand cimport RAND_R_MAX, rand_int, rand_uniform
 
 
@@ -1110,7 +1110,7 @@ cdef class TreeBuilder:
                 end - start,
                 self.attribute_buffer + start,
             )
-            argsort(self.attribute_buffer + start, self.samples + start, n_samples)
+            pairsort(self.attribute_buffer + start, self.samples + start, n_samples)
 
             # All attribute values are constant
             if (

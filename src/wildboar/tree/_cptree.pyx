@@ -16,7 +16,7 @@ from numpy cimport uint32_t
 
 from ..distance._cdistance cimport MetricList
 from ..utils cimport TSArray
-from ..utils._misc cimport argsort, safe_realloc
+from ..utils._misc cimport pairsort, safe_realloc
 from ..utils._rand cimport (
     RAND_R_MAX,
     VoseRand,
@@ -813,7 +813,7 @@ cdef class TreeBuilder:
                 sizeof(double) * n_samples,
             )
 
-            argsort(self.samples_branch + start, self.samples + start, n_samples)
+            pairsort(self.samples_branch + start, self.samples + start, n_samples)
             self.criterion.reset(self.samples_branch)
             self.criterion.child_impurity(split.child_impurity, n_branches)
 

@@ -119,16 +119,17 @@ cdef class List:
     cdef void* get(self, Py_ssize_t i) noexcept nogil:
         return PyList_GET_ITEM(self.py_list, i)
 
-
-cdef inline void argsort(
+# TODO: this has a really unfortunate name...
+#       we should instead call it pairsort or something...
+cdef inline void pairsort(
     double_or_int *values, Py_ssize_t *samples, Py_ssize_t n
 ) noexcept nogil:
     if n == 0:
         return
     cdef Py_ssize_t maxd = 2 * <Py_ssize_t> log2(n)
-    introsort(values, samples, n, maxd)
+    pairsort_introsort(values, samples, n, maxd)
 
-cdef inline void swap(
+cdef inline void pairsort_swap(
     double_or_int *values,
     Py_ssize_t *samples,
     Py_ssize_t i,
@@ -137,7 +138,7 @@ cdef inline void swap(
     values[i], values[j] = values[j], values[i]
     samples[i], samples[j] = samples[j], samples[i]
 
-cdef inline double_or_int median3(double_or_int *values, Py_ssize_t n) noexcept nogil:
+cdef inline double_or_int pairsort_median3(double_or_int *values, Py_ssize_t n) noexcept nogil:
     cdef double_or_int a = values[0]
     cdef double_or_int b = values[n / 2]
     cdef double_or_int c = values[n - 1]
@@ -156,7 +157,7 @@ cdef inline double_or_int median3(double_or_int *values, Py_ssize_t n) noexcept 
     else:
         return b
 
-cdef void introsort(
+cdef void pairsort_introsort(
     double_or_int *values,
     Py_ssize_t *samples,
     Py_ssize_t n,
@@ -167,27 +168,27 @@ cdef void introsort(
 
     while n > 1:
         if maxd <= 0:
-            heapsort(values, samples, n)
+            pairsort_heapsort(values, samples, n)
             return
         maxd -= 1
 
-        pivot = median3(values, n)
+        pivot = pairsort_median3(values, n)
 
         i = l = 0
         r = n
         while i < r:
             value = values[i]
             if value < pivot:
-                swap(values, samples, i, l)
+                pairsort_swap(values, samples, i, l)
                 i += 1
                 l += 1
             elif value > pivot:
                 r -= 1
-                swap(values, samples, i, r)
+                pairsort_swap(values, samples, i, r)
             else:
                 i += 1
 
-        introsort(values, samples, l, maxd)
+        pairsort_introsort(values, samples, l, maxd)
         values += r
         samples += r
         n -= r
@@ -207,10 +208,10 @@ cdef inline void sift_down(double_or_int *values, Py_ssize_t *samples,
         if maxind == root:
             break
         else:
-            swap(values, samples, root, maxind)
+            pairsort_swap(values, samples, root, maxind)
             root = maxind
 
-cdef void heapsort(
+cdef void pairsort_heapsort(
     double_or_int *values, Py_ssize_t *samples, Py_ssize_t n
 ) noexcept nogil:
     cdef Py_ssize_t start, end
@@ -225,9 +226,118 @@ cdef void heapsort(
 
     end = n - 1
     while end > 0:
-        swap(values, samples, 0, end)
+        pairsort_swap(values, samples, 0, end)
         sift_down(values, samples, 0, end)
         end = end - 1
+
+
+cdef inline void argsort(
+    const double_or_int *values, Py_ssize_t *samples, Py_ssize_t n
+) noexcept nogil:
+    if n == 0:
+        return
+    cdef Py_ssize_t maxd = 2 * <Py_ssize_t> log2(n)
+    argsort_introsort(values, samples, n, maxd)
+
+cdef inline void argsort_swap(
+    Py_ssize_t *samples,
+    Py_ssize_t i,
+    Py_ssize_t j
+) noexcept nogil:
+    samples[i], samples[j] = samples[j], samples[i]
+
+cdef inline double_or_int argsort_median3(const double_or_int *values, Py_ssize_t *samples, Py_ssize_t n) noexcept nogil:
+    cdef double_or_int a = values[samples[0]]
+    cdef double_or_int b = values[samples[n // 2]]
+    cdef double_or_int c = values[samples[n - 1]]
+    if a < b:
+        if b < c:
+            return b
+        elif a < c:
+            return c
+        else:
+            return a
+    elif b < c:
+        if a < c:
+            return a
+        else:
+            return c
+    else:
+        return b
+
+cdef void argsort_introsort(
+    const double_or_int *values,
+    Py_ssize_t *samples,
+    Py_ssize_t n,
+    Py_ssize_t maxd
+) noexcept nogil:
+    cdef double_or_int pivot, value
+    cdef Py_ssize_t i, l, r
+
+    while n > 1:
+        if maxd <= 0:
+            argsort_heapsort(values, samples, n)
+            return
+        maxd -= 1
+
+        pivot = argsort_median3(values, samples, n)
+
+        i = l = 0
+        r = n
+        while i < r:
+            value = values[samples[i]]
+            if value < pivot:
+                argsort_swap(samples, i, l)
+                i += 1
+                l += 1
+            elif value > pivot:
+                r -= 1
+                argsort_swap(samples, i, r)
+            else:
+                i += 1
+
+        argsort_introsort(values, samples, l, maxd)
+        samples += r
+        n -= r
+
+cdef inline void argsort_sift_down(
+    const double_or_int *values, Py_ssize_t *samples, Py_ssize_t start, Py_ssize_t end
+) noexcept nogil:
+    cdef Py_ssize_t child, maxind, root
+    root = start
+    while True:
+        child = root * 2 + 1
+        maxind = root
+        if child < end and values[samples[maxind]] < values[samples[child]]:
+            maxind = child
+        if child + 1 < end and values[samples[maxind]] < values[samples[child + 1]]:
+            maxind = child + 1
+
+        if maxind == root:
+            break
+        else:
+            argsort_swap(samples, root, maxind)
+            root = maxind
+
+cdef void argsort_heapsort(
+    const double_or_int *values, Py_ssize_t *samples, Py_ssize_t n
+) noexcept nogil:
+    cdef Py_ssize_t start, end
+
+    start = (n - 2) / 2
+    end = n
+    while True:
+        argsort_sift_down(values, samples, start, end)
+        if start == 0:
+            break
+        start -= 1
+
+    end = n - 1
+    while end > 0:
+        argsort_swap(samples, 0, end)
+        argsort_sift_down(values, samples, 0, end)
+        end = end - 1
+
 
 cdef int realloc_array(
     void** ptr, Py_ssize_t old_size, Py_ssize_t ptr_size, Py_ssize_t *capacity

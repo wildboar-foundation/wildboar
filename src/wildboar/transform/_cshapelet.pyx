@@ -24,7 +24,7 @@ from ..distance._cdistance cimport (
     scaled_dilated_distance_profile,
 )
 from ..utils cimport TSArray
-from ..utils._misc cimport argsort, to_ndarray_int
+from ..utils._misc cimport pairsort, to_ndarray_int
 from ..utils._stats cimport fast_mean_std
 from ..utils._rand cimport (
     RAND_R_MAX,
@@ -650,7 +650,7 @@ cdef class DilatedShapeletAttributeGenerator(AttributeGenerator):
 
         for i in range(n_distances):
             self.arg_buffer[i] = i
-        argsort(self.dist_buffer, self.arg_buffer, n_distances)
+        pairsort(self.dist_buffer, self.arg_buffer, n_distances)
 
         cdef Py_ssize_t lower = <Py_ssize_t> floor(n_distances * self.lower_bound)
         cdef Py_ssize_t upper = <Py_ssize_t> floor(n_distances * self.upper_bound)
@@ -1213,7 +1213,7 @@ cdef class CastorAttributeGenerator(AttributeGenerator):
         for i in range(n_samples):
             self.rnd_value[i] = rand_uniform(0, 1, seed)
 
-        argsort(self.rnd_value, samples, n_samples)
+        pairsort(self.rnd_value, samples, n_samples)
 
         # shapelet[0, 0], ..., shapelet[n_shapelets, max_exponent]
         cdef double *data = <double*> malloc(
@@ -1282,7 +1282,7 @@ cdef class CastorAttributeGenerator(AttributeGenerator):
 
                 for m in range(n_distances):
                     self.arg_buffer[m] = m
-                argsort(self.dist_buffer, self.arg_buffer, n_distances)
+                pairsort(self.dist_buffer, self.arg_buffer, n_distances)
 
                 lower = <Py_ssize_t> floor(n_distances * self.lower)
                 upper = <Py_ssize_t> floor(n_distances * self.upper)
