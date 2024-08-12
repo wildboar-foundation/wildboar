@@ -10,10 +10,12 @@ from sklearn.utils._param_validation import Interval, StrOptions
 from ._base import BaseAttributeTransform
 from ._cinterval import (
     Catch22Summarizer,
-    IntervalAttributeGenerator,
+    DyadicIntervalAttributeGenerator,
+    FixedIntervalAttributeGenerator,
     MeanSummarizer,
     MeanVarianceSlopeSummarizer,
     PyFuncSummarizer,
+    QuantSummarizer,
     RandomFixedIntervalAttributeGenerator,
     RandomIntervalAttributeGenerator,
     SlopeSummarizer,
@@ -26,6 +28,7 @@ _SUMMARIZER = {
     "variance": VarianceSummarizer,
     "slope": SlopeSummarizer,
     "catch22": Catch22Summarizer,
+    "quant": QuantSummarizer,
 }
 
 
@@ -57,7 +60,12 @@ class IntervalMixin:
             StrOptions({"sqrt", "log2"}),
         ],
         "intervals": [
-            StrOptions({"fixed", "sample", "random"}, deprecated={"fixed"}),
+            StrOptions({"fixed", "sample", "random", "dyadic"}, deprecated={"fixed"}),
+        ],
+        "depth": [
+            Interval(numbers.Integral, 0, None, closed="neither"),
+            StrOptions({"auto"}),
+            None,
         ],
         "min_size": [
             Interval(numbers.Real, 0, 1, closed="both"),
@@ -69,6 +77,7 @@ class IntervalMixin:
         ],
         "sample_size": [None, Interval(numbers.Real, 0, 1, closed="both")],
         "summarizer": [StrOptions(_SUMMARIZER.keys()), list],
+        "summarizer_params": [dict, None],
     }
 
     def _get_generator(self, x, y):  # noqa: PLR0912
@@ -80,7 +89,14 @@ class IntervalMixin:
                 )
             summarizer = PyFuncSummarizer(self.summarizer)
         else:
-            summarizer = _SUMMARIZER[self.summarizer]()
+            if (
+                hasattr(self, "summarizer_params")
+                and self.summarizer_params is not None
+            ):
+                summarizer_params = self.summarizer_params
+            else:
+                summarizer_params = {}
+            summarizer = _SUMMARIZER[self.summarizer](**summarizer_params)
 
         if self.n_intervals == "sqrt":
             n_intervals = math.ceil(math.sqrt(self.n_timesteps_in_))
@@ -99,12 +115,6 @@ class IntervalMixin:
         else:
             n_intervals = math.ceil(self.n_intervals * self.n_timesteps_in_)
 
-        if self.intervals != "random" and n_intervals > self.n_timesteps_in_:
-            raise ValueError(
-                "The number of intervals must be fewer than or equal "
-                "to the number of timesteps."
-            )
-
         # TODO(1.4)
         if self.intervals == "sample":
             warnings.warn(
@@ -116,13 +126,38 @@ class IntervalMixin:
         else:
             intervals = self.intervals
 
+        if intervals == "fixed" and n_intervals > self.n_timesteps_in_:
+            raise ValueError(
+                "The number of intervals must be fewer than or equal "
+                "to the number of timesteps."
+            )
+
         if intervals == "fixed":
             if self.sample_size is None or self.sample_size == 1.0:
-                return IntervalAttributeGenerator(n_intervals, summarizer)
+                return FixedIntervalAttributeGenerator(summarizer, n_intervals)
             else:
                 return RandomFixedIntervalAttributeGenerator(
-                    n_intervals, summarizer, math.floor(self.sample_size * n_intervals)
+                    summarizer, n_intervals, math.floor(self.sample_size * n_intervals)
                 )
+        elif intervals == "dyadic":
+            if self.depth is None or (
+                isinstance(self.depth, str) and self.depth == "auto"
+            ):
+                depth = min(math.floor(math.log2(self.n_timesteps_in_)) + 1, 6)
+            else:
+                if 2 ** (self.depth - 1) > self.n_timesteps_in_:
+                    raise ValueError(
+                        "The depth must be less than {}, got {}".format(
+                            math.floor(math.log2(self.n_timesteps_in_)) + 1, self.depth
+                        )
+                    )
+                elif self.depth < 1:
+                    raise ValueError(
+                        "The depth must be larger than 1, got {self.depth}"
+                    )
+                depth = self.depth
+
+            return DyadicIntervalAttributeGenerator(summarizer, depth)
         else:  # "random"
             min_size = self.min_size if self.min_size is not None else 0
             max_size = self.max_size if self.max_size is not None else 1
@@ -142,7 +177,7 @@ class IntervalMixin:
                     min_size = 2
 
             return RandomIntervalAttributeGenerator(
-                n_intervals, summarizer, min_size, max_size
+                summarizer, n_intervals, min_size, max_size
             )
 
 
@@ -167,11 +202,14 @@ class IntervalTransform(IntervalMixin, BaseAttributeTransform):
         The method for selecting intervals.
 
         - if "fixed", `n_intervals` non-overlapping intervals.
+        - if "dyadic", `2**depth-1+2**depth-1-depth" intervals.
         - if "sample", `n_intervals * sample_size` non-overlapping intervals.
         - if "random", `n_intervals` possibly overlapping intervals of randomly
           sampled in `[min_size * n_timestep, max_size * n_timestep]`.
     sample_size : float, optional
         The sample size of fixed intervals if `intervals="sample"`.
+    depth : int, optional
+        The maximum depth for dyadic intervals.
     min_size : float, optional
         The minimum interval size if `intervals="random"`.
     max_size : float, optional
@@ -237,17 +275,21 @@ class IntervalTransform(IntervalMixin, BaseAttributeTransform):
         *,
         intervals="fixed",
         sample_size=None,
+        depth=None,
         min_size=0.0,
         max_size=1.0,
         summarizer="mean_var_slope",
+        summarizer_params=None,
         n_jobs=None,
         random_state=None,
     ):
         super().__init__(n_jobs=n_jobs, random_state=random_state)
         self.n_intervals = n_intervals
         self.summarizer = summarizer
+        self.summarizer_params = summarizer_params
         self.intervals = intervals
         self.sample_size = sample_size
+        self.depth = depth
         self.min_size = min_size
         self.max_size = max_size
 

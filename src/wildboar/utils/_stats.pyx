@@ -147,7 +147,10 @@ cdef double slope(const double *x, Py_ssize_t length) noexcept nogil:
     mean_diff /= length
     mean_y_sqr /= length
     x_mean /= length
-    return (mean_diff - y_mean * x_mean) / (mean_y_sqr - y_mean ** 2)
+    cdef double denom = (mean_y_sqr - y_mean ** 2)
+    if denom == 0.0:
+        return 0
+    return (mean_diff - y_mean * x_mean) / denom
 
 cdef double find_min(
     const double *x, Py_ssize_t n, Py_ssize_t *min_index=NULL
