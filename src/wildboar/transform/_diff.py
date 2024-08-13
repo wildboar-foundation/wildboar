@@ -42,8 +42,9 @@ class FftTransform(TransformerMixin, BaseEstimator):
 
         Returns
         -------
-        ndarray of shape (n_samples, n_dims, n_timesteps)
-            The transformed data.
+        ndarray of shape (n_samples, n_dims, m_timesteps)
+            The transformed data. If n_timesteps is even m_timesteps is
+            (n_timesteps/2) + 1; otherwise (n_timesteps + 1) / 2.
         """
         X = self._validate_data(X, allow_3d=True, reset=False)
         return np.abs(np.fft.rfft(X))
