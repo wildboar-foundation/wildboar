@@ -28,6 +28,7 @@ from wildboar.utils.estimator_checks import check_estimator
     "estimator, skip",
     [
         (IntervalTransform(), []),
+        (IntervalTransform(intervals="dyadic", summarizer="quant"), []),
         (RandomShapeletTransform(), []),
         (ShapeletTransform(), []),
         (RocketTransform(), ["max_size"]),
