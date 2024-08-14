@@ -87,14 +87,14 @@ Functions
 
 
 
+
+
    .. rubric:: Notes
 
    Contrary to other cross-validation strategies, the random outlier
    cross-validator does not ensure that all folds will be different.
    Instead, the inlier samples are shuffled and new outlier samples
    are inserted in the training and test sets repeatedly.
-
-
 
 
 
@@ -118,12 +118,12 @@ Functions
           **groups** : object, optional
               Always ignored, exists for compatibility.
 
+
+
       :Returns:
 
           int
               Returns the number of splitting iterations in the cross-validator.
-
-
 
 
 
@@ -157,12 +157,12 @@ Functions
               Always ignored, exists for compatibility.
 
 
+
+
       :Yields:
 
           **train_idx, test_idx** : ndarray
               The training and test indicies
-
-
 
 
 
@@ -203,6 +203,8 @@ Functions
        **random_state** : int or RandomState, optional
            Psudo random state used for stable results.
 
+
+
    :Returns:
 
        **x_train** : array-like
@@ -233,8 +235,6 @@ Functions
    >>> x_train, x_test, y_train, y_test = train_test_split(
    ...     x, y, 1, test_size=0.2, anomalies_train_size=0.05
    ... )
-
-
 
    ..
        !! processed by numpydoc !!

@@ -88,6 +88,8 @@ Functions
        **return_distance** : bool, optional
            Return the distance from main to neighbours.
 
+
+
    :Returns:
 
        **motif_indicies** : list
@@ -122,8 +124,6 @@ Functions
    .. only:: latex
 
       
-
-
 
 
    ..
@@ -162,6 +162,8 @@ Functions
        **return_arc_curve** : bool, optional
            Return the arc curve.
 
+
+
    :Returns:
 
        **segments** : ndarray of shape (n_samples, n_segments), (n_segments) or int
@@ -193,8 +195,6 @@ Functions
    .. only:: latex
 
       
-
-
 
 
    ..

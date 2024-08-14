@@ -64,6 +64,8 @@ Classes
 
 
 
+
+
    .. rubric:: Examples
 
    >>> from wildboar.datasets import load_gun_point
@@ -78,8 +80,6 @@ Classes
    ...     metric_params={"r": 0.1},
    ...     lower_bound=lbkeogh.transform(X[:30])
    ... )
-
-
 
    ..
        !! processed by numpydoc !!
@@ -98,12 +98,12 @@ Classes
           **y** : ignored, optional
               For API compatibility.
 
+
+
       :Returns:
 
           self
               The estimator.
-
-
 
 
 
@@ -138,12 +138,12 @@ Classes
           **\*\*fit_params** : dict
               Additional fit parameters.
 
+
+
       :Returns:
 
           **X_new** : ndarray array of shape (n_samples, n_features_new)
               Transformed array.
-
-
 
 
 
@@ -168,13 +168,13 @@ Classes
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -202,12 +202,12 @@ Classes
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -244,12 +244,12 @@ Classes
               .. versionadded:: 1.4
                   `"polars"` option was added.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -280,12 +280,12 @@ Classes
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -312,12 +312,12 @@ Classes
           **X** : array-like of shape (n_samples, n_timestep)
               The time series to query.
 
+
+
       :Returns:
 
           self
               The estimator.
-
-
 
 
 
@@ -373,12 +373,12 @@ Classes
           **y** : ignored, optional
               For API compatibility.
 
+
+
       :Returns:
 
           self
               The estimator.
-
-
 
 
 
@@ -413,12 +413,12 @@ Classes
           **\*\*fit_params** : dict
               Additional fit parameters.
 
+
+
       :Returns:
 
           **X_new** : ndarray array of shape (n_samples, n_features_new)
               Transformed array.
-
-
 
 
 
@@ -443,13 +443,13 @@ Classes
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -477,12 +477,12 @@ Classes
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -519,12 +519,12 @@ Classes
               .. versionadded:: 1.4
                   `"polars"` option was added.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -555,12 +555,12 @@ Classes
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -587,13 +587,13 @@ Classes
           **X** : array-like of shape (n_queries, n_timesteps)
               The query.
 
+
+
       :Returns:
 
           ndarray of shape (n_queries, n_samples)
               The lower bound of the distance between the i:th
               query and the j:th in database sample.
-
-
 
 
 
@@ -636,6 +636,8 @@ Classes
 
 
 
+
+
    .. rubric:: Examples
 
    >>> from wildboar.datasets import load_gun_point
@@ -644,8 +646,6 @@ Classes
    >>> X, y = load_gun_point()
    >>> lbpaa = PaaLowerBound().fit(X[30:])
    >>> argmin_distance(X[:30], X[30:], lower_bound=lbpaa.transform(X[:30]))
-
-
 
    ..
        !! processed by numpydoc !!
@@ -664,12 +664,12 @@ Classes
           **y** : ignored, optional
               For API compatibility.
 
+
+
       :Returns:
 
           self
               The estimator.
-
-
 
 
 
@@ -704,12 +704,12 @@ Classes
           **\*\*fit_params** : dict
               Additional fit parameters.
 
+
+
       :Returns:
 
           **X_new** : ndarray array of shape (n_samples, n_features_new)
               Transformed array.
-
-
 
 
 
@@ -734,13 +734,13 @@ Classes
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -768,12 +768,12 @@ Classes
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -810,12 +810,12 @@ Classes
               .. versionadded:: 1.4
                   `"polars"` option was added.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -846,12 +846,12 @@ Classes
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -878,13 +878,13 @@ Classes
           **X** : array-like of shape (n_queries, n_timesteps)
               The query.
 
+
+
       :Returns:
 
           ndarray of shape (n_queries, n_samples)
               The lower bound of the distance between the i:th
               query and the j:th in database sample.
-
-
 
 
 
@@ -930,6 +930,8 @@ Classes
 
 
 
+
+
    .. rubric:: Examples
 
    >>> from wildboar.datasets import load_gun_point
@@ -938,8 +940,6 @@ Classes
    >>> X, y = load_gun_point()
    >>> lbsax = SaxLowerBound(n_bins=20).fit(X[30:])
    >>> argmin_distance(X[:30], X[30:], lower_bound=lbsax.transform(X[:30]))
-
-
 
    ..
        !! processed by numpydoc !!
@@ -958,12 +958,12 @@ Classes
           **y** : ignored, optional
               For API compatibility.
 
+
+
       :Returns:
 
           self
               The estimator.
-
-
 
 
 
@@ -998,12 +998,12 @@ Classes
           **\*\*fit_params** : dict
               Additional fit parameters.
 
+
+
       :Returns:
 
           **X_new** : ndarray array of shape (n_samples, n_features_new)
               Transformed array.
-
-
 
 
 
@@ -1028,13 +1028,13 @@ Classes
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -1062,12 +1062,12 @@ Classes
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -1104,12 +1104,12 @@ Classes
               .. versionadded:: 1.4
                   `"polars"` option was added.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -1140,12 +1140,12 @@ Classes
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -1172,13 +1172,13 @@ Classes
           **X** : array-like of shape (n_queries, n_timesteps)
               The query.
 
+
+
       :Returns:
 
           ndarray of shape (n_queries, n_samples)
               The lower bound of the distance between the i:th
               query and the j:th in database sample.
-
-
 
 
 

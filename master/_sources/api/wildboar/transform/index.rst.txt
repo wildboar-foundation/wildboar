@@ -40,6 +40,7 @@ Classes
    wildboar.transform.DiffTransform
    wildboar.transform.DilatedShapeletTransform
    wildboar.transform.FeatureTransform
+   wildboar.transform.FftTransform
    wildboar.transform.HydraTransform
    wildboar.transform.IntervalTransform
    wildboar.transform.MatrixProfileTransform
@@ -170,12 +171,12 @@ Functions
           **y** : None, optional
               For compatibility.
 
+
+
       :Returns:
 
           BaseAttributeTransform
               This object.
-
-
 
 
 
@@ -205,12 +206,12 @@ Functions
           **y** : None, optional
               For compatibility.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, n_outputs)
               The embedding.
-
-
 
 
 
@@ -235,13 +236,13 @@ Functions
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -269,12 +270,12 @@ Functions
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -311,12 +312,12 @@ Functions
               .. versionadded:: 1.4
                   `"polars"` option was added.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -347,12 +348,12 @@ Functions
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -379,12 +380,12 @@ Functions
           **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
               The time series dataset.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, n_outputs)
               The transformation.
-
-
 
 
 
@@ -431,6 +432,8 @@ Functions
 
 
 
+
+
    .. rubric:: Examples
 
    >>> import numpy as np
@@ -446,8 +449,6 @@ Functions
    >>> X = [[1, 2], [2, 3], [3, 4]]
    >>> transformer.fit_transform(X)
    array([1, 1, 1])
-
-
 
    ..
        !! processed by numpydoc !!
@@ -471,12 +472,12 @@ Functions
           **\*\*fit_params** : dict
               Additional fit parameters.
 
+
+
       :Returns:
 
           **X_new** : ndarray array of shape (n_samples, n_features_new)
               Transformed array.
-
-
 
 
 
@@ -501,13 +502,13 @@ Functions
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -535,12 +536,12 @@ Functions
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -577,12 +578,12 @@ Functions
               .. versionadded:: 1.4
                   `"polars"` option was added.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -613,12 +614,12 @@ Functions
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -665,6 +666,8 @@ Functions
 
 
 
+
+
    .. rubric:: Examples
 
    >>> import numpy as np
@@ -680,8 +683,6 @@ Functions
    >>> X = [[1, 2], [2, 3], [3, 4]]
    >>> transformer.fit_transform(X)
    array([1, 1, 1])
-
-
 
    ..
        !! processed by numpydoc !!
@@ -705,12 +706,12 @@ Functions
           **\*\*fit_params** : dict
               Additional fit parameters.
 
+
+
       :Returns:
 
           **X_new** : ndarray array of shape (n_samples, n_features_new)
               Transformed array.
-
-
 
 
 
@@ -735,13 +736,13 @@ Functions
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -769,12 +770,12 @@ Functions
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -811,12 +812,12 @@ Functions
               .. versionadded:: 1.4
                   `"polars"` option was added.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -847,12 +848,12 @@ Functions
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -944,6 +945,8 @@ Functions
 
 
 
+
+
    .. rubric:: References
 
    Antoine Guillaume, Christel Vrain, Elloumi Wael
@@ -953,8 +956,6 @@ Functions
    .. only:: latex
 
       
-
-
 
 
    ..
@@ -974,12 +975,12 @@ Functions
           **y** : None, optional
               For compatibility.
 
+
+
       :Returns:
 
           BaseAttributeTransform
               This object.
-
-
 
 
 
@@ -1009,12 +1010,12 @@ Functions
           **y** : None, optional
               For compatibility.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, n_outputs)
               The embedding.
-
-
 
 
 
@@ -1039,13 +1040,13 @@ Functions
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -1073,12 +1074,12 @@ Functions
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -1115,12 +1116,12 @@ Functions
               .. versionadded:: 1.4
                   `"polars"` option was added.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -1151,12 +1152,12 @@ Functions
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -1183,12 +1184,12 @@ Functions
           **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
               The time series dataset.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, n_outputs)
               The transformation.
-
-
 
 
 
@@ -1236,6 +1237,8 @@ Functions
 
 
 
+
+
    .. rubric:: Examples
 
    >>> from wildboar.datasets import load_gun_point
@@ -1248,8 +1251,6 @@ Functions
            6.42857143e-01,  1.00000000e-01, -3.26666667e-01,  9.89974643e-01,
            2.90000000e+01,  1.31570726e+00,  1.50000000e-01,  8.50000000e-01,
            4.90873852e-02,  1.47311800e-01])
-
-
 
    ..
        !! processed by numpydoc !!
@@ -1268,12 +1269,12 @@ Functions
           **y** : None, optional
               For compatibility.
 
+
+
       :Returns:
 
           BaseAttributeTransform
               This object.
-
-
 
 
 
@@ -1303,12 +1304,12 @@ Functions
           **y** : None, optional
               For compatibility.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, n_outputs)
               The embedding.
-
-
 
 
 
@@ -1333,13 +1334,13 @@ Functions
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -1367,12 +1368,12 @@ Functions
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -1409,12 +1410,12 @@ Functions
               .. versionadded:: 1.4
                   `"polars"` option was added.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -1445,12 +1446,12 @@ Functions
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -1477,12 +1478,287 @@ Functions
           **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
               The time series dataset.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, n_outputs)
               The transformation.
 
 
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+.. py:class:: FftTransform
+
+
+
+   
+   Discrete Fourier Transform.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+   .. py:method:: fit(X, y=None)
+
+      
+      Fit the estimator.
+
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_dims, n_timesteps)
+              The samples.
+
+          **y** : ignore, optional
+              Ignored.
+
+
+
+      :Returns:
+
+          self
+              This instance.
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: fit_transform(X, y=None, **fit_params)
+
+      
+      Fit to data, then transform it.
+
+      Fits transformer to `X` and `y` with optional parameters `fit_params`
+      and returns a transformed version of `X`.
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_features)
+              Input samples.
+
+          **y** :  array-like of shape (n_samples,) or (n_samples, n_outputs),                 default=None
+              Target values (None for unsupervised transformations).
+
+          **\*\*fit_params** : dict
+              Additional fit parameters.
+
+
+
+      :Returns:
+
+          **X_new** : ndarray array of shape (n_samples, n_features_new)
+              Transformed array.
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: set_output(*, transform=None)
+
+      
+      Set output container.
+
+      See :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py`
+      for an example on how to use the API.
+
+      :Parameters:
+
+          **transform** : {"default", "pandas", "polars"}, default=None
+              Configure output of `transform` and `fit_transform`.
+              
+              - `"default"`: Default output format of a transformer
+              - `"pandas"`: DataFrame output
+              - `"polars"`: Polars output
+              - `None`: Transform configuration is unchanged
+              
+              .. versionadded:: 1.4
+                  `"polars"` option was added.
+
+
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: transform(X)
+
+      
+      Transform the input.
+
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_dims, n_timesteps)
+              The input samples.
+
+
+
+      :Returns:
+
+          ndarray of shape (n_samples, n_dims, m_timesteps)
+              The transformed data. If n_timesteps is even m_timesteps is
+              (n_timesteps/2) + 1; otherwise (n_timesteps + 1) / 2.
 
 
 
@@ -1542,6 +1818,12 @@ Functions
              :class:`numpy.random.RandomState` instance used by
              :func:`numpy.random`.
 
+   :Attributes:
+
+       **embedding_** : Embedding
+           The underlying embedding
+
+
 
 
 
@@ -1591,12 +1873,6 @@ Functions
    >>> t = HydraTransform(n_groups=8, n_kernels=4, random_state=1)
    >>> t.fit_transform(X)
 
-   :Attributes:
-
-       **embedding_** : Embedding
-           The underlying embedding
-
-
    ..
        !! processed by numpydoc !!
 
@@ -1614,12 +1890,12 @@ Functions
           **y** : None, optional
               For compatibility.
 
+
+
       :Returns:
 
           BaseAttributeTransform
               This object.
-
-
 
 
 
@@ -1649,12 +1925,12 @@ Functions
           **y** : None, optional
               For compatibility.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, n_outputs)
               The embedding.
-
-
 
 
 
@@ -1679,13 +1955,13 @@ Functions
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -1713,12 +1989,12 @@ Functions
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -1755,12 +2031,12 @@ Functions
               .. versionadded:: 1.4
                   `"polars"` option was added.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -1791,12 +2067,12 @@ Functions
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -1823,6 +2099,8 @@ Functions
           **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
               The time series dataset.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, n_outputs)
@@ -1838,13 +2116,11 @@ Functions
 
 
 
-
-
       ..
           !! processed by numpydoc !!
 
 
-.. py:class:: IntervalTransform(n_intervals='sqrt', *, intervals='fixed', sample_size=None, min_size=0.0, max_size=1.0, summarizer='mean_var_slope', n_jobs=None, random_state=None)
+.. py:class:: IntervalTransform(n_intervals='sqrt', *, intervals='fixed', sample_size=None, depth=None, min_size=0.0, max_size=1.0, summarizer='mean_var_slope', summarizer_params=None, n_jobs=None, random_state=None)
 
 
 
@@ -1870,12 +2146,15 @@ Functions
            The method for selecting intervals.
            
            - if "fixed", `n_intervals` non-overlapping intervals.
-           - if "sample", `n_intervals * sample_size` non-overlapping intervals.
+           - if "dyadic", `2**depth-1+2**depth-1-depth" intervals.
            - if "random", `n_intervals` possibly overlapping intervals of randomly
              sampled in `[min_size * n_timestep, max_size * n_timestep]`.
 
        **sample_size** : float, optional
-           The sample size of fixed intervals if `intervals="sample"`.
+           The sample size of fixed intervals if `intervals="fixed"`.
+
+       **depth** : int, optional
+           The maximum depth for dyadic intervals if `intervals="dyadic"`.
 
        **min_size** : float, optional
            The minimum interval size if `intervals="random"`.
@@ -1893,6 +2172,9 @@ Functions
            The default summarizer summarizes each interval as its mean, standard
            deviation and slope.
 
+       **summarizer_params** : dict, optional
+           A dictionary of parameters to the summarizer.
+
        **n_jobs** : int, optional
            The number of cores to use on multi-core.
 
@@ -1901,6 +2183,8 @@ Functions
            - If `RandomState` instance, `random_state` is the random number generator
            - If `None`, the random number generator is the `RandomState` instance used
              by `np.random`.
+
+
 
 
 
@@ -1945,8 +2229,6 @@ Functions
    Each interval (`150 // 12` timepoints) are transformed to two features. The
    mean and the standard deviation.
 
-
-
    ..
        !! processed by numpydoc !!
 
@@ -1964,12 +2246,12 @@ Functions
           **y** : None, optional
               For compatibility.
 
+
+
       :Returns:
 
           BaseAttributeTransform
               This object.
-
-
 
 
 
@@ -1999,12 +2281,12 @@ Functions
           **y** : None, optional
               For compatibility.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, n_outputs)
               The embedding.
-
-
 
 
 
@@ -2029,13 +2311,13 @@ Functions
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -2063,12 +2345,12 @@ Functions
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -2105,12 +2387,12 @@ Functions
               .. versionadded:: 1.4
                   `"polars"` option was added.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -2141,12 +2423,12 @@ Functions
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -2173,12 +2455,12 @@ Functions
           **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
               The time series dataset.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, n_outputs)
               The transformation.
-
-
 
 
 
@@ -2231,6 +2513,8 @@ Functions
 
 
 
+
+
    .. rubric:: Examples
 
    >>> from wildboar.datasets import load_two_lead_ecg()
@@ -2238,8 +2522,6 @@ Functions
    >>> x, y = load_two_lead_ecg()
    >>> t = MatrixProfileTransform()
    >>> t.fit_transform(x)
-
-
 
    ..
        !! processed by numpydoc !!
@@ -2259,12 +2541,12 @@ Functions
           **y** : ignored
               The optional labels.
 
+
+
       :Returns:
 
           self
               A fitted instance.
-
-
 
 
 
@@ -2299,12 +2581,12 @@ Functions
           **\*\*fit_params** : dict
               Additional fit parameters.
 
+
+
       :Returns:
 
           **X_new** : ndarray array of shape (n_samples, n_features_new)
               Transformed array.
-
-
 
 
 
@@ -2329,13 +2611,13 @@ Functions
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -2363,12 +2645,12 @@ Functions
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -2405,12 +2687,12 @@ Functions
               .. versionadded:: 1.4
                   `"polars"` option was added.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -2441,12 +2723,12 @@ Functions
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -2473,12 +2755,12 @@ Functions
           **x** : array-like of shape (n_samples, n_timesteps)         or (n_samples, n_dims, n_timesteps)
               The samples.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timesteps)
               The matrix matrix profile of each sample.
-
-
 
 
 
@@ -2545,12 +2827,12 @@ Functions
           **\*\*fit_params** : dict
               Additional fit parameters.
 
+
+
       :Returns:
 
           **X_new** : ndarray array of shape (n_samples, n_features_new)
               Transformed array.
-
-
 
 
 
@@ -2575,13 +2857,13 @@ Functions
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -2609,12 +2891,12 @@ Functions
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -2651,12 +2933,12 @@ Functions
               .. versionadded:: 1.4
                   `"polars"` option was added.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -2687,12 +2969,12 @@ Functions
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -2782,12 +3064,12 @@ Functions
           **y** : None, optional
               For compatibility.
 
+
+
       :Returns:
 
           BaseAttributeTransform
               This object.
-
-
 
 
 
@@ -2817,12 +3099,12 @@ Functions
           **y** : None, optional
               For compatibility.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, n_outputs)
               The embedding.
-
-
 
 
 
@@ -2847,13 +3129,13 @@ Functions
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -2881,12 +3163,12 @@ Functions
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -2923,12 +3205,12 @@ Functions
               .. versionadded:: 1.4
                   `"polars"` option was added.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -2959,12 +3241,12 @@ Functions
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -2991,12 +3273,12 @@ Functions
           **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
               The time series dataset.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, n_outputs)
               The transformation.
-
-
 
 
 
@@ -3091,12 +3373,12 @@ Functions
           **\*\*fit_params** : dict
               Additional fit parameters.
 
+
+
       :Returns:
 
           **X_new** : ndarray array of shape (n_samples, n_features_new)
               Transformed array.
-
-
 
 
 
@@ -3121,13 +3403,13 @@ Functions
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -3155,12 +3437,12 @@ Functions
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -3197,12 +3479,12 @@ Functions
               .. versionadded:: 1.4
                   `"polars"` option was added.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -3233,12 +3515,12 @@ Functions
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -3305,6 +3587,12 @@ Functions
            - If `None`, the random number generator is the `RandomState` instance used
                by `np.random`.
 
+   :Attributes:
+
+       **embedding_** : Embedding
+           The underlying embedding object.
+
+
 
 
 
@@ -3344,12 +3632,6 @@ Functions
    ... )
    >>> t.fit_transform(X)
 
-   :Attributes:
-
-       **embedding_** : Embedding
-           The underlying embedding object.
-
-
    ..
        !! processed by numpydoc !!
 
@@ -3367,12 +3649,12 @@ Functions
           **y** : None, optional
               For compatibility.
 
+
+
       :Returns:
 
           BaseAttributeTransform
               This object.
-
-
 
 
 
@@ -3402,12 +3684,12 @@ Functions
           **y** : None, optional
               For compatibility.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, n_outputs)
               The embedding.
-
-
 
 
 
@@ -3432,13 +3714,13 @@ Functions
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -3466,12 +3748,12 @@ Functions
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -3508,12 +3790,12 @@ Functions
               .. versionadded:: 1.4
                   `"polars"` option was added.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -3544,12 +3826,12 @@ Functions
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -3576,12 +3858,12 @@ Functions
           **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
               The time series dataset.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, n_outputs)
               The transformation.
-
-
 
 
 
@@ -3663,6 +3945,12 @@ Functions
              :class:`numpy.random.RandomState` instance used by
              :func:`numpy.random`.
 
+   :Attributes:
+
+       **embedding_** : Embedding
+           The underlying embedding
+
+
 
 
 
@@ -3704,12 +3992,6 @@ Functions
           [0.66      , 3.94724793, 0.32666667, ..., 1.85575661, 0.25333333,
            0.67630249]])
 
-   :Attributes:
-
-       **embedding_** : Embedding
-           The underlying embedding
-
-
    ..
        !! processed by numpydoc !!
 
@@ -3727,12 +4009,12 @@ Functions
           **y** : None, optional
               For compatibility.
 
+
+
       :Returns:
 
           BaseAttributeTransform
               This object.
-
-
 
 
 
@@ -3762,12 +4044,12 @@ Functions
           **y** : None, optional
               For compatibility.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, n_outputs)
               The embedding.
-
-
 
 
 
@@ -3792,13 +4074,13 @@ Functions
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -3826,12 +4108,12 @@ Functions
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -3868,12 +4150,12 @@ Functions
               .. versionadded:: 1.4
                   `"polars"` option was added.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -3904,12 +4186,12 @@ Functions
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -3936,12 +4218,12 @@ Functions
           **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
               The time series dataset.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, n_outputs)
               The transformation.
-
-
 
 
 
@@ -4041,12 +4323,12 @@ Functions
           **\*\*fit_params** : dict
               Additional fit parameters.
 
+
+
       :Returns:
 
           **X_new** : ndarray array of shape (n_samples, n_features_new)
               Transformed array.
-
-
 
 
 
@@ -4071,13 +4353,13 @@ Functions
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -4105,12 +4387,12 @@ Functions
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -4147,12 +4429,12 @@ Functions
               .. versionadded:: 1.4
                   `"polars"` option was added.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -4183,12 +4465,12 @@ Functions
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -4287,6 +4569,12 @@ Functions
            The number of jobs to run in parallel. None means 1 and -1 means using all
            processors.
 
+   :Attributes:
+
+       **embedding_** : Embedding
+           The underlying embedding object.
+
+
 
 
 
@@ -4332,12 +4620,6 @@ Functions
    >>> t = ShapeletTransform(strategy="best", shapelet_size=38)
    >>> t.fit_transform(X, y)
 
-   :Attributes:
-
-       **embedding_** : Embedding
-           The underlying embedding object.
-
-
    ..
        !! processed by numpydoc !!
 
@@ -4355,12 +4637,12 @@ Functions
           **y** : None, optional
               For compatibility.
 
+
+
       :Returns:
 
           BaseAttributeTransform
               This object.
-
-
 
 
 
@@ -4390,12 +4672,12 @@ Functions
           **y** : None, optional
               For compatibility.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, n_outputs)
               The embedding.
-
-
 
 
 
@@ -4420,13 +4702,13 @@ Functions
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -4454,12 +4736,12 @@ Functions
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -4496,12 +4778,12 @@ Functions
               .. versionadded:: 1.4
                   `"polars"` option was added.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -4532,12 +4814,12 @@ Functions
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -4564,12 +4846,12 @@ Functions
           **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
               The time series dataset.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, n_outputs)
               The transformation.
-
-
 
 
 
@@ -4611,6 +4893,8 @@ Functions
        **padding** : int, optional
            Implicit padding on both sides of the input time series.
 
+
+
    :Returns:
 
        ndarray of shape (n_samples, output_size)
@@ -4620,8 +4904,6 @@ Functions
                    ((X.shape[1] + 2 * padding) - (kernel.shape[0] - 1 * dilation + 1)) / stride
                    + 1
                ).
-
-
 
 
 
@@ -4660,12 +4942,12 @@ Functions
            The window size. If ``window`` is set, the value of ``n_intervals`` has no
            effect.
 
+
+
    :Returns:
 
        ndarray of shape (n_samples, n_intervals)
            The symbolic aggregate approximation.
-
-
 
 
 
@@ -4712,12 +4994,12 @@ Functions
            normal distribution. Possible values are ``"normal"`` for normally
            distributed bins or ``"uniform"`` for uniformly distributed bins.
 
+
+
    :Returns:
 
        ndarray of shape (n_samples, n_intervals)
            The symbolic aggregate approximation.
-
-
 
 
 

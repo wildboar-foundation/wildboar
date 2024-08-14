@@ -145,3 +145,10 @@ Wildboar 1.2 introduces several new models.
        determined by the `shapelet_size` parameter.
      - |API| Deprecate the ``estimate`` parameter in :class:`~wildboar.transform.SAX`.
        The same behavior can be had using ``scale=True`` (default).
+     - |Enhancement| Add support for dyadic intervals in
+       :class:`~wildboar.transform.IntervalTransform`.
+     - |Enhancement| Add support for quantile summarizer in
+       :class:`~wildboar.transform.IntervalTransform`.
+     - |Enhancement| Add support for summarizer parameters in
+       :class:`~wildboar.transform.IntervalTransform`.
+

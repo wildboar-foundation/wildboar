@@ -74,13 +74,13 @@ Functions
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -108,12 +108,12 @@ Functions
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -144,12 +144,12 @@ Functions
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -202,12 +202,12 @@ Functions
           **y** : array-like of shape (n_samples, )
               The desired counterfactal label.
 
+
+
       :Returns:
 
           **score** : float
               The closensess of fit.
-
-
 
 
 
@@ -266,12 +266,12 @@ Functions
           **\*\*kwargs**
               Optional extra arguments.
 
+
+
       :Returns:
 
           ndarray
               The explanation.
-
-
 
 
 
@@ -294,12 +294,12 @@ Functions
 
 
 
+
+
       :Returns:
 
           **ax** : Axes
               The axes object
-
-
 
 
 
@@ -326,12 +326,12 @@ Functions
        **estimator** : object
            The estimator
 
+
+
    :Returns:
 
        bool
            True if the estimator probably is a counterfactual explainer
-
-
 
 
 
@@ -357,12 +357,12 @@ Functions
        **estimator** : object
            The estimator
 
+
+
    :Returns:
 
        bool
            True if the estimator probably is an explainer
-
-
 
 
 

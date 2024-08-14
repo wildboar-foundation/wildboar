@@ -84,6 +84,12 @@ Functions
            - If `None`, the random number generator is the `RandomState` instance used
              by `np.random`.
 
+   :Attributes:
+
+       **explainer_** : dict
+           The explainer for each label
+
+
 
 
 
@@ -102,12 +108,6 @@ Functions
    .. only:: latex
 
       
-
-
-   :Attributes:
-
-       **explainer_** : dict
-           The explainer for each label
 
 
    ..
@@ -133,12 +133,12 @@ Functions
           **\*\*kwargs**
               Optional extra arguments.
 
+
+
       :Returns:
 
           ndarray
               The explanation.
-
-
 
 
 
@@ -163,13 +163,13 @@ Functions
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -197,12 +197,12 @@ Functions
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -225,12 +225,12 @@ Functions
 
 
 
+
+
       :Returns:
 
           **ax** : Axes
               The axes object
-
-
 
 
 
@@ -260,12 +260,12 @@ Functions
           **y** : array-like of shape (n_samples, )
               The desired counterfactal label.
 
+
+
       :Returns:
 
           **score** : float
               The closensess of fit.
-
-
 
 
 
@@ -296,12 +296,12 @@ Functions
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -371,6 +371,21 @@ Functions
        **n_jobs** : int, optional
            The number of parallel jobs.
 
+   :Attributes:
+
+       **target_** : TargetEvaluator
+           The target evaluator.
+
+       **importance_** : Importance
+           The importance.
+
+       **estimator_** : Estimator
+           The estimator.
+
+       **clasess_** : ndarray
+           The classes known to the explainer.
+
+
 
 
 
@@ -417,21 +432,6 @@ Functions
    >>> clf.predict(cf)
    array([1., 1.], dtype=float32)
 
-   :Attributes:
-
-       **target_** : TargetEvaluator
-           The target evaluator.
-
-       **importance_** : Importance
-           The importance.
-
-       **estimator_** : Estimator
-           The estimator.
-
-       **clasess_** : ndarray
-           The classes known to the explainer.
-
-
    ..
        !! processed by numpydoc !!
 
@@ -455,12 +455,12 @@ Functions
           **\*\*kwargs**
               Optional extra arguments.
 
+
+
       :Returns:
 
           ndarray
               The explanation.
-
-
 
 
 
@@ -485,13 +485,13 @@ Functions
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -519,12 +519,12 @@ Functions
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -547,12 +547,12 @@ Functions
 
 
 
+
+
       :Returns:
 
           **ax** : Axes
               The axes object
-
-
 
 
 
@@ -582,12 +582,12 @@ Functions
           **y** : array-like of shape (n_samples, )
               The desired counterfactal label.
 
+
+
       :Returns:
 
           **score** : float
               The closensess of fit.
-
-
 
 
 
@@ -618,12 +618,12 @@ Functions
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -648,6 +648,21 @@ Functions
 
 
 
+   :Attributes:
+
+       **estimator_** : object
+           The estimator for which counterfactuals are computed
+
+       **classes_** : ndarray
+           The classes
+
+       **partitions_** : dict
+           Dictionary of classes and PrototypeSampler
+
+       **target_** : TargetEvaluator
+           The target evaluator
+
+
 
 
 
@@ -665,21 +680,6 @@ Functions
    .. only:: latex
 
       
-
-
-   :Attributes:
-
-       **estimator_** : object
-           The estimator for which counterfactuals are computed
-
-       **classes_** : ndarray
-           The classes
-
-       **partitions_** : dict
-           Dictionary of classes and PrototypeSampler
-
-       **target_** : TargetEvaluator
-           The target evaluator
 
 
    ..
@@ -705,12 +705,12 @@ Functions
           **\*\*kwargs**
               Optional extra arguments.
 
+
+
       :Returns:
 
           ndarray
               The explanation.
-
-
 
 
 
@@ -735,13 +735,13 @@ Functions
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -769,12 +769,12 @@ Functions
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -797,12 +797,12 @@ Functions
 
 
 
+
+
       :Returns:
 
           **ax** : Axes
               The axes object
-
-
 
 
 
@@ -832,12 +832,12 @@ Functions
           **y** : array-like of shape (n_samples, )
               The desired counterfactal label.
 
+
+
       :Returns:
 
           **score** : float
               The closensess of fit.
-
-
 
 
 
@@ -868,12 +868,12 @@ Functions
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -928,6 +928,12 @@ Functions
        **random_state** : RandomState or int, optional
            Pseudo-random number for consistency between different runs.
 
+   :Attributes:
+
+       **paths_** : dict
+           A dictionary of prediction paths per label
+
+
 
 
 
@@ -960,12 +966,6 @@ Functions
       
 
 
-   :Attributes:
-
-       **paths_** : dict
-           A dictionary of prediction paths per label
-
-
    ..
        !! processed by numpydoc !!
 
@@ -989,12 +989,12 @@ Functions
           **\*\*kwargs**
               Optional extra arguments.
 
+
+
       :Returns:
 
           ndarray
               The explanation.
-
-
 
 
 
@@ -1019,13 +1019,13 @@ Functions
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -1053,12 +1053,12 @@ Functions
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -1081,12 +1081,12 @@ Functions
 
 
 
+
+
       :Returns:
 
           **ax** : Axes
               The axes object
-
-
 
 
 
@@ -1116,12 +1116,12 @@ Functions
           **y** : array-like of shape (n_samples, )
               The desired counterfactal label.
 
+
+
       :Returns:
 
           **score** : float
               The closensess of fit.
-
-
 
 
 
@@ -1152,12 +1152,12 @@ Functions
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -1233,6 +1233,8 @@ Functions
            
            .. versionadded:: 1.1.0
 
+
+
    :Returns:
 
        **x_counterfactuals** : ndarray of shape (n_samples, n_timestep)
@@ -1243,8 +1245,6 @@ Functions
 
        **score** : ndarray of shape (n_samples,) or dict, optional
            Return score of the counterfactual transform, if ``scoring`` is not None.
-
-
 
 
 
@@ -1284,12 +1284,12 @@ Functions
            Read more about the parameters in the
            :ref:`User guide <list_of_metrics>`.
 
+
+
    :Returns:
 
        ndarray
            The scores.
-
-
 
 
 

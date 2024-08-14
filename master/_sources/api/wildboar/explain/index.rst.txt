@@ -104,12 +104,12 @@ Functions
           **\*\*kwargs**
               Optional extra arguments.
 
+
+
       :Returns:
 
           ndarray
               The explanation.
-
-
 
 
 
@@ -134,13 +134,13 @@ Functions
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -168,12 +168,12 @@ Functions
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -231,6 +231,8 @@ Functions
           **show_grid** : bool, optional
               Annotate the plot with the bin thresholds, ignored if x is not None.
 
+
+
       :Returns:
 
           **ax** : Axis
@@ -239,8 +241,6 @@ Functions
           **mappable** : ScalarMappable, optional
               Return the mappable used to plot the colorbar.
               Only returned if ax is not None and x is not None.
-
-
 
 
 
@@ -271,12 +271,12 @@ Functions
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -337,12 +337,12 @@ Functions
           **\*\*kwargs**
               Optional extra arguments.
 
+
+
       :Returns:
 
           ndarray
               The explanation.
-
-
 
 
 
@@ -367,13 +367,13 @@ Functions
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -401,12 +401,12 @@ Functions
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -429,12 +429,12 @@ Functions
 
 
 
+
+
       :Returns:
 
           **ax** : Axes
               The axes object
-
-
 
 
 
@@ -465,12 +465,12 @@ Functions
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -519,17 +519,6 @@ Functions
            - If `None`, the random number generator is the `RandomState` instance used
                by `np.random`.
 
-
-
-
-
-
-
-
-
-
-
-
    :Attributes:
 
        **importances_** : dict or Importance
@@ -538,6 +527,17 @@ Functions
 
        **components_** : ndarray of shape (n_intervals, 2)
            The interval start and end positions.
+
+
+
+
+
+
+
+
+
+
+
 
 
    ..
@@ -563,12 +563,12 @@ Functions
           **\*\*kwargs**
               Optional extra arguments.
 
+
+
       :Returns:
 
           ndarray
               The explanation.
-
-
 
 
 
@@ -593,13 +593,13 @@ Functions
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -627,12 +627,12 @@ Functions
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -655,12 +655,12 @@ Functions
 
 
 
+
+
       :Returns:
 
           **ax** : Axes
               The axes object
-
-
 
 
 
@@ -691,12 +691,12 @@ Functions
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -756,21 +756,21 @@ Functions
              :class:`numpy.random.RandomState` instance used by
              :func:`numpy.random`.
 
-
-
-
-
-
-
-
-
-
-
-
    :Attributes:
 
        **components** : ndarray
            The shapelets
+
+
+
+
+
+
+
+
+
+
+
 
 
    ..
@@ -796,12 +796,12 @@ Functions
           **\*\*kwargs**
               Optional extra arguments.
 
+
+
       :Returns:
 
           ndarray
               The explanation.
-
-
 
 
 
@@ -826,13 +826,13 @@ Functions
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -860,12 +860,12 @@ Functions
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -888,12 +888,12 @@ Functions
 
 
 
+
+
       :Returns:
 
           **ax** : Axes
               The axes object
-
-
 
 
 
@@ -924,12 +924,12 @@ Functions
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -963,12 +963,12 @@ Functions
        **labels** : array-like, optional
            The labels for the importances.
 
+
+
    :Returns:
 
        Axes
            The plotted Axes.
-
-
 
 
 

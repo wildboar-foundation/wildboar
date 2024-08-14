@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Pre-processing &#8212; Wildboar 1.3.0.dev74+g58d5031e8 documentation</title>
+    <title>Pre-processing &#8212; Wildboar 1.3.0.dev86+g24d8ac2ca documentation</title>
   
   
   
@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/tabs.css?v=4c969af8" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=87e54e7c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=584e34e5" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/pygments-override.css?v=9e853fe2" />
   
@@ -41,7 +41,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../_static/documentation_options.js?v=1cb16014"></script>
+    <script src="../../_static/documentation_options.js?v=f20f1f51"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -533,7 +533,9 @@ snippet could be rewritten as:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;GunPoint&quot;</span><span class="p">,</span> <span class="n">preprocess</span><span class="o">=</span><span class="s2">&quot;minmax_scale&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/minmax_scale-light.svg" class="only-light align-center" src="../../_images/minmax_scale-light.svg" /><img alt="../../_images/minmax_scale-dark.svg" class="only-dark align-center" src="../../_images/minmax_scale-dark.svg" /><p>A crude way of dealing with time series of unequal length is to truncate longer
+<img alt="../../_images/minmax_scale-light.svg" class="only-light align-center" src="../../_images/minmax_scale-light.svg" />
+<img alt="../../_images/minmax_scale-dark.svg" class="only-dark align-center" src="../../_images/minmax_scale-dark.svg" />
+<p>A crude way of dealing with time series of unequal length is to truncate longer
 time series to the length of the shortest time series. In Wildboar, we can use
 <a class="reference internal" href="../../api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.truncate" title="wildboar.datasets.preprocess.truncate"><code class="xref py py-func docutils literal notranslate"><span class="pre">truncate</span></code></a> to accomplish this.</p>
 <p>In Wildboar, all time series datasets are traditional Numpy-arrays with a
@@ -559,10 +561,14 @@ dimension of a multivariate time series:</p>
 </div>
 <p>Running the code with a dataset (e.g., <code class="docutils literal notranslate"><span class="pre">SpokenArabicDigits</span></code> from
 <code class="docutils literal notranslate"><span class="pre">wildboar/ucrmts</span></code>) would yield a figure similar to this.</p>
-<img alt="../../_images/no-truncate-light.svg" class="only-light align-center" src="../../_images/no-truncate-light.svg" /><img alt="../../_images/no-truncate-dark.svg" class="only-dark align-center" src="../../_images/no-truncate-dark.svg" /><p>Truncating the time series to the shortest dimension (in the example this is 26
+<img alt="../../_images/no-truncate-light.svg" class="only-light align-center" src="../../_images/no-truncate-light.svg" />
+<img alt="../../_images/no-truncate-dark.svg" class="only-dark align-center" src="../../_images/no-truncate-dark.svg" />
+<p>Truncating the time series to the shortest dimension (in the example this is 26
 time steps), using <code class="code highlight python docutils literal highlight-python"><span class="n">preprocess</span><span class="o">.</span><span class="n">truncate</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></code>, results in a figure similar
 to this:</p>
-<img alt="../../_images/truncate-light.svg" class="only-light align-center" src="../../_images/truncate-light.svg" /><img alt="../../_images/truncate-dark.svg" class="only-dark align-center" src="../../_images/truncate-dark.svg" /><p>Since many algorithms in Wildboar only support dimensions and samples of
+<img alt="../../_images/truncate-light.svg" class="only-light align-center" src="../../_images/truncate-light.svg" />
+<img alt="../../_images/truncate-dark.svg" class="only-dark align-center" src="../../_images/truncate-dark.svg" />
+<p>Since many algorithms in Wildboar only support dimensions and samples of
 uniform length, we can preprocess the time series using the truncate function.
 One should note that truncating is very crude and result in data loss.</p>
 </section>
@@ -648,7 +654,7 @@ One should note that truncating is very crude and result in data loss.</p>
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
     <br/>
   </p>
 </div>

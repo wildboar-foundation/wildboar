@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>wildboar.explain.counterfactual &#8212; Wildboar 1.3.0.dev74+g58d5031e8 documentation</title>
+    <title>wildboar.explain.counterfactual &#8212; Wildboar 1.3.0.dev86+g24d8ac2ca documentation</title>
   
   
   
@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=fd3f3429" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/tabs.css?v=4c969af8" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/sphinx-design.min.css?v=87e54e7c" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/css/custom.css?v=584e34e5" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/css/pygments-override.css?v=9e853fe2" />
   
@@ -41,7 +41,7 @@
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../../_static/documentation_options.js?v=1cb16014"></script>
+    <script src="../../../../_static/documentation_options.js?v=f20f1f51"></script>
     <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -549,19 +549,17 @@ by <cite>np.random</cite>.</p></li>
 </dd>
 </dl>
 </dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>explainer_</strong><span class="classifier">dict</span></dt><dd><p>The explainer for each label</p>
+</dd>
+</dl>
+</dd>
 </dl>
 <p class="rubric">References</p>
 <dl class="simple">
 <dt>Karlsson, I., Rebane, J., Papapetrou, P., &amp; Gionis, A. (2020).</dt><dd><p>Locally and globally explainable time series tweaking.
 Knowledge and Information Systems, 62(5), 1671-1700.</p>
-</dd>
-</dl>
-<dl class="field-list simple">
-<dt class="field-odd">Attributes<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>explainer_</strong><span class="classifier">dict</span></dt><dd><p>The explainer for each label</p>
-</dd>
-</dl>
 </dd>
 </dl>
 <dl class="py method">
@@ -735,6 +733,18 @@ target value.</p></li>
 </dd>
 </dl>
 </dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>target_</strong><span class="classifier">TargetEvaluator</span></dt><dd><p>The target evaluator.</p>
+</dd>
+<dt><strong>importance_</strong><span class="classifier">Importance</span></dt><dd><p>The importance.</p>
+</dd>
+<dt><strong>estimator_</strong><span class="classifier">Estimator</span></dt><dd><p>The estimator.</p>
+</dd>
+<dt><strong>clasess_</strong><span class="classifier">ndarray</span></dt><dd><p>The classes known to the explainer.</p>
+</dd>
+</dl>
+</dd>
 </dl>
 <p class="rubric">Notes</p>
 <p>The current implementation uses the
@@ -768,20 +778,6 @@ Classification. Case-Based Reasoning Research and Development, vol.
 <span class="go">array([1., 1.], dtype=float32)</span>
 </pre></div>
 </div>
-<dl class="field-list simple">
-<dt class="field-odd">Attributes<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>target_</strong><span class="classifier">TargetEvaluator</span></dt><dd><p>The target evaluator.</p>
-</dd>
-<dt><strong>importance_</strong><span class="classifier">Importance</span></dt><dd><p>The importance.</p>
-</dd>
-<dt><strong>estimator_</strong><span class="classifier">Estimator</span></dt><dd><p>The estimator.</p>
-</dd>
-<dt><strong>clasess_</strong><span class="classifier">ndarray</span></dt><dd><p>The classes known to the explainer.</p>
-</dd>
-</dl>
-</dd>
-</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual.NativeGuideCounterfactual.fit_explain">
 <span class="sig-name descname"><span class="pre">fit_explain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/base.py#L295-L314"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual.NativeGuideCounterfactual.fit_explain" title="Link to this definition">#</a></dt>
@@ -912,11 +908,6 @@ possible to update each component of a nested object.</p>
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual.PrototypeCounterfactual">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual.</span></span><span class="sig-name descname"><span class="pre">PrototypeCounterfactual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_prototypes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'predict'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sample'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L468-L685"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual.PrototypeCounterfactual" title="Link to this definition">#</a></dt>
 <dd><p>Model agnostic approach for constructing counterfactual explanations.</p>
-<p class="rubric">References</p>
-<dl class="simple">
-<dt>Samsten, Isak (2020).</dt><dd><p>Model agnostic time series counterfactuals</p>
-</dd>
-</dl>
 <dl class="field-list simple">
 <dt class="field-odd">Attributes<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -929,6 +920,11 @@ possible to update each component of a nested object.</p>
 <dt><strong>target_</strong><span class="classifier">TargetEvaluator</span></dt><dd><p>The target evaluator</p>
 </dd>
 </dl>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<dl class="simple">
+<dt>Samsten, Isak (2020).</dt><dd><p>Model agnostic time series counterfactuals</p>
 </dd>
 </dl>
 <dl class="py method">
@@ -1088,6 +1084,12 @@ all counterfactual samples.</p>
 </dd>
 </dl>
 </dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>paths_</strong><span class="classifier">dict</span></dt><dd><p>A dictionary of prediction paths per label</p>
+</dd>
+</dl>
+</dd>
 </dl>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -1104,14 +1106,6 @@ Knowledge and Information Systems, 62(5), 1671-1700.</p>
 </dd>
 <dt>Karlsson, I., Rebane, J., Papapetrou, P., &amp; Gionis, A. (2018).</dt><dd><p>Explainable time series tweaking via irreversible and reversible temporal
 transformations. In 2018 IEEE International Conference on Data Mining (ICDM)</p>
-</dd>
-</dl>
-<dl class="field-list simple">
-<dt class="field-odd">Attributes<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>paths_</strong><span class="classifier">dict</span></dt><dd><p>A dictionary of prediction paths per label</p>
-</dd>
-</dl>
 </dd>
 </dl>
 <dl class="py method">
@@ -1473,7 +1467,7 @@ sample and the original sample.</p>
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
     <br/>
   </p>
 </div>

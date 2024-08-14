@@ -123,21 +123,21 @@ Functions
            - If `None`, the random number generator is the `RandomState` instance used
                by `np.random`.
 
-
-
-
-
-
-
-
-
-
-
-
    :Attributes:
 
        **tree_** : Tree
            The tree representation
+
+
+
+
+
+
+
+
+
+
+
 
 
    ..
@@ -157,6 +157,8 @@ Functions
           **check_input** : bool, optional
               Bypass array validation. Only set to True if you are sure your data
               is valid.
+
+
 
       :Returns:
 
@@ -190,8 +192,6 @@ Functions
 
       This is equvivalent to using `tree.predict_proba`.
 
-
-
       ..
           !! processed by numpydoc !!
 
@@ -211,13 +211,13 @@ Functions
               Bypass array validation. Only set to True if you are sure your data
               is valid.
 
+
+
       :Returns:
 
           sparse matrix of shape (n_samples, n_nodes)
               An indicator array where each nonzero values indicate that the sample
               traverses a node.
-
-
 
 
 
@@ -256,12 +256,12 @@ Functions
           **check_input** : bool, optional
               Allow to bypass several input checks.
 
+
+
       :Returns:
 
           self
               This instance.
-
-
 
 
 
@@ -286,13 +286,13 @@ Functions
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -320,12 +320,12 @@ Functions
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -356,12 +356,12 @@ Functions
               Allow to bypass several input checking. Don't use this parameter unless you
               know what you do.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples,)
               The predicted classes.
-
-
 
 
 
@@ -394,13 +394,13 @@ Functions
               Allow to bypass several input checking. Don't use this parameter unless you
               know what you do.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, n_classes)
               The class probabilities of the input samples. The order of the classes
               corresponds to that in the attribute `classes_`.
-
-
 
 
 
@@ -436,12 +436,12 @@ Functions
           **sample_weight** : array-like of shape (n_samples,), default=None
               Sample weights.
 
+
+
       :Returns:
 
           **score** : float
               Mean accuracy of ``self.predict(X)`` w.r.t. `y`.
-
-
 
 
 
@@ -472,12 +472,12 @@ Functions
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -549,21 +549,21 @@ Functions
            - If `None`, the random number generator is the `RandomState` instance used
                by `np.random`.
 
-
-
-
-
-
-
-
-
-
-
-
    :Attributes:
 
        **tree_** : Tree
            The internal tree representation
+
+
+
+
+
+
+
+
+
+
+
 
 
    ..
@@ -583,6 +583,8 @@ Functions
           **check_input** : bool, optional
               Bypass array validation. Only set to True if you are sure your data
               is valid.
+
+
 
       :Returns:
 
@@ -616,8 +618,6 @@ Functions
 
       This is equvivalent to using `tree.predict_proba`.
 
-
-
       ..
           !! processed by numpydoc !!
 
@@ -637,13 +637,13 @@ Functions
               Bypass array validation. Only set to True if you are sure your data
               is valid.
 
+
+
       :Returns:
 
           sparse matrix of shape (n_samples, n_nodes)
               An indicator array where each nonzero values indicate that the sample
               traverses a node.
-
-
 
 
 
@@ -682,12 +682,12 @@ Functions
           **check_input** : bool, optional
               Allow to bypass several input checks.
 
+
+
       :Returns:
 
           self
               This object.
-
-
 
 
 
@@ -712,13 +712,13 @@ Functions
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -746,12 +746,12 @@ Functions
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -782,12 +782,12 @@ Functions
               Allow to bypass several input checking. Don't use this parameter unless you
               know what you do.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples,)
               The predicted classes.
-
-
 
 
 
@@ -831,6 +831,8 @@ Functions
           **sample_weight** : array-like of shape (n_samples,), default=None
               Sample weights.
 
+
+
       :Returns:
 
           **score** : float
@@ -854,8 +856,6 @@ Functions
 
 
 
-
-
       ..
           !! processed by numpydoc !!
 
@@ -875,12 +875,12 @@ Functions
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -972,21 +972,21 @@ Functions
            - If `None`, the random number generator is the `RandomState` instance used
                by `np.random`.
 
-
-
-
-
-
-
-
-
-
-
-
    :Attributes:
 
        **tree_** : Tree
            The internal tree structure.
+
+
+
+
+
+
+
+
+
+
+
 
 
    ..
@@ -1006,6 +1006,8 @@ Functions
           **check_input** : bool, optional
               Bypass array validation. Only set to True if you are sure your data
               is valid.
+
+
 
       :Returns:
 
@@ -1039,8 +1041,6 @@ Functions
 
       This is equvivalent to using `tree.predict_proba`.
 
-
-
       ..
           !! processed by numpydoc !!
 
@@ -1060,13 +1060,13 @@ Functions
               Bypass array validation. Only set to True if you are sure your data
               is valid.
 
+
+
       :Returns:
 
           sparse matrix of shape (n_samples, n_nodes)
               An indicator array where each nonzero values indicate that the sample
               traverses a node.
-
-
 
 
 
@@ -1105,12 +1105,12 @@ Functions
           **check_input** : bool, optional
               Allow to bypass several input checks.
 
+
+
       :Returns:
 
           self
               This instance.
-
-
 
 
 
@@ -1135,13 +1135,13 @@ Functions
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -1169,12 +1169,12 @@ Functions
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -1205,12 +1205,12 @@ Functions
               Allow to bypass several input checking. Don't use this parameter unless you
               know what you do.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples,)
               The predicted classes.
-
-
 
 
 
@@ -1243,13 +1243,13 @@ Functions
               Allow to bypass several input checking. Don't use this parameter unless you
               know what you do.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, n_classes)
               The class probabilities of the input samples. The order of the classes
               corresponds to that in the attribute `classes_`.
-
-
 
 
 
@@ -1285,12 +1285,12 @@ Functions
           **sample_weight** : array-like of shape (n_samples,), default=None
               Sample weights.
 
+
+
       :Returns:
 
           **score** : float
               Mean accuracy of ``self.predict(X)`` w.r.t. `y`.
-
-
 
 
 
@@ -1321,12 +1321,12 @@ Functions
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -1411,21 +1411,21 @@ Functions
            - If `None`, the random number generator is the `RandomState` instance used
                by `np.random`.
 
-
-
-
-
-
-
-
-
-
-
-
    :Attributes:
 
        **tree_** : Tree
            The internal tree structure.
+
+
+
+
+
+
+
+
+
+
+
 
 
    ..
@@ -1445,6 +1445,8 @@ Functions
           **check_input** : bool, optional
               Bypass array validation. Only set to True if you are sure your data
               is valid.
+
+
 
       :Returns:
 
@@ -1478,8 +1480,6 @@ Functions
 
       This is equvivalent to using `tree.predict_proba`.
 
-
-
       ..
           !! processed by numpydoc !!
 
@@ -1499,13 +1499,13 @@ Functions
               Bypass array validation. Only set to True if you are sure your data
               is valid.
 
+
+
       :Returns:
 
           sparse matrix of shape (n_samples, n_nodes)
               An indicator array where each nonzero values indicate that the sample
               traverses a node.
-
-
 
 
 
@@ -1544,12 +1544,12 @@ Functions
           **check_input** : bool, optional
               Allow to bypass several input checks.
 
+
+
       :Returns:
 
           self
               This object.
-
-
 
 
 
@@ -1574,13 +1574,13 @@ Functions
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -1608,12 +1608,12 @@ Functions
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -1644,12 +1644,12 @@ Functions
               Allow to bypass several input checking. Don't use this parameter unless you
               know what you do.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples,)
               The predicted classes.
-
-
 
 
 
@@ -1693,6 +1693,8 @@ Functions
           **sample_weight** : array-like of shape (n_samples,), default=None
               Sample weights.
 
+
+
       :Returns:
 
           **score** : float
@@ -1716,8 +1718,6 @@ Functions
 
 
 
-
-
       ..
           !! processed by numpydoc !!
 
@@ -1737,12 +1737,12 @@ Functions
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -1815,21 +1815,21 @@ Functions
            - If `None`, the random number generator is the `RandomState` instance used
                by `np.random`.
 
-
-
-
-
-
-
-
-
-
-
-
    :Attributes:
 
        **tree_** : Tree
            The internal tree representation
+
+
+
+
+
+
+
+
+
+
+
 
 
    ..
@@ -1849,6 +1849,8 @@ Functions
           **check_input** : bool, optional
               Bypass array validation. Only set to True if you are sure your data
               is valid.
+
+
 
       :Returns:
 
@@ -1882,8 +1884,6 @@ Functions
 
       This is equvivalent to using `tree.predict_proba`.
 
-
-
       ..
           !! processed by numpydoc !!
 
@@ -1903,13 +1903,13 @@ Functions
               Bypass array validation. Only set to True if you are sure your data
               is valid.
 
+
+
       :Returns:
 
           sparse matrix of shape (n_samples, n_nodes)
               An indicator array where each nonzero values indicate that the sample
               traverses a node.
-
-
 
 
 
@@ -1948,12 +1948,12 @@ Functions
           **check_input** : bool, optional
               Allow to bypass several input checks.
 
+
+
       :Returns:
 
           self
               This instance.
-
-
 
 
 
@@ -1978,13 +1978,13 @@ Functions
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -2012,12 +2012,12 @@ Functions
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -2048,12 +2048,12 @@ Functions
               Allow to bypass several input checking. Don't use this parameter unless you
               know what you do.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples,)
               The predicted classes.
-
-
 
 
 
@@ -2086,13 +2086,13 @@ Functions
               Allow to bypass several input checking. Don't use this parameter unless you
               know what you do.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, n_classes)
               The class probabilities of the input samples. The order of the classes
               corresponds to that in the attribute `classes_`.
-
-
 
 
 
@@ -2128,12 +2128,12 @@ Functions
           **sample_weight** : array-like of shape (n_samples,), default=None
               Sample weights.
 
+
+
       :Returns:
 
           **score** : float
               Mean accuracy of ``self.predict(X)`` w.r.t. `y`.
-
-
 
 
 
@@ -2164,12 +2164,12 @@ Functions
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -2274,6 +2274,8 @@ Functions
 
 
 
+
+
    .. rubric:: References
 
    Lucas, Benjamin, Ahmed Shifaz, Charlotte Pelletier, Lachlan O'Neill, Nayyar Zaidi,     Bart Goethals, François Petitjean, and Geoffrey I. Webb. (2019)
@@ -2301,8 +2303,6 @@ Functions
    ... )
    >>> f.fit(x, y)
 
-
-
    ..
        !! processed by numpydoc !!
 
@@ -2320,6 +2320,8 @@ Functions
           **check_input** : bool, optional
               Bypass array validation. Only set to True if you are sure your data
               is valid.
+
+
 
       :Returns:
 
@@ -2353,8 +2355,6 @@ Functions
 
       This is equvivalent to using `tree.predict_proba`.
 
-
-
       ..
           !! processed by numpydoc !!
 
@@ -2374,13 +2374,13 @@ Functions
               Bypass array validation. Only set to True if you are sure your data
               is valid.
 
+
+
       :Returns:
 
           sparse matrix of shape (n_samples, n_nodes)
               An indicator array where each nonzero values indicate that the sample
               traverses a node.
-
-
 
 
 
@@ -2419,12 +2419,12 @@ Functions
           **check_input** : bool, optional
               Allow to bypass several input checks.
 
+
+
       :Returns:
 
           self
               This instance.
-
-
 
 
 
@@ -2449,13 +2449,13 @@ Functions
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -2483,12 +2483,12 @@ Functions
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -2519,12 +2519,12 @@ Functions
               Allow to bypass several input checking. Don't use this parameter unless you
               know what you do.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples,)
               The predicted classes.
-
-
 
 
 
@@ -2557,13 +2557,13 @@ Functions
               Allow to bypass several input checking. Don't use this parameter unless you
               know what you do.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, n_classes)
               The class probabilities of the input samples. The order of the classes
               corresponds to that in the attribute `classes_`.
-
-
 
 
 
@@ -2599,12 +2599,12 @@ Functions
           **sample_weight** : array-like of shape (n_samples,), default=None
               Sample weights.
 
+
+
       :Returns:
 
           **score** : float
               Mean accuracy of ``self.predict(X)`` w.r.t. `y`.
-
-
 
 
 
@@ -2635,12 +2635,12 @@ Functions
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -2665,21 +2665,21 @@ Functions
 
 
 
-
-
-
-
-
-
-
-
-
-
-
    :Attributes:
 
        **tree_** : Tree
            The internal tree representation.
+
+
+
+
+
+
+
+
+
+
+
 
 
    ..
@@ -2699,6 +2699,8 @@ Functions
           **check_input** : bool, optional
               Bypass array validation. Only set to True if you are sure your data
               is valid.
+
+
 
       :Returns:
 
@@ -2732,8 +2734,6 @@ Functions
 
       This is equvivalent to using `tree.predict_proba`.
 
-
-
       ..
           !! processed by numpydoc !!
 
@@ -2753,13 +2753,13 @@ Functions
               Bypass array validation. Only set to True if you are sure your data
               is valid.
 
+
+
       :Returns:
 
           sparse matrix of shape (n_samples, n_nodes)
               An indicator array where each nonzero values indicate that the sample
               traverses a node.
-
-
 
 
 
@@ -2798,12 +2798,12 @@ Functions
           **check_input** : bool, optional
               Allow to bypass several input checks.
 
+
+
       :Returns:
 
           self
               This instance.
-
-
 
 
 
@@ -2828,13 +2828,13 @@ Functions
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -2862,12 +2862,12 @@ Functions
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -2898,12 +2898,12 @@ Functions
               Allow to bypass several input checking. Don't use this parameter unless you
               know what you do.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples,)
               The predicted classes.
-
-
 
 
 
@@ -2936,13 +2936,13 @@ Functions
               Allow to bypass several input checking. Don't use this parameter unless you
               know what you do.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, n_classes)
               The class probabilities of the input samples. The order of the classes
               corresponds to that in the attribute `classes_`.
-
-
 
 
 
@@ -2978,12 +2978,12 @@ Functions
           **sample_weight** : array-like of shape (n_samples,), default=None
               Sample weights.
 
+
+
       :Returns:
 
           **score** : float
               Mean accuracy of ``self.predict(X)`` w.r.t. `y`.
-
-
 
 
 
@@ -3014,12 +3014,12 @@ Functions
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -3044,21 +3044,21 @@ Functions
 
 
 
-
-
-
-
-
-
-
-
-
-
-
    :Attributes:
 
        **tree_** : Tree
            The internal tree representation.
+
+
+
+
+
+
+
+
+
+
+
 
 
    ..
@@ -3078,6 +3078,8 @@ Functions
           **check_input** : bool, optional
               Bypass array validation. Only set to True if you are sure your data
               is valid.
+
+
 
       :Returns:
 
@@ -3111,8 +3113,6 @@ Functions
 
       This is equvivalent to using `tree.predict_proba`.
 
-
-
       ..
           !! processed by numpydoc !!
 
@@ -3132,13 +3132,13 @@ Functions
               Bypass array validation. Only set to True if you are sure your data
               is valid.
 
+
+
       :Returns:
 
           sparse matrix of shape (n_samples, n_nodes)
               An indicator array where each nonzero values indicate that the sample
               traverses a node.
-
-
 
 
 
@@ -3177,12 +3177,12 @@ Functions
           **check_input** : bool, optional
               Allow to bypass several input checks.
 
+
+
       :Returns:
 
           self
               This object.
-
-
 
 
 
@@ -3207,13 +3207,13 @@ Functions
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -3241,12 +3241,12 @@ Functions
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -3277,12 +3277,12 @@ Functions
               Allow to bypass several input checking. Don't use this parameter unless you
               know what you do.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples,)
               The predicted classes.
-
-
 
 
 
@@ -3326,6 +3326,8 @@ Functions
           **sample_weight** : array-like of shape (n_samples,), default=None
               Sample weights.
 
+
+
       :Returns:
 
           **score** : float
@@ -3349,8 +3351,6 @@ Functions
 
 
 
-
-
       ..
           !! processed by numpydoc !!
 
@@ -3370,12 +3370,12 @@ Functions
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -3524,6 +3524,18 @@ Functions
            - If `None`, the random number generator is the `RandomState` instance used
                by `np.random`.
 
+   :Attributes:
+
+       **tree_** : Tree
+           The tree data structure used internally
+
+       **classes_** : ndarray of shape (n_classes,)
+           The class labels
+
+       **n_classes_** : int
+           The number of class labels
+
+
 
 
 
@@ -3574,18 +3586,6 @@ Functions
       
 
 
-   :Attributes:
-
-       **tree_** : Tree
-           The tree data structure used internally
-
-       **classes_** : ndarray of shape (n_classes,)
-           The class labels
-
-       **n_classes_** : int
-           The number of class labels
-
-
    ..
        !! processed by numpydoc !!
 
@@ -3603,6 +3603,8 @@ Functions
           **check_input** : bool, optional
               Bypass array validation. Only set to True if you are sure your data
               is valid.
+
+
 
       :Returns:
 
@@ -3636,8 +3638,6 @@ Functions
 
       This is equvivalent to using `tree.predict_proba`.
 
-
-
       ..
           !! processed by numpydoc !!
 
@@ -3657,13 +3657,13 @@ Functions
               Bypass array validation. Only set to True if you are sure your data
               is valid.
 
+
+
       :Returns:
 
           sparse matrix of shape (n_samples, n_nodes)
               An indicator array where each nonzero values indicate that the sample
               traverses a node.
-
-
 
 
 
@@ -3702,12 +3702,12 @@ Functions
           **check_input** : bool, optional
               Allow to bypass several input checks.
 
+
+
       :Returns:
 
           self
               This instance.
-
-
 
 
 
@@ -3732,13 +3732,13 @@ Functions
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -3766,12 +3766,12 @@ Functions
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -3802,12 +3802,12 @@ Functions
               Allow to bypass several input checking. Don't use this parameter unless you
               know what you do.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples,)
               The predicted classes.
-
-
 
 
 
@@ -3840,13 +3840,13 @@ Functions
               Allow to bypass several input checking. Don't use this parameter unless you
               know what you do.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, n_classes)
               The class probabilities of the input samples. The order of the classes
               corresponds to that in the attribute `classes_`.
-
-
 
 
 
@@ -3882,12 +3882,12 @@ Functions
           **sample_weight** : array-like of shape (n_samples,), default=None
               Sample weights.
 
+
+
       :Returns:
 
           **score** : float
               Mean accuracy of ``self.predict(X)`` w.r.t. `y`.
-
-
 
 
 
@@ -3918,12 +3918,12 @@ Functions
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -4064,6 +4064,12 @@ Functions
                :class:`numpy.random.RandomState` instance used by
                :func:`numpy.random`.
 
+   :Attributes:
+
+       **tree_** : Tree
+           The internal tree representation
+
+
 
 
 
@@ -4106,12 +4112,6 @@ Functions
       
 
 
-   :Attributes:
-
-       **tree_** : Tree
-           The internal tree representation
-
-
    ..
        !! processed by numpydoc !!
 
@@ -4129,6 +4129,8 @@ Functions
           **check_input** : bool, optional
               Bypass array validation. Only set to True if you are sure your data
               is valid.
+
+
 
       :Returns:
 
@@ -4162,8 +4164,6 @@ Functions
 
       This is equvivalent to using `tree.predict_proba`.
 
-
-
       ..
           !! processed by numpydoc !!
 
@@ -4183,13 +4183,13 @@ Functions
               Bypass array validation. Only set to True if you are sure your data
               is valid.
 
+
+
       :Returns:
 
           sparse matrix of shape (n_samples, n_nodes)
               An indicator array where each nonzero values indicate that the sample
               traverses a node.
-
-
 
 
 
@@ -4228,12 +4228,12 @@ Functions
           **check_input** : bool, optional
               Allow to bypass several input checks.
 
+
+
       :Returns:
 
           self
               This object.
-
-
 
 
 
@@ -4258,13 +4258,13 @@ Functions
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -4292,12 +4292,12 @@ Functions
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -4328,12 +4328,12 @@ Functions
               Allow to bypass several input checking. Don't use this parameter unless you
               know what you do.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples,)
               The predicted classes.
-
-
 
 
 
@@ -4377,6 +4377,8 @@ Functions
           **sample_weight** : array-like of shape (n_samples,), default=None
               Sample weights.
 
+
+
       :Returns:
 
           **score** : float
@@ -4400,8 +4402,6 @@ Functions
 
 
 
-
-
       ..
           !! processed by numpydoc !!
 
@@ -4421,12 +4421,12 @@ Functions
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -4496,6 +4496,8 @@ Functions
              - if branch, ``attribute`` contains the attribute used for computing
                the feature value. The attribute depends on the estimator.
 
+
+
    :Returns:
 
        axes
@@ -4513,8 +4515,6 @@ Functions
    .. rubric:: Examples
 
    >>> from wildboar.
-
-
 
    ..
        !! processed by numpydoc !!

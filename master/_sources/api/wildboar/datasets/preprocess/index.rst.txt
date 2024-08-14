@@ -44,12 +44,12 @@ Functions
        **x** : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
            The samples.
 
+
+
    :Returns:
 
        ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
            The transformed samples.
-
-
 
 
 
@@ -82,12 +82,12 @@ Functions
        **max** : float, optional
            The maximum value.
 
+
+
    :Returns:
 
        ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
            The transformed samples.
-
-
 
 
 
@@ -113,12 +113,12 @@ Functions
        **name** : str
            The name of the preprocessor.
 
+
+
    :Returns:
 
        callable
            The preprocessor function.
-
-
 
 
 
@@ -145,12 +145,12 @@ Functions
        **x** : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
            The samples.
 
+
+
    :Returns:
 
        ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
            The standardized samples.
-
-
 
 
 
@@ -179,12 +179,12 @@ Functions
        **n_shortest** : int, optional
            The maximum size.
 
+
+
    :Returns:
 
        ndarray of shape (n_samples, n_shortest) or (n_samples, n_dims, n_shortest)
            The truncated samples.
-
-
 
 
 

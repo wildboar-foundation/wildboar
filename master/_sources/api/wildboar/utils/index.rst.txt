@@ -108,6 +108,8 @@ Functions
        **estimator** : object, optional
            An estimator object for error reporting.
 
+
+
    :Returns:
 
        **X** : ndarray
@@ -115,8 +117,6 @@ Functions
 
        **y** : ndarray
            The validated array `y`.
-
-
 
 
 
@@ -218,12 +218,12 @@ Functions
        **input_name** : str, default=""
            The data name used to construct the error message.
 
+
+
    :Returns:
 
        object
            The converted and validated array.
-
-
 
 
 

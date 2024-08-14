@@ -108,6 +108,8 @@ Classes
 
 
 
+
+
    .. rubric:: Examples
 
    >>> from wildboar.datasets import load_ering
@@ -119,8 +121,6 @@ Classes
    >>> dv.get_dimensions()
    array([ True, False,  True,  True])
    >>> dv.transform(X).shape
-
-
 
    ..
        !! processed by numpydoc !!
@@ -139,12 +139,12 @@ Classes
           **y** : array-like of shape (n_samples, ), optional
               Ignored.
 
+
+
       :Returns:
 
           object
               The instance itself.
-
-
 
 
 
@@ -179,12 +179,12 @@ Classes
           **\*\*fit_params** : dict
               Additional fit parameters.
 
+
+
       :Returns:
 
           **X_new** : ndarray array of shape (n_samples, n_features_new)
               Transformed array.
-
-
 
 
 
@@ -211,12 +211,12 @@ Classes
           **indices** : bool, optional
               If True, return the indices instead of a boolean mask.
 
+
+
       :Returns:
 
           ndarray of shape (n_selected_dims, )
               An index that selects the retained dimensions.
-
-
 
 
 
@@ -241,13 +241,13 @@ Classes
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -275,12 +275,12 @@ Classes
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -307,13 +307,13 @@ Classes
           **X** : array-like of shape (n_samples, n_selected_dims, n_timestep)
               The samples.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, n_dims, n_timestep)
               The samples with zeros inserted where dimensions
               would have been removed by :meth:`transform`.
-
-
 
 
 
@@ -350,12 +350,12 @@ Classes
               .. versionadded:: 1.4
                   `"polars"` option was added.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -386,12 +386,12 @@ Classes
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -418,12 +418,12 @@ Classes
           **X** : array-like of shape (n_samples, n_dims, n_timestep)
               The samples.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, n_selected_dims, n_timestep)
               The samples with only the selected dimensions.
-
-
 
 
 
@@ -496,12 +496,12 @@ Classes
           **y** : array-like of shape (n_samples, )
               Ignored.
 
+
+
       :Returns:
 
           object
               The instance itself.
-
-
 
 
 
@@ -536,12 +536,12 @@ Classes
           **\*\*fit_params** : dict
               Additional fit parameters.
 
+
+
       :Returns:
 
           **X_new** : ndarray array of shape (n_samples, n_features_new)
               Transformed array.
-
-
 
 
 
@@ -568,12 +568,12 @@ Classes
           **indices** : bool, optional
               If True, return the indices instead of a boolean mask.
 
+
+
       :Returns:
 
           ndarray of shape (n_selected_dims, )
               An index that selects the retained dimensions.
-
-
 
 
 
@@ -598,13 +598,13 @@ Classes
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -632,12 +632,12 @@ Classes
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -664,13 +664,13 @@ Classes
           **X** : array-like of shape (n_samples, n_selected_dims, n_timestep)
               The samples.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, n_dims, n_timestep)
               The samples with zeros inserted where dimensions
               would have been removed by :meth:`transform`.
-
-
 
 
 
@@ -707,12 +707,12 @@ Classes
               .. versionadded:: 1.4
                   `"polars"` option was added.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -743,12 +743,12 @@ Classes
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -775,12 +775,12 @@ Classes
           **X** : array-like of shape (n_samples, n_dims, n_timestep)
               The samples.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, n_selected_dims, n_timestep)
               The samples with only the selected dimensions.
-
-
 
 
 
@@ -866,6 +866,8 @@ Classes
 
 
 
+
+
    .. rubric:: Examples
 
    >>> from wildboar.datasets import load_ering
@@ -877,8 +879,6 @@ Classes
    >>> sdp.get_dimensions()
    array([False, False,  True,  True])
    >>> sdp.transform(X).shape
-
-
 
    ..
        !! processed by numpydoc !!
@@ -897,12 +897,12 @@ Classes
           **y** : array-like of shape (n_samples, ), optional
               Ignored.
 
+
+
       :Returns:
 
           object
               The instance itself.
-
-
 
 
 
@@ -937,12 +937,12 @@ Classes
           **\*\*fit_params** : dict
               Additional fit parameters.
 
+
+
       :Returns:
 
           **X_new** : ndarray array of shape (n_samples, n_features_new)
               Transformed array.
-
-
 
 
 
@@ -969,12 +969,12 @@ Classes
           **indices** : bool, optional
               If True, return the indices instead of a boolean mask.
 
+
+
       :Returns:
 
           ndarray of shape (n_selected_dims, )
               An index that selects the retained dimensions.
-
-
 
 
 
@@ -999,13 +999,13 @@ Classes
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -1033,12 +1033,12 @@ Classes
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -1065,13 +1065,13 @@ Classes
           **X** : array-like of shape (n_samples, n_selected_dims, n_timestep)
               The samples.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, n_dims, n_timestep)
               The samples with zeros inserted where dimensions
               would have been removed by :meth:`transform`.
-
-
 
 
 
@@ -1108,12 +1108,12 @@ Classes
               .. versionadded:: 1.4
                   `"polars"` option was added.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -1144,12 +1144,12 @@ Classes
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -1176,12 +1176,12 @@ Classes
           **X** : array-like of shape (n_samples, n_dims, n_timestep)
               The samples.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, n_selected_dims, n_timestep)
               The samples with only the selected dimensions.
-
-
 
 
 
@@ -1263,6 +1263,8 @@ Classes
 
 
 
+
+
    .. rubric:: Examples
 
    >>> from wildboar.datasets import load_basic_motions
@@ -1275,8 +1277,6 @@ Classes
    array([ True,  True,  True,  True,  True,  True])
    >>> sds.transform(X).shape
    (80, 6, 100)
-
-
 
    ..
        !! processed by numpydoc !!
@@ -1295,12 +1295,12 @@ Classes
           **y** : array-like of shape (n_samples, ), optional
               Ignored.
 
+
+
       :Returns:
 
           object
               The instance itself.
-
-
 
 
 
@@ -1335,12 +1335,12 @@ Classes
           **\*\*fit_params** : dict
               Additional fit parameters.
 
+
+
       :Returns:
 
           **X_new** : ndarray array of shape (n_samples, n_features_new)
               Transformed array.
-
-
 
 
 
@@ -1367,12 +1367,12 @@ Classes
           **indices** : bool, optional
               If True, return the indices instead of a boolean mask.
 
+
+
       :Returns:
 
           ndarray of shape (n_selected_dims, )
               An index that selects the retained dimensions.
-
-
 
 
 
@@ -1397,13 +1397,13 @@ Classes
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -1431,12 +1431,12 @@ Classes
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -1463,13 +1463,13 @@ Classes
           **X** : array-like of shape (n_samples, n_selected_dims, n_timestep)
               The samples.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, n_dims, n_timestep)
               The samples with zeros inserted where dimensions
               would have been removed by :meth:`transform`.
-
-
 
 
 
@@ -1506,12 +1506,12 @@ Classes
               .. versionadded:: 1.4
                   `"polars"` option was added.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -1542,12 +1542,12 @@ Classes
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -1574,12 +1574,12 @@ Classes
           **X** : array-like of shape (n_samples, n_dims, n_timestep)
               The samples.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, n_selected_dims, n_timestep)
               The samples with only the selected dimensions.
-
-
 
 
 
@@ -1654,6 +1654,8 @@ Classes
 
 
 
+
+
    .. rubric:: Examples
 
    >>> from wildboar.datasets import load_ering
@@ -1666,8 +1668,6 @@ Classes
    array([False, False,  True, False])
    >>> sdt.transform(X).shape
    (300, 65)
-
-
 
    ..
        !! processed by numpydoc !!
@@ -1686,12 +1686,12 @@ Classes
           **y** : array-like of shape (n_samples, ), optional
               Ignored.
 
+
+
       :Returns:
 
           object
               The instance itself.
-
-
 
 
 
@@ -1726,12 +1726,12 @@ Classes
           **\*\*fit_params** : dict
               Additional fit parameters.
 
+
+
       :Returns:
 
           **X_new** : ndarray array of shape (n_samples, n_features_new)
               Transformed array.
-
-
 
 
 
@@ -1758,12 +1758,12 @@ Classes
           **indices** : bool, optional
               If True, return the indices instead of a boolean mask.
 
+
+
       :Returns:
 
           ndarray of shape (n_selected_dims, )
               An index that selects the retained dimensions.
-
-
 
 
 
@@ -1788,13 +1788,13 @@ Classes
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -1822,12 +1822,12 @@ Classes
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -1854,13 +1854,13 @@ Classes
           **X** : array-like of shape (n_samples, n_selected_dims, n_timestep)
               The samples.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, n_dims, n_timestep)
               The samples with zeros inserted where dimensions
               would have been removed by :meth:`transform`.
-
-
 
 
 
@@ -1897,12 +1897,12 @@ Classes
               .. versionadded:: 1.4
                   `"polars"` option was added.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -1933,12 +1933,12 @@ Classes
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -1965,12 +1965,12 @@ Classes
           **X** : array-like of shape (n_samples, n_dims, n_timestep)
               The samples.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, n_selected_dims, n_timestep)
               The samples with only the selected dimensions.
-
-
 
 
 
@@ -2041,6 +2041,8 @@ Classes
 
 
 
+
+
    .. rubric:: Examples
 
    >>> from wildboar.datasets import load_ering
@@ -2055,8 +2057,6 @@ Classes
    array([ True, False, False,  True])
    >>> sds.transform(X).shape
    (300, 2, 65)
-
-
 
    ..
        !! processed by numpydoc !!
@@ -2075,12 +2075,12 @@ Classes
           **y** : array-like of shape (n_samples, )
               The training labels.
 
+
+
       :Returns:
 
           object
               The instance itself.
-
-
 
 
 
@@ -2115,12 +2115,12 @@ Classes
           **\*\*fit_params** : dict
               Additional fit parameters.
 
+
+
       :Returns:
 
           **X_new** : ndarray array of shape (n_samples, n_features_new)
               Transformed array.
-
-
 
 
 
@@ -2147,12 +2147,12 @@ Classes
           **indices** : bool, optional
               If True, return the indices instead of a boolean mask.
 
+
+
       :Returns:
 
           ndarray of shape (n_selected_dims, )
               An index that selects the retained dimensions.
-
-
 
 
 
@@ -2177,13 +2177,13 @@ Classes
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -2211,12 +2211,12 @@ Classes
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -2243,13 +2243,13 @@ Classes
           **X** : array-like of shape (n_samples, n_selected_dims, n_timestep)
               The samples.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, n_dims, n_timestep)
               The samples with zeros inserted where dimensions
               would have been removed by :meth:`transform`.
-
-
 
 
 
@@ -2286,12 +2286,12 @@ Classes
               .. versionadded:: 1.4
                   `"polars"` option was added.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -2322,12 +2322,12 @@ Classes
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -2354,12 +2354,12 @@ Classes
           **X** : array-like of shape (n_samples, n_dims, n_timestep)
               The samples.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, n_selected_dims, n_timestep)
               The samples with only the selected dimensions.
-
-
 
 
 

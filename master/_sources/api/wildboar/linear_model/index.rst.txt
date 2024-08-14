@@ -170,13 +170,13 @@ Classes
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -204,12 +204,12 @@ Classes
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -245,12 +245,12 @@ Classes
           **sample_weight** : array-like of shape (n_samples,), default=None
               Sample weights.
 
+
+
       :Returns:
 
           **score** : float
               Mean accuracy of ``self.predict(X)`` w.r.t. `y`.
-
-
 
 
 
@@ -281,12 +281,12 @@ Classes
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -389,6 +389,8 @@ Classes
 
 
 
+
+
    .. rubric:: References
 
    Antoine Guillaume, Christel Vrain, Elloumi Wael
@@ -398,8 +400,6 @@ Classes
    .. only:: latex
 
       
-
-
 
 
    ..
@@ -414,13 +414,13 @@ Classes
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -448,12 +448,12 @@ Classes
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -489,12 +489,12 @@ Classes
           **sample_weight** : array-like of shape (n_samples,), default=None
               Sample weights.
 
+
+
       :Returns:
 
           **score** : float
               Mean accuracy of ``self.predict(X)`` w.r.t. `y`.
-
-
 
 
 
@@ -525,12 +525,12 @@ Classes
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -625,6 +625,8 @@ Classes
 
 
 
+
+
    .. rubric:: References
 
    Dempster, A., Schmidt, D. F., & Webb, G. I. (2023).
@@ -634,8 +636,6 @@ Classes
    .. only:: latex
 
       
-
-
 
 
    ..
@@ -650,13 +650,13 @@ Classes
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -684,12 +684,12 @@ Classes
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -725,12 +725,12 @@ Classes
           **sample_weight** : array-like of shape (n_samples,), default=None
               Sample weights.
 
+
+
       :Returns:
 
           **score** : float
               Mean accuracy of ``self.predict(X)`` w.r.t. `y`.
-
-
 
 
 
@@ -761,12 +761,12 @@ Classes
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -870,6 +870,8 @@ Classes
 
 
 
+
+
    .. rubric:: References
 
    Wistuba, Martin, Josif Grabocka, and Lars Schmidt-Thieme.
@@ -879,8 +881,6 @@ Classes
    .. only:: latex
 
       
-
-
 
 
    ..
@@ -895,13 +895,13 @@ Classes
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -929,12 +929,12 @@ Classes
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -970,12 +970,12 @@ Classes
           **sample_weight** : array-like of shape (n_samples,), default=None
               Sample weights.
 
+
+
       :Returns:
 
           **score** : float
               Mean accuracy of ``self.predict(X)`` w.r.t. `y`.
-
-
 
 
 
@@ -1006,12 +1006,12 @@ Classes
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -1124,6 +1124,8 @@ Classes
 
 
 
+
+
    .. rubric:: References
 
    Wistuba, Martin, Josif Grabocka, and Lars Schmidt-Thieme.
@@ -1133,8 +1135,6 @@ Classes
    .. only:: latex
 
       
-
-
 
 
    ..
@@ -1149,13 +1149,13 @@ Classes
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -1183,12 +1183,12 @@ Classes
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -1232,6 +1232,8 @@ Classes
           **sample_weight** : array-like of shape (n_samples,), default=None
               Sample weights.
 
+
+
       :Returns:
 
           **score** : float
@@ -1255,8 +1257,6 @@ Classes
 
 
 
-
-
       ..
           !! processed by numpydoc !!
 
@@ -1276,12 +1276,12 @@ Classes
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -1409,13 +1409,13 @@ Classes
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -1443,12 +1443,12 @@ Classes
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -1484,12 +1484,12 @@ Classes
           **sample_weight** : array-like of shape (n_samples,), default=None
               Sample weights.
 
+
+
       :Returns:
 
           **score** : float
               Mean accuracy of ``self.predict(X)`` w.r.t. `y`.
-
-
 
 
 
@@ -1520,12 +1520,12 @@ Classes
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -1662,13 +1662,13 @@ Classes
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -1696,12 +1696,12 @@ Classes
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -1745,6 +1745,8 @@ Classes
           **sample_weight** : array-like of shape (n_samples,), default=None
               Sample weights.
 
+
+
       :Returns:
 
           **score** : float
@@ -1768,8 +1770,6 @@ Classes
 
 
 
-
-
       ..
           !! processed by numpydoc !!
 
@@ -1789,12 +1789,12 @@ Classes
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 

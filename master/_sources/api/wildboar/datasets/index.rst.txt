@@ -24,14 +24,14 @@
 
 
 
+
+
    .. rubric:: Examples
 
    >>> from wildboar.datasets import load_dataset
    >>> X, y = load_dataset("GunPoint")
    >>> X.shape
    (200, 60)
-
-
 
    ..
        !! processed by numpydoc !!
@@ -137,12 +137,12 @@ Functions
           **collection** : str, optional
               The name of the collection.
 
+
+
       :Returns:
 
           list
               List of datasets in the collection.
-
-
 
 
 
@@ -175,12 +175,12 @@ Functions
           **ext** : str, optional
               The extension of the file.
 
+
+
       :Returns:
 
           str
               The filename.
-
-
 
 
 
@@ -210,12 +210,12 @@ Functions
           **collection** : str, optional
               The collection name.
 
+
+
       :Returns:
 
           list
               A sorted list of datasets in the bundle.
-
-
 
 
 
@@ -245,6 +245,8 @@ Functions
           **archive** : ZipFile
               The zip-file bundle.
 
+
+
       :Returns:
 
           **x** : ndarray
@@ -258,8 +260,6 @@ Functions
 
           **extras** : dict, optional
               Extra numpy arrays.
-
-
 
 
 
@@ -311,12 +311,12 @@ Functions
           **key** : str
               Key of the bundle.
 
+
+
       :Returns:
 
           Bundle, optional
               A bundle or None.
-
-
 
 
 
@@ -339,12 +339,12 @@ Functions
 
 
 
+
+
       :Returns:
 
           dict
               A dictionary of key and bundle.
-
-
 
 
 
@@ -390,12 +390,12 @@ Functions
 
 
 
+
+
       :Returns:
 
           str
               The download url.
-
-
 
 
 
@@ -417,12 +417,12 @@ Functions
 
 
 
+
+
       :Returns:
 
           str
               The name of the repository.
-
-
 
 
 
@@ -444,12 +444,12 @@ Functions
 
 
 
+
+
       :Returns:
 
           str
               The version of the repository.
-
-
 
 
 
@@ -471,12 +471,12 @@ Functions
 
 
 
+
+
       :Returns:
 
           str
               The min version.
-
-
 
 
 
@@ -528,12 +528,12 @@ Functions
           **collection** : str, optional
               The name of the collection.
 
+
+
       :Returns:
 
           list
               List of datasets in the collection.
-
-
 
 
 
@@ -566,12 +566,12 @@ Functions
           **ext** : str, optional
               The extension of the file.
 
+
+
       :Returns:
 
           str
               The filename.
-
-
 
 
 
@@ -601,12 +601,12 @@ Functions
           **collection** : str, optional
               The collection name.
 
+
+
       :Returns:
 
           list
               A sorted list of datasets in the bundle.
-
-
 
 
 
@@ -636,6 +636,8 @@ Functions
           **archive** : ZipFile
               The zip-file bundle.
 
+
+
       :Returns:
 
           **x** : ndarray
@@ -649,8 +651,6 @@ Functions
 
           **extras** : dict, optional
               Extra numpy arrays.
-
-
 
 
 
@@ -700,12 +700,12 @@ Functions
           **key** : str
               Key of the bundle.
 
+
+
       :Returns:
 
           Bundle, optional
               A bundle or None.
-
-
 
 
 
@@ -730,12 +730,12 @@ Functions
 
 
 
+
+
       :Returns:
 
           dict
               A dictionary of key and bundle.
-
-
 
 
 
@@ -783,12 +783,12 @@ Functions
 
 
 
+
+
       :Returns:
 
           str
               The download url.
-
-
 
 
 
@@ -812,12 +812,12 @@ Functions
 
 
 
+
+
       :Returns:
 
           str
               The name of the repository.
-
-
 
 
 
@@ -841,12 +841,12 @@ Functions
 
 
 
+
+
       :Returns:
 
           str
               The version of the repository.
-
-
 
 
 
@@ -870,12 +870,12 @@ Functions
 
 
 
+
+
       :Returns:
 
           str
               The min version.
-
-
 
 
 
@@ -947,12 +947,12 @@ Functions
            
            .. versionadded:: 1.1
 
+
+
    :Returns:
 
        dict
            A dict of key Bundle pairs.
-
-
 
 
 
@@ -978,12 +978,12 @@ Functions
        **repository** : str
            Repository name.
 
+
+
    :Returns:
 
        Repository
            A repository.
-
-
 
 
 
@@ -1061,6 +1061,8 @@ Functions
            
            .. versionadded:: 1.1
 
+
+
    :Returns:
 
        list
@@ -1081,8 +1083,6 @@ Functions
    >>> list_bundles("wildboar")
    ["ucr", "ucr-tiny", ...]
 
-
-
    ..
        !! processed by numpydoc !!
 
@@ -1098,6 +1098,8 @@ Functions
            The data repository
            
            - if str load a named bundle, format {repository}/{bundle}.
+
+
 
    :Returns:
 
@@ -1118,8 +1120,6 @@ Functions
    >>> from wildboar.datasets import list_collections
    >>> list_collections("wildboar/ucr")
    ["bake-off", ...]
-
-
 
    ..
        !! processed by numpydoc !!
@@ -1162,12 +1162,12 @@ Functions
            
            .. versionadded:: 1.1
 
+
+
    :Returns:
 
        set
            A set of dataset names.
-
-
 
 
 
@@ -1205,6 +1205,8 @@ Functions
            
            .. versionadded:: 1.1
 
+
+
    :Returns:
 
        repositories
@@ -1230,8 +1232,6 @@ Functions
 
    >>> list_repositories(refresh=True)
 
-
-
    ..
        !! processed by numpydoc !!
 
@@ -1245,6 +1245,8 @@ Functions
 
        **merge_train_test** : bool, optional
            Merge the existing training and testing partitions.
+
+
 
    :Returns:
 
@@ -1282,8 +1284,6 @@ Functions
            load a named dataset
        
        
-
-
 
 
 
@@ -1301,6 +1301,8 @@ Functions
        **merge_train_test** : bool, optional
            Merge the existing training and testing partitions.
 
+
+
    :Returns:
 
        **x** : ndarray, optional
@@ -1337,8 +1339,6 @@ Functions
            load a named dataset
        
        
-
-
 
 
 
@@ -1408,6 +1408,8 @@ Functions
            
            .. versionadded:: 1.1
 
+
+
    :Returns:
 
        **x** : ndarray, optional
@@ -1462,8 +1464,6 @@ Functions
    ...     merge_train_test=False,
    ... )
 
-
-
    ..
        !! processed by numpydoc !!
 
@@ -1515,6 +1515,8 @@ Functions
 
        **kwargs** : dict
            Optional arguments to :func:`~wildboar.datasets.load_dataset`.
+
+
 
 
    :Yields:
@@ -1569,8 +1571,6 @@ Functions
    SyntheticControl
    TwoLeadECG
 
-
-
    ..
        !! processed by numpydoc !!
 
@@ -1584,6 +1584,8 @@ Functions
 
        **merge_train_test** : bool, optional
            Merge the existing training and testing partitions.
+
+
 
    :Returns:
 
@@ -1621,8 +1623,6 @@ Functions
            load a named dataset
        
        
-
-
 
 
 
@@ -1640,6 +1640,8 @@ Functions
        **merge_train_test** : bool, optional
            Merge the existing training and testing partitions.
 
+
+
    :Returns:
 
        **x** : ndarray, optional
@@ -1676,8 +1678,6 @@ Functions
            load a named dataset
        
        
-
-
 
 
 
@@ -1695,6 +1695,8 @@ Functions
        **merge_train_test** : bool, optional
            Merge the existing training and testing partitions.
 
+
+
    :Returns:
 
        **x** : ndarray, optional
@@ -1731,8 +1733,6 @@ Functions
            load a named dataset
        
        
-
-
 
 
 
@@ -1750,6 +1750,8 @@ Functions
        **merge_train_test** : bool, optional
            Merge the existing training and testing partitions.
 
+
+
    :Returns:
 
        **x** : ndarray, optional
@@ -1786,8 +1788,6 @@ Functions
            load a named dataset
        
        
-
-
 
 
 

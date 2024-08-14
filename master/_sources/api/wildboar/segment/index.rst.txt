@@ -91,6 +91,12 @@ Classes
        **n_jobs** : int, optional
            The number of parallel jobs to compute the matrix profile.
 
+   :Attributes:
+
+       **labels_** : list of shape (n_samples, )
+           A list of n_samples lists with the start index of the segment.
+
+
 
 
 
@@ -111,12 +117,6 @@ Classes
       
 
 
-   :Attributes:
-
-       **labels_** : list of shape (n_samples, )
-           A list of n_samples lists with the start index of the segment.
-
-
    ..
        !! processed by numpydoc !!
 
@@ -134,12 +134,12 @@ Classes
           **y** : ignored, optional
               Ignored.
 
+
+
       :Returns:
 
           self
               The estimator.
-
-
 
 
 
@@ -174,12 +174,12 @@ Classes
           **\*\*fit_params** : dict
               Additional fit parameters.
 
+
+
       :Returns:
 
           **X_new** : ndarray array of shape (n_samples, n_features_new)
               Transformed array.
-
-
 
 
 
@@ -204,13 +204,13 @@ Classes
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -238,12 +238,12 @@ Classes
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -272,12 +272,12 @@ Classes
           **X** : array-like of shape (n_samples, n_timesteps)
               The input data.
 
+
+
       :Returns:
 
           csr_array of shape (n_samples, n_timesteps)
               A boolean array with the start of the change point set to True.
-
-
 
 
 
@@ -314,12 +314,12 @@ Classes
               .. versionadded:: 1.4
                   `"polars"` option was added.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -350,12 +350,12 @@ Classes
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -384,12 +384,12 @@ Classes
           **X** : array-like of shape (n_samples, n_timesteps)
               The input data.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, n_timesteps)
               An array with the segments annotated with a label.
-
-
 
 
 
