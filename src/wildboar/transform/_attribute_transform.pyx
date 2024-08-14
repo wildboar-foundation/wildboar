@@ -255,12 +255,15 @@ def transform(AttributeEmbedding embedding, TSArray X, n_jobs=None):
     cdef BatchTransform transform = BatchTransform(generators, embedding)
     transform.init(X, out)
 
-    Parallel(n_jobs=n_jobs, require="sharedmem")(
-        delayed(transform)(
-            jobid, attribute_offsets[jobid], batch_sizes[jobid]
+    if n_jobs > 1:
+        Parallel(n_jobs=n_jobs, require="sharedmem")(
+            delayed(transform)(
+                jobid, attribute_offsets[jobid], batch_sizes[jobid]
+            )
+            for jobid in range(n_jobs)
         )
-        for jobid in range(n_jobs)
-    )
+    else:
+        transform(0, 0, embedding.n_attributes)
 
     return out.base
 
@@ -281,12 +284,17 @@ def fit_transform(AttributeGenerator generator, TSArray X, random_state, n_jobs=
 
     cdef BatchFitTransform fit_transform = BatchFitTransform(generators, embedding)
     fit_transform.init(X, out)
-    Parallel(n_jobs=n_jobs, require="sharedmem")(
-        delayed(fit_transform)(
-            jobid, attribute_offsets[jobid], batch_sizes[jobid], seeds[jobid]
+
+    if n_jobs > 1:
+        Parallel(n_jobs=n_jobs, require="sharedmem")(
+            delayed(fit_transform)(
+                jobid, attribute_offsets[jobid], batch_sizes[jobid], seeds[jobid]
+            )
+            for jobid in range(n_jobs)
         )
-        for jobid in range(n_jobs)
-    )
+    else:
+        fit_transform(0, 0, n_attributes, seeds[0])
+
     return embedding, out.base
 
 
