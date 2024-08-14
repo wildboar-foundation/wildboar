@@ -184,13 +184,12 @@ class IntervalTransform(IntervalMixin, BaseAttributeTransform):
 
         - if "fixed", `n_intervals` non-overlapping intervals.
         - if "dyadic", `2**depth-1+2**depth-1-depth" intervals.
-        - if "sample", `n_intervals * sample_size` non-overlapping intervals.
         - if "random", `n_intervals` possibly overlapping intervals of randomly
           sampled in `[min_size * n_timestep, max_size * n_timestep]`.
     sample_size : float, optional
-        The sample size of fixed intervals if `intervals="sample"`.
+        The sample size of fixed intervals if `intervals="fixed"`.
     depth : int, optional
-        The maximum depth for dyadic intervals.
+        The maximum depth for dyadic intervals if `intervals="dyadic"`.
     min_size : float, optional
         The minimum interval size if `intervals="random"`.
     max_size : float, optional
@@ -204,6 +203,8 @@ class IntervalTransform(IntervalMixin, BaseAttributeTransform):
 
         The default summarizer summarizes each interval as its mean, standard
         deviation and slope.
+    summarizer_params : dict, optional
+        A dictionary of parameters to the summarizer.
     n_jobs : int, optional
         The number of cores to use on multi-core.
     random_state : int or RandomState, optional
