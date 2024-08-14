@@ -44,7 +44,8 @@ Wildboar 1.2 introduces several new models.
   - :class:`~wildboar.dimension_selection.ECSSelector`: Select time series
     dimensions based on the sum of distances between pairs of classes.
 
-
+- Add a new transform :class:`~wildboar.transform.QuantTransform` as proposed by
+  Dempster et.al (2024).
 
 - Add a new module :mod:`~wildboar.distance.lb` for distance lower bounds. The module
   contains four lower bounds.
