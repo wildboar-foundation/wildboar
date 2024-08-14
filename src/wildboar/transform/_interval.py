@@ -3,7 +3,6 @@
 
 import math
 import numbers
-import warnings
 
 from sklearn.utils._param_validation import Interval, StrOptions
 
@@ -60,7 +59,7 @@ class IntervalMixin:
             StrOptions({"sqrt", "log2"}),
         ],
         "intervals": [
-            StrOptions({"fixed", "sample", "random", "dyadic"}, deprecated={"fixed"}),
+            StrOptions({"fixed", "random", "dyadic"}),
         ],
         "depth": [
             Interval(numbers.Integral, 0, None, closed="neither"),
@@ -100,32 +99,14 @@ class IntervalMixin:
 
         if self.n_intervals == "sqrt":
             n_intervals = math.ceil(math.sqrt(self.n_timesteps_in_))
-        elif self.n_intervals in ("log2", "log"):
-            # TODO(1.4) Remove
-            if self.n_intervals == "log":
-                warnings.warn(
-                    "The value 'log' for `n_intervals` has been renamed to 'log2' "
-                    "and will be removed in 1.4",
-                    FutureWarning,
-                )
-
+        elif self.n_intervals == "log2":
             n_intervals = math.ceil(math.log2(self.n_timesteps_in_))
         elif isinstance(self.n_intervals, numbers.Integral):
             n_intervals = self.n_intervals
         else:
             n_intervals = math.ceil(self.n_intervals * self.n_timesteps_in_)
 
-        # TODO(1.4)
-        if self.intervals == "sample":
-            warnings.warn(
-                "The value 'sample' for intervals has been deprecated "
-                "and will be removed in 1.4",
-                FutureWarning,
-            )
-            intervals = "fixed"
-        else:
-            intervals = self.intervals
-
+        intervals = self.intervals
         if intervals == "fixed" and n_intervals > self.n_timesteps_in_:
             raise ValueError(
                 "The number of intervals must be fewer than or equal "
