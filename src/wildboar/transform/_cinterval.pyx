@@ -759,6 +759,7 @@ cdef class DyadicIntervalAttributeGenerator(IntervalAttributeGenerator):
             current_depth = <Py_ssize_t> floor(log2(out_attribute + 1))
 
         cdef Py_ssize_t n_intervals = <Py_ssize_t> pow(2, current_depth)
+        cdef Py_ssize_t length = X.shape[2] // n_intervals
 
         # To ensure that the intervals are in order, we shift the output
         # index so that it is between 0 and n_intervals
@@ -774,7 +775,7 @@ cdef class DyadicIntervalAttributeGenerator(IntervalAttributeGenerator):
         else:
             shifted_out_attribute = out_attribute - (n_intervals - 1)
 
-        cdef Py_ssize_t n_outputs = self.summarizer.n_outputs(interval.length)
+        cdef Py_ssize_t n_outputs = self.summarizer.n_outputs(length)
         cdef Py_ssize_t offset = shifted_out_attribute * n_outputs
 
         cdef Py_ssize_t min_depth = 0
@@ -800,7 +801,7 @@ cdef class DyadicIntervalAttributeGenerator(IntervalAttributeGenerator):
             &X[sample, attribute.dim, interval.start],
             interval.length,
             &out[out_sample, offset],
-            self.summarizer.n_outputs(interval.length),
+            self.summarizer.n_outputs(length),
         )
         return 0
 
