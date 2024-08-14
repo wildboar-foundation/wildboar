@@ -5,7 +5,7 @@
 from ._conv import convolve
 from ._diff import DerivativeTransform, DiffTransform, FftTransform
 from ._hydra import HydraTransform
-from ._interval import FeatureTransform, IntervalTransform
+from ._interval import FeatureTransform, IntervalTransform, QuantTransform
 from ._matrix_profile import MatrixProfileTransform
 from ._pivot import PivotTransform, ProximityTransform
 from ._rocket import RocketTransform
@@ -41,5 +41,6 @@ __all__ = [
     "DiffTransform",
     "DerivativeTransform",
     "FftTransform",
+    "QuantTrasform",
     "CastorTransform",
 ]

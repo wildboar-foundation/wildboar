@@ -4,7 +4,12 @@
 import math
 import numbers
 
+from sklearn.base import BaseEstimator, TransformerMixin, _fit_context
+from sklearn.pipeline import make_pipeline, make_union
 from sklearn.utils._param_validation import Interval, StrOptions
+from sklearn.utils.validation import check_is_fitted
+
+from wildboar.transform._diff import DiffTransform, FftTransform
 
 from ._base import BaseAttributeTransform
 from ._cinterval import (
@@ -319,3 +324,104 @@ class FeatureTransform(IntervalTransform):
         n_jobs=None,
     ):
         super().__init__(n_intervals=1, summarizer=summarizer, n_jobs=n_jobs)
+
+
+class QuantTransform(TransformerMixin, BaseEstimator):
+    """
+    Quant transformation
+
+    Computes quantiles over a fixed set of intervals on input time series
+    and their transformations, using these quantiles for classification.
+
+    The Quant transform performs the following steps:
+
+    1. Computes quantiles over fixed, dyadic intervals on the input time
+       series.
+    2. Applies three transformations to the time series (first difference,
+       second difference, and Fourier transform).
+
+    Parameters
+    ----------
+    depth : {"auto"} or int, optional
+        The maximal depth. If set to auto, the depth is `min(log2(n_timestep) +
+        1, 6)`.
+    v : int, optional
+        The proportion of quantiles per interval given as `k = m/v` were `m` is
+        the length of the interval.
+    n_jobs : int, optional
+        The number of parallel jobs.
+
+    Notes
+    -----
+    The implementation differs to the original in the following ways:
+
+    1. Does not apply smoothing to the first order difference.
+    2. Does not subtract the mean from every second quantile.
+
+    References
+    ----------
+    Dempster, Angus, Daniel F. Schmidt, and Geoffrey I. Webb.
+        "Quant: A Minimalist Interval Method for Time Series Classification."
+        Data Mining and Knowledge Discovery 38, no. 4 (July 1, 2024): 2377–2402.
+        https://doi.org/10.1007/s10618-024-01036-9.
+    """
+
+    _parameter_constraints = {
+        "depth": IntervalTransform._parameter_constraints["depth"],
+        "v": [Interval(numbers.Integral, 1, None, closed="left")],
+        "n_jobs": [None, numbers.Integral],
+    }
+
+    def __init__(self, depth="auto", v=4, n_jobs=None):
+        self.depth = depth
+        self.v = v
+        self.n_jobs = n_jobs
+
+    @_fit_context(prefer_skip_nested_validation=True)
+    def fit(self, X, y=None):
+        """
+        Fit the transform.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_dims, n_timestep)
+            The input data.
+        y : ignored
+
+        Returns
+        -------
+        self
+            The fitted estimator.
+        """
+        params = dict(
+            intervals="dyadic",
+            depth=self.depth,
+            summarizer="quant",
+            summarizer_params={"v": self.v},
+        )
+        self.pipe_ = make_union(
+            IntervalTransform(**params),
+            make_pipeline(DiffTransform(order=1), IntervalTransform(**params)),
+            make_pipeline(DiffTransform(order=2), IntervalTransform(**params)),
+            make_pipeline(FftTransform(), IntervalTransform(**params)),
+            n_jobs=self.n_jobs,
+        )
+        self.pipe_.fit(X)
+        return self
+
+    def transform(self, X):
+        """
+        Transform the input samples.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_dims, n_timestep)
+            The input data.
+
+        Returns
+        -------
+        ndarray of shape (n_samples, n_outputs)
+            The transformed samples.
+        """
+        check_is_fitted(self)
+        return self.pipe_.transform(X)

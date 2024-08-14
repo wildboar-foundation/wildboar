@@ -40,6 +40,7 @@ It is currently maintained by Isak Samsten
 |                                                                 | `DilatedShapeletClassifier`    |                               |                                |            | `KMedoids`                   |                               |                           |
 |                                                                 | `CastorClassifier`             |                               |                                |            | `DilatedShapeletTransform`   |                               |                           |
 |                                                                 |                                |                               |                                |            | `CastorTransform`            |                               |                           |
+|                                                                 |                                |                               |                                |            | `QuantTransform`             |                               |                           |
 
 See the [documentation](https://wildboar.dev/master/) for examples.
 
