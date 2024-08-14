@@ -127,6 +127,8 @@ cdef class BatchFitTransform(Batch):
                 self.embedding.set_attribute(attribute_offset + j, persistent)
                 generator.free_transient(&transient)
 
+        free(samples)
+
 cdef class AttributeEmbedding:
 
     cdef readonly AttributeGenerator generator
@@ -285,7 +287,6 @@ def fit_transform(AttributeGenerator generator, TSArray X, random_state, n_jobs=
         )
         for jobid in range(n_jobs)
     )
-
     return embedding, out.base
 
 
