@@ -41,6 +41,6 @@ __all__ = [
     "DiffTransform",
     "DerivativeTransform",
     "FftTransform",
-    "QuantTrasform",
+    "QuantTransform",
     "CastorTransform",
 ]
