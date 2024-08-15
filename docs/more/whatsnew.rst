@@ -47,6 +47,9 @@ Wildboar 1.2 introduces several new models.
 - Add a new transform :class:`~wildboar.transform.QuantTransform` as proposed by
   Dempster et.al (2024).
 
+- Add a new transform :class:`~wildboar.transform.FftTransform` for discrete
+  Fourier transform.
+
 - Add a new module :mod:`~wildboar.distance.lb` for distance lower bounds. The module
   contains four lower bounds.
 
