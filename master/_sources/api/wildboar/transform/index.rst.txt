@@ -47,6 +47,7 @@ Classes
    wildboar.transform.PAA
    wildboar.transform.PivotTransform
    wildboar.transform.ProximityTransform
+   wildboar.transform.QuantTransform
    wildboar.transform.RandomShapeletTransform
    wildboar.transform.RocketTransform
    wildboar.transform.SAX
@@ -3521,6 +3522,317 @@ Functions
 
           **self** : estimator instance
               Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+.. py:class:: QuantTransform(depth='auto', v=4, n_jobs=None)
+
+
+
+   
+   Quant transformation
+
+   Computes quantiles over a fixed set of intervals on input time series
+   and their transformations, using these quantiles for classification.
+
+   The Quant transform performs the following steps:
+
+   1. Computes quantiles over fixed, dyadic intervals on the input time
+      series.
+   2. Applies three transformations to the time series (first difference,
+      second difference, and Fourier transform).
+
+   :Parameters:
+
+       **depth** : {"auto"} or int, optional
+           The maximal depth. If set to auto, the depth is `min(log2(n_timestep) +
+           1, 6)`.
+
+       **v** : int, optional
+           The proportion of quantiles per interval given as `k = m/v` were `m` is
+           the length of the interval.
+
+       **n_jobs** : int, optional
+           The number of parallel jobs.
+
+
+
+
+
+
+
+
+
+
+
+   .. rubric:: Notes
+
+   The implementation differs to the original in the following ways:
+
+   1. Does not apply smoothing to the first order difference.
+   2. Does not subtract the mean from every second quantile.
+
+   .. rubric:: References
+
+   Dempster, Angus, Daniel F. Schmidt, and Geoffrey I. Webb.
+       "Quant: A Minimalist Interval Method for Time Series Classification."
+       Data Mining and Knowledge Discovery 38, no. 4 (July 1, 2024): 2377–2402.
+       https://doi.org/10.1007/s10618-024-01036-9.
+
+   .. only:: latex
+
+      
+
+
+   ..
+       !! processed by numpydoc !!
+
+   .. py:method:: fit(X, y=None)
+
+      
+      Fit the transform.
+
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_dims, n_timestep)
+              The input data.
+
+          **y** : ignored
+              ..
+
+
+
+      :Returns:
+
+          self
+              The fitted estimator.
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: fit_transform(X, y=None, **fit_params)
+
+      
+      Fit to data, then transform it.
+
+      Fits transformer to `X` and `y` with optional parameters `fit_params`
+      and returns a transformed version of `X`.
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_features)
+              Input samples.
+
+          **y** :  array-like of shape (n_samples,) or (n_samples, n_outputs),                 default=None
+              Target values (None for unsupervised transformations).
+
+          **\*\*fit_params** : dict
+              Additional fit parameters.
+
+
+
+      :Returns:
+
+          **X_new** : ndarray array of shape (n_samples, n_features_new)
+              Transformed array.
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: set_output(*, transform=None)
+
+      
+      Set output container.
+
+      See :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py`
+      for an example on how to use the API.
+
+      :Parameters:
+
+          **transform** : {"default", "pandas", "polars"}, default=None
+              Configure output of `transform` and `fit_transform`.
+              
+              - `"default"`: Default output format of a transformer
+              - `"pandas"`: DataFrame output
+              - `"polars"`: Polars output
+              - `None`: Transform configuration is unchanged
+              
+              .. versionadded:: 1.4
+                  `"polars"` option was added.
+
+
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: transform(X)
+
+      
+      Transform the input samples.
+
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_dims, n_timestep)
+              The input data.
+
+
+
+      :Returns:
+
+          ndarray of shape (n_samples, n_outputs)
+              The transformed samples.
 
 
 
