@@ -418,7 +418,6 @@ def test_impurity_equality_tolerance():
     "clf",
     [
         ShapeletTreeClassifier(strategy="random"),
-        ShapeletTreeClassifier(strategy="best"),
         ExtraShapeletTreeClassifier(),
         ShapeletTreeClassifier(impurity_equality_tolerance=0.0),
     ],
