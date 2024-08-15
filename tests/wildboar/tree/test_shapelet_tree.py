@@ -417,9 +417,9 @@ def test_impurity_equality_tolerance():
 @pytest.mark.parametrize(
     "clf",
     [
-        ShapeletTreeClassifier(strategy="random"),
-        ExtraShapeletTreeClassifier(),
-        ShapeletTreeClassifier(impurity_equality_tolerance=0.0),
+        ShapeletTreeClassifier(strategy="random", random_state=1),
+        ExtraShapeletTreeClassifier(random_state=1),
+        ShapeletTreeClassifier(impurity_equality_tolerance=0.0, random_state=1),
     ],
 )
 @pytest.mark.parametrize("metric", ["euclidean"])
