@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Time series transform &#8212; Wildboar 1.3.0.dev91+g8b75c911a documentation</title>
+    <title>Time series transform &#8212; Wildboar 1.3.0.dev96+g45ddc4596 documentation</title>
   
   
   
@@ -41,7 +41,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../_static/documentation_options.js?v=fade8802"></script>
+    <script src="../../_static/documentation_options.js?v=08310b68"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -60,7 +60,7 @@
     <script src="../../_static/js/fa.js?v=744fd48f"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Glossary" href="../glossary.html" />
+    <link rel="next" title="Interpretability" href="../explain.html" />
     <link rel="prev" title="Segmentation" href="segmentation.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -435,6 +435,10 @@ document.write(`
 </details></li>
 <li class="toctree-l2"><a class="reference internal" href="segmentation.html">Segmentation</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Time series transform</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../explain.html">Interpretability</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../explain/counterfactuals.html">Counterfactual explanations</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
@@ -1470,8 +1474,8 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 <span class="n">X_test_transform</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="sd-mt-0 execute-return highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">0.97470448</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.49450595</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.21460406</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.59707777</span><span class="p">,</span>
-        <span class="mf">0.01343081</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.9294847</span> <span class="p">])</span>
+<div class="sd-mt-0 execute-return highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">1.06937936</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.61204526</span><span class="p">,</span>  <span class="mf">0.73441567</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.26183167</span><span class="p">,</span>
+        <span class="mf">0.07829626</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.53171907</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -1505,7 +1509,7 @@ in the data.</p>
 </div>
 </div>
 </div>
-<p>The first two components explain 35.03 and 16.44 percent of the variance.</p>
+<p>The first two components explain 35.16 and 16.27 percent of the variance.</p>
 <aside class="footnote-list brackets">
 <aside class="footnote brackets" id="rocket" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
@@ -1540,11 +1544,11 @@ in the data.</p>
       </div>
     </a>
     <a class="right-next"
-       href="../glossary.html"
+       href="../explain.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Glossary</p>
+        <p class="prev-next-title">Interpretability</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

@@ -7,7 +7,7 @@
 
 .. autoapi-nested-parse::
 
-   Utilities for variable length series.
+   Variable length utilities.
 
    ..
        !! processed by numpydoc !!

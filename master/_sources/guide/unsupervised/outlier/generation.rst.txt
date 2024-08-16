@@ -10,7 +10,7 @@ Outlier detection benchmarks
 
    The :mod:`datasets.outlier` module optionally requires the package `networkx
    <https://pypi.org/projects/networkx>`_ to generate outliers for multi-class
-   problems using :func:`~datasets.outlier.emmott_labeler`. We can
+   problems using :func:`~datasets.outlier.emmott_outliers`. We can
    install the packages using `pip`:
 
    .. code-block:: shell
@@ -23,45 +23,50 @@ opposed to detecting deviating patterns or time points. Since there are no good
 benchmark datasets for outlier detection (except for ``wildboar/outlier``,
 which we construct using the :class:`~datasets.outlier.emmott_outliers`), we
 support the constructing benchmark outlier datasets from traditional
-classification tasks.
+classification tasks. In the following sections, we will use the `GunPoint`
+dataset.
 
-****************
-Minority labeler
-****************
+.. execute::
+   :context:
+
+   from wildboar.datasets import load_gun_point
+   x, y = load_gun_point()
+
+*****************
+Minority outliers
+*****************
 
 Perhaps the simplest approach to generate outliers implemented in Wildboar is
-the :func:`~datasets.outliers.minority_labeler`. The minority labeler selects a
+the :func:`~datasets.outlier.minority_outliers`. The minority outliers selects a
 small fraction, specified as ``n_outliers``, of the minority class as the outlier
 samples:
 
-.. code-block:: python
+.. execute::
+   :context:
 
-   >>> from wildboar.datasets.outlier import minority_labeler
-   >>> x_outlier, y_outlier = minority_outliers(x, y, n_outliers=0.05)
+   from wildboar.datasets.outlier import minority_outliers
+   x_outlier, y_outlier = minority_outliers(x, y, n_outliers=0.05)
 
-.. ldimage:: /_static/fig/guide/unsupervised/outlier/minority.svg
-   :align: center
 
-****************
-Majority labeler
-****************
+*****************
+Majority outliers
+*****************
 
 Another equally simple approach to generate outliers implemented in Wildboar is
-the :func:`~datasets.outliers.majority_labeler`. The majority labeler selects a
+the :func:`~datasets.outlier.majority_outliers`. The majority outliers selects a
 small fraction, specified as ``n_outliers``, of the majority class as the outlier
 samples:
 
-.. code-block:: python
+.. execute::
+   :context:
 
-   >>> from wildboar.datasets.outlier import majority_labeler
-   >>> x_outlier, y_outlier = majority_labeler(x, y, n_outliers=0.05)
+   from wildboar.datasets.outlier import majority_outliers
+   x_outlier, y_outlier = majority_outliers(x, y, n_outliers=0.05)
 
-.. ldimage:: /_static/fig/guide/unsupervised/outlier/majority.svg
-   :align: center
 
-**************
-Emmott labeler
-**************
+***************
+Emmott outliers
+***************
 
 Wildboar implements a more sophisticated approach to generate outliers, first
 published by Emmott et.al (2013) [#emmott]_. Wildboar implements the default
@@ -75,41 +80,38 @@ both binary and multi-class problems, and allows the user to specify a desired
 difficulty, i.e., the separation between inliers and outliers. By default, it
 returns a tight cluster of the simplest outliers:
 
-.. code-block:: python
+.. execute::
+   :context:
 
-   >>> from wildboar.datasets.outliers import emmott_labeler
-   >>> x_outlier, y_outlier = emmott_labeler(
-   ...    x,
-   ...    y,
-   ...    n_outlier=0.05,
-   ...    variation="tight"     # default
-   ...    difficulty="simplest" # default
-   ... )
+   from wildboar.datasets.outlier import emmott_outliers
+   x_outlier, y_outlier = emmott_outliers(
+      x,
+      y,
+      n_outliers=0.05,
+      variation="tight",     # default
+      difficulty="simplest", # default
+   )
 
-.. ldimage:: /_static/fig/guide/unsupervised/outlier/emmott.svg
-   :align: center
 
 but we can request a dispersed collection of the most difficult samples:
 
-.. code-block:: python
+.. execute::
+   :context:
 
-   >>> from wildboar.datasets.outliers import emmott_labeler
-   >>> x_outlier, y_outlier = emmott_labeler(
-   ...    x,
-   ...    y,
-   ...    n_outlier=0.05,
-   ...    variation="dispersed"
-   ...    difficulty="hardest"
-   ... )
+   from wildboar.datasets.outlier import emmott_outliers
+   x_outlier, y_outlier = emmott_outliers(
+      x,
+      y,
+      n_outliers=0.05,
+      variation="dispersed",
+      difficulty="hardest",
+   )
 
 .. note::
    To generate outliers for multiclass problems, we must install the package
    ``networkx``.
 
-.. ldimage:: /_static/fig/guide/unsupervised/outlier/emmott-hard.svg
-   :align: center
-
-The :func:`~datasets.outlier.emmott_labeler` discretizes the difficulty scores
+The :func:`~datasets.outlier.emmott_outliers` discretizes the difficulty scores
 assigned by the difficulty estimator into `n` discrete bins determined by the
 :python:`scale` parameter. By default, the difficulty scores are assigned into
 four bins according to the ranges ``[0, 0.16]``, ``[0.16, 0.3]``, ``[0.3,

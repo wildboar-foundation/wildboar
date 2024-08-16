@@ -48,3 +48,4 @@ API Reference
 
    /api/wildboar/utils/plot/index
 
+   /api/wildboar/utils/variable_len/index

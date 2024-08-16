@@ -206,7 +206,8 @@ Exploring model performance
 Wildboar implements several methods for explaining classifiers, e.g., using
 counterfactual reasoning or input dependencies.
 
-.. code-block:: python
+.. execute:: python
+   :context:
 
    from wildboar.explain import IntervalImportance
    i = IntervalImportance()
@@ -220,16 +221,14 @@ reevaluating the predictive performance of the classifier of sample-wise
 shuffled intervals. In the example, we evaluate the in-sample importance, which
 captures the reliance of the model on a particular interval.
 
-.. ldimage:: /_static/fig/getting-started/interval.svg
-   :align: center
-
 The :meth:`explain.IntervalImportance.plot` method can be used to visualize the
 interval importance, or we can return the full importance matrix.
 
-.. code-block:: python
+.. execute:: python
+   :context:
+   :show-return:
 
-   >>> i.importance_.mean()
-   [..., 0.31, 0.30, 0.34, ...]
+   i.importance_.mean()
 
 *****************
 Model persistence
@@ -263,4 +262,5 @@ work when using a newer version (or vice versa).
    guide/dimension_selection
    guide/supervised
    guide/unsupervised
+   guide/explain
    guide/glossary

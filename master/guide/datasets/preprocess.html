@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Pre-processing &#8212; Wildboar 1.3.0.dev91+g8b75c911a documentation</title>
+    <title>Pre-processing &#8212; Wildboar 1.3.0.dev96+g45ddc4596 documentation</title>
   
   
   
@@ -41,7 +41,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../_static/documentation_options.js?v=fade8802"></script>
+    <script src="../../_static/documentation_options.js?v=08310b68"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -436,6 +436,10 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="../unsupervised/transform.html">Time series transform</a></li>
 </ul>
 </details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../explain.html">Interpretability</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../explain/counterfactuals.html">Counterfactual explanations</a></li>
+</ul>
+</details></li>
 <li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
 </ul>
 </div>
@@ -501,7 +505,7 @@ document.write(`
 <h1>Pre-processing<a class="headerlink" href="#pre-processing" title="Link to this heading">#</a></h1>
 <p>A common operation on time series is to pre-processes each series individually,
 e.g., normalizing each timestep or truncating multivariate time series to have
-uniform length, the <code class="xref py py-mod docutils literal notranslate"><span class="pre">datasets.preprocess</span></code>-module implements a selection of
+uniform length, the <a class="reference internal" href="../../api/wildboar/datasets/preprocess/index.html#module-wildboar.datasets.preprocess" title="wildboar.datasets.preprocess"><code class="xref py py-mod docutils literal notranslate"><span class="pre">preprocess</span></code></a>-module implements a selection of
 common operations that are performed along the time dimension (i.e., along the
 last dimension of the time series array). Currently, Wildboar supports the
 following operations:</p>
@@ -521,20 +525,42 @@ shortest time series.</p>
 reuse them for both the training and testing parts of our data. To simplify the
 application of preprocessing, the <a class="reference internal" href="../../api/wildboar/datasets/index.html#wildboar.datasets.load_dataset" title="wildboar.datasets.load_dataset"><code class="xref py py-func docutils literal notranslate"><span class="pre">wildboar.datasets.load_dataset</span></code></a> function
 accepts a <code class="code highlight python docutils literal highlight-python"><span class="n">preprocess</span></code> parameter:</p>
+<div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">load_dataset</span>
 <span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">preprocess</span>
+
 <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;GunPoint&quot;</span><span class="p">,</span> <span class="n">preprocess</span><span class="o">=</span><span class="n">preprocess</span><span class="o">.</span><span class="n">minmax_scale</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The <code class="code highlight python docutils literal highlight-python"><span class="n">preprocess</span></code> accept both a function that expects a <code class="docutils literal notranslate"><span class="pre">ndarray</span></code> and returns a
-new preprocessed <code class="docutils literal notranslate"><span class="pre">ndarray</span></code> or a named preprocessor as a string. The names are
-the same as the function names enumerated above. For example, the previous code
-snippet could be rewritten as:</p>
+</div>
+</div>
+</div>
+<p>The <code class="code highlight python docutils literal highlight-python"><span class="n">preprocess</span></code> parameters accept both a function that expects a
+<code class="docutils literal notranslate"><span class="pre">ndarray</span></code> and returns a new preprocessed <code class="docutils literal notranslate"><span class="pre">ndarray</span></code> or a named preprocessor
+as a string. The names are the same as the function names enumerated above. For
+example, the previous code snippet could be rewritten as:</p>
+<div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;GunPoint&quot;</span><span class="p">,</span> <span class="n">preprocess</span><span class="o">=</span><span class="s2">&quot;minmax_scale&quot;</span><span class="p">)</span>
+<span class="n">x_orig</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;GunPoint&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;minmax&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_orig</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;original&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="../../_images/minmax_scale-light.svg" class="only-light align-center" src="../../_images/minmax_scale-light.svg" />
-<img alt="../../_images/minmax_scale-dark.svg" class="only-dark align-center" src="../../_images/minmax_scale-dark.svg" />
+</div>
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="sd-card sd-sphinx-override sd-w-auto sd-m-auto sd-shadow-none sd-text-center docutils">
+<div class="sd-card-body docutils">
+<img alt="../../_images/preprocess-3.png" class="only-light card-image align-center" src="../../_images/preprocess-3.png" />
+<img alt="../../_images/preprocess-4.png" class="only-dark card-image align-center" src="../../_images/preprocess-4.png" />
+</div>
+</div>
+</div>
+</div>
+</div>
 <p>A crude way of dealing with time series of unequal length is to truncate longer
 time series to the length of the shortest time series. In Wildboar, we can use
 <a class="reference internal" href="../../api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.truncate" title="wildboar.datasets.preprocess.truncate"><code class="xref py py-func docutils literal notranslate"><span class="pre">truncate</span></code></a> to accomplish this.</p>
@@ -544,30 +570,63 @@ series of unequal length, we use a specific value to denote end-of-sequence
 (<code class="docutils literal notranslate"><span class="pre">EOS</span></code>). We can get the <code class="docutils literal notranslate"><span class="pre">EOS</span></code> value from <code class="xref py py-const docutils literal notranslate"><span class="pre">wildboar.eos</span></code>, and use
 <a class="reference internal" href="../../api/wildboar/utils/variable_len/index.html#wildboar.utils.variable_len.is_end_of_series" title="wildboar.utils.variable_len.is_end_of_series"><code class="xref py py-func docutils literal notranslate"><span class="pre">wildboar.utils.variable_len.is_end_of_series</span></code></a> to check for this value,
 and get the length of each series:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wildboar.variable_len</span> <span class="kn">import</span> <span class="n">is_end_of_series</span>
-<span class="n">length</span> <span class="o">=</span> <span class="n">is_end_of_series</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wildboar.utils.variable_len</span> <span class="kn">import</span> <span class="n">is_end_of_series</span>
+
+<span class="n">is_end_of_series</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
+</div>
+<div class="sd-mt-0 execute-return highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 <p>For example, we could use the following code to plot the length of each
 dimension of a multivariate time series:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">eos</span> <span class="o">=</span> <span class="n">wildboar</span><span class="o">.</span><span class="n">iseos</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span> <span class="c1"># assuming 3 dimensions</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">dim</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">eos</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
-<span class="gp">... </span>   <span class="n">eos</span><span class="p">[</span><span class="n">eos</span><span class="p">[:,</span> <span class="n">dim</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># if eos == n_timestep</span>
-<span class="gp">... </span>   <span class="n">ax</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">eos</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">eos</span><span class="p">[:,</span> <span class="n">dim</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
-<span class="gp">... </span>   <span class="n">ax</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;dim </span><span class="si">{</span><span class="n">dim</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;SpokenArabicDigits&quot;</span><span class="p">,</span> <span class="n">repository</span><span class="o">=</span><span class="s2">&quot;wildboar/ucrmts&quot;</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:</span><span class="mi">25</span><span class="p">,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">eos</span> <span class="o">=</span> <span class="n">is_end_of_series</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="k">for</span> <span class="n">dim</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">eos</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+    <span class="n">eos</span><span class="p">[</span><span class="n">eos</span><span class="p">[:,</span> <span class="n">dim</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># if eos == n_timestep</span>
+    <span class="n">ax</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">eos</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">eos</span><span class="p">[:,</span> <span class="n">dim</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;dim </span><span class="si">{</span><span class="n">dim</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Running the code with a dataset (e.g., <code class="docutils literal notranslate"><span class="pre">SpokenArabicDigits</span></code> from
-<code class="docutils literal notranslate"><span class="pre">wildboar/ucrmts</span></code>) would yield a figure similar to this.</p>
-<img alt="../../_images/no-truncate-light.svg" class="only-light align-center" src="../../_images/no-truncate-light.svg" />
-<img alt="../../_images/no-truncate-dark.svg" class="only-dark align-center" src="../../_images/no-truncate-dark.svg" />
+</div>
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="sd-card sd-sphinx-override sd-w-auto sd-m-auto sd-shadow-none sd-text-center docutils">
+<div class="sd-card-body docutils">
+<img alt="../../_images/preprocess-7.png" class="only-light card-image align-center" src="../../_images/preprocess-7.png" />
+<img alt="../../_images/preprocess-8.png" class="only-dark card-image align-center" src="../../_images/preprocess-8.png" />
+</div>
+</div>
+</div>
+</div>
+</div>
 <p>Truncating the time series to the shortest dimension (in the example this is 26
 time steps), using <code class="code highlight python docutils literal highlight-python"><span class="n">preprocess</span><span class="o">.</span><span class="n">truncate</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></code>, results in a figure similar
 to this:</p>
-<img alt="../../_images/truncate-light.svg" class="only-light align-center" src="../../_images/truncate-light.svg" />
-<img alt="../../_images/truncate-dark.svg" class="only-dark align-center" src="../../_images/truncate-dark.svg" />
+<div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="sd-card sd-sphinx-override sd-w-auto sd-m-auto sd-shadow-none sd-text-center docutils">
+<div class="sd-card-body docutils">
+<img alt="../../_images/preprocess-9.png" class="only-light card-image align-center" src="../../_images/preprocess-9.png" />
+<img alt="../../_images/preprocess-10.png" class="only-dark card-image align-center" src="../../_images/preprocess-10.png" />
+</div>
+</div>
+</div>
+</div>
+</div>
 <p>Since many algorithms in Wildboar only support dimensions and samples of
 uniform length, we can preprocess the time series using the truncate function.
 One should note that truncating is very crude and result in data loss.</p>

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>User Guide &#8212; Wildboar 1.3.0.dev91+g8b75c911a documentation</title>
+    <title>User Guide &#8212; Wildboar 1.3.0.dev96+g45ddc4596 documentation</title>
   
   
   
@@ -41,7 +41,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=fade8802"></script>
+    <script src="_static/documentation_options.js?v=08310b68"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -437,6 +437,10 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="guide/unsupervised/transform.html">Time series transform</a></li>
 </ul>
 </details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="guide/explain.html">Interpretability</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="guide/explain/counterfactuals.html">Counterfactual explanations</a></li>
+</ul>
+</details></li>
 <li class="toctree-l1"><a class="reference internal" href="guide/glossary.html">Glossary</a></li>
 </ul>
 </div>
@@ -660,26 +664,14 @@ estimating the pipelines performance.</p>
 <h2>Exploring model performance<a class="headerlink" href="#exploring-model-performance" title="Link to this heading">#</a></h2>
 <p>Wildboar implements several methods for explaining classifiers, e.g., using
 counterfactual reasoning or input dependencies.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wildboar.explain</span> <span class="kn">import</span> <span class="n">IntervalImportance</span>
-<span class="n">i</span> <span class="o">=</span> <span class="n">IntervalImportance</span><span class="p">()</span>
-<span class="n">i</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-<span class="n">i</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
-</pre></div>
-</div>
 <p>The <a class="reference internal" href="api/wildboar/explain/index.html#wildboar.explain.IntervalImportance" title="wildboar.explain.IntervalImportance"><code class="xref py py-class docutils literal notranslate"><span class="pre">wildboar.explain.IntervalImportance</span></code></a>-class identifies temporal
 regions that are responsible for the classifier performance. It does so by
 breaking the dependency between continuous intervals and the label while
 reevaluating the predictive performance of the classifier of sample-wise
 shuffled intervals. In the example, we evaluate the in-sample importance, which
 captures the reliance of the model on a particular interval.</p>
-<img alt="_images/interval-light.svg" class="only-light align-center" src="_images/interval-light.svg" />
-<img alt="_images/interval-dark.svg" class="only-dark align-center" src="_images/interval-dark.svg" />
 <p>The <a class="reference internal" href="api/wildboar/explain/index.html#wildboar.explain.IntervalImportance.plot" title="wildboar.explain.IntervalImportance.plot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">explain.IntervalImportance.plot</span></code></a> method can be used to visualize the
 interval importance, or we can return the full importance matrix.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">i</span><span class="o">.</span><span class="n">importance_</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-<span class="go">[..., 0.31, 0.30, 0.34, ...]</span>
-</pre></div>
-</div>
 </section>
 <section id="model-persistence">
 <h2>Model persistence<a class="headerlink" href="#model-persistence" title="Link to this heading">#</a></h2>
