@@ -1,7 +1,8 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
-"""Utilities for variable length series."""
+"""Variable length utilities."""
+
 import numpy as np
 
 
@@ -15,6 +16,14 @@ def _int_bits_to_float(bits):
 
 eos = EoS = EOS = _int_bits_to_float(0x7F800009).item()
 _END_OF_SERIES_MASK = np.array(0x0000000F, dtype=np.uint64)
+
+__all__ = [
+    "is_end_of_series",
+    "EOS",
+    "eos",
+    "is_variable_length",
+    "get_variable_length",
+]
 
 
 def is_end_of_series(x):

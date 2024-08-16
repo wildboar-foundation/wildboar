@@ -44,7 +44,6 @@ author = "Isak Samsten"
 # ones.
 extensions = [
     "autoapi.extension",
-    "lightdarkimg",
     "execute",
     "numpydoc",
     "sphinx.ext.intersphinx",
@@ -182,17 +181,17 @@ def linkcode_resolve(domain, info):
     )
 
 
-regenerate_plots = os.environ.get("REGENERATE_PLOTS", False)
-
-basepath = pathlib.Path("_static", "fig")
-for modinfo in pkgutil.iter_modules(["_gen_figures"]):
-    if modinfo.name.startswith("gen"):
-        logger.info(f"Generating figures for: '{modinfo.name}'")
-        module = modinfo.module_finder.find_module(modinfo.name).load_module(
-            modinfo.name
-        )
-        funcs = list(module.__dict__.values())
-        for func in funcs:
-            if callable(func) and func.__name__.startswith("gen_"):
-                logger.info(f" - '{func.__name__}'")
-                func(basepath, force=regenerate_plots)
+# regenerate_plots = os.environ.get("REGENERATE_PLOTS", False)
+#
+# basepath = pathlib.Path("_static", "fig")
+# for modinfo in pkgutil.iter_modules(["_gen_figures"]):
+#     if modinfo.name.startswith("gen"):
+#         logger.info(f"Generating figures for: '{modinfo.name}'")
+#         module = modinfo.module_finder.find_module(modinfo.name).load_module(
+#             modinfo.name
+#         )
+#         funcs = list(module.__dict__.values())
+#         for func in funcs:
+#             if callable(func) and func.__name__.startswith("gen_"):
+#                 logger.info(f" - '{func.__name__}'")
+#                 func(basepath, force=regenerate_plots)

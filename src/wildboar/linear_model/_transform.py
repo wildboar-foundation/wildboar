@@ -145,7 +145,7 @@ class TransformRidgeClassifierCV(BaseTransformClassifier):
             scoring=self.scoring,
             cv=self.cv,
             class_weight=self.class_weight,
-            store_cv_values=False,
+            store_cv_results=False,
         )
 
     def _build_pipeline(self):
@@ -213,7 +213,7 @@ class TransformRidgeCV(BaseTransformRegressor):
             scoring=self.scoring,
             cv=self.cv,
             gcv_mode=self.gcv_mode,
-            store_cv_values=False,
+            store_cv_results=False,
             alpha_per_target=False,
         )
 

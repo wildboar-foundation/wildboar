@@ -43,7 +43,7 @@
                   :class: sd-px-4 sd-fs-5
 
 
-.. grid:: 1 1 3 3
+.. grid:: 1 1 2 2
 
    .. grid-item-card::
       :padding: 2
@@ -59,19 +59,6 @@
 
    .. grid-item-card::
       :padding: 2
-      :link: examples
-      :link-type: doc
-      :text-align: center
-
-      :fas:`fire;10em` Examples
-      ^^^
-
-      The reference guide contains detailed descriptions of the Wildboar API.
-      The reference describe what methods, classes and which parameters can be
-      used.
-
-   .. grid-item-card::
-      :padding: 2
       :link: api/index
       :link-type: doc
       :text-align: center
@@ -81,7 +68,7 @@
 
       The reference guide contains detailed descriptions of the Wildboar API.
       The reference describe what methods, classes and which parameters can be
-      used. :execute:`1+1`
+      used.
 
 .. toctree::
   :maxdepth: 3
@@ -90,6 +77,5 @@
   Install <install>
   guide
   api/index
-  examples
   more/whatsnew
 

@@ -114,7 +114,6 @@ class KernelLogisticRegression(LogisticRegression):
             random_state=random_state,
             solver=solver,
             max_iter=max_iter,
-            multi_class="auto",
             verbose=0,
             warm_start=warm_start,
             n_jobs=None,
