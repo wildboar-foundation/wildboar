@@ -828,7 +828,7 @@ def paired_distance(  # noqa: PLR0912
     x,
     y,
     *,
-    dim="warn",
+    dim="mean",
     metric="euclidean",
     metric_params=None,
     n_jobs=None,
@@ -899,16 +899,6 @@ def paired_distance(  # noqa: PLR0912
 
     n_dims = x.shape[1] if x.ndim == 3 else 1
 
-    # TODO(1.3)
-    if dim == "warn":
-        if n_dims > 1:
-            warnings.warn(
-                "The default value for dim will change to 'mean' from 0 in 1.3. "
-                "Explicitly set dim=0 to keep the current behaviour for 3d-arrays.",
-                FutureWarning,
-            )
-        dim = 0
-
     if n_dims == 1 and dim == "mean":
         dim = 0
 
@@ -934,7 +924,7 @@ def pairwise_distance(  # noqa: PLR0912, PLR0915
     x,
     y=None,
     *,
-    dim="warn",
+    dim="mean",
     metric="euclidean",
     metric_params=None,
     n_jobs=None,
@@ -997,16 +987,6 @@ def pairwise_distance(  # noqa: PLR0912, PLR0915
         x_ = _check_ts_array(x)
         n_dims = x.shape[1] if x.ndim == 3 else 1
 
-        # TODO(1.3)
-        if dim == "warn":
-            if n_dims > 1:
-                warnings.warn(
-                    "The default value for dim will change to 'mean' from 0 in 1.3. "
-                    "Explicitly set dim=0 to keep the current behaviour for 3d-arrays.",
-                    FutureWarning,
-                )
-            dim = 0
-
         if n_dims == 1 and dim == "mean":
             dim = 0
 
@@ -1047,16 +1027,6 @@ def pairwise_distance(  # noqa: PLR0912, PLR0915
         x_ = _check_ts_array(x)
         y_ = _check_ts_array(y)
         n_dims = x.shape[1] if x.ndim == 3 else 1
-
-        # TODO(1.3)
-        if dim == "warn":
-            if n_dims > 1:
-                warnings.warn(
-                    "The default value for dim will change to 'mean' from 0 in 1.3. "
-                    "Explicitly set dim=0 to keep the current behaviour for 3d-arrays.",
-                    FutureWarning,
-                )
-            dim = 0
 
         if n_dims == 1 and dim == "mean":
             dim = 0
