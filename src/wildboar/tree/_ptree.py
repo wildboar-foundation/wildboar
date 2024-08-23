@@ -40,7 +40,6 @@ _METRICS_SAMPLER = {
 
 _METRIC_NAMES = set(_METRICS.keys())
 _METRIC_NAMES.add("auto")
-_METRIC_NAMES.add("default")  # TODO(1.3)
 _METRIC_NAMES = frozenset(_METRIC_NAMES)
 
 
@@ -59,7 +58,7 @@ class ProximityTreeClassifier(BaseTreeClassifier):
         The pivot sampling method.
     metric_sample : {"uniform", "weighted"}, optional
         The metric sampling method.
-    metric : {"auto", "default"}, str or list, optional
+    metric : {"auto"}, str or list, optional
         The distance metrics. By default, we use the parameterization suggested by
         Lucas et.al (2019).
 
@@ -150,13 +149,13 @@ class ProximityTreeClassifier(BaseTreeClassifier):
             StrOptions(_METRICS_SAMPLER.keys()),
         ],
         "metric": [
-            StrOptions(_METRIC_NAMES, deprecated={"default"}),
+            StrOptions(_METRIC_NAMES),
             list,
             dict,
         ],
         "metric_params": [None, dict],
         "metric_factories": [  # TODO(1.4)
-            StrOptions({"default", "auto"}, deprecated={"default"}),
+            StrOptions({"auto"}),
             list,
             None,
         ],
@@ -216,15 +215,7 @@ class ProximityTreeClassifier(BaseTreeClassifier):
             metric = self.metric_factories
 
         metric = self.metric
-        if isinstance(metric, str) and metric in ["default", "auto"]:
-            if metric == "default":
-                # TODO(1.4)
-                warnings.warn(
-                    "The default value for 'metric' has changed to 'auto' in 1.2 and "
-                    "'default' will be removed in 1.4.",
-                    FutureWarning,
-                )
-
+        if isinstance(metric, str) and metric == "auto":
             std_x = np.std(x)
             metric_spec = [
                 ("euclidean", None),
