@@ -86,6 +86,13 @@ _EXPECTED_PAIRWISE_DISTANCE = {
             [0.17004678165807582, 0.22040991627513995, 0.2315062579605518],
         ]
     },
+    "adtw": {
+        None: [
+            [4.69083572, 3.68072683, 5.18388301],
+            [1.97779401, 1.98149209, 2.35023939],
+            [1.64445581, 3.29762649, 2.17239949],
+        ]
+    },
 }
 
 
@@ -152,6 +159,23 @@ _EXPECTED_PAIRWISE_ELASTIC_DISTANCE = {
             [0.2954656939377251, 0.26678376281035415, 0.229345270589047],
             [0.2704246569028106, 0.17578692671143978, 0.1561584366814303],
         ]
+    },
+    "adtw": {
+        None: [
+            [2.89574449, 3.62862418, 3.33419749],
+            [3.33153105, 4.14722871, 4.19984515],
+            [3.42644096, 3.92021674, 4.50912718],
+        ],
+        (("p", 0.1),): [
+            [1.72781253, 2.61851875, 1.73691477],
+            [2.13972494, 3.0170421, 2.66286184],
+            [2.12933477, 2.60907533, 2.78474616],
+        ],
+        (("p", 10),): [
+            [7.42419502, 8.52466488, 9.4233542],
+            [8.25390679, 9.29971138, 10.25641927],
+            [8.6803816, 9.58466787, 10.74391274],
+        ],
     },
 }
 
@@ -875,6 +899,7 @@ def test_pairwise_subsequence_distance_benchmark(benchmark, metric, X):
         ("ddtw", None),
         ("wdtw", None),
         ("wddtw", None),
+        ("adtw", None),
     ],
 )
 def test_elastic_metric_equal_length(
@@ -900,12 +925,19 @@ def test_elastic_metric_equal_length(
         ("ddtw", None),
         ("wdtw", None),
         ("wddtw", None),
+        ("adtw", None),
+        ("adtw", (("p", 0.1),)),
+        ("adtw", (("p", 10),)),
     ],
 )
 def test_elastic_metric_unequal_length(
     metric, metric_params, pairwise_elastic_data, pairwise_elastic_expected
 ):
     Y, X = pairwise_elastic_data
+    if metric_params is not None:
+        print(metric_params)
+        metric_params = {k: v for k, v in metric_params}
+
     actual = pairwise_distance(Y, X, metric=metric, metric_params=metric_params)
     assert_almost_equal(
         actual,

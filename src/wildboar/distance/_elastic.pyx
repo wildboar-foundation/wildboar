@@ -960,6 +960,7 @@ cdef double adtw_distance(
     cdef double z
     cdef double v
     cdef double min_cost
+    cdef double prev_cost
     cdef Py_ssize_t max_len = max(0, y_length - x_length) + r
     cdef Py_ssize_t min_len = max(0, x_length - y_length)
     v = X[0] - Y[0]
@@ -978,11 +979,12 @@ cdef double adtw_distance(
         if j_start > 0:
             cost[j_start - 1] = INFINITY
 
+        prev_cost = INFINITY
         min_cost = INFINITY
         for j in range(j_start, j_stop):
             x = cost_prev[j] + penalty
             if j > 0:
-                y = cost[j - 1] + penalty
+                y = prev_cost + penalty
                 z = cost_prev[j - 1]
             else:
                 y = INFINITY
@@ -993,6 +995,8 @@ cdef double adtw_distance(
 
             if cost[j] < min_cost:
                 min_cost = cost[j]
+
+            prev_cost = cost[j]
 
         if min_cost > min_dist:
             return INFINITY
