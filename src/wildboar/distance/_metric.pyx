@@ -1036,11 +1036,7 @@ cdef Py_ssize_t chebyshev_distance_matches(
 ) noexcept nogil:
     cdef double c = 0
     cdef double max_dist
-    cdef Py_ssize_t capacity = 1
-    cdef Py_ssize_t tmp_capacity
-    cdef Py_ssize_t i
-    cdef Py_ssize_t j
-    cdef double x
+    cdef Py_ssize_t i, j
     cdef Py_ssize_t n_matches = 0
 
     for i in range(t_length - s_length + 1):
@@ -1068,7 +1064,7 @@ cdef double cosine_similarity(
     Py_ssize_t t_length,
     Py_ssize_t *index,
 ) noexcept nogil:
-    cdef double prod = 0, sim
+    cdef double prod = 0, sim, tmp
     cdef double s_norm, t_norm
     cdef double max_sim = -INFINITY
 
@@ -1081,8 +1077,9 @@ cdef double cosine_similarity(
         t_norm = 0
         for j in range(s_length):
             prod += T[i + j] * S[j]
-            s_norm += pow(S[j], 2)
-            t_norm += pow(T[i + j], 2)
+            s_norm += S[j] * S[j]
+            tmp = T[i + j]
+            t_norm += tmp * tmp
 
         sim = (sqrt(s_norm) * sqrt(t_norm))
         if sim <= EPSILON:
@@ -1107,12 +1104,8 @@ cdef Py_ssize_t cosine_similarity_matches(
     double *distances,
     Py_ssize_t *matches,
 ) noexcept nogil:
-    cdef double prod = 0, sim, s_norm, t_norm
-    cdef Py_ssize_t capacity = 1
-    cdef Py_ssize_t tmp_capacity
-    cdef Py_ssize_t i
-    cdef Py_ssize_t j
-    cdef double x
+    cdef double prod = 0, sim, s_norm, t_norm, tmp
+    cdef Py_ssize_t i, j
     cdef Py_ssize_t n_matches = 0
 
     for i in range(t_length - s_length + 1):
@@ -1121,8 +1114,9 @@ cdef Py_ssize_t cosine_similarity_matches(
         t_norm = 0
         for j in range(s_length):
             prod += T[i + j] * S[j]
-            s_norm += pow(S[j], 2)
-            t_norm += pow(T[i + j], 2)
+            s_norm += S[j] * S[j]
+            tmp = T[i + j]
+            t_norm += tmp * tmp
 
         sim = prod / (sqrt(s_norm) * sqrt(t_norm))
         if sim >= threshold:
