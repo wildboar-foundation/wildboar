@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Time series &#8212; Wildboar 1.3.0.dev96+g45ddc4596 documentation</title>
+    <title>Time series &#8212; Wildboar 1.3.0.dev97+g9153c1300 documentation</title>
   
   
   
@@ -41,7 +41,7 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../_static/documentation_options.js?v=08310b68"></script>
+    <script src="../_static/documentation_options.js?v=b3d75850"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -515,10 +515,10 @@ of shape <code class="code highlight python docutils literal highlight-python"><
 and without missing values. However, some datasets contain both missing values
 and/or have time series or dimensions of unequal length. Wildboar represents
 the <cite>End-of-Sequence</cite> identifier as <code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.eos</span></code> and <em>value is missing</em>
-by <a class="reference external" href="https://numpy.org/doc/stable/reference/constants.html#numpy.nan" title="(in NumPy v2.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.nan</span></code></a>. The <code class="docutils literal notranslate"><span class="pre">EoS</span></code> value is a valid IEEE754 <code class="docutils literal notranslate"><span class="pre">NaN</span></code> value, and
-will be treated as <code class="code highlight python docutils literal highlight-python"><span class="kc">True</span></code> by <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.isnan.html#numpy.isnan" title="(in NumPy v2.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.isnan</span></code></a>, whereas
+by <a class="reference external" href="https://numpy.org/doc/stable/reference/constants.html#numpy.nan" title="(in NumPy v2.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.nan</span></code></a>. The <code class="docutils literal notranslate"><span class="pre">EoS</span></code> value is a valid IEEE754 <code class="docutils literal notranslate"><span class="pre">NaN</span></code> value, and
+will be treated as <code class="code highlight python docutils literal highlight-python"><span class="kc">True</span></code> by <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.isnan.html#numpy.isnan" title="(in NumPy v2.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.isnan</span></code></a>, whereas
 <a class="reference internal" href="../api/wildboar/utils/variable_len/index.html#wildboar.utils.variable_len.is_end_of_series" title="wildboar.utils.variable_len.is_end_of_series"><code class="xref py py-func docutils literal notranslate"><span class="pre">is_end_of_series</span></code></a> will treat
-<a class="reference external" href="https://numpy.org/doc/stable/reference/constants.html#numpy.nan" title="(in NumPy v2.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.nan</span></code></a> as <code class="code highlight python docutils literal highlight-python"><span class="kc">False</span></code>.</p>
+<a class="reference external" href="https://numpy.org/doc/stable/reference/constants.html#numpy.nan" title="(in NumPy v2.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.nan</span></code></a> as <code class="code highlight python docutils literal highlight-python"><span class="kc">False</span></code>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>By having <code class="docutils literal notranslate"><span class="pre">EoS</span></code> treated as <code class="docutils literal notranslate"><span class="pre">NaN</span></code>, we can ignore it and just treat them

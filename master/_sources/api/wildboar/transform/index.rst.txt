@@ -2150,6 +2150,8 @@ Functions
            - if "dyadic", `2**depth-1+2**depth-1-depth" intervals.
            - if "random", `n_intervals` possibly overlapping intervals of randomly
              sampled in `[min_size * n_timestep, max_size * n_timestep]`.
+           
+           Read more in the :ref:`User Guide <interval_intervals>`
 
        **sample_size** : float, optional
            The sample size of fixed intervals if `intervals="fixed"`.
@@ -2172,6 +2174,8 @@ Functions
            
            The default summarizer summarizes each interval as its mean, standard
            deviation and slope.
+           
+           Read more in the :ref:`User Guide <interval_summarizers>`
 
        **summarizer_params** : dict, optional
            A dictionary of parameters to the summarizer.

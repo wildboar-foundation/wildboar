@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Glossary &#8212; Wildboar 1.3.0.dev96+g45ddc4596 documentation</title>
+    <title>Glossary &#8212; Wildboar 1.3.0.dev97+g9153c1300 documentation</title>
   
   
   
@@ -41,7 +41,7 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../_static/documentation_options.js?v=08310b68"></script>
+    <script src="../_static/documentation_options.js?v=b3d75850"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -504,7 +504,7 @@ document.write(`
 with some additions.</p>
 <dl class="simple">
 <dt>time-series</dt><dd><p>The most common input to Wildboar estimators. An array-like that for which
-<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.asarray.html#numpy.asarray" title="(in NumPy v2.0)"><code class="docutils literal notranslate"><span class="pre">numpy.asarray</span></code></a> will produce an array of appropriate shape, with
+<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.asarray.html#numpy.asarray" title="(in NumPy v2.1)"><code class="docutils literal notranslate"><span class="pre">numpy.asarray</span></code></a> will produce an array of appropriate shape, with
 rank 1, 2 or 3.</p>
 </dd>
 <dt>single time-series</dt><dd><p>A 1d-array with shape <code class="docutils literal notranslate"><span class="pre">(n_timestep,</span> <span class="pre">)</span></code> or 2d-array with a single row or
@@ -518,12 +518,12 @@ column.</p>
 maximum length is given by <code class="docutils literal notranslate"><span class="pre">arr.shape[-1]</span></code>, but each sample can have a
 length shorter than that.</p>
 </dd>
-<dt>missing-values</dt><dd><p>A missing value represented by <a class="reference external" href="https://numpy.org/doc/stable/reference/constants.html#numpy.nan" title="(in NumPy v2.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.nan</span></code></a>.</p>
+<dt>missing-values</dt><dd><p>A missing value represented by <a class="reference external" href="https://numpy.org/doc/stable/reference/constants.html#numpy.nan" title="(in NumPy v2.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.nan</span></code></a>.</p>
 </dd>
 <dt>end-of-series value</dt><dd><p>A missing value that also indicates that the time-series is variable-length,
 represented by <code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.utils.variable_len.EoS</span></code>. Any value with an
 index larger than the first <code class="docutils literal notranslate"><span class="pre">EoS</span></code> is assumed not to be part of the series.
-<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.isnan.html#numpy.isnan" title="(in NumPy v2.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.isnan</span></code></a> returns <code class="docutils literal notranslate"><span class="pre">True</span></code> for <code class="docutils literal notranslate"><span class="pre">EoS</span></code>. To check for exactly
+<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.isnan.html#numpy.isnan" title="(in NumPy v2.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.isnan</span></code></a> returns <code class="docutils literal notranslate"><span class="pre">True</span></code> for <code class="docutils literal notranslate"><span class="pre">EoS</span></code>. To check for exactly
 <code class="docutils literal notranslate"><span class="pre">EoS</span></code>, use <a class="reference internal" href="../api/wildboar/utils/variable_len/index.html#wildboar.utils.variable_len.is_end_of_series" title="wildboar.utils.variable_len.is_end_of_series"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.utils.variable_len.is_end_of_series</span></code></a>.</p>
 </dd>
 <dt>timestep (or <code class="docutils literal notranslate"><span class="pre">n_timestep</span></code>)</dt><dd><p>The length of the time series given by <code class="docutils literal notranslate"><span class="pre">arr.shape[-1]</span></code>.</p>

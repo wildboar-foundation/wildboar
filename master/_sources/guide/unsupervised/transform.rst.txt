@@ -52,7 +52,6 @@ transformation and one for evaluating the predictive performance.
 Hydra transform
 ===============
 
-
 In Wildboar, we extensively utilize the functionalities of ``scikit-learn`` and
 can directly employ these features. We construct a pipeline wherein we
 initially transform each time series into the representation dictated by
@@ -201,6 +200,291 @@ in the data.
       The first two components explain {(100 * evr[0]):.2f} and {(100 * evr[1]):.2f} percent of the variance.
    """)
 
-.. [#rocket] Rocket
 
-.. [#hydra] Hydra
+************************
+Interval-based transform
+************************
+Interval-based time series transformation is a powerful technique used in time
+series analysis to simplify and enhance the understanding of temporal data.
+Instead of analyzing each individual time point, this method groups the data
+into predefined intervals, such as days, weeks, or months, and summarizes the
+information within each interval. By aggregating data in this way, we can
+reduce noise and more easily identify significant patterns, trends, and
+seasonal behaviors.
+
+This approach is particularly beneficial in situations where data exhibits
+periodicity, or when we need to focus on broader trends rather than detailed,
+point-by-point fluctuations. By transforming time series data into
+intervals, we can gain clearer insights and make more informed decisions based
+on the summarized data.
+
+We can import :class:`~wildboar.transform.IntervalTransform`:
+
+.. execute::
+   :context:
+
+   from wildboar.transform import IntervalTransform
+
+.. _interval_intervals:
+
+Fixed intervals
+===============
+In the equally sized interval-based transformation method, the time series data
+is divided into a specified number of equal-sized intervals, referred to as
+``n_interval``. This approach is particularly useful when we want to analyze the
+data in consistent chunks, regardless of the total duration or length of the
+time series.
+
+.. execute::
+   :context:
+   :show-return:
+
+   f = IntervalTransform(intervals="fixed", n_intervals=20)
+   f.fit(X_train, y_train)
+
+.. execute::
+   :context:
+   :show-source-link: yes
+   :include-source: no
+
+   fig, ax = plt.subplots()
+   for _, (start, length, _) in f.embedding_.attributes:
+      end = start + length
+      ax.axvspan(
+         start,
+         end,
+         ymin=0.02,
+         ymax=0.98,
+         facecolor="gray",
+         edgecolor="black",
+         alpha=0.1,
+      )
+
+   ax.plot(X_train[0])
+
+We can also randomly sample equally sized intervals by selecting a specific
+sample of those intervals, defined by ``sample_size``. This approach allows us
+to focus on a subset of the intervals for detailed analysis, rather than
+considering all intervals.
+
+.. execute::
+   :context:
+   :show-return:
+
+   f = IntervalTransform(
+      intervals="fixed", n_intervals=30, sample_size=0.5, random_state=1
+   )
+   f.fit(X_train, y_train)
+
+.. execute::
+   :context:
+   :show-source-link: yes
+   :include-source: no
+
+   fig, ax = plt.subplots()
+   for _, (start, length, _) in f.embedding_.attributes:
+      end = start + length
+      ax.axvspan(
+         start,
+         end,
+         ymin=0.02,
+         ymax=0.98,
+         facecolor="gray",
+         edgecolor="black",
+         alpha=0.1,
+      )
+
+   ax.plot(X_train[0])
+
+Random intervals
+================
+
+Interval transformation with randomly sized intervals is a method used in time
+series analysis where the data is divided into a random number of intervals,
+each with a size that is randomly determined. Specifically, the number of
+intervals, ``n_intervals``, is defined in advance, but the size of each
+interval is sampled randomly between a minimum size (``min_size``) and a
+maximum size (``max_size``), both expressed as fractions of the total size of
+the input data.
+
+This approach introduces variability into the analysis, allowing for the
+exploration of patterns that might not be captured by fixed or equally sized
+intervals. By varying the size of the intervals, we can potentially uncover
+different trends, anomalies, or seasonal effects that may be hidden when using
+more traditional, uniform interval methods.
+
+.. execute::
+   :context:
+
+   f = IntervalTransform(
+      intervals="random", n_intervals=30, min_size=0.05, max_size=0.1, random_state=1
+   )
+   f.fit(X_train, y_train)
+
+.. execute::
+   :context:
+   :show-source-link:
+   :include-source: no
+
+   fig, ax = plt.subplots()
+   for _, (start, length, _) in f.embedding_.attributes:
+      end = start + length
+      ax.axvspan(
+         start,
+         end,
+         ymin=0.02,
+         ymax=0.98,
+         facecolor="gray",
+         edgecolor="black",
+         alpha=0.1,
+      )
+
+   ax.plot(X_train[0])
+
+Dyadic intervals
+================
+
+Dyadic interval transformation is a method
+where the time series data is recursively divided into smaller and smaller
+intervals, with each level of recursion (or depth) producing a set of intervals
+that are twice as many as the previous level. Specifically, at each depth, the
+number of intervals is determined by :math:`2^{\text{depth}}`, meaning:
+
+*	Depth 0: The entire time series is considered as a single interval.
+*	Depth 1: The series is divided into 2 equal-sized intervals.
+*	Depth 2: Each of the intervals from Depth 1 is further divided into 2, resulting in 4 intervals.
+*	Depth 3: Each of the intervals from Depth 2 is divided again, resulting in 8 intervals.
+
+This process continues recursively, producing increasingly smaller and more
+granular intervals at each depth. Dyadic interval transformation is
+particularly effective for capturing patterns at multiple scales, allowing for
+a hierarchical analysis of the data. For time series classification, the method was first described by Depmster et al. (2024) [#quant]_.
+
+.. execute::
+   :context:
+
+   f = IntervalTransform(intervals="dyadic", depth=5)
+   f.fit(X_train, y_train)
+
+
+.. execute::
+   :context:
+   :show-source-link:
+   :include-source: no
+
+   import math
+
+   def binsearch_depth(i):
+
+      low = 0
+      high = math.ceil(math.log2(i + 2))
+
+      while low < high:
+         mid = (low + high) // 2
+         if 2 ** (mid + 1) - 2 - mid > i:
+            high = mid
+         else:
+            low = mid + 1
+      return low
+
+   fig, ax = plt.subplots(ncols=2, figsize=(12, 4))
+
+   step = 1.0 / f.depth
+   n_first = 2**f.depth - 1
+   for i, (_, (start, length, _)) in enumerate(f.embedding_.attributes[:n_first]):
+      end = start + length
+      depth = math.floor(math.log2(i + 1))
+      ax[0].axvspan(
+         start,
+         end,
+         ymin=1 - (step * depth) - 0.02,
+         ymax=1 - (step * (depth + 1)),
+         facecolor="gray",
+         edgecolor="black",
+         alpha=0.1,
+      )
+
+   for i, (_, (start, length, _)) in enumerate(f.embedding_.attributes[n_first:]):
+      end = start + length
+      depth = binsearch_depth(i)
+      ax[1].axvspan(
+         start,
+         end,
+         ymin=1 - (step * depth) - 0.02,
+         ymax=1 - (step * (depth + 1)),
+         facecolor="gray",
+         edgecolor="black",
+         alpha=0.1,
+      )
+
+   ax[0].plot(X_train[0])
+   ax[1].plot(X_train[0])
+
+On the left side, we observe dyadic intervals beginning at the first time step, while on the right side, the same dyadic intervals are shifted to start in the middle of the first interval. This adjustment helps capture features in the overlapping regions between intervals.
+
+.. _interval_summarizers:
+
+Feature summarizers
+===================
+Regardless of the interval type, the :class:`~wildboar.transform.IntervalTransform` accommodates various *summarizers* to calculate one or more features per interval.
+
+``"mean"``
+  The mean of the interval. No additional parameters.
+
+``"variance"``
+  The variance of the interval. No additional parameters.
+
+``"slope"``
+  The slope of the interval. No additional parameters.
+
+``"mean_var_slope"``
+  The three values: *mean*, *variance* and *slope* for each interval. No additional parameters.
+
+``"catch22"``
+   The 22 *catch22* features. No additional parameters.
+
+``"quant"``
+  The `k = interval_length/v` quantiles of the interval. Accepts an additional
+  parameter ``v``, e.g, ``summarizer_params={"v": 6}``.
+
+A list of functions accepting a nd-array, returning a float
+  The values returned by the functions
+
+.. note::
+   If the summarizer allows additional parameters, we can provide them using ``summarizer_params``
+   as a ``dict`` containing parameter names and their values.
+
+
+Examples
+--------
+Fixed intervals with four intervals and we compute the mean of each interval.
+
+.. execute::
+   :context:
+   :show-return:
+
+   f = IntervalTransform(n_intervals=4, summarizer="mean")
+   f.fit_transform(X_train[:2])
+
+Dyadic intervals with a depth of 3 we compute every fourth quantile of the intervals.
+
+.. execute::
+   :context:
+   :show-return:
+
+   f = IntervalTransform(
+      intervals="dyadic", depth=3, summarizer="quant", summarizer_params={"v": 4}
+   )
+   f.fit_transform(X_train[:2])
+
+
+**********
+References
+**********
+
+.. [#rocket] Dempster, Angus, François Petitjean, and Geoffrey I. Webb. “ROCKET: Exceptionally Fast and Accurate Time Series Classification Using Random Convolutional Kernels.” Data Mining and Knowledge Discovery 34, no. 5 (2020): 1454–95. https://doi.org/10.1007/s10618-020-00701-z.
+
+.. [#hydra] Dempster, Angus, Daniel F. Schmidt, and Geoffrey I. Webb. “Hydra: Competing Convolutional Kernels for Fast and Accurate Time Series Classification.” Data Mining and Knowledge Discovery 37, no. 5 (2023): 1779–1805. https://doi.org/10.1007/s10618-023-00939-3.
+
+.. [#quant] Dempster, Angus, Daniel F. Schmidt, and Geoffrey I. Webb. “Quant: A Minimalist Interval Method for Time Series Classification.” Data Mining and Knowledge Discovery 38, no. 4 (July 1, 2024): 2377–2402. https://doi.org/10.1007/s10618-024-01036-9.
+
