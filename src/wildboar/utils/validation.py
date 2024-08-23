@@ -10,7 +10,6 @@ from sklearn.utils.validation import (
     _check_estimator_name,
     _check_y,
     check_consistent_length,
-    warnings,
 )
 from sklearn.utils.validation import check_array as sklearn_check_array
 
@@ -520,15 +519,7 @@ def check_array(  # noqa: PLR0913, PLR0912
                 raise ValueError(f"Input {padded_input_name}contains NaN.")
 
         if force_all_finite and np.isinf(array).any():
-            if allow_eos and not np.isposinf(array).any():
-                # TODO(1.3)
-                warnings.warn(
-                    "Using -np.inf as eos has been deprecated in 1.3 and support will "
-                    "be removed in 1.3. ",
-                    DeprecationWarning,
-                )
-            else:
-                raise ValueError(f"Input {padded_input_name}contains infinity.")
+            raise ValueError(f"Input {padded_input_name}contains infinity.")
 
     return _check_ts_array(array) if ensure_ts_array else array
 
