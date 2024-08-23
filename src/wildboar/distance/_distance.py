@@ -611,15 +611,6 @@ def subsequence_match(  # noqa: PLR0912, PLR0915
 
         threshold = np.inf
     elif isinstance(threshold, str):
-        # TODO(1.3)
-        if threshold == "best":
-            warnings.warn(
-                "threshold 'best' has been renamed to 'auto' in 1.2 "
-                "and will be removed in 1.3.",
-                UserWarning,
-            )
-            threshold = "auto"
-
         threshold_fn = check_option(_THRESHOLD, threshold, "threshold")
 
         def max_dist(d):
