@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Time series &#8212; Wildboar 1.3.0.dev99+g798d28140 documentation</title>
+    <title>Time series &#8212; Wildboar 1.3.0.dev103+g10872c0d4 documentation</title>
   
   
   
@@ -41,7 +41,7 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../_static/documentation_options.js?v=221c93c2"></script>
+    <script src="../_static/documentation_options.js?v=59ea03f0"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -514,30 +514,45 @@ of shape <code class="code highlight python docutils literal highlight-python"><
 <p>Most algorithms in wildboar assumes that the time series are of equal length
 and without missing values. However, some datasets contain both missing values
 and/or have time series or dimensions of unequal length. Wildboar represents
-the <cite>End-of-Sequence</cite> identifier as <code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.eos</span></code> and <em>value is missing</em>
-by <a class="reference external" href="https://numpy.org/doc/stable/reference/constants.html#numpy.nan" title="(in NumPy v2.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.nan</span></code></a>. The <code class="docutils literal notranslate"><span class="pre">EoS</span></code> value is a valid IEEE754 <code class="docutils literal notranslate"><span class="pre">NaN</span></code> value, and
-will be treated as <code class="code highlight python docutils literal highlight-python"><span class="kc">True</span></code> by <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.isnan.html#numpy.isnan" title="(in NumPy v2.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.isnan</span></code></a>, whereas
-<a class="reference internal" href="../api/wildboar/utils/variable_len/index.html#wildboar.utils.variable_len.is_end_of_series" title="wildboar.utils.variable_len.is_end_of_series"><code class="xref py py-func docutils literal notranslate"><span class="pre">is_end_of_series</span></code></a> will treat
+the <cite>End-of-Sequence</cite> identifier as <code class="xref py py-obj docutils literal notranslate"><span class="pre">EOS</span></code> and
+<em>value is missing</em> by <code class="xref py py-obj docutils literal notranslate"><span class="pre">nupy.nan</span></code>. The <code class="docutils literal notranslate"><span class="pre">EoS</span></code> value is a valid IEEE754
+<code class="docutils literal notranslate"><span class="pre">NaN</span></code> value, and will be treated as <code class="code highlight python docutils literal highlight-python"><span class="kc">True</span></code> by <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.isnan.html#numpy.isnan" title="(in NumPy v2.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.isnan</span></code></a>,
+whereas <a class="reference internal" href="../api/wildboar/utils/variable_len/index.html#wildboar.utils.variable_len.is_end_of_series" title="wildboar.utils.variable_len.is_end_of_series"><code class="xref py py-func docutils literal notranslate"><span class="pre">is_end_of_series</span></code></a> will treat
 <a class="reference external" href="https://numpy.org/doc/stable/reference/constants.html#numpy.nan" title="(in NumPy v2.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.nan</span></code></a> as <code class="code highlight python docutils literal highlight-python"><span class="kc">False</span></code>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>By having <code class="docutils literal notranslate"><span class="pre">EoS</span></code> treated as <code class="docutils literal notranslate"><span class="pre">NaN</span></code>, we can ignore it and just treat them
 as missing values.</p>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">wildboar</span> <span class="k">as</span> <span class="nn">wb</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">t1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">t2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">wb</span><span class="o">.</span><span class="n">eos</span><span class="p">,</span> <span class="n">wb</span><span class="o">.</span><span class="n">eos</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">t3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">t1</span><span class="p">,</span> <span class="n">t2</span><span class="p">,</span> <span class="n">t3</span><span class="p">])</span> <span class="c1"># dataset of (3, 6)</span>
+<div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">wildboar.utils.variable_len</span> <span class="kn">import</span> <span class="n">EOS</span>
+
+<span class="n">t1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">t2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">EOS</span><span class="p">,</span> <span class="n">EOS</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">t3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">t1</span><span class="p">,</span> <span class="n">t2</span><span class="p">,</span> <span class="n">t3</span><span class="p">])</span>  <span class="c1"># dataset of (3, 6)</span>
+<span class="n">x</span>
 </pre></div>
 </div>
-<p>In the example, we create a dataset with 3 samples, where each sample has 6
-timestep, and:</p>
+<div class="sd-mt-0 execute-return highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([[</span> <span class="mf">1.</span><span class="p">,</span>  <span class="mf">2.</span><span class="p">,</span>  <span class="mf">3.</span><span class="p">,</span>  <span class="mf">1.</span><span class="p">,</span>  <span class="mf">1.</span><span class="p">,</span>  <span class="mf">1.</span><span class="p">],</span>
+       <span class="p">[</span> <span class="mf">1.</span><span class="p">,</span>  <span class="mf">2.</span><span class="p">,</span>  <span class="mf">3.</span><span class="p">,</span>  <span class="mf">1.</span><span class="p">,</span> <span class="n">nan</span><span class="p">,</span> <span class="n">nan</span><span class="p">],</span>
+       <span class="p">[</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">nan</span><span class="p">,</span>  <span class="mf">3.</span><span class="p">,</span>  <span class="mf">3.</span><span class="p">,</span>  <span class="mf">3.</span><span class="p">,</span>  <span class="mf">3.</span><span class="p">]])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<p>In the example, we construct a dataset comprising 3 samples, each containing 6
+timesteps, where:</p>
 <ul class="simple">
-<li><p><code class="code highlight python docutils literal highlight-python"><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></code> has no missing values and is of length <code class="docutils literal notranslate"><span class="pre">n_samples</span></code>.</p></li>
-<li><p><code class="code highlight python docutils literal highlight-python"><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span></code> has no missing values and is of length 4</p></li>
-<li><p><code class="code highlight python docutils literal highlight-python"><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span></code> has a single missing value at index 2.</p></li>
+<li><p><code class="code highlight python docutils literal highlight-python"><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></code> contains no missing values and has a sequence length equal to
+<code class="docutils literal notranslate"><span class="pre">n_timestep</span></code>.</p></li>
+<li><p><code class="code highlight python docutils literal highlight-python"><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span></code> also contains no missing values but has a sequence length of
+4.</p></li>
+<li><p><code class="code highlight python docutils literal highlight-python"><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span></code> includes one missing value at the second index position.</p></li>
 </ul>
 <section id="variable-length-time-series">
 <h2>Variable length time series<a class="headerlink" href="#variable-length-time-series" title="Link to this heading">#</a></h2>

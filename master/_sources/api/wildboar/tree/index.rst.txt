@@ -2207,7 +2207,7 @@ Functions
        **metric_sample** : {"uniform", "weighted"}, optional
            The metric sampling method.
 
-       **metric** : {"auto", "default"}, str or list, optional
+       **metric** : {"auto"}, str or list, optional
            The distance metrics. By default, we use the parameterization suggested by
            Lucas et.al (2019).
            

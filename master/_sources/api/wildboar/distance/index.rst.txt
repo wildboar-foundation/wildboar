@@ -1581,7 +1581,7 @@ Functions
    ..
        !! processed by numpydoc !!
 
-.. py:function:: paired_distance(x, y, *, dim='warn', metric='euclidean', metric_params=None, n_jobs=None)
+.. py:function:: paired_distance(x, y, *, dim='mean', metric='euclidean', metric_params=None, n_jobs=None)
 
    
    Compute the distance between the i:th time series.
@@ -1802,7 +1802,7 @@ Functions
    ..
        !! processed by numpydoc !!
 
-.. py:function:: pairwise_distance(x, y=None, *, dim='warn', metric='euclidean', metric_params=None, n_jobs=None)
+.. py:function:: pairwise_distance(x, y=None, *, dim='mean', metric='euclidean', metric_params=None, n_jobs=None)
 
    
    Compute the distance between subsequences and time series.
