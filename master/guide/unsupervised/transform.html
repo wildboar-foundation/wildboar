@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Time series transform &#8212; Wildboar 1.3.0.dev103+g10872c0d4 documentation</title>
+    <title>Time series transform &#8212; Wildboar 1.3.0.dev104+g0fcaf9497 documentation</title>
   
   
   
@@ -41,7 +41,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../_static/documentation_options.js?v=59ea03f0"></script>
+    <script src="../../_static/documentation_options.js?v=589cdc7f"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -1474,8 +1474,8 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 <span class="n">X_test_transform</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="sd-mt-0 execute-return highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([</span> <span class="mf">0.8609233</span> <span class="p">,</span>  <span class="mf">0.16215686</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.24942024</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.83796238</span><span class="p">,</span>
-        <span class="mf">0.19033383</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.56428089</span><span class="p">])</span>
+<div class="sd-mt-0 execute-return highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([</span> <span class="mf">0.01313547</span><span class="p">,</span>  <span class="mf">0.04655423</span><span class="p">,</span>  <span class="mf">0.46545446</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2501052</span> <span class="p">,</span>
+        <span class="mf">0.75058108</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.58439726</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -1509,7 +1509,7 @@ in the data.</p>
 </div>
 </div>
 </div>
-<p>The first two components explain 34.41 and 17.03 percent of the variance.</p>
+<p>The first two components explain 34.79 and 17.07 percent of the variance.</p>
 </section>
 </section>
 <section id="interval-based-transform">
@@ -2559,7 +2559,92 @@ as a <code class="docutils literal notranslate"><span class="pre">dict</span></c
 </div>
 </div>
 </div>
+<p>To simplify the use of QUANT <a class="footnote-reference brackets" href="#quant" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a>, Wildboar offers a class
+<a class="reference internal" href="../../api/wildboar/transform/index.html#wildboar.transform.QuantTransform" title="wildboar.transform.QuantTransform"><code class="xref py py-class docutils literal notranslate"><span class="pre">QuantTransform</span></code></a> which constructs a transformation
+using the <code class="docutils literal notranslate"><span class="pre">&quot;quant&quot;</span></code> summarizer over three additional time series
+representations:</p>
+<ul class="simple">
+<li><p>first-order differences</p></li>
+<li><p>second-order differences</p></li>
+<li><p>Fourier space</p></li>
+</ul>
+<div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wildboar.transform</span> <span class="kn">import</span> <span class="n">QuantTransform</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="n">QuantTransform</span><span class="p">(</span><span class="n">v</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">f</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="sd-mt-0 execute-return highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">1.64988482</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.35294735</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.22602081</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span>  <span class="mf">6.33285162</span><span class="p">,</span>
+         <span class="mf">0.78876199</span><span class="p">,</span>  <span class="mf">4.18782161</span><span class="p">],</span>
+       <span class="p">[</span><span class="o">-</span><span class="mf">1.19426882</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.19426882</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.87747502</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span>  <span class="mf">7.95959108</span><span class="p">,</span>
+         <span class="mf">0.99429779</span><span class="p">,</span>  <span class="mf">7.12748755</span><span class="p">]])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
 </section>
+</section>
+<section id="other-transformations">
+<h3>Other transformations<a class="headerlink" href="#other-transformations" title="Link to this heading">#</a></h3>
+<p>Wildboar provides various transformations to convert time series into
+representations that enhance predictive performance.</p>
+<dl>
+<dt><a class="reference internal" href="../../api/wildboar/transform/index.html#wildboar.transform.DiffTransform" title="wildboar.transform.DiffTransform"><code class="xref py py-class docutils literal notranslate"><span class="pre">DiffTransform</span></code></a></dt><dd><p>Convert time series to the <cite>n</cite>:th order difference between consecutive
+elements in a time series.</p>
+<p>If we have a time series where the values trend upward, applying
+it with an order of 1 would transform this series into one that
+highlights changes between consecutive time points, effectively removing the
+trend and focusing on the rate of change.</p>
+<p><a class="reference internal" href="../../api/wildboar/transform/index.html#wildboar.transform.DiffTransform" title="wildboar.transform.DiffTransform"><code class="xref py py-class docutils literal notranslate"><span class="pre">DiffTransform</span></code></a> is particularly useful when we
+need to remove trends or seasonality from data, making it more suitable for
+machine learning models that assume stationarity or when we want to focus
+on changes rather than absolute values.</p>
+</dd>
+<dt><code class="xref py py-class docutils literal notranslate"><span class="pre">DtwTransform</span></code></dt><dd><p>Transforms data from the time domain to the frequency domain, allowing us
+to analyze the underlying frequency components.</p>
+<p>It is especially valuable when we need to understand the frequency
+characteristics of data, such as identifying dominant cycles, filtering
+specific frequencies, or compressing data by focusing on the most
+significant frequency components.</p>
+</dd>
+<dt><a class="reference internal" href="../../api/wildboar/transform/index.html#wildboar.transform.PAA" title="wildboar.transform.PAA"><code class="xref py py-class docutils literal notranslate"><span class="pre">PAA</span></code></a></dt><dd><p>PAA simplifies a time series by dividing it into equal-sized segments and
+then averaging the data points within each segment. This results in a
+compressed representation of the original series, capturing its general
+trends while reducing noise and detail.</p>
+<p>It is particularly valuable when we need to reduce the complexity of time
+series data while retaining its essential characteristics.</p>
+</dd>
+<dt><a class="reference internal" href="../../api/wildboar/transform/index.html#wildboar.transform.SAX" title="wildboar.transform.SAX"><code class="xref py py-class docutils literal notranslate"><span class="pre">SAX</span></code></a></dt><dd><p>A feature transformation class that implements Symbolic Aggregate
+Approximation (SAX), a powerful technique for transforming time series data
+into a symbolic representation. SAX combines Piecewise Aggregate
+Approximation (PAA) with a discretization process that converts continuous
+values into a sequence of symbols. This method is particularly effective for
+reducing the dimensionality and storage requirements of time series data,
+making it easier to analyze, store, and compare.</p>
+<p>To minimize storage requirements, <code class="xref py py-class docutils literal notranslate"><span class="pre">SaxTransform</span></code>
+uses the smallest possible integer type to store the symbolic data.</p>
+<p>For example, we can convert this continuous data into a sequence of symbols
+that represent different heart rate levels (e.g., low, medium, high). This
+symbolic representation can then be used for efficient pattern matching,
+such as detecting abnormal heart rate patterns across different days.</p>
+</dd>
+<dt><a class="reference internal" href="../../api/wildboar/transform/index.html#wildboar.transform.DerivativeTransform" title="wildboar.transform.DerivativeTransform"><code class="xref py py-class docutils literal notranslate"><span class="pre">DerivativeTransform</span></code></a></dt><dd><p>The derivative of a time series represents the rate of change at each point
+in time, providing insights into the dynamics of the data, such as trends,
+turning points, and volatility</p>
+<p>It is particularly valuable when we need to focus on the dynamics of time
+series data, such as identifying trends, detecting changes in momentum, or
+analyzing volatility.</p>
+</dd>
+<dt><a class="reference internal" href="../../api/wildboar/transform/index.html#wildboar.transform.FeatureTransform" title="wildboar.transform.FeatureTransform"><code class="xref py py-class docutils literal notranslate"><span class="pre">FeatureTransform</span></code></a>:</dt><dd><p>A collection of features for the full time series. By default we compute
+the <cite>catch22</cite> features. This is equivalent to
+<a class="reference internal" href="../../api/wildboar/transform/index.html#wildboar.transform.IntervalTransform" title="wildboar.transform.IntervalTransform"><code class="xref py py-class docutils literal notranslate"><span class="pre">IntervalTransform</span></code></a> with <code class="docutils literal notranslate"><span class="pre">n_intervals</span></code> set to
+<code class="docutils literal notranslate"><span class="pre">1</span></code>.</p>
+</dd>
+</dl>
 </section>
 </section>
 <section id="references">
@@ -2574,7 +2659,8 @@ as a <code class="docutils literal notranslate"><span class="pre">dict</span></c
 <p>Dempster, Angus, Daniel F. Schmidt, and Geoffrey I. Webb. “Hydra: Competing Convolutional Kernels for Fast and Accurate Time Series Classification.” Data Mining and Knowledge Discovery 37, no. 5 (2023): 1779–1805. <a class="reference external" href="https://doi.org/10.1007/s10618-023-00939-3">https://doi.org/10.1007/s10618-023-00939-3</a>.</p>
 </aside>
 <aside class="footnote brackets" id="quant" role="doc-footnote">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">3</a><span class="fn-bracket">]</span></span>
+<span class="label"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id3">1</a>,<a role="doc-backlink" href="#id4">2</a>)</span>
 <p>Dempster, Angus, Daniel F. Schmidt, and Geoffrey I. Webb. “Quant: A Minimalist Interval Method for Time Series Classification.” Data Mining and Knowledge Discovery 38, no. 4 (July 1, 2024): 2377–2402. <a class="reference external" href="https://doi.org/10.1007/s10618-024-01036-9">https://doi.org/10.1007/s10618-024-01036-9</a>.</p>
 </aside>
 </aside>
@@ -2640,6 +2726,7 @@ as a <code class="docutils literal notranslate"><span class="pre">dict</span></c
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a></li>
 </ul>
 </li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#other-transformations">Other transformations</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
