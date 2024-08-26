@@ -477,6 +477,93 @@ Dyadic intervals with a depth of 3 we compute every fourth quantile of the inter
    )
    f.fit_transform(X_train[:2])
 
+To simplify the use of QUANT [#quant]_, Wildboar offers a class
+:class:`~wildboar.transform.QuantTransform` which constructs a transformation
+using the ``"quant"`` summarizer over three additional time series
+representations:
+
+- first-order differences
+- second-order differences
+- Fourier space
+
+.. execute::
+   :context:
+   :show-return:
+
+   from wildboar.transform import QuantTransform
+
+   f = QuantTransform(v=4, depth=3)
+   f.fit_transform(X_train[:2])
+
+Other transformations
+=====================
+Wildboar provides various transformations to convert time series into
+representations that enhance predictive performance.
+
+:class:`~wildboar.transform.DiffTransform`
+   Convert time series to the `n`:th order difference between consecutive
+   elements in a time series.
+
+   If we have a time series where the values trend upward, applying
+   it with an order of 1 would transform this series into one that
+   highlights changes between consecutive time points, effectively removing the
+   trend and focusing on the rate of change.
+
+   :class:`~wildboar.transform.DiffTransform` is particularly useful when we
+   need to remove trends or seasonality from data, making it more suitable for
+   machine learning models that assume stationarity or when we want to focus
+   on changes rather than absolute values.
+
+:class:`~wildboar.transform.DtwTransform`
+   Transforms data from the time domain to the frequency domain, allowing us
+   to analyze the underlying frequency components.
+
+   It is especially valuable when we need to understand the frequency
+   characteristics of data, such as identifying dominant cycles, filtering
+   specific frequencies, or compressing data by focusing on the most
+   significant frequency components.
+
+:class:`~wildboar.transform.PAA`
+   PAA simplifies a time series by dividing it into equal-sized segments and
+   then averaging the data points within each segment. This results in a
+   compressed representation of the original series, capturing its general
+   trends while reducing noise and detail.
+
+   It is particularly valuable when we need to reduce the complexity of time
+   series data while retaining its essential characteristics.
+
+:class:`~wildboar.transform.SAX`
+   A feature transformation class that implements Symbolic Aggregate
+   Approximation (SAX), a powerful technique for transforming time series data
+   into a symbolic representation. SAX combines Piecewise Aggregate
+   Approximation (PAA) with a discretization process that converts continuous
+   values into a sequence of symbols. This method is particularly effective for
+   reducing the dimensionality and storage requirements of time series data,
+   making it easier to analyze, store, and compare.
+
+   To minimize storage requirements, :class:`~wildboar.transform.SaxTransform`
+   uses the smallest possible integer type to store the symbolic data.
+
+   For example, we can convert this continuous data into a sequence of symbols
+   that represent different heart rate levels (e.g., low, medium, high). This
+   symbolic representation can then be used for efficient pattern matching,
+   such as detecting abnormal heart rate patterns across different days.
+
+:class:`~wildboar.transform.DerivativeTransform`
+   The derivative of a time series represents the rate of change at each point
+   in time, providing insights into the dynamics of the data, such as trends,
+   turning points, and volatility
+
+   It is particularly valuable when we need to focus on the dynamics of time
+   series data, such as identifying trends, detecting changes in momentum, or
+   analyzing volatility.
+
+:class:`~wildboar.transform.FeatureTransform`:
+   A collection of features for the full time series. By default we compute
+   the `catch22` features. This is equivalent to
+   :class:`~wildboar.transform.IntervalTransform` with ``n_intervals`` set to
+   ``1``.
+
 
 **********
 References

@@ -56,7 +56,7 @@ distance):
 
 
 We can also specify multiple metrics, see :ref:`metric specification guide
-<metric_specification` for more information on how to format the metrics. We
+<metric_specification>` for more information on how to format the metrics. We
 can also limit the size of shapelets.
 
 .. execute::
