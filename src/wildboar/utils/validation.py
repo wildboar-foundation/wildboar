@@ -144,6 +144,33 @@ def check_option(options, key, name):
 
 
 def _num_timesteps_dim(dim):
+    """
+    Determine the number of timesteps from the provided object.
+
+    Parameters
+    ----------
+    dim : any
+        The object from which to extract the number of timesteps. This can
+        be a list, array-like object, or types that support length or shape
+        attributes.
+
+    Returns
+    -------
+    int
+        The number of timesteps represented by the object.
+
+    Raises
+    ------
+    TypeError
+        If the object does not have a length or shape attribute, or if it is
+        not a one-dimensional array-like object.
+
+    Notes
+    -----
+    If the input object is a multi-dimensional array or does not meet the
+    expected criteria, an error message will be raised indicating the issue
+    with the provided object type.
+    """
     type_ = type(dim)
     if type_.__module__ == "builtins":
         type_name = type_.__qualname__
