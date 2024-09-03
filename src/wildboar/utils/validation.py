@@ -397,6 +397,9 @@ def check_array(  # noqa: PLR0913, PLR0912
         error is raised.
     ensure_2d : bool, optional
         Whether to raise a value error if array is not 2D.
+    ensure_ts_array : bool, optional
+        Whether to convert the array to a c-continuous 3d array of shape
+        (n_samples, n_dims, n_timesteps).
     allow_3d : bool, optional
         Whether to allow array.ndim == 3.
     allow_nd : bool, optional
