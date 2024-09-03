@@ -13,6 +13,7 @@ from wildboar.transform import (
     IntervalTransform,
     MatrixProfileTransform,
     PivotTransform,
+    QuantTransform,
     RandomShapeletTransform,
     RocketTransform,
     ShapeletTransform,
@@ -29,6 +30,7 @@ from wildboar.utils.estimator_checks import check_estimator
     [
         (IntervalTransform(), []),
         (IntervalTransform(intervals="dyadic", summarizer="quant"), []),
+        (QuantTransform(), []),
         (RandomShapeletTransform(), []),
         (ShapeletTransform(), []),
         (RocketTransform(), ["max_size"]),
