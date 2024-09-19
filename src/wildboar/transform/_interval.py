@@ -4,12 +4,12 @@
 import math
 import numbers
 
-from sklearn.base import BaseEstimator, TransformerMixin, _fit_context
+from sklearn.base import TransformerMixin, _fit_context
 from sklearn.pipeline import make_pipeline, make_union
 from sklearn.utils._param_validation import Interval, StrOptions
 from sklearn.utils.validation import check_is_fitted
 
-from wildboar.transform._diff import DiffTransform, FftTransform
+from wildboar.base import BaseEstimator
 
 from ._base import BaseAttributeTransform
 from ._cinterval import (
@@ -25,6 +25,7 @@ from ._cinterval import (
     SlopeSummarizer,
     VarianceSummarizer,
 )
+from ._diff import DiffTransform, FftTransform
 
 _SUMMARIZER = {
     "mean_var_slope": MeanVarianceSlopeSummarizer,
@@ -361,6 +362,10 @@ class QuantTransform(TransformerMixin, BaseEstimator):
 
     1. Does not apply smoothing to the first order difference.
     2. Does not subtract the mean from every second quantile.
+    3. Does not apply 1-order differences if the time series are shorter than 2
+       timesteps.
+    4. Does not apply 2-order differences if the time series are shorter than 3
+       timesteps.
 
     References
     ----------
@@ -397,19 +402,28 @@ class QuantTransform(TransformerMixin, BaseEstimator):
         self
             The fitted estimator.
         """
+        X = self._validate_data(X, allow_3d=True)
         params = dict(
             intervals="dyadic",
             depth=self.depth,
             summarizer="quant",
             summarizer_params={"v": self.v},
         )
-        self.pipe_ = make_union(
+        steps = [
             IntervalTransform(**params),
-            make_pipeline(DiffTransform(order=1), IntervalTransform(**params)),
-            make_pipeline(DiffTransform(order=2), IntervalTransform(**params)),
             make_pipeline(FftTransform(), IntervalTransform(**params)),
-            n_jobs=self.n_jobs,
-        )
+        ]
+        if X.shape[-1] > 1:
+            steps.append(
+                make_pipeline(DiffTransform(order=1), IntervalTransform(**params))
+            )
+
+        if X.shape[-1] > 2:
+            steps.append(
+                make_pipeline(DiffTransform(order=2), IntervalTransform(**params))
+            )
+
+        self.pipe_ = make_union(*steps, n_jobs=self.n_jobs)
         self.pipe_.fit(X)
         return self
 
@@ -427,5 +441,6 @@ class QuantTransform(TransformerMixin, BaseEstimator):
         ndarray of shape (n_samples, n_outputs)
             The transformed samples.
         """
+        X = self._validate_data(X, reset=False, allow_3d=True)
         check_is_fitted(self)
         return self.pipe_.transform(X)
