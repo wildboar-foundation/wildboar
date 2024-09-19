@@ -50,6 +50,13 @@ Wildboar 1.2 introduces several new models.
 - Add a new transform :class:`~wildboar.transform.FftTransform` for discrete
   Fourier transform.
 
+- Add support for scikit-learn style preprocessing transformers:
+  :class:`~wildboar.datasets.preprocess.Standardize`,
+  :class:`~wildboar.datasets.preprocess.MinMaxScale`,
+  :class:`~wildboar.datasets.preprocess.MaxAbsScale`,
+  :class:`~wildboar.datasets.preprocess.Truncate`,
+  :class:`~wildboar.datasets.preprocess.Interpolate`.
+
 - Add a new module :mod:`~wildboar.distance.lb` for distance lower bounds. The module
   contains four lower bounds.
 
@@ -81,6 +88,14 @@ Wildboar 1.2 introduces several new models.
        repositories.
 
      - |Fix| Avoid division by zero in :func:`~wildboar.datasets.preprocess.standardize`.
+
+     - |Feature| Add support for interpolating missing values. Support is
+       implemented for both :meth:`~wildboar.datasets.load_dataset` (with
+       ``preprocess="interpolate"``) and as a scikit-learn compatible
+       transformer :class:`~wildboar.datasets.preprocess.Interpolate`
+
+     - |Feature| Add support for scikit-learn compatible transformers for
+       `standardize`, `minmax_scale`, `maxabs_scale` and `truncate`.
 
   .. grid-item-card::
 
