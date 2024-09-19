@@ -3587,6 +3587,10 @@ Functions
 
    1. Does not apply smoothing to the first order difference.
    2. Does not subtract the mean from every second quantile.
+   3. Does not apply 1-order differences if the time series are shorter than 2
+      timesteps.
+   4. Does not apply 2-order differences if the time series are shorter than 3
+      timesteps.
 
    .. rubric:: References
 
