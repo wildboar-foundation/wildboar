@@ -179,7 +179,8 @@ A recommended approach for parameter tuning is to incrementally double the
 values of both ``n_group`` and ``n_shapelets`` in successive iterations.
 
 .. warning::
-    For better performance with multivariate datasets, set ``n_shapelets`` to
+
+   For better performance with multivariate datasets, set ``n_shapelets`` to
    `n_shapelets * n_dims` to ensure feature variability.
 
 .. execute::
