@@ -109,3 +109,15 @@ def test_interpolate_2d(gun_point, method, desired):
         desired,
         atol=0.0001,
     )
+
+
+@pytest.mark.parametrize(
+    "estimator",
+    [
+        Interpolate(method="linear"),
+        Interpolate(method="cubic"),
+        Interpolate(method="pchip"),
+    ],
+)
+def test_interpolate_2d_benchmark(estimator, benchmark, X):
+    benchmark(estimator.fit, X=X)
