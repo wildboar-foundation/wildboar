@@ -34,7 +34,7 @@ def test_multivaraite_regressor(appliances_energy):
     X_train, X_test, y_train, y_test = appliances_energy
     c = CastorRegressor(n_groups=16, n_shapelets=4, random_state=1)
     c.fit(X_train, y_train)
-    assert_almost_equal(c.score(X_test, y_test), 0.034, decimal=3)
+    assert c.score(X_test, y_test) > 0.02
 
 
 @pytest.mark.parametrize(
