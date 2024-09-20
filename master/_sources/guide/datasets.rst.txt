@@ -32,10 +32,27 @@ the feature useful, and will distribute their datasets as Wildboar repositories.
   the full bundle to load a single dataset. We hope to improve this in the
   future and download assets on-demand.
 
-For small experiments, we can load a small selection of datasets from the
-``wildboar/ucr-tiny`` bundle, either using :func:`~datasets.load_dataset` or
-using one of the named functions, e.g., :func:`~datasets.load_gun_point`
-(browse :mod:`wildboar.datasets` for all such functions).
+For small experiments, we can load a limited selection of datasets from
+``wildboar/ucr-tiny``, either using :func:`~datasets.load_dataset` or one of
+the specific functions, e.g., :func:`~datasets.load_gun_point`. Additionally,
+Wildboar includes two more small repositories: ``wildboar/ucrmts-tiny``
+(multivariate classification) and ``wildboar/tsereg-tiny`` (univariate and
+multivariate regression).
+
+
+.. note::
+
+   These datasets optimized for minimal download size and can be loaded using
+   specialized functions:
+
+   - :meth:`~wildboar.datasets.load_gun_point` (univariate, classification)
+   - :meth:`~wildboar.datasets.load_two_lead_ecg` (univariate, classification)
+   - :meth:`~wildboar.datasets.load_synthetic_control` (univariate, classification)
+   - :meth:`~wildboar.datasets.load_ering` (multi-variate, classification)
+   - :meth:`~wildboar.datasets.load_articulary_word_recognition` (multi-variate, classification)
+   - :meth:`~wildboar.datasets.load_flood_modeling` (univaraite, regression)
+   - :meth:`~wildboar.datasets.load_appliances_energy` (multi-variate, regression)
+
 
 Loading a single dataset
 ========================

@@ -63,11 +63,13 @@ Functions
    wildboar.datasets.list_collections
    wildboar.datasets.list_datasets
    wildboar.datasets.list_repositories
+   wildboar.datasets.load_appliances_energy
    wildboar.datasets.load_articulary_word_recognition
    wildboar.datasets.load_basic_motions
    wildboar.datasets.load_dataset
    wildboar.datasets.load_datasets
    wildboar.datasets.load_ering
+   wildboar.datasets.load_flood_modeling
    wildboar.datasets.load_gun_point
    wildboar.datasets.load_synthetic_control
    wildboar.datasets.load_two_lead_ecg
@@ -1235,6 +1237,61 @@ Functions
    ..
        !! processed by numpydoc !!
 
+.. py:function:: load_appliances_energy(merge_train_test=True)
+
+   
+   Load the AppliancesEnergy extrinsic regression dataset.
+
+
+   :Parameters:
+
+       **merge_train_test** : bool, optional
+           Merge the existing training and testing partitions.
+
+
+
+   :Returns:
+
+       **x** : ndarray, optional
+           The samples if `merge_train_test=False`.
+
+       **y** : ndarray, optional
+           The labels, if `merge_train_test=False`.
+
+       **x_train** : ndarray, optional
+           The training samples if `merge_train_test=False`.
+
+       **x_test** : ndarray, optional
+           The testing samples if `merge_train_test=False`.
+
+       **y_train** : ndarray, optional
+           The training labels if `merge_train_test=False`.
+
+       **y_test** : ndarray, optional
+           The testing labels if `merge_train_test=False`.
+
+       **extras** : dict, optional
+           The optional extras if `return_extras=True`.
+
+
+
+
+
+
+
+   .. seealso::
+
+       
+       :obj:`load_dataset`
+           load a named dataset
+       
+       
+
+
+
+   ..
+       !! processed by numpydoc !!
+
 .. py:function:: load_articulary_word_recognition(merge_train_test=True)
 
    
@@ -1578,6 +1635,61 @@ Functions
 
    
    Load the ERing multivariate dataset.
+
+
+   :Parameters:
+
+       **merge_train_test** : bool, optional
+           Merge the existing training and testing partitions.
+
+
+
+   :Returns:
+
+       **x** : ndarray, optional
+           The samples if `merge_train_test=False`.
+
+       **y** : ndarray, optional
+           The labels, if `merge_train_test=False`.
+
+       **x_train** : ndarray, optional
+           The training samples if `merge_train_test=False`.
+
+       **x_test** : ndarray, optional
+           The testing samples if `merge_train_test=False`.
+
+       **y_train** : ndarray, optional
+           The training labels if `merge_train_test=False`.
+
+       **y_test** : ndarray, optional
+           The testing labels if `merge_train_test=False`.
+
+       **extras** : dict, optional
+           The optional extras if `return_extras=True`.
+
+
+
+
+
+
+
+   .. seealso::
+
+       
+       :obj:`load_dataset`
+           load a named dataset
+       
+       
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: load_flood_modeling(merge_train_test=True)
+
+   
+   Load the FloodModeling1 extrinsic regression dataset.
 
 
    :Parameters:

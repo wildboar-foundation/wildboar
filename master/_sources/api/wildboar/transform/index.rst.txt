@@ -152,6 +152,10 @@ Functions
 
 
 
+   .. rubric:: Notes
+
+   For better performance with multivariate datasets, set `n_shapelets` to
+   `n_shapelets * n_dims` to ensure feature variability.
 
 
 

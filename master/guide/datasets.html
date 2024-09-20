@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Datasets &#8212; Wildboar 1.3.0.dev109+g6f622ed67 documentation</title>
+    <title>Datasets &#8212; Wildboar 1.3.0.dev119+g6171faca8 documentation</title>
   
   
   
@@ -41,7 +41,7 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../_static/documentation_options.js?v=6f9a79b3"></script>
+    <script src="../_static/documentation_options.js?v=fa9b819a"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -521,10 +521,26 @@ the feature useful, and will distribute their datasets as Wildboar repositories.
 the full bundle to load a single dataset. We hope to improve this in the
 future and download assets on-demand.</p>
 </div>
-<p>For small experiments, we can load a small selection of datasets from the
-<code class="docutils literal notranslate"><span class="pre">wildboar/ucr-tiny</span></code> bundle, either using <a class="reference internal" href="../api/wildboar/datasets/index.html#wildboar.datasets.load_dataset" title="wildboar.datasets.load_dataset"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_dataset</span></code></a> or
-using one of the named functions, e.g., <a class="reference internal" href="../api/wildboar/datasets/index.html#wildboar.datasets.load_gun_point" title="wildboar.datasets.load_gun_point"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_gun_point</span></code></a>
-(browse <a class="reference internal" href="../api/wildboar/datasets/index.html#module-wildboar.datasets" title="wildboar.datasets"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets</span></code></a> for all such functions).</p>
+<p>For small experiments, we can load a limited selection of datasets from
+<code class="docutils literal notranslate"><span class="pre">wildboar/ucr-tiny</span></code>, either using <a class="reference internal" href="../api/wildboar/datasets/index.html#wildboar.datasets.load_dataset" title="wildboar.datasets.load_dataset"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_dataset</span></code></a> or one of
+the specific functions, e.g., <a class="reference internal" href="../api/wildboar/datasets/index.html#wildboar.datasets.load_gun_point" title="wildboar.datasets.load_gun_point"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_gun_point</span></code></a>. Additionally,
+Wildboar includes two more small repositories: <code class="docutils literal notranslate"><span class="pre">wildboar/ucrmts-tiny</span></code>
+(multivariate classification) and <code class="docutils literal notranslate"><span class="pre">wildboar/tsereg-tiny</span></code> (univariate and
+multivariate regression).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>These datasets optimized for minimal download size and can be loaded using
+specialized functions:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../api/wildboar/datasets/index.html#wildboar.datasets.load_gun_point" title="wildboar.datasets.load_gun_point"><code class="xref py py-meth docutils literal notranslate"><span class="pre">load_gun_point</span></code></a> (univariate, classification)</p></li>
+<li><p><a class="reference internal" href="../api/wildboar/datasets/index.html#wildboar.datasets.load_two_lead_ecg" title="wildboar.datasets.load_two_lead_ecg"><code class="xref py py-meth docutils literal notranslate"><span class="pre">load_two_lead_ecg</span></code></a> (univariate, classification)</p></li>
+<li><p><a class="reference internal" href="../api/wildboar/datasets/index.html#wildboar.datasets.load_synthetic_control" title="wildboar.datasets.load_synthetic_control"><code class="xref py py-meth docutils literal notranslate"><span class="pre">load_synthetic_control</span></code></a> (univariate, classification)</p></li>
+<li><p><a class="reference internal" href="../api/wildboar/datasets/index.html#wildboar.datasets.load_ering" title="wildboar.datasets.load_ering"><code class="xref py py-meth docutils literal notranslate"><span class="pre">load_ering</span></code></a> (multi-variate, classification)</p></li>
+<li><p><a class="reference internal" href="../api/wildboar/datasets/index.html#wildboar.datasets.load_articulary_word_recognition" title="wildboar.datasets.load_articulary_word_recognition"><code class="xref py py-meth docutils literal notranslate"><span class="pre">load_articulary_word_recognition</span></code></a> (multi-variate, classification)</p></li>
+<li><p><a class="reference internal" href="../api/wildboar/datasets/index.html#wildboar.datasets.load_flood_modeling" title="wildboar.datasets.load_flood_modeling"><code class="xref py py-meth docutils literal notranslate"><span class="pre">load_flood_modeling</span></code></a> (univaraite, regression)</p></li>
+<li><p><a class="reference internal" href="../api/wildboar/datasets/index.html#wildboar.datasets.load_appliances_energy" title="wildboar.datasets.load_appliances_energy"><code class="xref py py-meth docutils literal notranslate"><span class="pre">load_appliances_energy</span></code></a> (multi-variate, regression)</p></li>
+</ul>
+</div>
 <section id="loading-a-single-dataset">
 <h3>Loading a single dataset<a class="headerlink" href="#loading-a-single-dataset" title="Link to this heading">#</a></h3>
 <p>We can load a single dataset as follows:</p>
