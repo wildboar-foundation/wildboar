@@ -439,6 +439,12 @@ class CastorTransform(CastorMixin, BaseAttributeTransform):
           :func:`numpy.random`.
     n_jobs : int, optional
         The number of parallel jobs.
+
+
+    Notes
+    -----
+    For better performance with multivariate datasets, set `n_shapelets` to
+    `n_shapelets * n_dims` to ensure feature variability.
     """
 
     _parameter_constraints = {

@@ -1,7 +1,12 @@
 import numpy as np
 import pytest
 
-from wildboar.datasets import load_ering, load_gun_point
+from wildboar.datasets import (
+    load_appliances_energy,
+    load_ering,
+    load_flood_modeling,
+    load_gun_point,
+)
 
 
 @pytest.fixture(scope="session")
@@ -12,6 +17,16 @@ def gun_point():
 @pytest.fixture(scope="session")
 def ering():
     return load_ering(merge_train_test=False)
+
+
+@pytest.fixture(scope="session")
+def flood_modeling():
+    return load_flood_modeling(merge_train_test=False)
+
+
+@pytest.fixture(scope="session")
+def appliances_energy():
+    return load_appliances_energy(merge_train_test=False)
 
 
 @pytest.fixture(scope="session")
