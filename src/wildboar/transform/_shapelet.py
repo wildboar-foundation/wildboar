@@ -102,8 +102,7 @@ class FixedShapeletMixin:
         def _shapelet_size(shapelet_size):
             if not isinstance(shapelet_size, numbers.Integral):
                 shapelet_size = math.ceil(X.shape[-1] * shapelet_size)
-                if shapelet_size < 1:
-                    shapelet_size = 1
+                shapelet_size = max(shapelet_size, 1)
 
             if not 0 <= shapelet_size < X.shape[-1]:
                 raise ValueError(
@@ -302,10 +301,8 @@ class DilatedShapeletMixin:
 
             min_shapelet_size = int(self.n_timesteps_in_ * min_shapelet_size)
             max_shapelet_size = int(self.n_timesteps_in_ * max_shapelet_size)
-            if min_shapelet_size < 2:
-                min_shapelet_size = 2
-            if max_shapelet_size < 3:
-                max_shapelet_size = 3
+            min_shapelet_size = max(min_shapelet_size, 2)
+            max_shapelet_size = max(max_shapelet_size, 3)
             shapelet_size = range(min_shapelet_size, max_shapelet_size)
         elif self.shapelet_size is None:
             shapelet_size = [7, 9, 11]
