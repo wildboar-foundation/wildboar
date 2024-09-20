@@ -18,13 +18,6 @@ from ..base import BaseEstimator
 from ..datasets.preprocess import SparseScaler
 
 
-def _transform_has_attr(attr):
-    def check(self):
-        return hasattr(self.pipe_["transform"], "embedding_")
-
-    return check
-
-
 class BaseTransformEstimator(BaseEstimator, metaclass=ABCMeta):
     _parameter_constraints = {
         "random_state": ["random_state"],
