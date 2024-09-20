@@ -82,7 +82,7 @@ def test_maxabs_scale(load_data):
     ],
 )
 def test_interpolate_3d(ering, method, desired):
-    X = ering[0]
+    X = ering[0].copy()
     X[0, 0, 4:10] = np.nan
     X_s = Interpolate(method=method).fit_transform(X)
     np.testing.assert_allclose(
@@ -101,7 +101,7 @@ def test_interpolate_3d(ering, method, desired):
     ],
 )
 def test_interpolate_2d(gun_point, method, desired):
-    X = gun_point[0]
+    X = gun_point[0].copy()
     X[10, 4:10] = np.nan
     X_s = Interpolate(method=method).fit_transform(X)
     np.testing.assert_allclose(
