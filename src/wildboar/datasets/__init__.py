@@ -55,6 +55,8 @@ __all__ = [
     "load_ering",
     "load_articulary_word_recognition",
     "load_basic_motions",
+    "load_flood_modeling",
+    "load_appliances_energy",
 ]
 
 
@@ -336,6 +338,82 @@ def load_basic_motions(merge_train_test=True):
     return load_dataset(
         "BasicMotions",
         repository="wildboar/ucrmts-tiny",
+        merge_train_test=merge_train_test,
+        progress=False,
+    )
+
+
+def load_flood_modeling(merge_train_test=True):
+    """
+    Load the FloodModeling1 extrinsic regression dataset.
+
+    Parameters
+    ----------
+    merge_train_test : bool, optional
+        Merge the existing training and testing partitions.
+
+    Returns
+    -------
+    x : ndarray, optional
+        The samples if `merge_train_test=False`.
+    y : ndarray, optional
+        The labels, if `merge_train_test=False`.
+    x_train : ndarray, optional
+        The training samples if `merge_train_test=False`.
+    x_test : ndarray, optional
+        The testing samples if `merge_train_test=False`.
+    y_train : ndarray, optional
+        The training labels if `merge_train_test=False`.
+    y_test : ndarray, optional
+        The testing labels if `merge_train_test=False`.
+    extras : dict, optional
+        The optional extras if `return_extras=True`.
+
+    See Also
+    --------
+    load_dataset : load a named dataset
+    """
+    return load_dataset(
+        "FloodModeling1",
+        repository="wildboar/tsereg-tiny",
+        merge_train_test=merge_train_test,
+        progress=False,
+    )
+
+
+def load_appliances_energy(merge_train_test=True):
+    """
+    Load the AppliancesEnergy extrinsic regression dataset.
+
+    Parameters
+    ----------
+    merge_train_test : bool, optional
+        Merge the existing training and testing partitions.
+
+    Returns
+    -------
+    x : ndarray, optional
+        The samples if `merge_train_test=False`.
+    y : ndarray, optional
+        The labels, if `merge_train_test=False`.
+    x_train : ndarray, optional
+        The training samples if `merge_train_test=False`.
+    x_test : ndarray, optional
+        The testing samples if `merge_train_test=False`.
+    y_train : ndarray, optional
+        The training labels if `merge_train_test=False`.
+    y_test : ndarray, optional
+        The testing labels if `merge_train_test=False`.
+    extras : dict, optional
+        The optional extras if `return_extras=True`.
+
+    See Also
+    --------
+    load_dataset : load a named dataset
+    """
+    return load_dataset(
+        "AppliancesEnergy",
+        repository="wildboar/tsereg-tiny",
         merge_train_test=merge_train_test,
         progress=False,
     )
