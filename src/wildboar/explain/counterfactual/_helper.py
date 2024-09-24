@@ -1,5 +1,4 @@
 import abc
-import warnings
 
 import numpy as np
 from sklearn.base import clone
@@ -172,8 +171,6 @@ def counterfactuals(  # noqa: PLR0912
     train_x=None,
     train_y=None,
     method="best",
-    scoring="deprecated",
-    valid_scoring="deprecated",
     proximity=None,
     random_state=None,
     method_args=None,
@@ -204,17 +201,6 @@ def counterfactuals(  # noqa: PLR0912
         - if str, select counterfactual explainer from named collection. See
           ``_COUNTERFACTUALS.keys()`` for a list of valid values.
         - if, BaseCounterfactual use the supplied counterfactual.
-    scoring : str, callable, list or dict, optional
-        The scoring function to determine the similarity between the counterfactual
-        sample and the original sample.
-
-        .. deprecated:: 1.1
-            ``scoring`` was renamed to ``proximity`` in 1.1 and will be removed in 1.2.
-    valid_scoring : bool, optional
-        Only compute score for successful counterfactuals.
-
-        .. deprecated:: 1.1
-            ``valid_scoring`` will be removed in 1.2.
     proximity : str, callable, list or dict, optional
         The scoring function to determine the similarity between the counterfactual
         sample and the original sample.
@@ -249,15 +235,6 @@ def counterfactuals(  # noqa: PLR0912
                     % (set(_COUNTERFACTUALS.keys()), method)
                 )
 
-        if "train_x" in method_args or "train_y" in method_args:
-            train_x = method_args.pop("train_x")
-            train_y = method_args.pot("train_y")
-            warnings.warn(
-                "train_x and train_y as method_args has been deprecated in 1.1 and "
-                "will be removed in 1.2. Use the train_x and train_y keyword params.",
-                FutureWarning,
-            )
-
         explainer = Explainer(**method_args)
     else:
         explainer = clone(method)
@@ -269,24 +246,6 @@ def counterfactuals(  # noqa: PLR0912
     y = np.broadcast_to(y, (x.shape[0],))
     x_counterfactuals = explainer.explain(x, y)
     valid = estimator.predict(x_counterfactuals) == y
-    if scoring != "deprecated":
-        warnings.warn(
-            "'scoring' was renamed to 'proximity' 1.1 and will be removed in 1.2.",
-            FutureWarning,
-        )
-        proximity = scoring
-
-    if valid_scoring != "deprecated":
-        warnings.warn(
-            "'valid_scoring' has been deprecated in 1.1 and will be removed in 1.2",
-            FutureWarning,
-        )
-    else:
-        valid_scoring = False
-
-    if valid_scoring is True:
-        x = x[valid]
-        x_counterfactuals = x_counterfactuals[valid]
 
     if proximity is not None:
         sc = _proximity(x, x_counterfactuals, metric=proximity)
