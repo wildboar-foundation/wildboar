@@ -297,6 +297,10 @@ class Interpolate(TransformerMixin, BaseEstimator):
 
 
 class Truncate(TransformerMixin, BaseEstimator):
+    """
+    A transformer that truncates the input data based on the end of series indicators.
+    """
+
     def fit(self, X, y=None):
         """
         Fit the model to the provided data.
@@ -319,6 +323,19 @@ class Truncate(TransformerMixin, BaseEstimator):
         return self
 
     def transform(self, X):
+        """
+        Transform the input data X according to the fitted model.
+
+        Parameters
+        ----------
+        X : array-like
+            Input data to transform.
+
+        Returns
+        -------
+        array-like
+            Transformed input data.
+        """
         check_is_fitted(self)
         X = self._validate_data(
             X, reset=False, allow_3d=True, allow_eos=True, force_all_finite="allow-nan"
