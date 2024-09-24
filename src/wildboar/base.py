@@ -65,7 +65,8 @@ class BaseEstimator(SklearnBaseEstimator):
 
     # Same additions as scikit-learn
     def __getstate__(self):
-        """Get the state of the estimator.
+        """
+        Get the state of the estimator.
 
         Add a new element to the dict we return `_wildboar_version` which
         is we use to warn when setting the state.
@@ -73,7 +74,7 @@ class BaseEstimator(SklearnBaseEstimator):
         Returns
         -------
         dict
-            The state
+            The state.
         """
         try:
             state = super().__getstate__()
@@ -87,14 +88,16 @@ class BaseEstimator(SklearnBaseEstimator):
 
     # Same check as scikit-learn
     def __setstate__(self, state):
-        """Set the state of the estimator.
+        """
+        Set the state of the estimator.
 
         Gives a warning if a user tries to unpickle a object serialized
         from a older version of Wildboar.
 
         Parameters
         ----------
-        state : The state
+        state : object
+            The state.
         """
         if type(self).__module__.startswith("wildboar."):
             pickle_version = state.pop("_wildboar_version", "pre-1.1")
@@ -163,7 +166,8 @@ class BaseEstimator(SklearnBaseEstimator):
             )
 
     def _validate_force_n_dims(self, X):
-        """Validate that X is valid.
+        """
+        Validate that X is valid.
 
         The validation takes into consideration the optional _force_n_dims
         attribute.
@@ -175,8 +179,8 @@ class BaseEstimator(SklearnBaseEstimator):
 
         Returns
         -------
-        X : ndarray of shape (n_samples, self._force_n_dims, -1)
-            The array validated and reshaped
+        ndarray of shape (n_samples, self._force_n_dims, -1)
+            The array validated and reshaped.
         """
         if hasattr(self, "_force_n_dims"):
             X = np.asarray(X)
@@ -252,17 +256,22 @@ class ExplainerMixin:
     _estimator_type = "explainer"
 
     def _validate_estimator(self, estimator, allow_3d=False):
-        """Check the estimator.
+        """
+        Check the estimator.
 
         Set the `n_timesteps_in_` and `n_dims_in_` parameter from the estimator.
 
         Parameters
         ----------
         estimator : object
-            The estimator object to check
-
+            The estimator object to check.
         allow_3d : bool, optional
             If estimator fit with 3d-arrays are supported.
+
+        Returns
+        -------
+        estimator
+            The validated estimator.
         """
         check_is_fitted(estimator)
         if hasattr(estimator, "n_timesteps_in_"):
@@ -293,7 +302,8 @@ class ExplainerMixin:
         return estimator
 
     def fit_explain(self, estimator, x=None, y=None, **kwargs):
-        """Fit and return the explanation.
+        """
+        Fit and return the explanation.
 
         Parameters
         ----------
@@ -303,7 +313,7 @@ class ExplainerMixin:
             The input time series.
         y : array-like of shape (n_samples, ), optional
             The labels.
-        **kwargs
+        **kwargs : dict, optional
             Optional extra arguments.
 
         Returns
@@ -314,12 +324,22 @@ class ExplainerMixin:
         return self.fit(estimator, x, y, **kwargs).explain(x, y)
 
     def plot(self, x=None, y=None, ax=None):
-        """Plot the explanation.
+        """
+        Plot the explanation.
+
+        Parameters
+        ----------
+        x : array-like, optional
+            Optional imput samples.
+        y : array-like, optional
+            Optional target labels.
+        ax : Axes, optional
+            Optional axes to plot to.
 
         Returns
         -------
-        ax : Axes
-            The axes object
+        Axes
+            The axes object.
         """
         from .utils.plot import plot_time_domain
 
@@ -335,20 +355,20 @@ class CounterfactualMixin:
     _estimator_type = "counterfactual"
 
     def score(self, x, y):
-        """Score the counterfactual explainer in terms of closeness of fit.
+        """
+        Score the counterfactual explainer in terms of closeness of fit.
 
         Parameters
         ----------
         x : array-like of shape (n_samples, n_timestep)
             The samples.
-
         y : array-like of shape (n_samples, )
             The desired counterfactal label.
 
         Returns
         -------
-        score : float
-            The closensess of fit.
+        float
+            The proximity.
         """
         from .metrics import proximity_score
 
@@ -356,17 +376,18 @@ class CounterfactualMixin:
 
 
 def is_counterfactual(estimator):
-    """Check if estimator is a counterfactual explainer.
+    """
+    Check if estimator is a counterfactual explainer.
 
     Parameters
     ----------
     estimator : object
-        The estimator
+        The estimator.
 
     Returns
     -------
     bool
-        True if the estimator probably is a counterfactual explainer
+        True if the estimator probably is a counterfactual explainer.
     """
     return (
         hasattr(estimator, "explain")
@@ -376,16 +397,17 @@ def is_counterfactual(estimator):
 
 
 def is_explainer(estimator):
-    """Check if estimator is an explainer.
+    """
+    Check if estimator is an explainer.
 
     Parameters
     ----------
     estimator : object
-        The estimator
+        The estimator.
 
     Returns
     -------
     bool
-        True if the estimator probably is an explainer
+        True if the estimator probably is an explainer.
     """
     return hasattr(estimator, "explain")
