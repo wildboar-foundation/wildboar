@@ -79,7 +79,12 @@ def plot_tree(
 
     Examples
     --------
-    >>> from wildboar.
+    >>> from wildboar.datasets import load_two_lead_ecg
+    >>> from wildboar.tree import ShapeletTreeClassifier, plot_tree
+    >>> X, y = load_two_lead_ecg()
+    >>> clf = ShapeletTreeClassifier(strategy="random").fit(X, y)
+    >>> plot_tree(clf)
+    <Axes: >
 
     """
     from ..transform._interval import IntervalMixin
