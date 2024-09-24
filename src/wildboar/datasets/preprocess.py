@@ -202,6 +202,21 @@ class SparseScaler(OneToOneFeatureMixin, TransformerMixin, BaseEstimator):
         self.mask_zero = mask_zero
 
     def fit(self, x, y=None):
+        """
+        Fit the model using x (ignores y)
+
+        Parameters
+        ----------
+        x : array-like
+            Training data.
+        : array-like, optional
+            Target values (default is None).
+
+        Returns
+        -------
+        self : object
+            Returns the instance itself.
+        """
         x = np.sqrt(self._validate_data(x, allow_3d=False).clip(min=0))
 
         self.mu_ = x.mean(axis=0)
@@ -209,6 +224,19 @@ class SparseScaler(OneToOneFeatureMixin, TransformerMixin, BaseEstimator):
         return self
 
     def transform(self, x):
+        """
+        Transform the input data using the stored parameters.
+
+        Parameters
+        ----------
+        x : array-like
+            Input data to be transformed.
+
+        Returns
+        -------
+        array-like
+            Transformed data.
+        """
         x = np.sqrt(self._validate_data(x, allow_3d=False).clip(min=0))
 
         x = x - self.mu_
