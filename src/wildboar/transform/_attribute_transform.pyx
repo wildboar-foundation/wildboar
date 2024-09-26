@@ -298,21 +298,59 @@ def fit_transform(AttributeGenerator generator, TSArray X, random_state, n_jobs=
     return embedding, out.base
 
 
-def derivative_transform(TSArray X):
-    if X.shape[2] < 3:
-        return X.base
-
+def slope_derivative_transform(TSArray X):
     cdef Py_ssize_t i, j, k
-    cdef double[:, :, :] out = np.empty(
-        (X.shape[0], X.shape[1], X.shape[2] - 2), dtype=float
+    cdef double[:, :, :] out = np.zeros(
+        (X.shape[0], X.shape[1], X.shape[2]), dtype=float
     )
+
+    if X.shape[2] < 3:
+        return out.base
 
     for i in range(X.shape[0]):
         for k in range(X.shape[1]):
             for j in range(1, X.shape[2] - 1):
-                out[i, k, j - 1] = (
-                    (X[i, k, j] - X[i, k, j - 1])
-                    + ((X[i, k, j + 1] - X[i, k, j - 1]) / 2)
-                ) / 2
+                diff1 = X[i, k, j] - X[i, k, j - 1]
+                diff2 = (X[i, k, j + 1] - X[i, k, j - 1]) / 2
+                out[i, k, j] = (diff1 + diff2) / 2
+            out[i, k, 0] = out[i, k, 1]
+            out[i, k, X.shape[2] - 1] = out[i, k, X.shape[2] - 2]
+
+    return out.base
+
+
+def backward_derivative_transform(TSArray X):
+    cdef Py_ssize_t i, j, k
+    cdef double[:, :, :] out = np.zeros(
+        (X.shape[0], X.shape[1], X.shape[2]), dtype=float
+    )
+
+    if X.shape[2] < 2:
+        return out.base
+
+    for i in range(X.shape[0]):
+        for k in range(X.shape[1]):
+            for j in range(1, X.shape[2]):
+                out[i, k, j - 1] = X[i, k, j] - X[i, k, j - 1]
+            out[i, k, X.shape[2] - 1] = out[i, k, X.shape[2] - 2]
+
+    return out.base
+
+
+def central_derivative_transform(TSArray X):
+    cdef Py_ssize_t i, j, k
+    cdef double[:, :, :] out = np.zeros(
+        (X.shape[0], X.shape[1], X.shape[2]), dtype=float
+    )
+
+    if X.shape[2] < 3:
+        return X.base
+
+    for i in range(X.shape[0]):
+        for k in range(X.shape[1]):
+            for j in range(1, X.shape[2] - 1):
+                out[i, k, j - 1] = (X[i, k, j + 1] - X[i, k, j - 1]) / 2
+            out[i, k, 0] = out[i, k, 1]
+            out[i, k, X.shape[2] - 1] = out[i, k, X.shape[2] - 2]
 
     return out.base

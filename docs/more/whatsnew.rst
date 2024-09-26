@@ -162,6 +162,10 @@ Wildboar 1.2 introduces several new models.
        or `"best"`. If set to `"best"` we use the matrix profile to find the best
        shapelets per sample to use in the transformation. The shapelet size is
        determined by the `shapelet_size` parameter.
+     - |Feature| Add a new option to
+       :class:`~wildboar.transform.DerivativeTransform` ``method`` to select
+       the way in which the difference is computed. Supported options include:
+       `backward`, `central`, and `slope`.
      - |API| Deprecate the ``estimate`` parameter in :class:`~wildboar.transform.SAX`.
        The same behavior can be had using ``scale=True`` (default).
      - |Enhancement| Add support for dyadic intervals in

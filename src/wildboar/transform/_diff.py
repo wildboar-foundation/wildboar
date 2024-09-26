@@ -1,10 +1,15 @@
 import numpy as np
-from sklearn.base import TransformerMixin
+from sklearn.base import TransformerMixin, _fit_context
+from sklearn.utils._param_validation import StrOptions
 from sklearn.utils.validation import check_is_fitted
 
 from ..base import BaseEstimator
 from ..utils.validation import _check_ts_array
-from ._attribute_transform import derivative_transform
+from ._attribute_transform import (
+    backward_derivative_transform,
+    central_derivative_transform,
+    slope_derivative_transform,
+)
 
 
 class FftTransform(TransformerMixin, BaseEstimator):
@@ -103,11 +108,38 @@ class DiffTransform(TransformerMixin, BaseEstimator):
         return np.diff(X, n=self.order_, axis=-1)
 
 
+_DERIVATIVE_TRANSFORM = {
+    "slope": slope_derivative_transform,
+    "central": central_derivative_transform,
+    "backward": backward_derivative_transform,
+}
+
+
 class DerivativeTransform(TransformerMixin, BaseEstimator):
     """
     Perform derivative transformation on time series data.
+
+    Parameters
+    ----------
+    method : str, optional
+        The method to use for the derivative transformation. Must be one of:
+        "slope", "central", or "backward".
+
+        - "backward", computes the derivative at each point using the
+          difference between the current and previous elements.
+        - "central", computes the derivative at each point using the average of
+          the differences between the next and previous elements.
+        - "slope", computes a smoothed derivative at each point by averaging
+          the difference between the current and previous elements with half
+          the difference between the next and previous elements.
     """
 
+    _parameter_constraints = {"method": [StrOptions(_DERIVATIVE_TRANSFORM.keys())]}
+
+    def __init__(self, method="slope"):
+        self.method = method
+
+    @_fit_context(prefer_skip_nested_validation=True)
     def fit(self, X, y=None):
         """
         Fit the model to the provided data.
@@ -127,6 +159,7 @@ class DerivativeTransform(TransformerMixin, BaseEstimator):
             Returns the instance itself.
         """
         self._validate_data(X, allow_3d=True)
+        self.method_ = self.method
         return self
 
     def transform(self, X):
@@ -143,10 +176,11 @@ class DerivativeTransform(TransformerMixin, BaseEstimator):
         array
             The transformed data.
         """
+        check_is_fitted(self)
         X = self._validate_data(X, allow_3d=True, reset=False)
-        X_t = derivative_transform(_check_ts_array(X))
+        X_t = _DERIVATIVE_TRANSFORM[self.method_](_check_ts_array(X))
 
-        if X.ndim == 3:
+        if X.ndim == 2:
             return np.squeeze(X_t)
         else:
             return X_t
