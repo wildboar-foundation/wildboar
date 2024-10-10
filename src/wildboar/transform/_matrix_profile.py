@@ -3,11 +3,11 @@ from functools import partial
 from numbers import Integral, Real
 
 import numpy as np
-from sklearn.base import TransformerMixin
+from sklearn.base import TransformerMixin, check_is_fitted
 from sklearn.utils._param_validation import Interval
 
 from ..base import BaseEstimator
-from ..distance import matrix_profile
+from ..distance import paired_matrix_profile
 
 
 class MatrixProfileTransform(TransformerMixin, BaseEstimator):
@@ -75,7 +75,7 @@ class MatrixProfileTransform(TransformerMixin, BaseEstimator):
 
         Returns
         -------
-        self 
+        self
             A fitted instance.
         """
         self._validate_params()
@@ -102,6 +102,7 @@ class MatrixProfileTransform(TransformerMixin, BaseEstimator):
         ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timesteps)
             The matrix matrix profile of each sample.
         """
+        check_is_fitted(self)
         x = self._validate_data(x, reset=False, allow_3d=True, dtype=float)
 
         if isinstance(self.window, Integral):
@@ -110,7 +111,10 @@ class MatrixProfileTransform(TransformerMixin, BaseEstimator):
             window = math.ceil(self.window * self.n_timesteps_in_)
 
         func = partial(
-            matrix_profile, window=window, exclude=self.exclude, n_jobs=self.n_jobs
+            paired_matrix_profile,
+            window=window,
+            exclude=self.exclude,
+            n_jobs=self.n_jobs,
         )
         if self.n_dims_in_ > 1:
             profile_size = self.n_timesteps_in_ - window + 1
