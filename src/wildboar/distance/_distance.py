@@ -75,6 +75,21 @@ from ._metric import (
 
 
 def _subsequence_metric_wrap(Metric):
+    """
+    Wrap a given metric class to create a scaled subsequence metric.
+
+    Parameters
+    ----------
+    Metric : class
+        The metric class to be wrapped.
+
+    Returns
+    -------
+    function
+        A function that takes metric parameters as keyword arguments and returns
+        an instance of ScaledSubsequenceMetricWrap initialized with the given metric.
+    """
+
     def f(**metric_params):
         return ScaledSubsequenceMetricWrap(Metric(**metric_params))
 
@@ -82,6 +97,20 @@ def _subsequence_metric_wrap(Metric):
 
 
 def _callable_metric(f):
+    """
+    A decorator to create a CallableMetric instance from a given function.
+
+    Parameters
+    ----------
+    f : function
+        The function to be wrapped into a CallableMetric.
+
+    Returns
+    -------
+    function
+        A wrapper function that takes metric parameters and returns a CallableMetric instance.
+    """
+
     def wrap(**metric_params):
         return CallableMetric(f)
 
@@ -89,6 +118,21 @@ def _callable_metric(f):
 
 
 def _callable_subsequence_metric(f, scale=False):
+    """
+    Create a subsequence metric wrapper for a callable function.
+
+    Parameters
+    ----------
+    f : callable
+        The function to be wrapped as a subsequence metric.
+    scale : bool, optional
+        If True, the metric will be scaled. Default is False.
+
+    Returns
+    -------
+    callable
+        A wrapped subsequence metric function.
+    """
     if scale:
 
         def wrap(**metric_params):
@@ -162,6 +206,22 @@ _METRICS = {
 
 
 def _infer_scaled_metric(metric):
+    """
+    Infer a scaled version of the given metric name.
+
+    If the metric name starts with "scaled_", it returns the metric name as is.
+    Otherwise, it prepends "scaled_" to the metric name.
+
+    Parameters
+    ----------
+    metric : str
+        The name of the metric to be scaled.
+
+    Returns
+    -------
+    str
+        The scaled metric name.
+    """
     if metric.startswith("scaled_"):
         return metric
     else:
@@ -169,6 +229,25 @@ def _infer_scaled_metric(metric):
 
 
 def check_metric(metric):
+    """
+    Check and retrieve the appropriate metric function.
+
+    Parameters
+    ----------
+    metric : callable or str
+        The metric to check. It can be a callable function or a string
+        representing one of the predefined metrics.
+
+    Returns
+    -------
+    function
+        The corresponding metric function.
+
+    Raises
+    ------
+    ValueError
+        If the metric is not callable and not a recognized string.
+    """
     if callable(metric):
         return _callable_metric(metric)
     elif metric in _METRICS:
@@ -182,6 +261,35 @@ def check_metric(metric):
 
 
 def check_subsequence_metric(metric, scale=False):
+    """
+    Check and retrieve the appropriate subsequence metric.
+
+    This function checks if the provided metric is callable or a recognized
+    string identifier for a subsequence metric. If the metric is callable, it
+    returns the result of `_callable_subsequence_metric`. If the metric is a
+    string, it verifies if it is a known subsequence metric and returns the
+    corresponding metric function. If the metric is not recognized, it raises
+    a `ValueError`.
+
+    Parameters
+    ----------
+    metric : callable or str
+        The metric to be checked. It can be a callable function or a string
+        identifier for a subsequence metric.
+    scale : bool, optional
+        Whether to scale the metric. Default is False.
+
+    Returns
+    -------
+    function
+        The appropriate subsequence metric function.
+
+    Raises
+    ------
+    ValueError
+        If the metric is not callable and not a recognized string identifier
+        for a subsequence metric.
+    """
     if callable(metric):
         return _callable_subsequence_metric(metric, scale=scale)
     else:
@@ -200,6 +308,22 @@ def check_subsequence_metric(metric, scale=False):
 
 
 def _std_below_mean(s):
+    """
+    Create a function that calculates the maximum of the mean minus a multiple of the standard deviation and the minimum value of an array.
+
+    Parameters
+    ----------
+    s : float
+        The multiplier for the standard deviation.
+
+    Returns
+    -------
+    function
+        A function that takes an array and returns the maximum of the mean
+        minus `s` times the standard deviation and the minimum value of the
+        array.
+    """
+
     def f(x):
         return max(np.mean(x) - s * np.std(x), np.min(x))
 
@@ -210,6 +334,26 @@ _THRESHOLD = {"auto": _std_below_mean(2.0)}
 
 
 def _validate_subsequence(y):
+    """
+    Validate and convert the input subsequence `y` to a list of numpy arrays.
+
+    Parameters
+    ----------
+    y : array-like
+        The input subsequence to validate. It can be a 1D or 2D numpy array, or any array-like structure.
+
+    Returns
+    -------
+    list of numpy.ndarray
+        A list containing the validated and converted subsequence as numpy arrays.
+
+    Raises
+    ------
+    ValueError
+        If the input subsequence `y` is empty or has more than 2 dimensions.
+    """
+    if len(y) == 0:
+        raise ValueError("Subsequence y cannot be empty.")
     if isinstance(y, np.ndarray) and y.dtype != object:
         if y.ndim == 1:
             return [y.astype(float)]
@@ -230,6 +374,23 @@ def _validate_subsequence(y):
 
 
 def _any_in_exclude(lst, i, exclude):
+    """
+    Check if any element in the list is within the exclude range of a given index.
+
+    Parameters
+    ----------
+    lst : list
+        The list of elements to check.
+    i : int
+        The index to compare against.
+    exclude : int
+        The range to exclude around the index.
+
+    Returns
+    -------
+    bool
+        True if any element in the list is within the exclude range of the index, False otherwise.
+    """
     for e in lst:
         if not (e <= i - exclude or e >= i + exclude):
             return True
@@ -237,6 +398,28 @@ def _any_in_exclude(lst, i, exclude):
 
 
 def _exclude_trivial_matches(indicies, distances, exclude):
+    """
+    Exclude trivial matches from the given indices and distances.
+
+    This function filters out trivial matches from the provided indices and distances
+    by excluding neighbors within a specified range.
+
+    Parameters
+    ----------
+    indicies : list of array-like
+        A list of arrays containing the indices of the matches.
+    distances : list of array-like
+        A list of arrays containing the distances of the matches.
+    exclude : int
+        The range which to exclude neighbors.
+
+    Returns
+    -------
+    indicies : list of array-like
+        A list of arrays containing the filtered indices.
+    distances : list of array-like
+        A list of arrays containing the filtered distances.
+    """
     indicies_tmp = []
     distances_tmp = []
     for index, distance in zip(indicies, distances):
@@ -261,6 +444,25 @@ def _exclude_trivial_matches(indicies, distances, exclude):
 
 
 def _filter_by_max_matches(indicies, distances, max_matches):
+    """
+    Filter the indices and distances by the maximum number of matches.
+
+    Parameters
+    ----------
+    indicies : list of array-like
+        A list of arrays containing indices.
+    distances : list of array-like
+        A list of arrays containing distances corresponding to the indices.
+    max_matches : int
+        The maximum number of matches to retain for each set of indices and distances.
+
+    Returns
+    -------
+    indicies : list of array-like
+        A list of arrays containing the filtered indices.
+    distances : list of array-like
+        A list of arrays containing the filtered distances.
+    """
     indicies_tmp = []
     distances_tmp = []
     for index, distance in zip(indicies, distances):
@@ -276,6 +478,25 @@ def _filter_by_max_matches(indicies, distances, max_matches):
 
 
 def _filter_by_max_dist(indicies, distances, max_dist):
+    """
+    Filter indices and distances by a maximum distance function.
+
+    Parameters
+    ----------
+    indicies : list
+        List of indices to filter.
+    distances : list
+        List of distances corresponding to the indices.
+    max_dist : callable
+        A function that takes a distance and returns the maximum distance index.
+
+    Returns
+    -------
+    indicies : list
+        Filtered list of indices.
+    distances : list
+        Filtered list of distances.
+    """
     indicies_tmp = []
     distances_tmp = []
     for index, distance in zip(indicies, distances):
@@ -291,6 +512,26 @@ def _filter_by_max_dist(indicies, distances, max_dist):
 
 
 def _format_return(x, y_dims, x_dims):
+    """
+    Format the return value based on the dimensions of the input arrays.
+
+    Parameters
+    ----------
+    x : ndarray
+        The array to format.
+    y_dims : int
+        The number of dimensions of the second input array.
+    x_dims : int
+        The number of dimensions of the first input array.
+
+    Returns
+    -------
+    scalar or ndarray
+        The formatted return value. If both input arrays are 1-dimensional and
+        the size of `x` is 1, a scalar is returned. If either input array is
+        1-dimensional, a squeezed array is returned. Otherwise, the original
+        array `x` is returned.
+    """
     if x_dims == 1 and y_dims == 1 and x.size == 1:
         return x.item()
     elif x_dims == 1 or y_dims == 1:
