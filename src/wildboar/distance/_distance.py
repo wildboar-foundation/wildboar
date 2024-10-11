@@ -392,7 +392,7 @@ def _any_in_exclude(lst, i, exclude):
         True if any element in the list is within the exclude range of the index, False otherwise.
     """
     for e in lst:
-        if not (e <= i - exclude or e >= i + exclude):
+        if i - exclude < e < i + exclude:
             return True
     return False
 
