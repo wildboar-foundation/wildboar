@@ -48,25 +48,25 @@ class _Explainer(metaclass=ABCMeta):
             )[:, : self.n_neighbors],
         )
 
-        for cls in classes:
-            cls_idx = np.nonzero(classes == cls)[0][0]
-            # Store the cluster centers that would be predicted as cls
-            self.majority_centers_[cls] = self.cluster_centers_[
-                (cluster_labels == cls_idx).sum(axis=1) >= self.n_neighbors // 2 + 1
+        for current_class in classes:
+            class_index = np.nonzero(classes == current_class)[0][0]
+            majority_count = (cluster_labels == class_index).sum(axis=1)
+            majority_threshold = self.n_neighbors // 2 + 1
+            self.majority_centers_[current_class] = self.cluster_centers_[
+                majority_count >= majority_threshold
             ]
 
     def _find_closest_center(self, x, y):
         if not hasattr(self, "majority_centers_"):
             raise ValueError("_assign must be called before _find_closest_center")
 
-        centers = self.majority_centers_[y]
-        if centers.shape[0] == 0:
+        majority_class_centers = self.majority_centers_[y]
+        if majority_class_centers.shape[0] == 0:
             return None
 
-        return centers[
-            self._pairwise_distance(x, centers).argmin(axis=1),
-            :,
-        ]
+        distances = self._pairwise_distance(x, majority_class_centers)
+        closest_indices = distances.argmin(axis=1)
+        return majority_class_centers[closest_indices, :]
 
 
 class _SklearnExplainer(_Explainer):
