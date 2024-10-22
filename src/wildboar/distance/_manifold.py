@@ -87,7 +87,7 @@ class MDS(BaseEstimator):
         random_state=None,
         dissimilarity="euclidean",
         dissimilarity_params=None,
-        normalized_stress="warn",
+        normalized_stress="auto",
     ):
         self.n_components = n_components
         self.metric = metric
