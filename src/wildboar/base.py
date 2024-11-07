@@ -39,6 +39,22 @@ class BaseEstimator(SklearnBaseEstimator):
 
     @property
     def _doc_link_template(self):
+        """Get the documentation link template for the current wildboar version.
+
+        The template generates documentation URLs that point to either a specific version
+        or the master branch depending on whether this is a development version.
+
+        Returns
+        -------
+        str
+            A URL template string containing placeholders for {module_path},
+            {estimator_module}, and {estimator_name}.
+
+        Notes
+        -----
+        For released versions, links point to that specific version (e.g., "1.2").
+        For development versions, links point to the "master" branch.
+        """
         wildboar_version = parse_version(__version__)
         if wildboar_version.dev is None:
             version_url = f"{wildboar_version.major}.{wildboar_version.minor}"
@@ -50,6 +66,22 @@ class BaseEstimator(SklearnBaseEstimator):
         )
 
     def _doc_link_url_param_generator(self, other):
+        """
+        Generate URL parameter dictionary for documentation linking.
+
+        Parameters
+        ----------
+        other : object
+            Another estimator object used for comparison.
+
+        Returns
+        -------
+        dict
+            Dictionary containing URL components with keys:
+            - 'module_path': Module path with '/' as separator.
+            - 'estimator_module': Full module path with '.' as separator.
+            - 'estimator_name': Name of the estimator class.
+        """
         estimator_name = self.__class__.__name__
         estimator_module = ".".join(
             itertools.takewhile(
