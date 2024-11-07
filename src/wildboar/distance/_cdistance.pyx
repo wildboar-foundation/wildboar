@@ -885,7 +885,7 @@ cdef Py_ssize_t scaled_dilated_distance_profile(
     cdef Py_ssize_t kernel_offset
     cdef Py_ssize_t convolution_size
     cdef double tmp_dist
-    cdef double mean, std
+    cdef double mean, std, x_val
     cdef Py_ssize_t dp_size = 0
 
     for i in range(output_size):
@@ -908,10 +908,11 @@ cdef Py_ssize_t scaled_dilated_distance_profile(
         mean = 0
         std = 0
         for j from 0 <= j < convolution_size by dilation:
-            x_buffer[k] = x[input_offset + j]
+            x_val = x[input_offset + j]
+            x_buffer[k] = x_val
             k_buffer[k] = kernel[((j + kernel_offset) // dilation)]
-            mean += x_buffer[k]
-            std += x_buffer[k] * x_buffer[k]
+            mean += x_val
+            std += x_val * x_val
             k += 1
 
         mean = mean / k_len
