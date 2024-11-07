@@ -47,7 +47,7 @@ _PROTOTYPE = {"mean": _MeanPrototype, "median": _MeanPrototype, "dtw": _DtwProto
 
 class ECSSelector(DimensionSelectorMixin, BaseEstimator):
     """
-    ElboxClassSum (ECS) dimension selector.
+    ElbowClassSum (ECS) dimension selector.
 
     Select time series dimensions based on the sum of distances between pairs
     of classes.
