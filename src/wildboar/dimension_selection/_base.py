@@ -13,7 +13,10 @@ from ..utils.validation import MetricOptions, check_array
 
 class DimensionSelectorMixin(TransformerMixin, metaclass=abc.ABCMeta):
     """
-    Mixin for dimension selector.
+    A mixin class for dimension selection in transformers.
+
+    This class provides methods to select and transform dimensions
+    of input data, as well as to reverse the transformation.
     """
 
     def get_dimensions(self, indices=False):
