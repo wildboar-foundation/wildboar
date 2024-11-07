@@ -8,12 +8,15 @@ from numpy.testing import assert_almost_equal
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.exceptions import NotFittedError
 from sklearn.neighbors import KNeighborsClassifier
+
 from wildboar.base import is_counterfactual
 from wildboar.datasets import load_dataset, load_gun_point
+from wildboar.distance import KNeighborsClassifier as Wildboar_KNeighborsClassifier
 from wildboar.ensemble import ShapeletForestClassifier
 from wildboar.explain.counterfactual import (
     KNeighborsCounterfactual,
     NativeGuideCounterfactual,
+    NiceCounterfactual,
     PrototypeCounterfactual,
     ShapeletForestCounterfactual,
     counterfactuals,
@@ -34,6 +37,7 @@ SKLEARN_VERSION = sklearn.__version__.split(".")
         KNeighborsCounterfactual(),
         PrototypeCounterfactual(),
         NativeGuideCounterfactual(),
+        NiceCounterfactual(),
     ],
 )
 def test_estimator_check_shapelet_forest_counterfactual(estimator):
@@ -47,6 +51,7 @@ def test_estimator_check_shapelet_forest_counterfactual(estimator):
         PrototypeCounterfactual(),
         ShapeletForestCounterfactual(),
         NativeGuideCounterfactual(),
+        NiceCounterfactual(),
     ],
 )
 def test_parameter_constraints(estimator):
@@ -146,6 +151,21 @@ def test_native_guide():
     )
     # fmt: on
     assert_almost_equal(e[:, [0, 10, 20, 30, 55, 66, 139, 145]], desired)
+
+
+@pytest.mark.parametrize(
+    "estimator,params,desired",
+    [
+        (KNeighborsClassifier(), {"method": "auto"}, []),
+        (KNeighborsClassifier(), {"method": "mean"}, []),
+        (KNeighborsClassifier(), {"method": "medoid"}, []),
+        (Wildboar_KNeighborsClassifier(), {"method": "auto"}, []),
+        (Wildboar_KNeighborsClassifier(), {"method": "mean"}, []),
+        (Wildboar_KNeighborsClassifier(), {"method": "medoid"}, []),
+    ],
+)
+def test_kneighbors_counterfactual(estimator, params, desired):
+    pass
 
 
 @pytest.mark.parametrize(
