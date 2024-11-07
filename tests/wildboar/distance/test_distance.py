@@ -4,6 +4,7 @@
 import numpy as np
 import pytest
 from numpy.testing import assert_almost_equal, assert_equal
+
 from wildboar.datasets import load_gun_point, load_two_lead_ecg
 from wildboar.distance import (
     argmin_distance,
@@ -15,7 +16,7 @@ from wildboar.distance import (
     pairwise_subsequence_distance,
     subsequence_match,
 )
-from wildboar.distance._distance import _METRICS, _SUBSEQUENCE_METRICS
+from wildboar.distance._distance import _METRICS, _SUBSEQUENCE_METRICS, _any_in_exclude
 
 
 def _test_metric(a, b):
@@ -1637,3 +1638,135 @@ def test_callable_equal(pairwise_data):
         pairwise_distance(pairwise_data, metric="euclidean"),
         pairwise_distance(pairwise_data, metric=_test_metric),
     )
+
+
+def test_subsequence_match_y_longer_than_x():
+    y = np.array([1, 2, 3])
+    x = np.array([1, 2])
+    with pytest.raises(ValueError):
+        subsequence_match(y, x)
+
+
+def test_subsequence_match_y_empty():
+    y = np.array([])
+    x = np.array([1, 2, 3])
+    with pytest.raises(ValueError):
+        subsequence_match(y, x)
+
+
+def test_subsequence_match_x_empty():
+    y = np.array([1, 2, 3])
+    x = np.array([])
+    with pytest.raises(ValueError):
+        subsequence_match(y, x)
+
+
+def test_subsequence_match_threshold_callable():
+    y = np.array([1, 2])
+    x = np.array([1, 2, 3, 4])
+    threshold = lambda d: d < 1.5
+    indices = subsequence_match(y, x, threshold=threshold)
+    assert len(indices) > 0
+
+
+def test_subsequence_match_threshold_string():
+    y = np.array([1, 2])
+    x = np.array([1, 2, 3, 4])
+    threshold = "auto"
+    indices = subsequence_match(y, x, threshold=threshold)
+    assert len(indices) > 0
+
+
+def test_subsequence_match_exclude_float():
+    y = np.array([1, 2])
+    x = np.array([1, 2, 3, 4])
+    indices = subsequence_match(y, x, exclude=0.5)
+    assert len(indices) > 0
+
+
+def test_subsequence_match_exclude_int():
+    y = np.array([1, 2])
+    x = np.array([1, 2, 3, 4])
+    indices = subsequence_match(y, x, exclude=1)
+    assert len(indices) > 0
+
+
+def test_subsequence_match_dim_out_of_bounds():
+    y = np.array([1, 2])
+    x = np.array([[1, 2, 3, 4]])
+    with pytest.raises(ValueError):
+        subsequence_match(y, x, dim=2)
+
+
+def test_subsequence_match_invalid_metric():
+    y = np.array([1, 2])
+    x = np.array([1, 2, 3, 4])
+    with pytest.raises(ValueError):
+        subsequence_match(y, x, metric="invalid_metric")
+
+
+def test_subsequence_match_1d():
+    y = np.array([1, 2])
+    x = np.array([1, 2, 3, 4])
+    indices = subsequence_match(y, x)
+    assert len(indices) > 0
+
+
+def test_subsequence_match_2d():
+    y = np.array([1, 2])
+    x = np.array([[1, 2, 3, 4], [1, 2, 3, 4]])
+    indices = subsequence_match(y, x)
+    assert len(indices) > 0
+
+
+def test_subsequence_match_3d():
+    y = np.array([1, 2])
+    x = np.array([[[1, 2, 3, 4]], [[1, 2, 3, 4]]])
+    indices = subsequence_match(y, x)
+    assert len(indices) > 0
+
+
+def test_subsequence_match_return_distance_true():
+    y = np.array([1, 2])
+    x = np.array([1, 2, 3, 4])
+    indices, distances = subsequence_match(y, x, return_distance=True)
+    assert len(indices) > 0
+    assert len(distances) > 0
+
+
+def test_subsequence_match_return_distance_false():
+    y = np.array([1, 2])
+    x = np.array([1, 2, 3, 4])
+    indices = subsequence_match(y, x, return_distance=False)
+    assert len(indices) > 0
+
+
+def test_subsequence_match_max_matches():
+    y = np.array([1, 2])
+    x = np.array([1, 2, 3, 4])
+    indices = subsequence_match(y, x, max_matches=1)
+    assert len(indices) == 1
+
+
+def test_subsequence_match_scale_true():
+    y = np.array([1, 2])
+    x = np.array([1, 2, 3, 4])
+    indices = subsequence_match(y, x, scale=True)
+    assert len(indices) > 0
+
+
+def test_any_in_exclude_normal_cases():
+    assert _any_in_exclude([1, 2, 3], 2, 1) is True
+    assert _any_in_exclude([1, 2, 3], 0, 1) is False
+    assert _any_in_exclude([5, 6, 7], 5, 1) is True
+
+
+def test_any_in_exclude_edge_cases():
+    assert _any_in_exclude([], 0, 1) is False  # Empty list should return False
+    assert _any_in_exclude([1], 1, 1) is True  # Single element equal to i
+    assert _any_in_exclude([2], 1, 1) is False  # Single element outside the range
+
+
+def test_any_in_exclude_error_handling():
+    with pytest.raises(TypeError):
+        _any_in_exclude([1, "a", 3], 2, 1)  # Non-numeric value in the list
