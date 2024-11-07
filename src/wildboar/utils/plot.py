@@ -163,12 +163,13 @@ def plot_frequency_domain(
     ax=None,
     n_samples=100,
     jitter=False,
+    spectrum="amplitude",
     sample_spacing=1,
-    frequency=False,
+    bins=None,
     cmap="Dark2",
 ):
     """
-    Plot the samples in the freqency domain.
+    Plot the samples in the frequency domain.
 
     Parameters
     ----------
@@ -183,9 +184,11 @@ def plot_frequency_domain(
         of samples in x or None, all samples are plotted.
     jitter : bool, optional
         Add jitter to the amplitude lines.
+    spectrum : {"amplitude", "phase"}, optional
+        The spectrum.
     sample_spacing : int, optional
         The frequency domain sample spacing.
-    frequency : bool, optional
+    bins : bool, optional
         Show the frequency bins.
     cmap : str, optional
         The colormap.
@@ -202,6 +205,9 @@ def plot_frequency_domain(
     >>> X, y = load_gun_point(X, y)
     >>> plot_frequency_domain(X, y, n_sample=10)
     """
+    if spectrum not in ("amplitude", "phase"):
+        raise ValueError("spectrum must be one of 'amplitude' or 'phase'")
+
     if ax is None:
         fig, ax = subplots()
 
@@ -227,14 +233,22 @@ def plot_frequency_domain(
     )
 
     n_freqs = int(x.shape[-1] // 2)
-    x_freq = np.abs(np.fft.fft(x, axis=1)[:, 1 : n_freqs + 1])  # / n_freqs
-    x_axis = np.arange(1, n_freqs + 1)
+    fft = np.fft.fft(x, axis=1)[:, :n_freqs]
+
+    if spectrum == "amplitude":
+        x_freq = np.abs(fft)
+    else:
+        x_freq = np.angle(fft)
+        x_freq[:, 0] = 0
+
+    x_axis = np.arange(0, n_freqs)
     max_freq = np.max(x_freq)
-    if frequency:
-        for i in x_axis:
+    min_freq = np.min(x_freq)
+    if bins is not None:
+        for start, end in bins:
             ax.axvspan(
-                i - 0.5,
-                i + 0.5,
+                start - 0.5,
+                end - 0.5,
                 0,
                 1,
                 facecolor=None,
@@ -243,10 +257,14 @@ def plot_frequency_domain(
                 alpha=0.05,
                 zorder=-100,
             )
-    ax.set_ylabel("Amplitude")
+    if spectrum == "amplitude":
+        ax.set_ylabel("Amplitude")
+    else:
+        ax.set_ylabel("Phase")
+
     for i in range(x.shape[0]):
         if jitter:
-            x_axis_tmp = x_axis + np.random.normal(scale=0.5, size=n_freqs)
+            x_axis_tmp = x_axis + np.random.normal(scale=0.1, size=n_freqs)
         else:
             x_axis_tmp = x_axis
 
@@ -270,12 +288,7 @@ def plot_frequency_domain(
 
         ax.add_artist(legend)
 
-    # ticks = ax.get_xticks().astype(int)[: len(x_axis)]
-    # ticks[0] = 1
-    # ax.set_xticks(ticks)
-    # x_label = np.fft.fftfreq(x.shape[-1], d=sample_spacing)[ticks]
-    # ax.set_xticklabels("%.2f" % lab for lab in x_label)
-    ax.set_xlim([0.5, n_freqs + 0.5])
-    ax.set_ylim(0, max_freq + np.std(x_freq))
+    ax.set_xlim([-0.5, n_freqs + 1.5])
+    ax.set_ylim(min_freq - np.std(x_freq) / 3, max_freq + np.std(x_freq) / 3)
 
     return ax

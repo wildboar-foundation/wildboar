@@ -8,6 +8,7 @@ from abc import ABCMeta, abstractmethod
 from collections import namedtuple
 
 import numpy as np
+from sklearn.base import _fit_context
 from sklearn.metrics import check_scoring
 from sklearn.metrics._scorer import _check_multimetric_scoring, _MultimetricScorer
 from sklearn.model_selection._validation import _aggregate_score_dicts
@@ -398,54 +399,161 @@ class IntervalImportance(ExplainerMixin, PermuteImportance):
 
 
 class FrequencyImportance(ExplainerMixin, PermuteImportance):
-    def __init__(self, window=1, scoring=None, n_repeat=1, random_state=None):
-        super().__init__(scoring=scoring, n_repeat=n_repeat, random_state=random_state)
-        self.window = window
+    """
+    Explainer to evaluate feature importance based on frequency bands.
 
-    # TODO: Ensure it has access to X to compute things in terms of it
+    This class implements a frequency-based importance measure by permuting values
+    within frequency bands obtained from the Fourier transform of time series data.
+    It extends PermuteImportance to analyze the impact of different frequency
+    components on model predictions.
+
+    Parameters
+    ----------
+    scoring : str, callable, or None, optional
+        Scoring metric to evaluate importance. If None, uses estimator's score method.
+    n_repeat : int, optional
+        Number of times to permute each frequency band.
+    random_state : int, RandomState instance or None, optional
+        Controls randomization for permutations.
+    n_bands : int, optional
+        Number of frequency bands to analyze.
+    spectrum : {"amplitude", "phase"}, optional
+        Whether to permute amplitude components or to permute phase components.
+    growth_factor : float, optional
+        Controls growth of frequency band sizes:
+        - growth_factor > 1: exponential growth (more detail at lower frequencies)
+        - growth_factor = 1: linear growth (equal-sized bands)
+        - growth_factor < 1: logarithmic decay (more detail at higher frequencies)
+
+        Defaults to `np.e`.
+
+    Attributes
+    ----------
+    components_ : list of tuples
+        The frequency bands used for permutation, as (start, end) indices.
+    importances_ : ImportanceContainer
+        Contains the calculated feature importance scores.
+    n_timesteps_in_ : int
+        Number of timesteps in the input data.
+
+    Notes
+    -----
+    The frequency bands are constructed by dividing the frequency domain into windows,
+    with the size of each window controlled by the growth_factor parameter. This allows
+    for analyzing different scales of temporal patterns in the data.
+
+    See Also
+    --------
+    PermuteImportance : Base class for permutation-based importance.
+    """
+
+    _parameter_constraints: dict = {
+        **PermuteImportance._parameter_constraints,
+        "n_bands": [Interval(numbers.Integral, 1, None, closed="left")],
+        "spectrum": [StrOptions({"phase", "amplitude"})],
+        "growth_factor": [Interval(numbers.Real, 1, None, closed="left")],
+    }
+
+    def __init__(
+        self,
+        scoring=None,
+        n_repeat=5,
+        random_state=None,
+        n_bands=10,
+        spectrum="amplitude",
+        growth_factor=np.e,
+    ):
+        super().__init__(scoring=scoring, n_repeat=n_repeat, random_state=random_state)
+        self.n_bands = n_bands
+        self.spectrum = spectrum
+        self.growth_factor = growth_factor
+
     def _yield_components(self):
-        n_timesteps = self.n_timesteps_in_ // 2
-        n_intervals = n_timesteps
-        if self.window > n_timesteps:
+        """
+        Yield frequency bands for permutation.
+
+        Returns frequency bands with configurable growth, ensuring consecutive
+        indices within each band. Each band represents a range of FFT bins,
+        where bin k corresponds to frequency f[k] = k * fs/N Hz, where:
+
+        - fs is the sampling frequency
+        - N is the number of samples (self.n_timesteps_in_)
+        - k is the bin index
+
+        The growth_factor parameter controls band sizes:
+        - growth_factor > 1: exponential growth (more detail at lower frequencies)
+        - growth_factor = 1: linear growth (equal-sized bands)
+        - growth_factor < 1: logarithmic decay (more detail at higher frequencies)
+        """
+        n_bands = self.n_timesteps_in_ // 2
+        if self.n_bands > n_bands:
             raise ValueError(
                 f"The window parameter of {type(self).__name__} must be "
-                "<= n_timesteps_in_"
+                "<= n_timesteps_in_ // 2"
             )
 
-        if n_timesteps % 2 != 0:
-            n_timesteps -= 1
+        if self.growth_factor == 1:
+            bands = np.linspace(1, n_bands, self.n_bands + 1, dtype=int)
+        else:
+            bands = np.zeros(self.n_bands + 1, dtype=int)
+            bands[0] = 1  # skip DC component
+            for i in range(1, self.n_bands + 1):
+                bands[i] = int(
+                    max(
+                        bands[i - 1] + 1,  # Ensure at least 1 bin difference
+                        np.round(
+                            1
+                            + (n_bands - 1)
+                            * (
+                                (self.growth_factor**i - 1)
+                                / (self.growth_factor**self.n_bands - 1)
+                            )
+                        ),
+                    )
+                )
+            bands[-1] = n_bands
 
-        n_intervals = n_timesteps // self.window
-        for i in range(n_intervals):
-            length = n_timesteps // n_intervals
-            start = 1 + i * length + min(i % n_intervals, n_timesteps % n_intervals)
-            if i % n_intervals < n_timesteps % n_intervals:
-                length += 1
-            yield start, start + length
+        for start, end in zip(bands[:-1], bands[1:]):
+            yield start, end
 
     def _permute_component(self, X, component, random_state):
         start, end = component
         X_fft = np.fft.rfft(X, axis=1)
-        random_state.shuffle(X_fft[:, start:end])
-        return np.fft.irfft(X_fft, X.shape[-1], axis=1)
 
-    def fit(self, estimator, x, y, sample_weight=None):
-        # self._validate_params()
+        idx = random_state.permutation(len(X_fft))
+
+        amplitude = np.abs(X_fft)
+        phase = np.angle(X_fft)
+
+        if self.spectrum == "amplitude":
+            amplitude[:, start:end] = amplitude[idx, start:end]
+        else:
+            phase[:, start:end] = phase[idx, start:end]
+
+        X_fft_new = amplitude * np.exp(1j * phase)
+        return np.fft.irfft(X_fft_new, n=X.shape[-1], axis=1)
+
+    @_fit_context(prefer_skip_nested_validation=True)
+    def fit(self, estimator, X, y, sample_weight=None):
         estimator = self._validate_estimator(estimator)
-        x, y = self._validate_data(x, y, reset=False, allow_3d=False)
+        X, y = self._validate_data(X, y, reset=False, allow_3d=False)
         random_state = check_random_state(self.random_state)
-        self._fit(estimator, x, y, random_state, sample_weight=sample_weight)
+        self._fit(estimator, X, y, random_state, sample_weight=sample_weight)
         return self
 
-    def plot(self, x=None, y=None, ax=None):
+    def plot(self, X=None, y=None, ax=None, k=None, sample_spacing=1, jitter=False):
         check_is_fitted(self)
+        frequencies = np.fft.fftfreq(self.n_timesteps_in_, d=sample_spacing)
 
         importances = self.importances_.mean
-        if x is None:
+        if X is None:
             return plot_importances(
-                importances,
+                self.importances_,
                 ax=ax,
-                labels=["(%d, %d)" % (start, end) for start, end in self.components_],
+                labels=[
+                    f"{frequencies[start]:.2f}Hz-{frequencies[end - 1]:.2f}Hz"
+                    for start, end in self.components_
+                ],
             )
 
         if ax is None:
@@ -455,13 +563,14 @@ class FrequencyImportance(ExplainerMixin, PermuteImportance):
 
         order = np.argsort(importances)[::-1]
         norm = MidpointNormalize(
-            vmin=0,  # importances[order[-1]],
-            vmax=1,  # importances[order[0]],
+            vmin=-1,
+            vmax=1,
             midpoint=0.0,
         )
         cmap = get_cmap("coolwarm")
 
-        for o in order:
+        k = min(k, order.shape[0]) if k is not None else order.shape[0]
+        for o in order[:k]:
             start, end = self.components_[o]
             ax.axvspan(
                 start - 0.5,
@@ -473,11 +582,24 @@ class FrequencyImportance(ExplainerMixin, PermuteImportance):
                 zorder=1,
             )
 
-        xticks = [start for start, _ in self.components_]
-        xticks.append(self.components_[-1][1])
-        ax.set_xticks(xticks)
-        ax.tick_params(axis="x", labelrotation=-70)
-        plot_frequency_domain(x, y, ax=ax)
+        plot_frequency_domain(
+            X, y, bins=self.components_, ax=ax, spectrum=self.spectrum, jitter=jitter
+        )
+        ax.set_xticks(
+            [
+                (start + end) / 2 if end - start > 1 else start
+                for start, end in self.components_
+            ]
+        )
+        ax.set_xticklabels(
+            [
+                f"{frequencies[int((start + end) / 2) if end-start > 1 else start]:.2f}Hz"
+                for start, end in self.components_
+            ],
+            rotation=90,
+            ha="center",
+        )
+        ax.set
         mappable = ScalarMappable(cmap=cmap, norm=norm)
         if fig is not None:
             fig.colorbar(mappable, ax=ax)
