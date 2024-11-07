@@ -1,6 +1,7 @@
 import numpy as np
 import pytest
 from numpy.testing import assert_almost_equal
+
 from wildboar.datasets import load_gun_point
 from wildboar.distance.lb import (
     DtwKeoghLowerBound,
