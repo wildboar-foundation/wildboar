@@ -1171,7 +1171,7 @@ def pairwise_distance(  # noqa: PLR0912, PLR0915
     n_jobs=None,
 ):
     """
-    Compute the distance between subsequences and time series.
+    Compute the distance between every time series in X and Y.
 
     Parameters
     ----------
