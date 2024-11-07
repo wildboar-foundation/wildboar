@@ -299,6 +299,14 @@ class ExplainerMixin:
                 )
             )
 
+        if hasattr(estimator, "classes_"):
+            self.classes_ = estimator.classes_
+        else:
+            raise ValueError(
+                "Unable to find the `classes_` attribute from {}".format(
+                    type(estimator).__qualname__
+                )
+            )
         return estimator
 
     def fit_explain(self, estimator, x=None, y=None, **kwargs):
