@@ -8,6 +8,7 @@ methods for generating counterfactual explanations.
 
 from ._helper import _proximity as proximity
 from ._helper import counterfactuals
+from ._nice import NiceCounterfactual
 from ._nn import KNeighborsCounterfactual
 from ._nun import NativeGuideCounterfactual
 from ._proto import PrototypeCounterfactual
@@ -20,4 +21,5 @@ __all__ = [
     "KNeighborsCounterfactual",
     "PrototypeCounterfactual",
     "NativeGuideCounterfactual",
+    "NiceCounterfactual",
 ]
