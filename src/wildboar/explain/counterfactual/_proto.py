@@ -4,7 +4,6 @@
 import abc
 import math
 import numbers
-import warnings
 from copy import deepcopy
 from functools import partial
 
@@ -497,7 +496,7 @@ class PrototypeCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimator
             Interval(numbers.Real, 0, 1, closed="right"),
         ],
         "target": [
-            StrOptions({"predict", "auto"}, deprecated={"auto"}),
+            StrOptions({"predict"}),
             Interval(numbers.Real, 0.5, 1, closed="right"),
         ],
         "method": [StrOptions(_PROTOTYPE_SAMPLER.keys())],
@@ -599,13 +598,7 @@ class PrototypeCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimator
         self.estimator_ = deepcopy(estimator)
         self.classes_ = np.unique(y)
         self.random_state_ = random_state.randint(np.iinfo(np.int32).max)
-        if self.target in {"auto", "predict"}:
-            if self.target == "auto":
-                warnings.warn(
-                    f"The parameter value 'auto' for target of {type(self).__name__} "
-                    "has been renamed to 'predict' in 1.2 and will be removed in 1.4.",
-                    FutureWarning,
-                )
+        if isinstance(self.target, str) and self.target == "predict":
             self.target_ = PredictEvaluator(self.estimator_)
         else:
             self.target_ = ProbabilityEvaluator(self.estimator_, self.target)
