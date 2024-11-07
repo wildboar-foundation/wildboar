@@ -200,7 +200,6 @@ class NativeGuideCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimat
         random_state = check_random_state(self.random_state)
 
         self.estimator_ = deepcopy(estimator)
-        self.classes_ = estimator.classes_
         self._fit_X = {label: x[y == label] for label in self.classes_}
         self.target_ = make_target_evaluator(self.estimator_, self.target)
 
