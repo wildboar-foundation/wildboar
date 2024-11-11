@@ -61,7 +61,7 @@ def test_random_shapelet_transform_equals_shapelet_transform_strategy_random():
 
 
 def test_derivative_transform():
-    t = DerivativeTransform(method="forward")
+    t = DerivativeTransform(method="slope")
     X = np.array([[1, 7, 3, 4], [4, 2, 6, 7]])
     expected_output = np.array([[3.5, 3.5, -2.75, -2.75], [-0.5, -0.5, 3.25, 3.25]])
     assert_almost_equal(t.fit_transform(X), expected_output)
