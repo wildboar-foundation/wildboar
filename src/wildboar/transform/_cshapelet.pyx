@@ -31,6 +31,7 @@ from ..utils._rand cimport (
     VoseRand,
     rand_int,
     rand_uniform,
+    rand_beta,
     vose_rand_free,
     vose_rand_init,
     vose_rand_int,
@@ -245,6 +246,96 @@ cdef class RandomShapeletAttributeGenerator(ShapeletAttributeGenerator):
         transient.attribute = v
         return 1
 
+
+cdef void _dirichlet_process_start_end(
+    double v, double p, Py_ssize_t n, uint32_t *random_seed, double *low, double *high
+) noexcept nogil:
+    if rand_uniform(0, 1, random_seed) > n * (n + 1) * p - n:
+        n += 1
+
+    cdef Py_ssize_t z = rand_int(0, n, random_seed)
+
+    low[0] = 0
+    if z != 0:
+        low[0] = rand_beta(v * z, v * (n - z), random_seed)
+
+    cdef double w = 1.0
+    if z != n - 1:
+        w = rand_beta(v, v * (n - z - 1), random_seed)
+
+    high[0] = low[0] + (1 - low[0]) * w
+
+
+cdef class CoverageProbabilityShapeletAttributeGenerator(ShapeletAttributeGenerator):
+
+    cdef Py_ssize_t n_shapelets
+    cdef double coverage_probability
+    cdef double variability
+    cdef Py_ssize_t n
+
+    def __init__(
+        self, metric, coverage_probability, variability, n_shapelets
+    ):
+        super().__init__(metric)
+        self.n_shapelets = n_shapelets
+        self.coverage_probability = coverage_probability
+        self.variability = variability
+        self.n = <Py_ssize_t> floor(1.0 / self.coverage_probability)
+
+    cdef Py_ssize_t get_n_attributes(
+        self, Py_ssize_t* samples, Py_ssize_t n_samples
+    ) noexcept nogil:
+        return self.n_shapelets
+
+    cdef Py_ssize_t next_attribute(
+        self,
+        Py_ssize_t attribute_id,
+        TSArray X,
+        Py_ssize_t *samples,
+        Py_ssize_t n_samples,
+        Attribute *transient,
+        uint32_t *random_seed
+    ) noexcept nogil:
+        if attribute_id >= self.n_shapelets:
+            return -1
+
+        cdef double low, high
+        cdef SubsequenceView *v = <SubsequenceView*> malloc(sizeof(SubsequenceView))
+
+        _dirichlet_process_start_end(
+            self.variability,
+            self.coverage_probability,
+            self.n,
+            random_seed,
+            &low,
+            &high,
+        )
+
+        # TODO: don't fail on tiny time series...
+        cdef Py_ssize_t start = <Py_ssize_t> min(X.shape[2] - 2, floor(low * X.shape[2]))
+        cdef Py_ssize_t end = <Py_ssize_t> floor(high * X.shape[2])
+        cdef Py_ssize_t length = max(2, end - start)
+
+        cdef Py_ssize_t index = samples[rand_int(0, n_samples, random_seed)]
+        cdef Py_ssize_t dim
+        if X.shape[1] > 1:
+            dim = rand_int(0, X.shape[1], random_seed)
+        else:
+            dim = 0
+
+        self.metric.init_transient(
+            X,
+            v,
+            index,
+            start,
+            length,
+            dim,
+        )
+        transient.dim = dim
+        transient.attribute = v
+        return 1
+
+
 cdef struct MetricSubsequenceView:
     Py_ssize_t metric
     SubsequenceView view
@@ -255,8 +346,6 @@ cdef struct MetricSubsequence:
 
 
 cdef class MultiMetricShapeletAttributeGenerator(AttributeGenerator):
-    cdef Py_ssize_t min_shapelet_size
-    cdef Py_ssize_t max_shapelet_size
     cdef SubsequenceMetricList metrics
     cdef bint weighted
     cdef VoseRand vr
@@ -269,8 +358,6 @@ cdef class MultiMetricShapeletAttributeGenerator(AttributeGenerator):
         list metrics,
         const double[::1] weights=None,
     ):
-        self.min_shapelet_size = min_shapelet_size
-        self.max_shapelet_size = max_shapelet_size
         self.metrics = SubsequenceMetricList(metrics)
         self.weights = weights
         if weights is not None:
@@ -384,6 +471,8 @@ cdef class RandomMultiMetricShapeletAttributeGenerator(
     MultiMetricShapeletAttributeGenerator
 ):
     cdef Py_ssize_t n_shapelets
+    cdef Py_ssize_t min_shapelet_size
+    cdef Py_ssize_t max_shapelet_size
 
     def __init__(
         self,
@@ -393,7 +482,9 @@ cdef class RandomMultiMetricShapeletAttributeGenerator(
         list metrics,
         const double[::1] weights=None,
     ):
-        super().__init__(min_shapelet_size, max_shapelet_size, metrics, weights)
+        super().__init__(metrics, weights)
+        self.min_shapelet_size = min_shapelet_size
+        self.max_shapelet_size = max_shapelet_size
         self.n_shapelets = n_shapelets
 
     def __reduce__(self):
@@ -452,6 +543,99 @@ cdef class RandomMultiMetricShapeletAttributeGenerator(
             shapelet_start,
             shapelet_length,
             shapelet_dim,
+        )
+        transient.attribute = msv
+        return 1
+
+
+cdef class CoverageProbabilityMultiMetricShapeletAttributeGenerator(
+    MultiMetricShapeletAttributeGenerator
+):
+    cdef Py_ssize_t n_shapelets
+    cdef Py_ssize_t n
+    cdef double coverage_probability
+    cdef double variability
+
+    def __init__(
+        self,
+        Py_ssize_t n_shapelets,
+        double coverage_probability,
+        double variability,
+        list metrics,
+        const double[::1] weights=None,
+    ):
+        super().__init__(metrics, weights)
+        self.n_shapelets = n_shapelets
+        self.coverage_probability = coverage_probability
+        self.variability = variability
+        self.n = <Py_ssize_t> floor(1.0 / self.coverage_probability)
+
+    def __reduce__(self):
+        return self.__class__, (
+            self.n_shapelets,
+            self.coverage_probability,
+            self.variability,
+            self.metrics.py_list,
+            np.asarray(self.weights)
+        )
+
+    cdef Py_ssize_t get_n_attributes(
+        self, Py_ssize_t* samples, Py_ssize_t n_samples
+    ) noexcept nogil:
+        return self.n_shapelets
+
+    cdef Py_ssize_t next_attribute(
+        self,
+        Py_ssize_t attribute_id,
+        TSArray X,
+        Py_ssize_t *samples,
+        Py_ssize_t n_samples,
+        Attribute *transient,
+        uint32_t *random_seed
+    ) noexcept nogil:
+        if attribute_id >= self.n_shapelets:
+            return -1
+
+        cdef double low, high
+        cdef MetricSubsequenceView *msv = <MetricSubsequenceView*> malloc(
+            sizeof(MetricSubsequenceView)
+        )
+
+        _dirichlet_process_start_end(
+            self.variability,
+            self.coverage_probability,
+            self.n,
+            random_seed,
+            &low,
+            &high,
+        )
+
+        # TODO: don't fail on tiny time series...
+        cdef Py_ssize_t start = <Py_ssize_t> min(X.shape[2] - 2, floor(low * X.shape[2]))
+        cdef Py_ssize_t end = <Py_ssize_t> floor(high * X.shape[2])
+        cdef Py_ssize_t length = max(2, end - start)
+
+        cdef Py_ssize_t index = samples[rand_int(0, n_samples, random_seed)]
+        cdef Py_ssize_t dim
+        if X.shape[1] > 1:
+            dim = rand_int(0, X.shape[1], random_seed)
+        else:
+            dim = 0
+
+        if self.weighted:
+            msv.metric = vose_rand_int(&self.vr, random_seed)
+        else:
+            msv.metric = rand_int(0, self.metrics.size, random_seed)
+
+        transient.dim = dim
+        self.metrics.init_transient(
+            msv.metric,
+            X,
+            &msv.view,
+            index,
+            start,
+            length,
+            dim,
         )
         transient.attribute = msv
         return 1

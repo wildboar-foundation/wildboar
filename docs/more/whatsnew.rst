@@ -144,6 +144,10 @@ Wildboar 1.2 introduces several new models.
        defaults to `strategy="random"` to retain backward compatibility. The
        default value will change to `strategy="best"` in 1.4 and we issue a
        deprecation warning.
+     - |Feature| Add support for specifying a coverage probability instead
+       of a shapelet size range using `coverage_probability` and `variability`.
+     - |Enhancement| Ensure that we consider the number of dimensions when
+       computing the default value for n_shapelets.
 
 
   .. grid-item-card::

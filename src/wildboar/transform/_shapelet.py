@@ -20,6 +20,8 @@ from ._base import BaseAttributeTransform
 from ._cshapelet import (
     CastorAttributeGenerator,
     CastorSummarizer,
+    CoverageProbabilityMultiMetricShapeletAttributeGenerator,
+    CoverageProbabilityShapeletAttributeGenerator,
     DilatedShapeletAttributeGenerator,
     FixedShapeletAttributeGenerator,
     RandomMultiMetricShapeletAttributeGenerator,
@@ -167,30 +169,29 @@ class RandomShapeletMixin:
         "max_shapelet_size": [
             Interval(numbers.Real, 0, 1, closed="both"),
         ],
+        "coverage_probability": [
+            Interval(numbers.Real, 0, 1, closed="left"),
+            None,
+        ],
+        "variability": [
+            Interval(numbers.Real, 0, None, closed="left"),
+            None,
+        ],
     }
 
     def _get_generator(self, x, y):  # noqa: PLR0912
-        if self.min_shapelet_size > self.max_shapelet_size:
-            raise ValueError(
-                f"The min_shapelet_size parameter of {type(self).__qualname__} "
-                "must be <= max_shapelet_size."
-            )
+        if (
+            not hasattr(self, "coverage_probability")
+            or self.coverage_probability is None
+        ):
+            if self.min_shapelet_size > self.max_shapelet_size:
+                raise ValueError(
+                    f"The min_shapelet_size parameter of {type(self).__qualname__} "
+                    "must be <= max_shapelet_size."
+                )
 
-        max_shapelet_size = math.ceil(self.n_timesteps_in_ * self.max_shapelet_size)
-        min_shapelet_size = math.ceil(self.n_timesteps_in_ * self.min_shapelet_size)
-        if min_shapelet_size < 2:
-            # NOTE: To ensure that the same random_seed generates the same shapelets
-            # in future versions we keep the limit of 2 timesteps for a shapelet as long
-            # as the time series is at least 2 timesteps. Otherwise we fall back to 1
-            # timestep.
-            if self.n_timesteps_in_ < 2:
-                min_shapelet_size = 1
-            else:
-                min_shapelet_size = 2
-
-        if isinstance(self.n_shapelets, str) and self.n_shapelets == "auto":
-            n_shapelets = 1000
-        elif isinstance(self.n_shapelets, str) or callable(self.n_shapelets):
+            max_shapelet_size = math.ceil(self.n_timesteps_in_ * self.max_shapelet_size)
+            min_shapelet_size = math.ceil(self.n_timesteps_in_ * self.min_shapelet_size)
             if min_shapelet_size < max_shapelet_size:
                 possible_shapelets = sum(
                     self.n_timesteps_in_ - curr_len + 1
@@ -198,7 +199,14 @@ class RandomShapeletMixin:
                 )
             else:
                 possible_shapelets = self.n_timesteps_in_ - min_shapelet_size + 1
+        else:
+            possible_shapelets = self.n_timesteps_in_
 
+        possible_shapelets *= self.n_dims_in_
+
+        if isinstance(self.n_shapelets, str) and self.n_shapelets == "auto":
+            n_shapelets = 1000
+        elif isinstance(self.n_shapelets, str) or callable(self.n_shapelets):
             if self.n_shapelets == "log2":
                 n_shapelets = int(np.log2(possible_shapelets))
             elif self.n_shapelets == "sqrt":
@@ -208,23 +216,64 @@ class RandomShapeletMixin:
         else:
             n_shapelets = self.n_shapelets
 
-        if isinstance(self.metric, str):
-            metric_params = self.metric_params if self.metric_params is not None else {}
-            return RandomShapeletAttributeGenerator(
-                _SUBSEQUENCE_METRICS[self.metric](**metric_params),
-                min_shapelet_size,
-                max_shapelet_size,
-                max(1, n_shapelets),
-            )
+        if (
+            hasattr(self, "coverage_probability")
+            and self.coverage_probability is not None
+        ):
+            if hasattr(self, "variability"):
+                variability = self.variability if self.variability is not None else 1
+            else:
+                variability = 1
+
+            if isinstance(self.metric, str):
+                metric_params = (
+                    self.metric_params if self.metric_params is not None else {}
+                )
+                return CoverageProbabilityShapeletAttributeGenerator(
+                    _SUBSEQUENCE_METRICS[self.metric](**metric_params),
+                    self.coverage_probability,
+                    variability,
+                    max(1, n_shapelets),
+                )
+            else:
+                metrics, weights = make_subsequence_metrics(self.metric)
+                return CoverageProbabilityMultiMetricShapeletAttributeGenerator(
+                    max(1, n_shapelets),
+                    self.coverage_probability,
+                    self.variability,
+                    metrics,
+                    weights,
+                )
         else:
-            metrics, weights = make_subsequence_metrics(self.metric)
-            return RandomMultiMetricShapeletAttributeGenerator(
-                max(1, n_shapelets),
-                min_shapelet_size,
-                max_shapelet_size,
-                metrics,
-                weights,
-            )
+            if min_shapelet_size < 2:
+                # NOTE: To ensure that the same random_seed generates the same shapelets
+                # in future versions we keep the limit of 2 timesteps for a shapelet as long
+                # as the time series is at least 2 timesteps. Otherwise we fall back to 1
+                # timestep.
+                if self.n_timesteps_in_ < 2:
+                    min_shapelet_size = 1
+                else:
+                    min_shapelet_size = 2
+
+            if isinstance(self.metric, str):
+                metric_params = (
+                    self.metric_params if self.metric_params is not None else {}
+                )
+                return RandomShapeletAttributeGenerator(
+                    _SUBSEQUENCE_METRICS[self.metric](**metric_params),
+                    min_shapelet_size,
+                    max_shapelet_size,
+                    max(1, n_shapelets),
+                )
+            else:
+                metrics, weights = make_subsequence_metrics(self.metric)
+                return RandomMultiMetricShapeletAttributeGenerator(
+                    max(1, n_shapelets),
+                    min_shapelet_size,
+                    max_shapelet_size,
+                    metrics,
+                    weights,
+                )
 
 
 class ShapeletMixin(RandomShapeletMixin, FixedShapeletMixin):
@@ -804,6 +853,8 @@ class ShapeletTransform(ShapeletMixin, BaseAttributeTransform):
         sample_size=1.0,
         min_shapelet_size=0.0,
         max_shapelet_size=1.0,
+        coverage_probability=None,
+        variability=None,
         random_state=None,
         n_jobs=None,
     ):
@@ -816,6 +867,8 @@ class ShapeletTransform(ShapeletMixin, BaseAttributeTransform):
         self.sample_size = sample_size
         self.min_shapelet_size = min_shapelet_size
         self.max_shapelet_size = max_shapelet_size
+        self.coverage_probability = coverage_probability
+        self.variability = variability
 
     def _more_tags(self):
         return {"requires_y": self.strategy == "best"}

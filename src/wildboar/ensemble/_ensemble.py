@@ -397,6 +397,8 @@ class BaseShapeletForestClassifier(BaseForestClassifier, metaclass=ABCMeta):
         n_shapelets="log2",
         min_shapelet_size=0.0,
         max_shapelet_size=1.0,
+        coverage_probability=None,
+        variability=1,
         metric="euclidean",
         metric_params=None,
         criterion="entropy",
@@ -426,6 +428,8 @@ class BaseShapeletForestClassifier(BaseForestClassifier, metaclass=ABCMeta):
         self.n_shapelets = n_shapelets
         self.min_shapelet_size = min_shapelet_size
         self.max_shapelet_size = max_shapelet_size
+        self.coverage_probability = coverage_probability
+        self.variability = variability
         self.metric = metric
         self.metric_params = metric_params
 
@@ -467,6 +471,18 @@ class ShapeletForestClassifier(BaseShapeletForestClassifier):
     max_shapelet_size : float, optional
         The maximum length of a shapelets expressed as a fraction of
         *n_timestep*.
+    coverage_probability : float, optional
+        The probability that a time step is covered by a
+        shapelet, in the range 0 < coverage_probability <= 1.
+
+        - For larger `coverage_probability`, we get larger shapelets.
+        - For smaller `coverage_probability`, we get shorter shapelets.
+    variability : float, optional
+        Controls the shape of the Beta distribution used to
+        sample shapelets. Defaults to 1.
+
+        - Higher `variability` creates more uniform intervals.
+        - Lower `variability` creates more variable intervals sizes.
     alpha : float, optional
         Dynamically decrease the number of sampled shapelets at each node
         according to the current depth, i.e.
@@ -567,6 +583,8 @@ class ShapeletForestClassifier(BaseShapeletForestClassifier):
         min_shapelet_size=0.0,
         max_shapelet_size=1.0,
         alpha=None,
+        coverage_probability=None,
+        variability=1,
         metric="euclidean",
         metric_params=None,
         criterion="entropy",
@@ -588,6 +606,8 @@ class ShapeletForestClassifier(BaseShapeletForestClassifier):
                 "impurity_equality_tolerance",
                 "min_shapelet_size",
                 "max_shapelet_size",
+                "coverage_probability",
+                "variability",
                 "alpha",
                 "metric",
                 "metric_params",
@@ -602,6 +622,8 @@ class ShapeletForestClassifier(BaseShapeletForestClassifier):
             impurity_equality_tolerance=impurity_equality_tolerance,
             min_shapelet_size=min_shapelet_size,
             max_shapelet_size=max_shapelet_size,
+            coverage_probability=coverage_probability,
+            variability=variability,
             metric=metric,
             metric_params=metric_params,
             criterion=criterion,
@@ -640,6 +662,18 @@ class ExtraShapeletTreesClassifier(BaseShapeletForestClassifier):
     max_shapelet_size : float, optional
         The maximum length of a shapelets expressed as a fraction of
         *n_timestep*.
+    coverage_probability : float, optional
+        The probability that a time step is covered by a
+        shapelet, in the range 0 < coverage_probability <= 1.
+
+        - For larger `coverage_probability`, we get larger shapelets.
+        - For smaller `coverage_probability`, we get shorter shapelets.
+    variability : float, optional
+        Controls the shape of the Beta distribution used to
+        sample shapelets. Defaults to 1.
+
+        - Higher `variability` creates more uniform intervals.
+        - Lower `variability` creates more variable intervals sizes.
     metric : str or list, optional
         The distance metric.
 
@@ -724,6 +758,8 @@ class ExtraShapeletTreesClassifier(BaseShapeletForestClassifier):
         min_impurity_decrease=0.0,
         min_shapelet_size=0.0,
         max_shapelet_size=1.0,
+        coverage_probability=None,
+        variability=1,
         metric="euclidean",
         metric_params=None,
         criterion="entropy",
@@ -743,6 +779,8 @@ class ExtraShapeletTreesClassifier(BaseShapeletForestClassifier):
                 "min_samples_split",
                 "min_shapelet_size",
                 "max_shapelet_size",
+                "coverage_probability",
+                "variability",
                 "metric",
                 "metric_params",
                 "criterion",
@@ -755,6 +793,8 @@ class ExtraShapeletTreesClassifier(BaseShapeletForestClassifier):
             min_impurity_decrease=min_impurity_decrease,
             min_shapelet_size=min_shapelet_size,
             max_shapelet_size=max_shapelet_size,
+            coverage_probability=coverage_probability,
+            variability=variability,
             metric=metric,
             metric_params=metric_params,
             criterion=criterion,
@@ -946,6 +986,8 @@ class BaseShapeletForestRegressor(BaseForestRegressor):
         n_shapelets="log2",
         min_shapelet_size=0.0,
         max_shapelet_size=1.0,
+        coverage_probability=None,
+        variability=1,
         metric="euclidean",
         metric_params=None,
         criterion="squared_error",
@@ -973,6 +1015,8 @@ class BaseShapeletForestRegressor(BaseForestRegressor):
         self.n_shapelets = n_shapelets
         self.min_shapelet_size = min_shapelet_size
         self.max_shapelet_size = max_shapelet_size
+        self.coverage_probability = coverage_probability
+        self.variability = variability
         self.metric = metric
         self.metric_params = metric_params
 
@@ -1015,6 +1059,18 @@ class ShapeletForestRegressor(BaseShapeletForestRegressor):
     max_shapelet_size : float, optional
         The maximum length of a shapelets expressed as a fraction of
         *n_timestep*.
+    coverage_probability : float, optional
+        The probability that a time step is covered by a
+        shapelet, in the range 0 < coverage_probability <= 1.
+
+        - For larger `coverage_probability`, we get larger shapelets.
+        - For smaller `coverage_probability`, we get shorter shapelets.
+    variability : float, optional
+        Controls the shape of the Beta distribution used to
+        sample shapelets. Defaults to 1.
+
+        - Higher `variability` creates more uniform intervals.
+        - Lower `variability` creates more variable intervals sizes.
     alpha : float, optional
         Dynamically decrease the number of sampled shapelets at each node
         according to the current depth, i.e.
@@ -1106,6 +1162,8 @@ class ShapeletForestRegressor(BaseShapeletForestRegressor):
         impurity_equality_tolerance=None,
         min_shapelet_size=0.0,
         max_shapelet_size=1.0,
+        coverage_probability=None,
+        variability=1,
         alpha=None,
         metric="euclidean",
         metric_params=None,
@@ -1127,6 +1185,8 @@ class ShapeletForestRegressor(BaseShapeletForestRegressor):
                 "impurity_equality_tolerance",
                 "min_shapelet_size",
                 "max_shapelet_size",
+                "coverage_probability",
+                "variability",
                 "alpha",
                 "metric",
                 "metric_params",
@@ -1141,6 +1201,8 @@ class ShapeletForestRegressor(BaseShapeletForestRegressor):
             impurity_equality_tolerance=impurity_equality_tolerance,
             min_shapelet_size=min_shapelet_size,
             max_shapelet_size=max_shapelet_size,
+            coverage_probability=coverage_probability,
+            variability=variability,
             metric=metric,
             metric_params=metric_params,
             criterion=criterion,
@@ -1173,6 +1235,18 @@ class ExtraShapeletTreesRegressor(BaseShapeletForestRegressor):
     max_shapelet_size : float, optional
         The maximum length of a shapelets expressed as a fraction of
         *n_timestep*.
+    coverage_probability : float, optional
+        The probability that a time step is covered by a
+        shapelet, in the range 0 < coverage_probability <= 1.
+
+        - For larger `coverage_probability`, we get larger shapelets.
+        - For smaller `coverage_probability`, we get shorter shapelets.
+    variability : float, optional
+        Controls the shape of the Beta distribution used to
+        sample shapelets. Defaults to 1.
+
+        - Higher `variability` creates more uniform intervals.
+        - Lower `variability` creates more variable intervals sizes.
     metric : str or list, optional
         The distance metric.
 
@@ -1251,6 +1325,8 @@ class ExtraShapeletTreesRegressor(BaseShapeletForestRegressor):
         min_samples_split=2,
         min_shapelet_size=0,
         max_shapelet_size=1,
+        coverage_probability=None,
+        variability=1,
         metric="euclidean",
         metric_params=None,
         criterion="squared_error",
@@ -1269,6 +1345,8 @@ class ExtraShapeletTreesRegressor(BaseShapeletForestRegressor):
                 "min_samples_split",
                 "min_shapelet_size",
                 "max_shapelet_size",
+                "coverage_probability",
+                "variability",
                 "metric",
                 "metric_params",
                 "criterion",
@@ -1279,6 +1357,8 @@ class ExtraShapeletTreesRegressor(BaseShapeletForestRegressor):
             min_samples_split=min_samples_split,
             min_shapelet_size=min_shapelet_size,
             max_shapelet_size=max_shapelet_size,
+            coverage_probability=coverage_probability,
+            variability=variability,
             metric=metric,
             metric_params=metric_params,
             criterion=criterion,
@@ -1325,6 +1405,18 @@ class ShapeletForestEmbedding(BaseShapeletForestRegressor):
     max_shapelet_size : float, optional
         The maximum length of a shapelets expressed as a fraction of
         *n_timestep*.
+    coverage_probability : float, optional
+        The probability that a time step is covered by a
+        shapelet, in the range 0 < coverage_probability <= 1.
+
+        - For larger `coverage_probability`, we get larger shapelets.
+        - For smaller `coverage_probability`, we get shorter shapelets.
+    variability : float, optional
+        Controls the shape of the Beta distribution used to
+        sample shapelets. Defaults to 1.
+
+        - Higher `variability` creates more uniform intervals.
+        - Lower `variability` creates more variable intervals sizes.
     metric : str or list, optional
         The distance metric.
 
@@ -1395,6 +1487,8 @@ class ShapeletForestEmbedding(BaseShapeletForestRegressor):
         min_impurity_decrease=0.0,
         min_shapelet_size=0.0,
         max_shapelet_size=1.0,
+        coverage_probability=None,
+        variability=1,
         metric="euclidean",
         metric_params=None,
         criterion="squared_error",
@@ -1414,6 +1508,8 @@ class ShapeletForestEmbedding(BaseShapeletForestRegressor):
                 "min_impurity_decrease",
                 "min_shapelet_size",
                 "max_shapelet_size",
+                "coverage_probability",
+                "variability",
                 "metric",
                 "metric_params",
                 "criterion",

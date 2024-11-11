@@ -177,6 +177,18 @@ class ShapeletTreeRegressor(DynamicTreeMixin, ShapeletMixin, BaseFeatureTreeRegr
     max_shapelet_size : float, optional
         The maximum length of a shapelets expressed as a fraction of
         *n_timestep*.
+    coverage_probability : float, optional
+        The probability that a time step is covered by a
+        shapelet, in the range 0 < coverage_probability <= 1.
+
+        - For larger `coverage_probability`, we get larger shapelets.
+        - For smaller `coverage_probability`, we get shorter shapelets.
+    variability : float, optional
+        Controls the shape of the Beta distribution used to
+        sample shapelets. Defaults to 1.
+
+        - Higher `variability` creates more uniform intervals.
+        - Lower `variability` creates more variable intervals sizes.
     alpha : float, optional
         Dynamically decrease the number of sampled shapelets at each node according
         to the current depth, i.e.:
@@ -249,7 +261,11 @@ class ShapeletTreeRegressor(DynamicTreeMixin, ShapeletMixin, BaseFeatureTreeRegr
     When `strategy` is set to `"random"`, the shapelet tree is constructed by
     randomly sampling `n_shapelets` within the range defined by
     `min_shapelet_size` and `max_shapelet_size`. This method is detailed in the
-    work of Karlsson et al. (2016).
+    work of Karlsson et al. (2016). Alternatively, shapelets can be sampled with
+    a specified `coverage_probability` and `variability`. By specifying a coverage
+    probability, we define the probability of including a point in the extracted
+    shapelet. If `coverage_probability` is set,
+    `min_shapelet_size` and `max_shapelet_size` are ignored.
 
     References
     ----------
@@ -283,6 +299,8 @@ class ShapeletTreeRegressor(DynamicTreeMixin, ShapeletMixin, BaseFeatureTreeRegr
         sample_size=1.0,
         min_shapelet_size=0,
         max_shapelet_size=1,
+        coverage_probability=None,
+        variability=1,
         alpha=None,
         metric="euclidean",
         metric_params=None,
@@ -303,6 +321,8 @@ class ShapeletTreeRegressor(DynamicTreeMixin, ShapeletMixin, BaseFeatureTreeRegr
         self.sample_size = sample_size
         self.min_shapelet_size = min_shapelet_size
         self.max_shapelet_size = max_shapelet_size
+        self.coverage_probability = coverage_probability
+        self.variability = variability
         self.metric = metric
         self.metric_params = metric_params
         self.criterion = criterion
@@ -342,6 +362,18 @@ class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
     max_shapelet_size : float, optional
         The maximum length of a sampled shapelet, expressed as a fraction, computed
         as `ceil(X.shape[-1] * max_shapelet_size)`.
+    coverage_probability : float, optional
+        The probability that a time step is covered by a
+        shapelet, in the range 0 < coverage_probability <= 1.
+
+        - For larger `coverage_probability`, we get larger shapelets.
+        - For smaller `coverage_probability`, we get shorter shapelets.
+    variability : float, optional
+        Controls the shape of the Beta distribution used to
+        sample shapelets. Defaults to 1.
+
+        - Higher `variability` creates more uniform intervals.
+        - Lower `variability` creates more variable intervals sizes.
     metric : {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
         Distance metric used to identify the best shapelet.
     metric_params : dict, optional
@@ -376,6 +408,8 @@ class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
         min_impurity_decrease=0.0,
         min_shapelet_size=0.0,
         max_shapelet_size=1.0,
+        coverage_probability=None,
+        variability=1,
         metric="euclidean",
         metric_params=None,
         criterion="squared_error",
@@ -390,6 +424,8 @@ class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
             strategy="random",
             min_shapelet_size=min_shapelet_size,
             max_shapelet_size=max_shapelet_size,
+            coverage_probability=coverage_probability,
+            variability=variability,
             metric=metric,
             metric_params=metric_params,
             criterion=criterion,
@@ -480,6 +516,18 @@ class ShapeletTreeClassifier(
     max_shapelet_size : float, optional
         The maximum length of a sampled shapelet, expressed as a fraction, computed
         as `ceil(X.shape[-1] * max_shapelet_size)`.
+    coverage_probability : float, optional
+        The probability that a time step is covered by a
+        shapelet, in the range 0 < coverage_probability <= 1.
+
+        - For larger `coverage_probability`, we get larger shapelets.
+        - For smaller `coverage_probability`, we get shorter shapelets.
+    variability : float, optional
+        Controls the shape of the Beta distribution used to
+        sample shapelets. Defaults to 1.
+
+        - Higher `variability` creates more uniform intervals.
+        - Lower `variability` creates more variable intervals sizes.
     alpha : float, optional
         Dynamically decrease the number of sampled shapelets at each node according
         to the current depth.
@@ -561,7 +609,11 @@ class ShapeletTreeClassifier(
     When `strategy` is set to `"random"`, the shapelet tree is constructed by
     randomly sampling `n_shapelets` within the range defined by
     `min_shapelet_size` and `max_shapelet_size`. This method is detailed in the
-    work of Karlsson et al. (2016).
+    work of Karlsson et al. (2016). Alternatively, shapelets can be sampled with
+    a specified `coverage_probability` and `variability`. By specifying a coverage
+    probability, we define the probability of including a point in the extracted
+    shapelet. If `coverage_probability` is set,
+    `min_shapelet_size` and `max_shapelet_size` are ignored.
 
     References
     ----------
@@ -595,6 +647,8 @@ class ShapeletTreeClassifier(
         sample_size=1.0,
         min_shapelet_size=0.0,
         max_shapelet_size=1.0,
+        coverage_probability=None,
+        variability=1,
         alpha=None,
         metric="euclidean",
         metric_params=None,
@@ -616,6 +670,8 @@ class ShapeletTreeClassifier(
         self.sample_size = sample_size
         self.min_shapelet_size = min_shapelet_size
         self.max_shapelet_size = max_shapelet_size
+        self.coverage_probability = coverage_probability
+        self.variability = variability
         self.metric = metric
         self.metric_params = metric_params
         self.criterion = criterion
@@ -651,6 +707,18 @@ class ExtraShapeletTreeClassifier(ShapeletTreeClassifier):
     max_shapelet_size : float, optional
         The maximum length of a sampled shapelet, expressed as a fraction, computed
         as `ceil(X.shape[-1] * max_shapelet_size)`.
+    coverage_probability : float, optional
+        The probability that a time step is covered by a
+        shapelet, in the range 0 < coverage_probability <= 1.
+
+        - For larger `coverage_probability`, we get larger shapelets.
+        - For smaller `coverage_probability`, we get shorter shapelets.
+    variability : float, optional
+        Controls the shape of the Beta distribution used to
+        sample shapelets. Defaults to 1.
+
+        - Higher `variability` creates more uniform intervals.
+        - Lower `variability` creates more variable intervals sizes.
     metric : {"euclidean", "scaled_euclidean", "dtw", "scaled_dtw"}, optional
         Distance metric used to identify the best shapelet.
     metric_params : dict, optional
@@ -693,6 +761,8 @@ class ExtraShapeletTreeClassifier(ShapeletTreeClassifier):
         min_samples_split=2,
         min_shapelet_size=0.0,
         max_shapelet_size=1.0,
+        coverage_probability=None,
+        variability=1,
         metric="euclidean",
         metric_params=None,
         criterion="entropy",
@@ -708,6 +778,8 @@ class ExtraShapeletTreeClassifier(ShapeletTreeClassifier):
             strategy="random",
             min_shapelet_size=min_shapelet_size,
             max_shapelet_size=max_shapelet_size,
+            coverage_probability=coverage_probability,
+            variability=variability,
             metric=metric,
             metric_params=metric_params,
             criterion=criterion,

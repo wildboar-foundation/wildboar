@@ -4,6 +4,7 @@
 import numpy as np
 import pytest
 from numpy.testing import assert_almost_equal, assert_array_equal, assert_equal
+
 from wildboar.datasets import load_gun_point
 from wildboar.tree import (
     ExtraShapeletTreeClassifier,
@@ -411,6 +412,31 @@ def test_impurity_equality_tolerance():
         3,  3,  3,  3,  6,  6,  9,  6,  9,  6,  3,  3,  6,  6]
     )
     # fmt:on
+    assert_array_equal(actual_apply, expected_apply)
+
+
+def test_coverage_probability(gun_point):
+    X_train, X_test, y_train, y_test = gun_point
+    f = ShapeletTreeClassifier(
+        random_state=1,
+        strategy="random",
+        metric="scaled_euclidean",
+        n_shapelets=5,
+        coverage_probability=0.2,
+        variability=3,
+    )
+    f.fit(X_train, y_train)
+    actual_apply = f.apply(X_test)
+    # fmt:off
+    expected_apply = np.array([
+        2, 5, 8, 2, 7, 7, 2, 8, 5, 2, 2, 2, 8, 2, 2, 2, 5, 5, 5, 8, 2, 5,
+        8, 2, 7, 5, 2, 2, 5, 8, 5, 5, 5, 5, 7, 2, 2, 5, 7, 8, 5, 5, 5, 5,
+        5, 2, 3, 5, 2, 5, 5, 8, 2, 5, 5, 2, 8, 5, 2, 7, 7, 8, 2, 2, 2, 2,
+        2, 5, 5, 8, 5, 5, 5, 5, 5, 5, 5, 5, 5, 2, 7, 7, 8, 5, 5, 5, 2, 5,
+        2, 8, 7, 8, 8, 5, 2, 2, 5, 5, 2, 2, 3, 7, 5, 5, 5, 7, 5, 5, 2, 8,
+        5, 5, 2, 5, 7, 2, 5, 2, 7, 5, 7, 5, 5, 5, 7, 5, 7, 2, 8, 5, 5, 5,
+        2, 2, 2, 3, 7, 5, 2, 2, 5, 7, 2, 8, 2, 5, 7, 5, 5, 7])
+    # fmt: on
     assert_array_equal(actual_apply, expected_apply)
 
 

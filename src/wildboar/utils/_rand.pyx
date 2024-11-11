@@ -7,7 +7,7 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 import numpy as np
-from libc.math cimport log, sqrt
+from libc.math cimport log, sqrt, pow
 from libc.stdlib cimport free, malloc
 
 
@@ -155,6 +155,36 @@ cdef double rand_normal(double mu, double sigma, uint32_t *random_state) noexcep
     _y1 = x1 * w
     y2 = x2 * w
     return mu + _y1 * sigma
+
+
+
+cdef double rand_gamma(double alpha, double theta, uint32_t *random_state) noexcept nogil:
+    if alpha < 1.0:
+        return (
+            rand_gamma(alpha + 1, theta, random_state) *
+            pow(rand_uniform(0, 1, random_state), 1 / alpha)
+        )
+
+    cdef double d = alpha - 1.0 / 3.0
+    cdef double c = 1.0 / sqrt(9.0 * d)
+    cdef double x, v, u;
+
+    while True:
+        x = rand_normal(0, 1, random_state)
+        v = 1 + c * x
+        if v > 0:
+            v = v * v * v
+            u = rand_uniform(0, 1, random_state)
+            if u < 1.0 - 0.0331 * x * x * x * x:
+                return theta * d * v
+            if log(u) < 0.5 * x * x + d * (1.0 - v + log(v)):
+                return theta * d * v
+
+
+cdef double rand_beta(double alpha, double beta, uint32_t *random_state) noexcept nogil:
+    cdef double x = rand_gamma(alpha, 1, random_state)
+    cdef double y = rand_gamma(beta, 1, random_state)
+    return x / (x + y)
 
 
 cdef void shuffle(Py_ssize_t *values, Py_ssize_t length, uint32_t *seed) noexcept nogil:

@@ -29,6 +29,10 @@ cdef double rand_uniform(double low, double high, uint32_t *random_state) noexce
 
 cdef double rand_normal(double mean, double std, uint32_t *random_state) noexcept nogil
 
+cdef double rand_gamma(double alpha, double theta, uint32_t *random_state) noexcept nogil
+
+cdef double rand_beta(double alpha, double beta, uint32_t *random_state) noexcept nogil
+
 cdef void shuffle(Py_ssize_t *values, Py_ssize_t length, uint32_t *seed) noexcept nogil
 
 cdef class RandomSampler:
