@@ -83,10 +83,8 @@ class RocketMixin:
 
             max_size = int(self.n_timesteps_in_ * max_size)
             min_size = int(self.n_timesteps_in_ * min_size)
-            if min_size < 2:
-                min_size = 2
-            if max_size < 3:
-                max_size = 3
+            min_size = max(min_size, 2)
+            max_size = max(max_size, 3)
 
             kernel_size = np.arange(min_size, max_size)
         elif self.kernel_size is None:
