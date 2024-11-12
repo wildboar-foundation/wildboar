@@ -15,7 +15,7 @@ from numpy cimport uint32_t
 
 from ..utils cimport TSArray, _stats
 from ..utils._misc cimport to_ndarray_double, argsort
-from ..utils._rand cimport RAND_R_MAX, rand_int, shuffle
+from ..utils._rand cimport RAND_R_MAX, rand_int, shuffle, rand_beta_interval
 from ._attr_gen cimport Attribute, AttributeGenerator
 from .catch22 cimport _catch22
 
@@ -686,6 +686,110 @@ cdef class RandomIntervalAttributeGenerator(FixedIntervalAttributeGenerator):
 
         transient.attribute = interval
         return 0
+
+
+cdef class CoverageIntervalAttributeGenerator(FixedIntervalAttributeGenerator):
+
+    cdef double coverage_probability
+    cdef double variability
+
+    def __cinit__(
+        self,
+        Summarizer summarizer,
+        Py_ssize_t n_intervals,
+        double coverage_probability,
+        double variability,
+    ):
+        self.coverage_probability = coverage_probability
+        self.variability = variability
+
+    def __reduce__(self):
+        return self.__class__, (
+            self.summarizer,
+            self.n_intervals,
+            self.coverage_probability,
+            self.variability,
+        )
+
+    cdef Py_ssize_t get_n_attributes(
+        self, Py_ssize_t* samples, Py_ssize_t n_samples
+    ) noexcept nogil:
+        return self.n_intervals
+
+    cdef Py_ssize_t get_n_outputs(
+        self, Py_ssize_t *samples, Py_ssize_t n_samples
+    ) noexcept nogil:
+        return (
+            self.get_n_attributes(samples, n_samples) *
+            self.summarizer.n_outputs(2)
+        )
+
+    cdef Py_ssize_t transient_fill(
+            self,
+            Attribute *attribute,
+            TSArray X,
+            Py_ssize_t sample,
+            double[:, :] out,
+            Py_ssize_t out_sample,
+            Py_ssize_t out_attribute,
+    ) noexcept nogil:
+        cdef Interval *interval = <Interval*> attribute.attribute
+        cdef Py_ssize_t n_outputs = self.summarizer.n_outputs(2)
+        self.summarizer.summarize_all(
+            &X[sample, attribute.dim, interval.start],
+            interval.length,
+            &out[out_sample, out_attribute * n_outputs],
+            n_outputs,
+        )
+        return 0
+
+    cdef double transient_value(
+            self,
+            Attribute *attribute,
+            TSArray X,
+            Py_ssize_t sample
+    ) noexcept nogil:
+        cdef Interval *interval = <Interval*> attribute.attribute
+        return self.summarizer.summarize(
+            interval.random_output,
+            &X[sample, attribute.dim, interval.start],
+            interval.length,
+            self.summarizer.n_outputs(2),
+        )
+
+    cdef Py_ssize_t next_attribute(
+            self,
+            Py_ssize_t attribute_id,
+            TSArray X,
+            Py_ssize_t *samples,
+            Py_ssize_t n_samples,
+            Attribute *transient,
+            uint32_t *seed,
+    ) noexcept nogil:
+        cdef Interval *interval = <Interval*> malloc(sizeof(Interval))
+        cdef double low, high
+        rand_beta_interval(
+            self.variability,
+            self.coverage_probability,
+            seed,
+            &low,
+            &high,
+        )
+        interval.start = <Py_ssize_t> min(X.shape[2] - 2, floor(low * X.shape[2]))
+        cdef Py_ssize_t end = <Py_ssize_t> floor(high * X.shape[2])
+        interval.length = max(2, end - interval.start)
+
+        interval.random_output = 0
+        if self.summarizer.n_outputs(interval.length) > 1:
+            interval.random_output = rand_int(0, self.summarizer.n_outputs(interval.length), seed)
+
+        transient.dim = 0
+        if X.shape[1] > 1:
+            transient.dim = rand_int(1, X.shape[1], seed)
+
+        transient.attribute = interval
+        return 0
+
 
 
 cdef Py_ssize_t binsearch_depth(Py_ssize_t i) noexcept nogil:

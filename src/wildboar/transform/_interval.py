@@ -14,6 +14,7 @@ from wildboar.base import BaseEstimator
 from ._base import BaseAttributeTransform
 from ._cinterval import (
     Catch22Summarizer,
+    CoverageIntervalAttributeGenerator,
     DyadicIntervalAttributeGenerator,
     FixedIntervalAttributeGenerator,
     MeanSummarizer,
@@ -80,6 +81,8 @@ class IntervalMixin:
             Interval(numbers.Real, 0, 1, closed="both"),
             None,
         ],
+        "coverage_probability": [Interval(numbers.Real, 0, 1, closed="neither"), None],
+        "variability": [Interval(numbers.Real, 0, None, closed="left")],
         "sample_size": [None, Interval(numbers.Real, 0, 1, closed="both")],
         "summarizer": [StrOptions(_SUMMARIZER.keys()), list],
         "summarizer_params": [dict, None],
@@ -145,7 +148,11 @@ class IntervalMixin:
                 depth = self.depth
 
             return DyadicIntervalAttributeGenerator(summarizer, depth)
-        else:  # "random"
+        elif self.coverage_probability is not None:
+            return CoverageIntervalAttributeGenerator(
+                summarizer, n_intervals, self.coverage_probability, self.variability
+            )
+        else:
             min_size = self.min_size if self.min_size is not None else 0
             max_size = self.max_size if self.max_size is not None else 1
 
@@ -199,9 +206,23 @@ class IntervalTransform(IntervalMixin, BaseAttributeTransform):
     depth : int, optional
         The maximum depth for dyadic intervals if `intervals="dyadic"`.
     min_size : float, optional
-        The minimum interval size if `intervals="random"`.
+        The minimum interval size if `intervals="random"`. Ignored if
+        `coverage_probability` is set.
     max_size : float, optional
-        The maximum interval size if `intervals="random"`.
+        The maximum interval size if `intervals="random"`. Ignored if
+        `coverage_probability` is set.
+    coverage_probability : float, optional
+        The probability that a time step is covered by an interval, in the
+        range 0 < coverage_probability <= 1.
+
+        - For larger `coverage_probability`, we get larger intervals.
+        - For smaller `coverage_probability`, we get shorter intervals.
+    variability : float, optional
+        Controls the shape of the Beta distribution used to sample intervals.
+        Defaults to 1.
+
+        - Higher `variability` creates more uniform intervals.
+        - Lower `variability` creates more variable intervals sizes.
     summarizer : str or list, optional
         The method to summarize each interval.
 
@@ -270,6 +291,8 @@ class IntervalTransform(IntervalMixin, BaseAttributeTransform):
         depth=None,
         min_size=0.0,
         max_size=1.0,
+        coverage_probability=None,
+        variability=1,
         summarizer="mean_var_slope",
         summarizer_params=None,
         n_jobs=None,
@@ -284,6 +307,8 @@ class IntervalTransform(IntervalMixin, BaseAttributeTransform):
         self.depth = depth
         self.min_size = min_size
         self.max_size = max_size
+        self.coverage_probability = coverage_probability
+        self.variability = variability
 
 
 class FeatureTransform(IntervalTransform):

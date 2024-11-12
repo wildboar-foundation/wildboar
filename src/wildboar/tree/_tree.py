@@ -1048,9 +1048,23 @@ class IntervalTreeClassifier(IntervalMixin, BaseFeatureTreeClassifier):
         The fraction of intervals to sample at each node. Ignored unless
         `intervals="sample"`.
     min_size : float, optional
-        The minmum interval size. Ignored unless `intervals="random"`.
+        The minimum interval size if `intervals="random"`. Ignored if
+        `coverage_probability` is set.
     max_size : float, optional
-        The maximum interval size. Ignored unless `intervals="random"`.
+        The maximum interval size if `intervals="random"`. Ignored if
+        `coverage_probability` is set.
+    coverage_probability : float, optional
+        The probability that a time step is covered by an interval, in the
+        range 0 < coverage_probability <= 1.
+
+        - For larger `coverage_probability`, we get larger intervals.
+        - For smaller `coverage_probability`, we get shorter intervals.
+    variability : float, optional
+        Controls the shape of the Beta distribution used to
+        sample shapelets. Defaults to 1.
+
+        - Higher `variability` creates more uniform intervals.
+        - Lower `variability` creates more variable intervals sizes.
     summarizer : str or list, optional
         The method to summarize each interval.
 
@@ -1098,6 +1112,8 @@ class IntervalTreeClassifier(IntervalMixin, BaseFeatureTreeClassifier):
         sample_size=None,
         min_size=0.0,
         max_size=1.0,
+        coverage_probability=None,
+        variability=1,
         summarizer="mean_var_slope",
         class_weight=None,
         random_state=None,
@@ -1113,6 +1129,8 @@ class IntervalTreeClassifier(IntervalMixin, BaseFeatureTreeClassifier):
         self.sample_size = sample_size
         self.min_size = min_size
         self.max_size = max_size
+        self.coverage_probability = coverage_probability
+        self.variability = variability
         self.summarizer = summarizer
         self.random_state = random_state
         self.class_weight = class_weight
@@ -1155,9 +1173,23 @@ class IntervalTreeRegressor(IntervalMixin, BaseFeatureTreeRegressor):
         The fraction of intervals to sample at each node. Ignored unless
         `intervals="sample"`.
     min_size : float, optional
-        The minmum interval size. Ignored unless `intervals="random"`.
+        The minimum interval size if `intervals="random"`. Ignored if
+        `coverage_probability` is set.
     max_size : float, optional
-        The maximum interval size. Ignored unless `intervals="random"`.
+        The maximum interval size if `intervals="random"`. Ignored if
+        `coverage_probability` is set.
+    coverage_probability : float, optional
+        The probability that a time step is covered by an interval, in the range
+        0 < coverage_probability <= 1.
+
+        - For larger `coverage_probability`, we get larger intervals.
+        - For smaller `coverage_probability`, we get shorter intervals.
+    variability : float, optional
+        Controls the shape of the Beta distribution used to
+        sample shapelets. Defaults to 1.
+
+        - Higher `variability` creates more uniform intervals.
+        - Lower `variability` creates more variable intervals sizes.
     summarizer : str or list, optional
         The method to summarize each interval.
 
@@ -1199,63 +1231,11 @@ class IntervalTreeRegressor(IntervalMixin, BaseFeatureTreeRegressor):
         sample_size=None,
         min_size=0.0,
         max_size=1.0,
+        coverage_probability=None,
+        variability=1,
         summarizer="mean_var_slope",
         random_state=None,
     ):
-        """
-        Construct a new interval tree regressor.
-
-        Parameters
-        ----------
-        n_intervals : {"log", "sqrt"}, int or float, optional
-            The number of intervals to partition the time series into.
-
-            - if "log", the number of intervals is `log2(n_timestep)`.
-            - if "sqrt", the number of intervals is `sqrt(n_timestep)`.
-            - if int, the number of intervals is `n_intervals`.
-            - if float, the number of intervals is `n_intervals * n_timestep`, with
-              `0 < n_intervals < 1`.
-        max_depth : int, optional
-            The maximum depth of the tree. If `None` the tree is expanded until all
-            leaves are pure or until all leaves contain less than `min_samples_split`
-            samples.
-        min_samples_split : int, optional
-            The minimum number of samples to split an internal node.
-        min_samples_leaf : int, optional
-            The minimum number of samples in a leaf.
-        min_impurity_decrease : float, optional
-            A split will be introduced only if the impurity decrease is larger than or
-            equal to this value.
-        criterion : {"squared_error"}, optional
-            The criterion used to evaluate the utility of a split.
-
-            .. deprecated:: 1.1
-                Criterion "mse" was deprecated in v1.1 and removed in version 1.2.
-        intervals : {"fixed", "sample", "random"}, optional
-            - if "fixed", `n_intervals` non-overlapping intervals.
-            - if "sample", `n_intervals * sample_size` non-overlapping intervals.
-            - if "random", `n_intervals` possibly overlapping intervals of randomly
-              sampled in `[min_size * n_timestep, max_size * n_timestep]`.
-        sample_size : float, optional
-            The fraction of intervals to sample at each node. Ignored unless
-            `intervals="sample"`.
-        min_size : float, optional
-            The minimum interval size. Ignored unless `intervals="random"`.
-        max_size : float, optional
-            The maximum interval size. Ignored unless `intervals="random"`.
-        summarizer : list or str, optional
-            The summarization of each interval.
-
-            - if list, a list of callables accepting a numpy array returing a float.
-            - if str, a predified summarized. See
-              :mod:`wildboar.transform._interval._INTERVALS.keys()` for all supported
-              summarizers.
-        random_state : int or RandomState
-            - If `int`, `random_state` is the seed used by the random number generator
-            - If `RandomState` instance, `random_state` is the random number generator
-            - If `None`, the random number generator is the `RandomState` instance used
-              by `np.random`.
-        """
         super().__init__(
             max_depth=max_depth,
             min_samples_split=min_samples_split,
@@ -1267,6 +1247,8 @@ class IntervalTreeRegressor(IntervalMixin, BaseFeatureTreeRegressor):
         self.sample_size = sample_size
         self.min_size = min_size
         self.max_size = max_size
+        self.coverage_probability = coverage_probability
+        self.variability = variability
         self.summarizer = summarizer
         self.random_state = random_state
         self.criterion = criterion

@@ -178,4 +178,8 @@ Wildboar 1.2 introduces several new models.
        :class:`~wildboar.transform.IntervalTransform`.
      - |Enhancement| Add support for summarizer parameters in
        :class:`~wildboar.transform.IntervalTransform`.
+     - |Feature| Add support for specifying a coverage probability instead of a
+       minimum and maximum interval size in
+       :class:`~wildboar.transform.IntervalTransform` when using
+       `intervals="random"`.
 
