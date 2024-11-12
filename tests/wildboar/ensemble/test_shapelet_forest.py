@@ -3,6 +3,7 @@
 
 import pytest
 from numpy.testing import assert_almost_equal, assert_equal
+
 from wildboar.datasets import load_dataset, load_gun_point
 from wildboar.ensemble import ShapeletForestClassifier, ShapeletForestRegressor
 from wildboar.utils.estimator_checks import check_estimator
@@ -33,6 +34,8 @@ def test_check_estimator():
                 "impurity_equality_tolerance",
                 "min_shapelet_size",
                 "max_shapelet_size",
+                "coverage_probability",
+                "variability",
                 "alpha",
                 "metric",
                 "metric_params",
@@ -50,6 +53,8 @@ def test_check_estimator():
                 "impurity_equality_tolerance",
                 "min_shapelet_size",
                 "max_shapelet_size",
+                "coverage_probability",
+                "variability",
                 "alpha",
                 "metric",
                 "metric_params",
