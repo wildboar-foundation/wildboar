@@ -170,7 +170,7 @@ class RandomShapeletMixin:
             Interval(numbers.Real, 0, 1, closed="both"),
         ],
         "coverage_probability": [
-            Interval(numbers.Real, 0, 1, closed="left"),
+            Interval(numbers.Real, 0, 1, closed="neither"),
             None,
         ],
         "variability": [
@@ -790,6 +790,18 @@ class ShapeletTransform(ShapeletMixin, BaseAttributeTransform):
         Minimum shapelet size.
     max_shapelet_size : float, optional
         Maximum shapelet size.
+    coverage_probability : float, optional
+        The probability that a time step is covered by a
+        shapelet, in the range 0 < coverage_probability <= 1.
+
+        - For larger `coverage_probability`, we get larger shapelets.
+        - For smaller `coverage_probability`, we get shorter shapelets.
+    variability : float, optional
+        Controls the shape of the Beta distribution used to
+        sample shapelets. Defaults to 1.
+
+        - Higher `variability` creates more uniform intervals.
+        - Lower `variability` creates more variable intervals sizes.
     random_state : int or RandomState, optional
         - If `int`, `random_state` is the seed used by the random number generator
         - If `RandomState` instance, `random_state` is the random number generator
