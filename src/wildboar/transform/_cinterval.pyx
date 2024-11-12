@@ -551,6 +551,11 @@ cdef class RandomFixedIntervalAttributeGenerator(FixedIntervalAttributeGenerator
         for i in range(n_intervals):
             self.random_attribute_id[i] = i
 
+    def __dealloc__(self):
+        if self.random_attribute_id != NULL:
+            free(self.random_attribute_id)
+            self.random_attribute_id = NULL
+
     cdef Py_ssize_t get_n_attributes(
         self, Py_ssize_t* samples, Py_ssize_t n_samples
     ) noexcept nogil:
