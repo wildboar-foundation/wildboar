@@ -31,7 +31,7 @@ from ..utils._rand cimport (
     VoseRand,
     rand_int,
     rand_uniform,
-    rand_beta,
+    rand_beta_interval,
     vose_rand_free,
     vose_rand_init,
     vose_rand_int,
@@ -247,31 +247,12 @@ cdef class RandomShapeletAttributeGenerator(ShapeletAttributeGenerator):
         return 1
 
 
-cdef void _dirichlet_process_start_end(
-    double v, double p, Py_ssize_t n, uint32_t *random_seed, double *low, double *high
-) noexcept nogil:
-    if rand_uniform(0, 1, random_seed) > n * (n + 1) * p - n:
-        n += 1
-
-    cdef Py_ssize_t z = rand_int(0, n, random_seed)
-
-    low[0] = 0
-    if z != 0:
-        low[0] = rand_beta(v * z, v * (n - z), random_seed)
-
-    cdef double w = 1.0
-    if z != n - 1:
-        w = rand_beta(v, v * (n - z - 1), random_seed)
-
-    high[0] = low[0] + (1 - low[0]) * w
-
 
 cdef class CoverageProbabilityShapeletAttributeGenerator(ShapeletAttributeGenerator):
 
     cdef Py_ssize_t n_shapelets
     cdef double coverage_probability
     cdef double variability
-    cdef Py_ssize_t n
 
     def __init__(
         self, metric, coverage_probability, variability, n_shapelets
@@ -280,7 +261,6 @@ cdef class CoverageProbabilityShapeletAttributeGenerator(ShapeletAttributeGenera
         self.n_shapelets = n_shapelets
         self.coverage_probability = coverage_probability
         self.variability = variability
-        self.n = <Py_ssize_t> floor(1.0 / self.coverage_probability)
 
     cdef Py_ssize_t get_n_attributes(
         self, Py_ssize_t* samples, Py_ssize_t n_samples
@@ -302,10 +282,9 @@ cdef class CoverageProbabilityShapeletAttributeGenerator(ShapeletAttributeGenera
         cdef double low, high
         cdef SubsequenceView *v = <SubsequenceView*> malloc(sizeof(SubsequenceView))
 
-        _dirichlet_process_start_end(
+        rand_beta_interval(
             self.variability,
             self.coverage_probability,
-            self.n,
             random_seed,
             &low,
             &high,
@@ -552,7 +531,6 @@ cdef class CoverageProbabilityMultiMetricShapeletAttributeGenerator(
     MultiMetricShapeletAttributeGenerator
 ):
     cdef Py_ssize_t n_shapelets
-    cdef Py_ssize_t n
     cdef double coverage_probability
     cdef double variability
 
@@ -568,7 +546,6 @@ cdef class CoverageProbabilityMultiMetricShapeletAttributeGenerator(
         self.n_shapelets = n_shapelets
         self.coverage_probability = coverage_probability
         self.variability = variability
-        self.n = <Py_ssize_t> floor(1.0 / self.coverage_probability)
 
     def __reduce__(self):
         return self.__class__, (
@@ -601,10 +578,9 @@ cdef class CoverageProbabilityMultiMetricShapeletAttributeGenerator(
             sizeof(MetricSubsequenceView)
         )
 
-        _dirichlet_process_start_end(
+        rand_beta_interval(
             self.variability,
             self.coverage_probability,
-            self.n,
             random_seed,
             &low,
             &high,
