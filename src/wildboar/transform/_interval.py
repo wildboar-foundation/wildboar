@@ -140,7 +140,7 @@ class IntervalMixin:
                     )
                 elif self.depth < 1:
                     raise ValueError(
-                        "The depth must be larger than 1, got {self.depth}"
+                        f"The depth must be larger than 1, got {self.depth}"
                     )
                 depth = self.depth
 
