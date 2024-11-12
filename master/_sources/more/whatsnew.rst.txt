@@ -144,6 +144,10 @@ Wildboar 1.2 introduces several new models.
        defaults to `strategy="random"` to retain backward compatibility. The
        default value will change to `strategy="best"` in 1.4 and we issue a
        deprecation warning.
+     - |Feature| Add support for specifying a coverage probability instead
+       of a shapelet size range using `coverage_probability` and `variability`.
+     - |Enhancement| Ensure that we consider the number of dimensions when
+       computing the default value for n_shapelets.
 
 
   .. grid-item-card::
@@ -162,6 +166,10 @@ Wildboar 1.2 introduces several new models.
        or `"best"`. If set to `"best"` we use the matrix profile to find the best
        shapelets per sample to use in the transformation. The shapelet size is
        determined by the `shapelet_size` parameter.
+     - |Feature| Add a new option to
+       :class:`~wildboar.transform.DerivativeTransform` ``method`` to select
+       the way in which the difference is computed. Supported options include:
+       `backward`, `central`, and `slope`.
      - |API| Deprecate the ``estimate`` parameter in :class:`~wildboar.transform.SAX`.
        The same behavior can be had using ``scale=True`` (default).
      - |Enhancement| Add support for dyadic intervals in
@@ -170,4 +178,8 @@ Wildboar 1.2 introduces several new models.
        :class:`~wildboar.transform.IntervalTransform`.
      - |Enhancement| Add support for summarizer parameters in
        :class:`~wildboar.transform.IntervalTransform`.
+     - |Feature| Add support for specifying a coverage probability instead of a
+       minimum and maximum interval size in
+       :class:`~wildboar.transform.IntervalTransform` when using
+       `intervals="random"`.
 

@@ -1055,7 +1055,7 @@ Classes
           !! processed by numpydoc !!
 
 
-.. py:class:: RandomShapeletClassifier(n_shapelets=1000, *, metric='euclidean', metric_params=None, min_shapelet_size=0.1, max_shapelet_size=1.0, alphas=(0.1, 1.0, 10.0), fit_intercept=True, normalize=False, scoring=None, cv=None, class_weight=None, random_state=None, n_jobs=None)
+.. py:class:: RandomShapeletClassifier(n_shapelets=1000, *, metric='euclidean', metric_params=None, min_shapelet_size=0.1, max_shapelet_size=1.0, coverage_probability=None, variability=None, alphas=(0.1, 1.0, 10.0), fit_intercept=True, normalize=False, scoring=None, cv=None, class_weight=None, random_state=None, n_jobs=None)
 
 
 
@@ -1100,6 +1100,20 @@ Classes
 
        **max_shapelet_size** : float, optional
            Maximum shapelet size.
+
+       **coverage_probability** : float, optional
+           The probability that a time step is covered by a
+           shapelet, in the range 0 < coverage_probability <= 1.
+           
+           - For larger `coverage_probability`, we get larger shapelets.
+           - For smaller `coverage_probability`, we get shorter shapelets.
+
+       **variability** : float, optional
+           Controls the shape of the Beta distribution used to
+           sample shapelets. Defaults to 1.
+           
+           - Higher `variability` creates more uniform intervals.
+           - Lower `variability` creates more variable intervals sizes.
 
        **alphas** : array-like of shape (n_alphas,), optional
            Array of alpha values to try.
@@ -1300,7 +1314,7 @@ Classes
           !! processed by numpydoc !!
 
 
-.. py:class:: RandomShapeletRegressor(n_shapelets=1000, *, metric='euclidean', metric_params=None, min_shapelet_size=0.1, max_shapelet_size=1.0, alphas=(0.1, 1.0, 10.0), fit_intercept=True, normalize=False, scoring=None, cv=None, gcv_mode=None, random_state=None, n_jobs=None)
+.. py:class:: RandomShapeletRegressor(n_shapelets=1000, *, metric='euclidean', metric_params=None, min_shapelet_size=0.1, max_shapelet_size=1.0, coverage_probability=None, variability=None, alphas=(0.1, 1.0, 10.0), fit_intercept=True, normalize=False, scoring=None, cv=None, gcv_mode=None, random_state=None, n_jobs=None)
 
 
 
@@ -1345,6 +1359,20 @@ Classes
 
        **max_shapelet_size** : float, optional
            Maximum shapelet size.
+
+       **coverage_probability** : float, optional
+           The probability that a time step is covered by a
+           shapelet, in the range 0 < coverage_probability <= 1.
+           
+           - For larger `coverage_probability`, we get larger shapelets.
+           - For smaller `coverage_probability`, we get shorter shapelets.
+
+       **variability** : float, optional
+           Controls the shape of the Beta distribution used to
+           sample shapelets. Defaults to 1.
+           
+           - Higher `variability` creates more uniform intervals.
+           - Lower `variability` creates more variable intervals sizes.
 
        **alphas** : array-like of shape (n_alphas,), optional
            Array of alpha values to try.

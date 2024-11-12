@@ -387,6 +387,7 @@ Functions
 
 
    .. py:property:: download_url
+
       
       The url template for downloading bundles.
 
@@ -414,6 +415,7 @@ Functions
 
 
    .. py:property:: name
+
       
       Name of the repository.
 
@@ -441,6 +443,7 @@ Functions
 
 
    .. py:property:: version
+
       
       The repository version.
 
@@ -468,6 +471,7 @@ Functions
 
 
    .. py:property:: wildboar_requires
+
       
       The minimum required wildboar version.
 
@@ -780,6 +784,7 @@ Functions
    .. py:property:: download_url
       :abstractmethod:
 
+
       
       The url template for downloading bundles.
 
@@ -808,6 +813,7 @@ Functions
 
    .. py:property:: name
       :abstractmethod:
+
 
       
       Name of the repository.
@@ -838,6 +844,7 @@ Functions
    .. py:property:: version
       :abstractmethod:
 
+
       
       The repository version.
 
@@ -866,6 +873,7 @@ Functions
 
    .. py:property:: wildboar_requires
       :abstractmethod:
+
 
       
       The minimum required wildboar version.

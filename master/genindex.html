@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Index &#8212; Wildboar 1.3.0.dev120+gdb7580d3e documentation</title>
+    <title>Index &#8212; Wildboar 1.3.0.dev161+ge3f2b11e7 documentation</title>
   
   
   
@@ -15,17 +15,19 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "auto";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "auto";
   </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-
-  
-  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+  <link href="_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=11f2bc40" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=fd3f3429" />
@@ -35,12 +37,13 @@
     <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=584e34e5" />
     <link rel="stylesheet" type="text/css" href="_static/css/pygments-override.css?v=9e853fe2" />
   
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="_static/documentation_options.js?v=7a569a3d"></script>
+    <script src="_static/documentation_options.js?v=92978116"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -50,7 +53,7 @@
     <script src="_static/design-tabs.js?v=f930bc37"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'genindex';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.15.4';
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://wildboar.dev/_versions.json';
         DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
         DOCUMENTATION_OPTIONS.show_version_warning_banner = true;
@@ -60,6 +63,7 @@
     <link rel="search" title="Search" href="search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.3.0.dev161+ge3f2b11e7" />
   </head>
   
   
@@ -75,19 +79,8 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="search.html"
       method="get">
@@ -95,7 +88,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search the docs ..."
          aria-label="Search the docs ..."
          autocomplete="off"
@@ -103,8 +95,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -138,7 +130,7 @@
     
     
     <img src="_static/logo.png" class="logo__image only-light" alt=""/>
-    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt=""/>`);</script>
+    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt=""/>
   
   
     <p class="title logo__title">Wildboar</p>
@@ -146,28 +138,24 @@
 </a></div>
     
       <div class="navbar-item">
-<script>
-document.write(`
-  <div class="version-switcher__container dropdown">
-    <button id="pst-version-switcher-button-2"
-      type="button"
-      class="version-switcher__button btn btn-sm dropdown-toggle"
-      data-bs-toggle="dropdown"
-      aria-haspopup="listbox"
-      aria-controls="pst-version-switcher-list-2"
-      aria-label="Version switcher list"
-    >
-      Choose version  <!-- this text may get changed later by javascript -->
-      <span class="caret"></span>
-    </button>
-    <div id="pst-version-switcher-list-2"
-      class="version-switcher__menu dropdown-menu list-group-flush py-0"
-      role="listbox" aria-labelledby="pst-version-switcher-button-2">
-      <!-- dropdown will be populated by javascript on page load -->
-    </div>
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
   </div>
-`);
-</script></div>
+</div></div>
     
   </div>
   
@@ -217,29 +205,21 @@ document.write(`
         <div class="navbar-item navbar-persistent--container">
           
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
         </div>
       
       
         <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
       
         <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -276,15 +256,11 @@ document.write(`
   
     <div class="navbar-persistent--mobile">
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
     </div>
   
 
@@ -301,7 +277,8 @@ document.write(`
       
         
       
-      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
         
 
   
@@ -355,15 +332,11 @@ document.write(`
         
           <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
         
           <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -657,6 +630,8 @@ document.write(`
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.NiceCounterfactual.explain">explain() (wildboar.explain.counterfactual.NiceCounterfactual method)</a>
+</li>
       <li><a href="api/wildboar/base/index.html#wildboar.base.ExplainerMixin">ExplainerMixin (class in wildboar.base)</a>
 </li>
       <li><a href="api/wildboar/tree/index.html#wildboar.tree.ExtraShapeletTreeClassifier">ExtraShapeletTreeClassifier (class in wildboar.tree)</a>
@@ -746,9 +721,15 @@ document.write(`
 </li>
         <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ShapeletForestRegressor.fit">(wildboar.ensemble.ShapeletForestRegressor method)</a>
 </li>
+        <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.NiceCounterfactual.fit">(wildboar.explain.counterfactual.NiceCounterfactual method)</a>
+</li>
         <li><a href="api/wildboar/segment/index.html#wildboar.segment.FlussSegmenter.fit">(wildboar.segment.FlussSegmenter method)</a>
 </li>
         <li><a href="api/wildboar/transform/index.html#wildboar.transform.CastorTransform.fit">(wildboar.transform.CastorTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.DerivativeTransform.fit">(wildboar.transform.DerivativeTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.DiffTransform.fit">(wildboar.transform.DiffTransform method)</a>
 </li>
         <li><a href="api/wildboar/transform/index.html#wildboar.transform.DilatedShapeletTransform.fit">(wildboar.transform.DilatedShapeletTransform method)</a>
 </li>
@@ -803,6 +784,8 @@ document.write(`
         <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.KNeighborsCounterfactual.fit_explain">(wildboar.explain.counterfactual.KNeighborsCounterfactual method)</a>
 </li>
         <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.NativeGuideCounterfactual.fit_explain">(wildboar.explain.counterfactual.NativeGuideCounterfactual method)</a>
+</li>
+        <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.NiceCounterfactual.fit_explain">(wildboar.explain.counterfactual.NiceCounterfactual method)</a>
 </li>
         <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.PrototypeCounterfactual.fit_explain">(wildboar.explain.counterfactual.PrototypeCounterfactual method)</a>
 </li>
@@ -1024,6 +1007,8 @@ document.write(`
 </li>
         <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.NativeGuideCounterfactual.get_metadata_routing">(wildboar.explain.counterfactual.NativeGuideCounterfactual method)</a>
 </li>
+        <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.NiceCounterfactual.get_metadata_routing">(wildboar.explain.counterfactual.NiceCounterfactual method)</a>
+</li>
         <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.PrototypeCounterfactual.get_metadata_routing">(wildboar.explain.counterfactual.PrototypeCounterfactual method)</a>
 </li>
         <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.ShapeletForestCounterfactual.get_metadata_routing">(wildboar.explain.counterfactual.ShapeletForestCounterfactual method)</a>
@@ -1189,6 +1174,8 @@ document.write(`
         <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.KNeighborsCounterfactual.get_params">(wildboar.explain.counterfactual.KNeighborsCounterfactual method)</a>
 </li>
         <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.NativeGuideCounterfactual.get_params">(wildboar.explain.counterfactual.NativeGuideCounterfactual method)</a>
+</li>
+        <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.NiceCounterfactual.get_params">(wildboar.explain.counterfactual.NiceCounterfactual method)</a>
 </li>
         <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.PrototypeCounterfactual.get_params">(wildboar.explain.counterfactual.PrototypeCounterfactual method)</a>
 </li>
@@ -1425,6 +1412,8 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/wildboar/datasets/outlier/index.html#wildboar.datasets.outlier.majority_outliers">majority_outliers() (in module wildboar.datasets.outlier)</a>
 </li>
+      <li><a href="api/wildboar/distance/index.html#wildboar.distance.matrix_profile">matrix_profile() (in module wildboar.distance)</a>
+</li>
       <li><a href="api/wildboar/transform/index.html#wildboar.transform.MatrixProfileTransform">MatrixProfileTransform (class in wildboar.transform)</a>
 </li>
       <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.maxabs_scale">maxabs_scale() (in module wildboar.datasets.preprocess)</a>
@@ -1504,11 +1493,13 @@ document.write(`
         <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.Repository.name">(wildboar.datasets.Repository property)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.named_preprocess">named_preprocess() (in module wildboar.datasets.preprocess)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.NativeGuideCounterfactual">NativeGuideCounterfactual (class in wildboar.explain.counterfactual)</a>
+</li>
+      <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.NiceCounterfactual">NiceCounterfactual (class in wildboar.explain.counterfactual)</a>
 </li>
       <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.NpBundle">NpBundle (class in wildboar.datasets)</a>
 </li>
@@ -1531,6 +1522,8 @@ document.write(`
       <li><a href="api/wildboar/distance/lb/index.html#wildboar.distance.lb.PaaLowerBound">PaaLowerBound (class in wildboar.distance.lb)</a>
 </li>
       <li><a href="api/wildboar/distance/index.html#wildboar.distance.paired_distance">paired_distance() (in module wildboar.distance)</a>
+</li>
+      <li><a href="api/wildboar/distance/index.html#wildboar.distance.paired_matrix_profile">paired_matrix_profile() (in module wildboar.distance)</a>
 </li>
       <li><a href="api/wildboar/distance/index.html#wildboar.distance.paired_subsequence_distance">paired_subsequence_distance() (in module wildboar.distance)</a>
 </li>
@@ -1558,6 +1551,8 @@ document.write(`
         <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.KNeighborsCounterfactual.plot">(wildboar.explain.counterfactual.KNeighborsCounterfactual method)</a>
 </li>
         <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.NativeGuideCounterfactual.plot">(wildboar.explain.counterfactual.NativeGuideCounterfactual method)</a>
+</li>
+        <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.NiceCounterfactual.plot">(wildboar.explain.counterfactual.NiceCounterfactual method)</a>
 </li>
         <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.PrototypeCounterfactual.plot">(wildboar.explain.counterfactual.PrototypeCounterfactual method)</a>
 </li>
@@ -1797,6 +1792,8 @@ document.write(`
 </li>
         <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.NativeGuideCounterfactual.score">(wildboar.explain.counterfactual.NativeGuideCounterfactual method)</a>
 </li>
+        <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.NiceCounterfactual.score">(wildboar.explain.counterfactual.NiceCounterfactual method)</a>
+</li>
         <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.PrototypeCounterfactual.score">(wildboar.explain.counterfactual.PrototypeCounterfactual method)</a>
 </li>
         <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.ShapeletForestCounterfactual.score">(wildboar.explain.counterfactual.ShapeletForestCounterfactual method)</a>
@@ -2001,6 +1998,8 @@ document.write(`
 </li>
         <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.NativeGuideCounterfactual.set_params">(wildboar.explain.counterfactual.NativeGuideCounterfactual method)</a>
 </li>
+        <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.NiceCounterfactual.set_params">(wildboar.explain.counterfactual.NiceCounterfactual method)</a>
+</li>
         <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.PrototypeCounterfactual.set_params">(wildboar.explain.counterfactual.PrototypeCounterfactual method)</a>
 </li>
         <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.ShapeletForestCounterfactual.set_params">(wildboar.explain.counterfactual.ShapeletForestCounterfactual method)</a>
@@ -2131,6 +2130,8 @@ document.write(`
 </li>
         <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.Standardize.transform">(wildboar.datasets.preprocess.Standardize method)</a>
 </li>
+        <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.Truncate.transform">(wildboar.datasets.preprocess.Truncate method)</a>
+</li>
         <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.DistanceVarianceThreshold.transform">(wildboar.dimension_selection.DistanceVarianceThreshold method)</a>
 </li>
         <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.ECSSelector.transform">(wildboar.dimension_selection.ECSSelector method)</a>
@@ -2158,6 +2159,10 @@ document.write(`
         <li><a href="api/wildboar/segment/index.html#wildboar.segment.FlussSegmenter.transform">(wildboar.segment.FlussSegmenter method)</a>
 </li>
         <li><a href="api/wildboar/transform/index.html#wildboar.transform.CastorTransform.transform">(wildboar.transform.CastorTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.DerivativeTransform.transform">(wildboar.transform.DerivativeTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.DiffTransform.transform">(wildboar.transform.DiffTransform method)</a>
 </li>
         <li><a href="api/wildboar/transform/index.html#wildboar.transform.DilatedShapeletTransform.transform">(wildboar.transform.DilatedShapeletTransform method)</a>
 </li>
@@ -2410,8 +2415,8 @@ document.write(`
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script defer src="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -2444,7 +2449,7 @@ document.write(`
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.4.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
 </p></div>
       
     </div>

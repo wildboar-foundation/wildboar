@@ -558,6 +558,9 @@ representations that enhance predictive performance.
    series data, such as identifying trends, detecting changes in momentum, or
    analyzing volatility.
 
+   Support computing the `backward` difference, `central` difference and
+   `slope` difference.
+
 :class:`~wildboar.transform.FeatureTransform`:
    A collection of features for the full time series. By default we compute
    the `catch22` features. This is equivalent to

@@ -39,6 +39,7 @@ Classes
 
    wildboar.explain.counterfactual.KNeighborsCounterfactual
    wildboar.explain.counterfactual.NativeGuideCounterfactual
+   wildboar.explain.counterfactual.NiceCounterfactual
    wildboar.explain.counterfactual.PrototypeCounterfactual
    wildboar.explain.counterfactual.ShapeletForestCounterfactual
 
@@ -130,7 +131,7 @@ Functions
           **y** : array-like of shape (n_samples, ), optional
               The labels.
 
-          **\*\*kwargs**
+          **\*\*kwargs** : dict, optional
               Optional extra arguments.
 
 
@@ -224,13 +225,23 @@ Functions
       Plot the explanation.
 
 
+      :Parameters:
+
+          **x** : array-like, optional
+              Optional imput samples.
+
+          **y** : array-like, optional
+              Optional target labels.
+
+          **ax** : Axes, optional
+              Optional axes to plot to.
 
 
 
       :Returns:
 
-          **ax** : Axes
-              The axes object
+          Axes
+              The axes object.
 
 
 
@@ -264,8 +275,8 @@ Functions
 
       :Returns:
 
-          **score** : float
-              The closensess of fit.
+          float
+              The proximity.
 
 
 
@@ -452,7 +463,7 @@ Functions
           **y** : array-like of shape (n_samples, ), optional
               The labels.
 
-          **\*\*kwargs**
+          **\*\*kwargs** : dict, optional
               Optional extra arguments.
 
 
@@ -546,13 +557,23 @@ Functions
       Plot the explanation.
 
 
+      :Parameters:
+
+          **x** : array-like, optional
+              Optional imput samples.
+
+          **y** : array-like, optional
+              Optional target labels.
+
+          **ax** : Axes, optional
+              Optional axes to plot to.
 
 
 
       :Returns:
 
-          **ax** : Axes
-              The axes object
+          Axes
+              The axes object.
 
 
 
@@ -586,8 +607,345 @@ Functions
 
       :Returns:
 
-          **score** : float
-              The closensess of fit.
+          float
+              The proximity.
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+.. py:class:: NiceCounterfactual(reward='compactness', metric='euclidean', metric_params=None, verbose=0)
+
+
+
+   
+   An algorithm designed to generate counterfactual explanations.
+
+   As described by Brughmans (2024), it is designed for tabular data,
+   addressing key requirements for real-life deployments:
+
+   1. Provides explanations for all predictions.
+   2. Compatible with any classification model, including non-differentiable ones.
+   3. Efficient in runtime.
+   4. Offers multiple counterfactual explanations with varying characteristics.
+
+   The algorithm leverages information from a nearest unlike neighbor to
+   iteratively incorporating timesteps from this neighbor into the instance
+   being explained.
+
+   :Parameters:
+
+       **reward** : str or callable, optional
+           The reward function to optimize the counterfactual explanations. Can be
+           a string specifying one of the predefined reward functions or a custom
+           callable. The callable is a function `f(original, current,
+           current_pred, candidates, candidate_preds)` that returns a ndarray of
+           scores for each candidate.
+
+       **metric** : str, optional
+           The distance metric to use for calculating proximity between instances.
+           Must be one of the supported metrics.
+
+       **metric_params** : dict, optional
+           Additional parameters to pass to the distance metric function.
+
+       **verbose** : int, optional
+           Increase feedback. No feedback (0) and some feedback (1).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+   .. py:method:: explain(X, y)
+
+      
+      Explain the predictions for the given data.
+
+
+      :Parameters:
+
+          **X** : array-like
+              The input data for which explanations are to be generated.
+
+          **y** : array-like
+              The target values corresponding to the input data.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: fit(estimator, X, y)
+
+      
+      Fit the counterfactual explanation model.
+
+
+      :Parameters:
+
+          **estimator** : object
+              The estimator object to be validated and used for fitting.
+
+          **X** : array-like of shape (n_samples, n_features)
+              The input samples.
+
+          **y** : array-like of shape (n_samples,)
+              The target values.
+
+
+
+      :Returns:
+
+          self
+              Returns the instance itself.
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: fit_explain(estimator, x=None, y=None, **kwargs)
+
+      
+      Fit and return the explanation.
+
+
+      :Parameters:
+
+          **estimator** : Estimator
+              The estimator to explain.
+
+          **x** : time-series, optional
+              The input time series.
+
+          **y** : array-like of shape (n_samples, ), optional
+              The labels.
+
+          **\*\*kwargs** : dict, optional
+              Optional extra arguments.
+
+
+
+      :Returns:
+
+          ndarray
+              The explanation.
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: plot(x=None, y=None, ax=None)
+
+      
+      Plot the explanation.
+
+
+      :Parameters:
+
+          **x** : array-like, optional
+              Optional imput samples.
+
+          **y** : array-like, optional
+              Optional target labels.
+
+          **ax** : Axes, optional
+              Optional axes to plot to.
+
+
+
+      :Returns:
+
+          Axes
+              The axes object.
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: score(x, y)
+
+      
+      Score the counterfactual explainer in terms of closeness of fit.
+
+
+      :Parameters:
+
+          **x** : array-like of shape (n_samples, n_timestep)
+              The samples.
+
+          **y** : array-like of shape (n_samples, )
+              The desired counterfactal label.
+
+
+
+      :Returns:
+
+          float
+              The proximity.
 
 
 
@@ -702,7 +1060,7 @@ Functions
           **y** : array-like of shape (n_samples, ), optional
               The labels.
 
-          **\*\*kwargs**
+          **\*\*kwargs** : dict, optional
               Optional extra arguments.
 
 
@@ -796,13 +1154,23 @@ Functions
       Plot the explanation.
 
 
+      :Parameters:
+
+          **x** : array-like, optional
+              Optional imput samples.
+
+          **y** : array-like, optional
+              Optional target labels.
+
+          **ax** : Axes, optional
+              Optional axes to plot to.
 
 
 
       :Returns:
 
-          **ax** : Axes
-              The axes object
+          Axes
+              The axes object.
 
 
 
@@ -836,8 +1204,8 @@ Functions
 
       :Returns:
 
-          **score** : float
-              The closensess of fit.
+          float
+              The proximity.
 
 
 
@@ -986,7 +1354,7 @@ Functions
           **y** : array-like of shape (n_samples, ), optional
               The labels.
 
-          **\*\*kwargs**
+          **\*\*kwargs** : dict, optional
               Optional extra arguments.
 
 
@@ -1080,13 +1448,23 @@ Functions
       Plot the explanation.
 
 
+      :Parameters:
+
+          **x** : array-like, optional
+              Optional imput samples.
+
+          **y** : array-like, optional
+              Optional target labels.
+
+          **ax** : Axes, optional
+              Optional axes to plot to.
 
 
 
       :Returns:
 
-          **ax** : Axes
-              The axes object
+          Axes
+              The axes object.
 
 
 
@@ -1120,8 +1498,8 @@ Functions
 
       :Returns:
 
-          **score** : float
-              The closensess of fit.
+          float
+              The proximity.
 
 
 
@@ -1173,7 +1551,7 @@ Functions
           !! processed by numpydoc !!
 
 
-.. py:function:: counterfactuals(estimator, x, y, *, train_x=None, train_y=None, method='best', scoring='deprecated', valid_scoring='deprecated', proximity=None, random_state=None, method_args=None)
+.. py:function:: counterfactuals(estimator, x, y, *, train_x=None, train_y=None, method='best', proximity=None, random_state=None, method_args=None)
 
    
    Compute a single counterfactual example for each sample.
@@ -1207,19 +1585,6 @@ Functions
            - if str, select counterfactual explainer from named collection. See
              ``_COUNTERFACTUALS.keys()`` for a list of valid values.
            - if, BaseCounterfactual use the supplied counterfactual.
-
-       **scoring** : str, callable, list or dict, optional
-           The scoring function to determine the similarity between the counterfactual
-           sample and the original sample.
-           
-           .. deprecated:: 1.1
-               ``scoring`` was renamed to ``proximity`` in 1.1 and will be removed in 1.2.
-
-       **valid_scoring** : bool, optional
-           Only compute score for successful counterfactuals.
-           
-           .. deprecated:: 1.1
-               ``valid_scoring`` will be removed in 1.2.
 
        **proximity** : str, callable, list or dict, optional
            The scoring function to determine the similarity between the counterfactual

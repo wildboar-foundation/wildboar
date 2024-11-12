@@ -101,7 +101,7 @@ Functions
           **y** : array-like of shape (n_samples, ), optional
               The labels.
 
-          **\*\*kwargs**
+          **\*\*kwargs** : dict, optional
               Optional extra arguments.
 
 
@@ -292,12 +292,53 @@ Functions
           !! processed by numpydoc !!
 
 
-.. py:class:: FrequencyImportance(window=1, scoring=None, n_repeat=1, random_state=None)
+.. py:class:: FrequencyImportance(scoring=None, n_repeat=5, random_state=None, n_bands=10, spectrum='amplitude', growth_factor=np.e)
 
 
 
    
-   Mixin class for all explainers in wildboar.
+   Explainer to evaluate feature importance based on frequency bands.
+
+   This class implements a frequency-based importance measure by permuting values
+   within frequency bands obtained from the Fourier transform of time series data.
+   It extends PermuteImportance to analyze the impact of different frequency
+   components on model predictions.
+
+   :Parameters:
+
+       **scoring** : str, callable, or None, optional
+           Scoring metric to evaluate importance. If None, uses estimator's score method.
+
+       **n_repeat** : int, optional
+           Number of times to permute each frequency band.
+
+       **random_state** : int, RandomState instance or None, optional
+           Controls randomization for permutations.
+
+       **n_bands** : int, optional
+           Number of frequency bands to analyze.
+
+       **spectrum** : {"amplitude", "phase"}, optional
+           Whether to permute amplitude components or to permute phase components.
+
+       **growth_factor** : float, optional
+           Controls growth of frequency band sizes:
+           - growth_factor > 1: exponential growth (more detail at lower frequencies)
+           - growth_factor = 1: linear growth (equal-sized bands)
+           - growth_factor < 1: logarithmic decay (more detail at higher frequencies)
+           
+           Defaults to `np.e`.
+
+   :Attributes:
+
+       **components_** : list of tuples
+           The frequency bands used for permutation, as (start, end) indices.
+
+       **importances_** : ImportanceContainer
+           Contains the calculated feature importance scores.
+
+       **n_timesteps_in_** : int
+           Number of timesteps in the input data.
 
 
 
@@ -307,10 +348,18 @@ Functions
 
 
 
+   .. seealso::
 
+       
+       :obj:`PermuteImportance`
+           Base class for permutation-based importance.
+       
+       
+   .. rubric:: Notes
 
-
-
+   The frequency bands are constructed by dividing the frequency domain into windows,
+   with the size of each window controlled by the growth_factor parameter. This allows
+   for analyzing different scales of temporal patterns in the data.
 
 
 
@@ -334,7 +383,7 @@ Functions
           **y** : array-like of shape (n_samples, ), optional
               The labels.
 
-          **\*\*kwargs**
+          **\*\*kwargs** : dict, optional
               Optional extra arguments.
 
 
@@ -422,19 +471,29 @@ Functions
           !! processed by numpydoc !!
 
 
-   .. py:method:: plot(x=None, y=None, ax=None)
+   .. py:method:: plot(X=None, y=None, ax=None, k=None, sample_spacing=1, jitter=False)
 
       
       Plot the explanation.
 
 
+      :Parameters:
+
+          **x** : array-like, optional
+              Optional imput samples.
+
+          **y** : array-like, optional
+              Optional target labels.
+
+          **ax** : Axes, optional
+              Optional axes to plot to.
 
 
 
       :Returns:
 
-          **ax** : Axes
-              The axes object
+          Axes
+              The axes object.
 
 
 
@@ -560,7 +619,7 @@ Functions
           **y** : array-like of shape (n_samples, ), optional
               The labels.
 
-          **\*\*kwargs**
+          **\*\*kwargs** : dict, optional
               Optional extra arguments.
 
 
@@ -654,13 +713,23 @@ Functions
       Plot the explanation.
 
 
+      :Parameters:
+
+          **x** : array-like, optional
+              Optional imput samples.
+
+          **y** : array-like, optional
+              Optional target labels.
+
+          **ax** : Axes, optional
+              Optional axes to plot to.
 
 
 
       :Returns:
 
-          **ax** : Axes
-              The axes object
+          Axes
+              The axes object.
 
 
 
@@ -712,7 +781,7 @@ Functions
           !! processed by numpydoc !!
 
 
-.. py:class:: ShapeletImportance(scoring=None, n_repeat=1, n_shapelets=10, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, random_state=None)
+.. py:class:: ShapeletImportance(scoring=None, n_repeat=1, n_shapelets=10, min_shapelet_size=0.0, max_shapelet_size=1.0, coverage_probability=None, variability=1, metric='euclidean', metric_params=None, random_state=None)
 
 
 
@@ -738,6 +807,20 @@ Functions
 
        **max_shapelet_size** : float, optional
            The maximum size of shapelets used for explanation.
+
+       **coverage_probability** : float, optional
+           The probability that a time step is covered by a
+           shapelet, in the range 0 < coverage_probability <= 1.
+           
+           - For larger `coverage_probability`, we get larger shapelets.
+           - For smaller `coverage_probability`, we get shorter shapelets.
+
+       **variability** : float, optional
+           Controls the shape of the Beta distribution used to
+           sample shapelets. Defaults to 1.
+           
+           - Higher `variability` creates more uniform intervals.
+           - Lower `variability` creates more variable intervals sizes.
 
        **metric** : str, optional
            The metric.
@@ -793,7 +876,7 @@ Functions
           **y** : array-like of shape (n_samples, ), optional
               The labels.
 
-          **\*\*kwargs**
+          **\*\*kwargs** : dict, optional
               Optional extra arguments.
 
 
@@ -887,13 +970,23 @@ Functions
       Plot the explanation.
 
 
+      :Parameters:
+
+          **x** : array-like, optional
+              Optional imput samples.
+
+          **y** : array-like, optional
+              Optional target labels.
+
+          **ax** : Axes, optional
+              Optional axes to plot to.
 
 
 
       :Returns:
 
-          **ax** : Axes
-              The axes object
+          Axes
+              The axes object.
 
 
 

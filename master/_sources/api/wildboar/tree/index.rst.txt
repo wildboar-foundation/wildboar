@@ -62,7 +62,7 @@ Functions
 
    <br />
 
-.. py:class:: ExtraShapeletTreeClassifier(*, n_shapelets=1, max_depth=None, min_samples_leaf=1, min_impurity_decrease=0.0, min_samples_split=2, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='entropy', class_weight=None, random_state=None)
+.. py:class:: ExtraShapeletTreeClassifier(*, n_shapelets=1, max_depth=None, min_samples_leaf=1, min_impurity_decrease=0.0, min_samples_split=2, min_shapelet_size=0.0, max_shapelet_size=1.0, coverage_probability=None, variability=1, metric='euclidean', metric_params=None, criterion='entropy', class_weight=None, random_state=None)
 
 
 
@@ -99,6 +99,20 @@ Functions
        **max_shapelet_size** : float, optional
            The maximum length of a sampled shapelet, expressed as a fraction, computed
            as `ceil(X.shape[-1] * max_shapelet_size)`.
+
+       **coverage_probability** : float, optional
+           The probability that a time step is covered by a
+           shapelet, in the range 0 < coverage_probability <= 1.
+           
+           - For larger `coverage_probability`, we get larger shapelets.
+           - For smaller `coverage_probability`, we get shorter shapelets.
+
+       **variability** : float, optional
+           Controls the shape of the Beta distribution used to
+           sample shapelets. Defaults to 1.
+           
+           - Higher `variability` creates more uniform intervals.
+           - Lower `variability` creates more variable intervals sizes.
 
        **metric** : {"euclidean", "scaled_euclidean", "dtw", "scaled_dtw"}, optional
            Distance metric used to identify the best shapelet.
@@ -493,7 +507,7 @@ Functions
           !! processed by numpydoc !!
 
 
-.. py:class:: ExtraShapeletTreeRegressor(*, n_shapelets=1, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='squared_error', random_state=None)
+.. py:class:: ExtraShapeletTreeRegressor(*, n_shapelets=1, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, coverage_probability=None, variability=1, metric='euclidean', metric_params=None, criterion='squared_error', random_state=None)
 
 
 
@@ -536,6 +550,20 @@ Functions
        **max_shapelet_size** : float, optional
            The maximum length of a sampled shapelet, expressed as a fraction, computed
            as `ceil(X.shape[-1] * max_shapelet_size)`.
+
+       **coverage_probability** : float, optional
+           The probability that a time step is covered by a
+           shapelet, in the range 0 < coverage_probability <= 1.
+           
+           - For larger `coverage_probability`, we get larger shapelets.
+           - For smaller `coverage_probability`, we get shorter shapelets.
+
+       **variability** : float, optional
+           Controls the shape of the Beta distribution used to
+           sample shapelets. Defaults to 1.
+           
+           - Higher `variability` creates more uniform intervals.
+           - Lower `variability` creates more variable intervals sizes.
 
        **metric** : {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
            Distance metric used to identify the best shapelet.
@@ -896,7 +924,7 @@ Functions
           !! processed by numpydoc !!
 
 
-.. py:class:: IntervalTreeClassifier(n_intervals='sqrt', *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='entropy', intervals='fixed', sample_size=None, min_size=0.0, max_size=1.0, summarizer='mean_var_slope', class_weight=None, random_state=None)
+.. py:class:: IntervalTreeClassifier(n_intervals='sqrt', *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='entropy', intervals='fixed', sample_size=None, min_size=0.0, max_size=1.0, coverage_probability=None, variability=1, summarizer='mean_var_slope', class_weight=None, random_state=None)
 
 
 
@@ -944,10 +972,26 @@ Functions
            `intervals="sample"`.
 
        **min_size** : float, optional
-           The minmum interval size. Ignored unless `intervals="random"`.
+           The minimum interval size if `intervals="random"`. Ignored if
+           `coverage_probability` is set.
 
        **max_size** : float, optional
-           The maximum interval size. Ignored unless `intervals="random"`.
+           The maximum interval size if `intervals="random"`. Ignored if
+           `coverage_probability` is set.
+
+       **coverage_probability** : float, optional
+           The probability that a time step is covered by an interval, in the
+           range 0 < coverage_probability <= 1.
+           
+           - For larger `coverage_probability`, we get larger intervals.
+           - For smaller `coverage_probability`, we get shorter intervals.
+
+       **variability** : float, optional
+           Controls the shape of the Beta distribution used to
+           sample shapelets. Defaults to 1.
+           
+           - Higher `variability` creates more uniform intervals.
+           - Lower `variability` creates more variable intervals sizes.
 
        **summarizer** : str or list, optional
            The method to summarize each interval.
@@ -1342,7 +1386,7 @@ Functions
           !! processed by numpydoc !!
 
 
-.. py:class:: IntervalTreeRegressor(n_intervals='sqrt', *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='squared_error', intervals='fixed', sample_size=None, min_size=0.0, max_size=1.0, summarizer='mean_var_slope', random_state=None)
+.. py:class:: IntervalTreeRegressor(n_intervals='sqrt', *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='squared_error', intervals='fixed', sample_size=None, min_size=0.0, max_size=1.0, coverage_probability=None, variability=1, summarizer='mean_var_slope', random_state=None)
 
 
 
@@ -1390,10 +1434,26 @@ Functions
            `intervals="sample"`.
 
        **min_size** : float, optional
-           The minmum interval size. Ignored unless `intervals="random"`.
+           The minimum interval size if `intervals="random"`. Ignored if
+           `coverage_probability` is set.
 
        **max_size** : float, optional
-           The maximum interval size. Ignored unless `intervals="random"`.
+           The maximum interval size if `intervals="random"`. Ignored if
+           `coverage_probability` is set.
+
+       **coverage_probability** : float, optional
+           The probability that a time step is covered by an interval, in the range
+           0 < coverage_probability <= 1.
+           
+           - For larger `coverage_probability`, we get larger intervals.
+           - For smaller `coverage_probability`, we get shorter intervals.
+
+       **variability** : float, optional
+           Controls the shape of the Beta distribution used to
+           sample shapelets. Defaults to 1.
+           
+           - Higher `variability` creates more uniform intervals.
+           - Lower `variability` creates more variable intervals sizes.
 
        **summarizer** : str or list, optional
            The method to summarize each interval.
@@ -3391,7 +3451,7 @@ Functions
           !! processed by numpydoc !!
 
 
-.. py:class:: ShapeletTreeClassifier(*, n_shapelets='log2', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, impurity_equality_tolerance=None, strategy='warn', shapelet_size=0.1, sample_size=1.0, min_shapelet_size=0.0, max_shapelet_size=1.0, alpha=None, metric='euclidean', metric_params=None, criterion='entropy', class_weight=None, random_state=None)
+.. py:class:: ShapeletTreeClassifier(*, n_shapelets='log2', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, impurity_equality_tolerance=None, strategy='warn', shapelet_size=0.1, sample_size=1.0, min_shapelet_size=0.0, max_shapelet_size=1.0, coverage_probability=None, variability=1, alpha=None, metric='euclidean', metric_params=None, criterion='entropy', class_weight=None, random_state=None)
 
 
 
@@ -3468,6 +3528,20 @@ Functions
        **max_shapelet_size** : float, optional
            The maximum length of a sampled shapelet, expressed as a fraction, computed
            as `ceil(X.shape[-1] * max_shapelet_size)`.
+
+       **coverage_probability** : float, optional
+           The probability that a time step is covered by a
+           shapelet, in the range 0 < coverage_probability <= 1.
+           
+           - For larger `coverage_probability`, we get larger shapelets.
+           - For smaller `coverage_probability`, we get shorter shapelets.
+
+       **variability** : float, optional
+           Controls the shape of the Beta distribution used to
+           sample shapelets. Defaults to 1.
+           
+           - Higher `variability` creates more uniform intervals.
+           - Lower `variability` creates more variable intervals sizes.
 
        **alpha** : float, optional
            Dynamically decrease the number of sampled shapelets at each node according
@@ -3569,7 +3643,11 @@ Functions
    When `strategy` is set to `"random"`, the shapelet tree is constructed by
    randomly sampling `n_shapelets` within the range defined by
    `min_shapelet_size` and `max_shapelet_size`. This method is detailed in the
-   work of Karlsson et al. (2016).
+   work of Karlsson et al. (2016). Alternatively, shapelets can be sampled with
+   a specified `coverage_probability` and `variability`. By specifying a coverage
+   probability, we define the probability of including a point in the extracted
+   shapelet. If `coverage_probability` is set,
+   `min_shapelet_size` and `max_shapelet_size` are ignored.
 
    .. rubric:: References
 
@@ -3939,7 +4017,7 @@ Functions
           !! processed by numpydoc !!
 
 
-.. py:class:: ShapeletTreeRegressor(*, n_shapelets='log2', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, impurity_equality_tolerance=None, strategy='warn', shapelet_size=0.1, sample_size=1.0, min_shapelet_size=0, max_shapelet_size=1, alpha=None, metric='euclidean', metric_params=None, criterion='squared_error', random_state=None)
+.. py:class:: ShapeletTreeRegressor(*, n_shapelets='log2', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, impurity_equality_tolerance=None, strategy='warn', shapelet_size=0.1, sample_size=1.0, min_shapelet_size=0, max_shapelet_size=1, coverage_probability=None, variability=1, alpha=None, metric='euclidean', metric_params=None, criterion='squared_error', random_state=None)
 
 
 
@@ -4009,6 +4087,20 @@ Functions
        **max_shapelet_size** : float, optional
            The maximum length of a shapelets expressed as a fraction of
            *n_timestep*.
+
+       **coverage_probability** : float, optional
+           The probability that a time step is covered by a
+           shapelet, in the range 0 < coverage_probability <= 1.
+           
+           - For larger `coverage_probability`, we get larger shapelets.
+           - For smaller `coverage_probability`, we get shorter shapelets.
+
+       **variability** : float, optional
+           Controls the shape of the Beta distribution used to
+           sample shapelets. Defaults to 1.
+           
+           - Higher `variability` creates more uniform intervals.
+           - Lower `variability` creates more variable intervals sizes.
 
        **alpha** : float, optional
            Dynamically decrease the number of sampled shapelets at each node according
@@ -4095,7 +4187,11 @@ Functions
    When `strategy` is set to `"random"`, the shapelet tree is constructed by
    randomly sampling `n_shapelets` within the range defined by
    `min_shapelet_size` and `max_shapelet_size`. This method is detailed in the
-   work of Karlsson et al. (2016).
+   work of Karlsson et al. (2016). Alternatively, shapelets can be sampled with
+   a specified `coverage_probability` and `variability`. By specifying a coverage
+   probability, we define the probability of including a point in the extracted
+   shapelet. If `coverage_probability` is set,
+   `min_shapelet_size` and `max_shapelet_size` are ignored.
 
    .. rubric:: References
 
@@ -4514,7 +4610,12 @@ Functions
 
    .. rubric:: Examples
 
-   >>> from wildboar.
+   >>> from wildboar.datasets import load_two_lead_ecg
+   >>> from wildboar.tree import ShapeletTreeClassifier, plot_tree
+   >>> X, y = load_two_lead_ecg()
+   >>> clf = ShapeletTreeClassifier(strategy="random").fit(X, y)
+   >>> plot_tree(clf)
+   <Axes: >
 
    ..
        !! processed by numpydoc !!

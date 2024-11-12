@@ -206,8 +206,8 @@ Functions
 
       :Returns:
 
-          **score** : float
-              The closensess of fit.
+          float
+              The proximity.
 
 
 
@@ -263,7 +263,7 @@ Functions
           **y** : array-like of shape (n_samples, ), optional
               The labels.
 
-          **\*\*kwargs**
+          **\*\*kwargs** : dict, optional
               Optional extra arguments.
 
 
@@ -293,13 +293,23 @@ Functions
       Plot the explanation.
 
 
+      :Parameters:
+
+          **x** : array-like, optional
+              Optional imput samples.
+
+          **y** : array-like, optional
+              Optional target labels.
+
+          **ax** : Axes, optional
+              Optional axes to plot to.
 
 
 
       :Returns:
 
-          **ax** : Axes
-              The axes object
+          Axes
+              The axes object.
 
 
 
@@ -324,14 +334,14 @@ Functions
    :Parameters:
 
        **estimator** : object
-           The estimator
+           The estimator.
 
 
 
    :Returns:
 
        bool
-           True if the estimator probably is a counterfactual explainer
+           True if the estimator probably is a counterfactual explainer.
 
 
 
@@ -355,14 +365,14 @@ Functions
    :Parameters:
 
        **estimator** : object
-           The estimator
+           The estimator.
 
 
 
    :Returns:
 
        bool
-           True if the estimator probably is an explainer
+           True if the estimator probably is an explainer.
 
 
 

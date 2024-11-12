@@ -444,7 +444,7 @@ Classes
 
 
    
-   ElboxClassSum (ECS) dimension selector.
+   ElbowClassSum (ECS) dimension selector.
 
    Select time series dimensions based on the sum of distances between pairs
    of classes.

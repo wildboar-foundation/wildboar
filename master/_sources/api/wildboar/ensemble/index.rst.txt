@@ -491,6 +491,7 @@ Classes
 
 
    .. py:property:: estimators_samples_
+
       
       The subset of drawn samples for each base estimator.
 
@@ -845,6 +846,7 @@ Classes
 
 
    .. py:property:: estimators_samples_
+
       
       The subset of drawn samples for each base estimator.
 
@@ -1053,6 +1055,7 @@ Classes
 
 
    .. py:property:: estimators_samples_
+
       
       The subset of drawn samples for each base estimator.
 
@@ -1397,7 +1400,7 @@ Classes
           !! processed by numpydoc !!
 
 
-.. py:class:: ExtraShapeletTreesClassifier(n_estimators=100, *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='entropy', oob_score=False, bootstrap=True, warm_start=False, class_weight=None, n_jobs=None, random_state=None)
+.. py:class:: ExtraShapeletTreesClassifier(n_estimators=100, *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, coverage_probability=None, variability=1, metric='euclidean', metric_params=None, criterion='entropy', oob_score=False, bootstrap=True, warm_start=False, class_weight=None, n_jobs=None, random_state=None)
 
 
 
@@ -1432,6 +1435,20 @@ Classes
        **max_shapelet_size** : float, optional
            The maximum length of a shapelets expressed as a fraction of
            *n_timestep*.
+
+       **coverage_probability** : float, optional
+           The probability that a time step is covered by a
+           shapelet, in the range 0 < coverage_probability <= 1.
+           
+           - For larger `coverage_probability`, we get larger shapelets.
+           - For smaller `coverage_probability`, we get shorter shapelets.
+
+       **variability** : float, optional
+           Controls the shape of the Beta distribution used to
+           sample shapelets. Defaults to 1.
+           
+           - Higher `variability` creates more uniform intervals.
+           - Lower `variability` creates more variable intervals sizes.
 
        **metric** : str or list, optional
            The distance metric.
@@ -1867,6 +1884,7 @@ Classes
 
 
    .. py:property:: estimators_samples_
+
       
       The subset of drawn samples for each base estimator.
 
@@ -1896,7 +1914,7 @@ Classes
           !! processed by numpydoc !!
 
 
-.. py:class:: ExtraShapeletTreesRegressor(n_estimators=100, *, max_depth=None, min_samples_split=2, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, criterion='squared_error', oob_score=False, bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
+.. py:class:: ExtraShapeletTreesRegressor(n_estimators=100, *, max_depth=None, min_samples_split=2, min_shapelet_size=0, max_shapelet_size=1, coverage_probability=None, variability=1, metric='euclidean', metric_params=None, criterion='squared_error', oob_score=False, bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
 
 
 
@@ -1924,6 +1942,20 @@ Classes
        **max_shapelet_size** : float, optional
            The maximum length of a shapelets expressed as a fraction of
            *n_timestep*.
+
+       **coverage_probability** : float, optional
+           The probability that a time step is covered by a
+           shapelet, in the range 0 < coverage_probability <= 1.
+           
+           - For larger `coverage_probability`, we get larger shapelets.
+           - For smaller `coverage_probability`, we get shorter shapelets.
+
+       **variability** : float, optional
+           Controls the shape of the Beta distribution used to
+           sample shapelets. Defaults to 1.
+           
+           - Higher `variability` creates more uniform intervals.
+           - Lower `variability` creates more variable intervals sizes.
 
        **metric** : str or list, optional
            The distance metric.
@@ -2256,6 +2288,7 @@ Classes
 
 
    .. py:property:: estimators_samples_
+
       
       The subset of drawn samples for each base estimator.
 
@@ -2746,6 +2779,7 @@ Classes
 
 
    .. py:property:: estimators_samples_
+
       
       The subset of drawn samples for each base estimator.
 
@@ -3127,6 +3161,7 @@ Classes
 
 
    .. py:property:: estimators_samples_
+
       
       The subset of drawn samples for each base estimator.
 
@@ -3480,6 +3515,7 @@ Classes
 
 
    .. py:property:: estimators_samples_
+
       
       The subset of drawn samples for each base estimator.
 
@@ -3878,6 +3914,7 @@ Classes
 
 
    .. py:property:: estimators_samples_
+
       
       The subset of drawn samples for each base estimator.
 
@@ -4376,6 +4413,7 @@ Classes
 
 
    .. py:property:: estimators_samples_
+
       
       The subset of drawn samples for each base estimator.
 
@@ -4870,6 +4908,7 @@ Classes
 
 
    .. py:property:: estimators_samples_
+
       
       The subset of drawn samples for each base estimator.
 
@@ -5261,6 +5300,7 @@ Classes
 
 
    .. py:property:: estimators_samples_
+
       
       The subset of drawn samples for each base estimator.
 
@@ -5290,7 +5330,7 @@ Classes
           !! processed by numpydoc !!
 
 
-.. py:class:: ShapeletForestClassifier(n_estimators=100, *, n_shapelets='log2', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, impurity_equality_tolerance=None, min_shapelet_size=0.0, max_shapelet_size=1.0, alpha=None, metric='euclidean', metric_params=None, criterion='entropy', oob_score=False, bootstrap=True, warm_start=False, class_weight=None, n_jobs=None, random_state=None)
+.. py:class:: ShapeletForestClassifier(n_estimators=100, *, n_shapelets='log2', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, impurity_equality_tolerance=None, min_shapelet_size=0.0, max_shapelet_size=1.0, alpha=None, coverage_probability=None, variability=1, metric='euclidean', metric_params=None, criterion='entropy', oob_score=False, bootstrap=True, warm_start=False, class_weight=None, n_jobs=None, random_state=None)
 
 
 
@@ -5338,6 +5378,20 @@ Classes
        **max_shapelet_size** : float, optional
            The maximum length of a shapelets expressed as a fraction of
            *n_timestep*.
+
+       **coverage_probability** : float, optional
+           The probability that a time step is covered by a
+           shapelet, in the range 0 < coverage_probability <= 1.
+           
+           - For larger `coverage_probability`, we get larger shapelets.
+           - For smaller `coverage_probability`, we get shorter shapelets.
+
+       **variability** : float, optional
+           Controls the shape of the Beta distribution used to
+           sample shapelets. Defaults to 1.
+           
+           - Higher `variability` creates more uniform intervals.
+           - Lower `variability` creates more variable intervals sizes.
 
        **alpha** : float, optional
            Dynamically decrease the number of sampled shapelets at each node
@@ -5786,6 +5840,7 @@ Classes
 
 
    .. py:property:: estimators_samples_
+
       
       The subset of drawn samples for each base estimator.
 
@@ -5815,7 +5870,7 @@ Classes
           !! processed by numpydoc !!
 
 
-.. py:class:: ShapeletForestEmbedding(n_estimators=100, *, n_shapelets=1, max_depth=5, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='squared_error', bootstrap=True, warm_start=False, n_jobs=None, sparse_output=True, random_state=None)
+.. py:class:: ShapeletForestEmbedding(n_estimators=100, *, n_shapelets=1, max_depth=5, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, coverage_probability=None, variability=1, metric='euclidean', metric_params=None, criterion='squared_error', bootstrap=True, warm_start=False, n_jobs=None, sparse_output=True, random_state=None)
 
 
 
@@ -5860,6 +5915,20 @@ Classes
        **max_shapelet_size** : float, optional
            The maximum length of a shapelets expressed as a fraction of
            *n_timestep*.
+
+       **coverage_probability** : float, optional
+           The probability that a time step is covered by a
+           shapelet, in the range 0 < coverage_probability <= 1.
+           
+           - For larger `coverage_probability`, we get larger shapelets.
+           - For smaller `coverage_probability`, we get shorter shapelets.
+
+       **variability** : float, optional
+           Controls the shape of the Beta distribution used to
+           sample shapelets. Defaults to 1.
+           
+           - Higher `variability` creates more uniform intervals.
+           - Lower `variability` creates more variable intervals sizes.
 
        **metric** : str or list, optional
            The distance metric.
@@ -6182,6 +6251,7 @@ Classes
 
 
    .. py:property:: estimators_samples_
+
       
       The subset of drawn samples for each base estimator.
 
@@ -6211,7 +6281,7 @@ Classes
           !! processed by numpydoc !!
 
 
-.. py:class:: ShapeletForestRegressor(n_estimators=100, *, n_shapelets='log2', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, impurity_equality_tolerance=None, min_shapelet_size=0.0, max_shapelet_size=1.0, alpha=None, metric='euclidean', metric_params=None, criterion='squared_error', oob_score=False, bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
+.. py:class:: ShapeletForestRegressor(n_estimators=100, *, n_shapelets='log2', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, impurity_equality_tolerance=None, min_shapelet_size=0.0, max_shapelet_size=1.0, coverage_probability=None, variability=1, alpha=None, metric='euclidean', metric_params=None, criterion='squared_error', oob_score=False, bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
 
 
 
@@ -6258,6 +6328,20 @@ Classes
        **max_shapelet_size** : float, optional
            The maximum length of a shapelets expressed as a fraction of
            *n_timestep*.
+
+       **coverage_probability** : float, optional
+           The probability that a time step is covered by a
+           shapelet, in the range 0 < coverage_probability <= 1.
+           
+           - For larger `coverage_probability`, we get larger shapelets.
+           - For smaller `coverage_probability`, we get shorter shapelets.
+
+       **variability** : float, optional
+           Controls the shape of the Beta distribution used to
+           sample shapelets. Defaults to 1.
+           
+           - Higher `variability` creates more uniform intervals.
+           - Lower `variability` creates more variable intervals sizes.
 
        **alpha** : float, optional
            Dynamically decrease the number of sampled shapelets at each node
@@ -6601,6 +6685,7 @@ Classes
 
 
    .. py:property:: estimators_samples_
+
       
       The subset of drawn samples for each base estimator.
 

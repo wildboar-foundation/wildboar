@@ -406,29 +406,27 @@ Functions
           !! processed by numpydoc !!
 
 
-.. py:class:: DerivativeTransform
+.. py:class:: DerivativeTransform(method='slope')
 
 
 
    
-   Mixin class for all transformers in scikit-learn.
-
-   This mixin defines the following functionality:
-
-   - a `fit_transform` method that delegates to `fit` and `transform`;
-   - a `set_output` method to output `X` as a specific container type.
-
-   If :term:`get_feature_names_out` is defined, then :class:`BaseEstimator` will
-   automatically wrap `transform` and `fit_transform` to follow the `set_output`
-   API. See the :ref:`developer_api_set_output` for details.
-
-   :class:`OneToOneFeatureMixin` and
-   :class:`ClassNamePrefixFeaturesOutMixin` are helpful mixins for
-   defining :term:`get_feature_names_out`.
+   Perform derivative transformation on time series data.
 
 
+   :Parameters:
 
-
+       **method** : str, optional
+           The method to use for the derivative transformation. Must be one of:
+           "slope", "central", or "backward".
+           
+           - "backward", computes the derivative at each point using the
+             difference between the current and previous elements.
+           - "central", computes the derivative at each point using the average of
+             the differences between the next and previous elements.
+           - "slope", computes a smoothed derivative at each point by averaging
+             the difference between the current and previous elements with half
+             the difference between the next and previous elements.
 
 
 
@@ -439,24 +437,48 @@ Functions
 
 
 
-   .. rubric:: Examples
 
-   >>> import numpy as np
-   >>> from sklearn.base import BaseEstimator, TransformerMixin
-   >>> class MyTransformer(TransformerMixin, BaseEstimator):
-   ...     def __init__(self, *, param=1):
-   ...         self.param = param
-   ...     def fit(self, X, y=None):
-   ...         return self
-   ...     def transform(self, X):
-   ...         return np.full(shape=len(X), fill_value=self.param)
-   >>> transformer = MyTransformer()
-   >>> X = [[1, 2], [2, 3], [3, 4]]
-   >>> transformer.fit_transform(X)
-   array([1, 1, 1])
+
+
 
    ..
        !! processed by numpydoc !!
+
+   .. py:method:: fit(X, y=None)
+
+      
+      Fit the model to the provided data.
+
+      Only performs input validation.
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_dims, n_timesteps)
+              The input data to fit the model.
+
+          **y** : array-like, optional
+              Not used.
+
+
+
+      :Returns:
+
+          object
+              Returns the instance itself.
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
 
    .. py:method:: fit_transform(X, y=None, **fit_params)
 
@@ -625,6 +647,38 @@ Functions
 
           **self** : estimator instance
               Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: transform(X)
+
+      
+      Transform the input data using a derivative transformation.
+
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_dims, n_timesteps)
+              The input data to be transformed.
+
+
+
+      :Returns:
+
+          array
+              The transformed data.
 
 
 
@@ -645,20 +699,13 @@ Functions
 
 
    
-   Mixin class for all transformers in scikit-learn.
+   A transformer that applies a difference transformation to time series data.
 
-   This mixin defines the following functionality:
 
-   - a `fit_transform` method that delegates to `fit` and `transform`;
-   - a `set_output` method to output `X` as a specific container type.
+   :Parameters:
 
-   If :term:`get_feature_names_out` is defined, then :class:`BaseEstimator` will
-   automatically wrap `transform` and `fit_transform` to follow the `set_output`
-   API. See the :ref:`developer_api_set_output` for details.
-
-   :class:`OneToOneFeatureMixin` and
-   :class:`ClassNamePrefixFeaturesOutMixin` are helpful mixins for
-   defining :term:`get_feature_names_out`.
+       **order** : int, optional
+           The order of the difference operation. Default is 1.
 
 
 
@@ -672,25 +719,44 @@ Functions
 
 
 
-
-   .. rubric:: Examples
-
-   >>> import numpy as np
-   >>> from sklearn.base import BaseEstimator, TransformerMixin
-   >>> class MyTransformer(TransformerMixin, BaseEstimator):
-   ...     def __init__(self, *, param=1):
-   ...         self.param = param
-   ...     def fit(self, X, y=None):
-   ...         return self
-   ...     def transform(self, X):
-   ...         return np.full(shape=len(X), fill_value=self.param)
-   >>> transformer = MyTransformer()
-   >>> X = [[1, 2], [2, 3], [3, 4]]
-   >>> transformer.fit_transform(X)
-   array([1, 1, 1])
 
    ..
        !! processed by numpydoc !!
+
+   .. py:method:: fit(X, y=None)
+
+      
+      Fit the model to the provided data.
+
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_dims, n_timesteps)
+              The input data to fit the model. Must have at least two timesteps.
+
+          **y** : array-like, optional
+              Not used.
+
+
+
+      :Returns:
+
+          object
+              Returns the instance of the fitted model.
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
 
    .. py:method:: fit_transform(X, y=None, **fit_params)
 
@@ -859,6 +925,39 @@ Functions
 
           **self** : estimator instance
               Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: transform(X)
+
+      
+      Transform the input data by computing the discrete differences.
+
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_dims, n_timesteps)
+              The input data to be transformed.
+
+
+
+      :Returns:
+
+          array_like
+              An array containing the discrete difference of the input data along
+              the last axis.
 
 
 
@@ -2125,7 +2224,7 @@ Functions
           !! processed by numpydoc !!
 
 
-.. py:class:: IntervalTransform(n_intervals='sqrt', *, intervals='fixed', sample_size=None, depth=None, min_size=0.0, max_size=1.0, summarizer='mean_var_slope', summarizer_params=None, n_jobs=None, random_state=None)
+.. py:class:: IntervalTransform(n_intervals='sqrt', *, intervals='fixed', sample_size=None, depth=None, min_size=0.0, max_size=1.0, coverage_probability=None, variability=1, summarizer='mean_var_slope', summarizer_params=None, n_jobs=None, random_state=None)
 
 
 
@@ -2164,10 +2263,26 @@ Functions
            The maximum depth for dyadic intervals if `intervals="dyadic"`.
 
        **min_size** : float, optional
-           The minimum interval size if `intervals="random"`.
+           The minimum interval size if `intervals="random"`. Ignored if
+           `coverage_probability` is set.
 
        **max_size** : float, optional
-           The maximum interval size if `intervals="random"`.
+           The maximum interval size if `intervals="random"`. Ignored if
+           `coverage_probability` is set.
+
+       **coverage_probability** : float, optional
+           The probability that a time step is covered by an interval, in the
+           range 0 < coverage_probability <= 1.
+           
+           - For larger `coverage_probability`, we get larger intervals.
+           - For smaller `coverage_probability`, we get shorter intervals.
+
+       **variability** : float, optional
+           Controls the shape of the Beta distribution used to sample intervals.
+           Defaults to 1.
+           
+           - Higher `variability` creates more uniform intervals.
+           - Lower `variability` creates more variable intervals sizes.
 
        **summarizer** : str or list, optional
            The method to summarize each interval.
@@ -4810,7 +4925,7 @@ Functions
           !! processed by numpydoc !!
 
 
-.. py:class:: ShapeletTransform(n_shapelets='auto', *, metric='euclidean', metric_params=None, strategy='random', shapelet_size=0.1, sample_size=1.0, min_shapelet_size=0.0, max_shapelet_size=1.0, random_state=None, n_jobs=None)
+.. py:class:: ShapeletTransform(n_shapelets='auto', *, metric='euclidean', metric_params=None, strategy='random', shapelet_size=0.1, sample_size=1.0, min_shapelet_size=0.0, max_shapelet_size=1.0, coverage_probability=None, variability=None, random_state=None, n_jobs=None)
 
 
 
@@ -4882,6 +4997,20 @@ Functions
 
        **max_shapelet_size** : float, optional
            Maximum shapelet size.
+
+       **coverage_probability** : float, optional
+           The probability that a time step is covered by a
+           shapelet, in the range 0 < coverage_probability <= 1.
+           
+           - For larger `coverage_probability`, we get larger shapelets.
+           - For smaller `coverage_probability`, we get shorter shapelets.
+
+       **variability** : float, optional
+           Controls the shape of the Beta distribution used to
+           sample shapelets. Defaults to 1.
+           
+           - Higher `variability` creates more uniform intervals.
+           - Lower `variability` creates more variable intervals sizes.
 
        **random_state** : int or RandomState, optional
            - If `int`, `random_state` is the seed used by the random number generator

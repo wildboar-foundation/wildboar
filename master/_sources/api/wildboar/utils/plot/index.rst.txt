@@ -30,10 +30,10 @@ Functions
 
    <br />
 
-.. py:function:: plot_frequency_domain(x, y=None, *, ax=None, n_samples=100, jitter=False, sample_spacing=1, frequency=False, cmap='Dark2')
+.. py:function:: plot_frequency_domain(x, y=None, *, ax=None, n_samples=100, jitter=False, spectrum='amplitude', sample_spacing=1, bins=None, cmap='Dark2')
 
    
-   Plot the samples in the freqency domain.
+   Plot the samples in the frequency domain.
 
 
    :Parameters:
@@ -54,10 +54,13 @@ Functions
        **jitter** : bool, optional
            Add jitter to the amplitude lines.
 
+       **spectrum** : {"amplitude", "phase"}, optional
+           The spectrum.
+
        **sample_spacing** : int, optional
            The frequency domain sample spacing.
 
-       **frequency** : bool, optional
+       **bins** : bool, optional
            Show the frequency bins.
 
        **cmap** : str, optional
