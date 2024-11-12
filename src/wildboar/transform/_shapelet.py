@@ -137,7 +137,7 @@ class FixedShapeletMixin:
             n_shapelets=n_shapelets,
             n_samples=self.sample_size,
             random_state=self.random_state if hasattr(self, "random_state") else None,
-            n_jobs=self.n_jobs if hasattr(self, "n_jobs") else -1,  # TODO
+            n_jobs=self.n_jobs if hasattr(self, "n_jobs") else 1,
         )
         self._shapelet_length = np.broadcast_to(
             np.repeat(shapelet_size, n_shapelets).astype(np.intp),
