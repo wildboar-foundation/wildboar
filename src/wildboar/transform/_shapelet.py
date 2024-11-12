@@ -708,6 +708,8 @@ class RandomShapeletTransform(RandomShapeletMixin, BaseAttributeTransform):
         **RandomShapeletMixin._parameter_constraints,
         **BaseAttributeTransform._parameter_constraints,
     }
+    _parameter_constraints.pop("variability")
+    _parameter_constraints.pop("coverage_probability")
 
     def __init__(
         self,

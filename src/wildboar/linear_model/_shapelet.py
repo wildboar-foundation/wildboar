@@ -55,6 +55,18 @@ class RandomShapeletClassifier(TransformRidgeClassifierCV):
         Minimum shapelet size.
     max_shapelet_size : float, optional
         Maximum shapelet size.
+    coverage_probability : float, optional
+        The probability that a time step is covered by a
+        shapelet, in the range 0 < coverage_probability <= 1.
+
+        - For larger `coverage_probability`, we get larger shapelets.
+        - For smaller `coverage_probability`, we get shorter shapelets.
+    variability : float, optional
+        Controls the shape of the Beta distribution used to
+        sample shapelets. Defaults to 1.
+
+        - Higher `variability` creates more uniform intervals.
+        - Lower `variability` creates more variable intervals sizes.
     alphas : array-like of shape (n_alphas,), optional
         Array of alpha values to try.
     fit_intercept : bool, optional
@@ -101,6 +113,8 @@ class RandomShapeletClassifier(TransformRidgeClassifierCV):
         metric_params=None,
         min_shapelet_size=0.1,
         max_shapelet_size=1.0,
+        coverage_probability=None,
+        variability=None,
         alphas=(0.1, 1.0, 10.0),
         fit_intercept=True,
         normalize=False,
@@ -125,6 +139,8 @@ class RandomShapeletClassifier(TransformRidgeClassifierCV):
         self.metric_params = metric_params
         self.min_shapelet_size = min_shapelet_size
         self.max_shapelet_size = max_shapelet_size
+        self.coverage_probability = coverage_probability
+        self.variability = variability
 
     def _get_transform(self, random_state):
         return ShapeletTransform(
@@ -134,6 +150,8 @@ class RandomShapeletClassifier(TransformRidgeClassifierCV):
             metric_params=self.metric_params,
             min_shapelet_size=self.min_shapelet_size,
             max_shapelet_size=self.max_shapelet_size,
+            coverage_probability=self.coverage_probability,
+            variability=self.variability,
             random_state=random_state,
             n_jobs=self.n_jobs,
         )
@@ -176,6 +194,18 @@ class RandomShapeletRegressor(TransformRidgeCV):
         Minimum shapelet size.
     max_shapelet_size : float, optional
         Maximum shapelet size.
+    coverage_probability : float, optional
+        The probability that a time step is covered by a
+        shapelet, in the range 0 < coverage_probability <= 1.
+
+        - For larger `coverage_probability`, we get larger shapelets.
+        - For smaller `coverage_probability`, we get shorter shapelets.
+    variability : float, optional
+        Controls the shape of the Beta distribution used to
+        sample shapelets. Defaults to 1.
+
+        - Higher `variability` creates more uniform intervals.
+        - Lower `variability` creates more variable intervals sizes.
     alphas : array-like of shape (n_alphas,), optional
         Array of alpha values to try.
     fit_intercept : bool, optional
@@ -231,6 +261,8 @@ class RandomShapeletRegressor(TransformRidgeCV):
         metric_params=None,
         min_shapelet_size=0.1,
         max_shapelet_size=1.0,
+        coverage_probability=None,
+        variability=None,
         alphas=(0.1, 1.0, 10.0),
         fit_intercept=True,
         normalize=False,
@@ -255,6 +287,8 @@ class RandomShapeletRegressor(TransformRidgeCV):
         self.metric_params = metric_params
         self.min_shapelet_size = min_shapelet_size
         self.max_shapelet_size = max_shapelet_size
+        self.coverage_probability = coverage_probability
+        self.variability = variability
 
     def _get_transform(self, random_state):
         return ShapeletTransform(
@@ -264,6 +298,8 @@ class RandomShapeletRegressor(TransformRidgeCV):
             metric_params=self.metric_params,
             min_shapelet_size=self.min_shapelet_size,
             max_shapelet_size=self.max_shapelet_size,
+            coverage_probability=self.coverage_probability,
+            variability=self.variability,
             random_state=random_state,
             n_jobs=self.n_jobs,
         )
