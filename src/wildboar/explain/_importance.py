@@ -909,6 +909,18 @@ class ShapeletImportance(ExplainerMixin, PermuteImportance):
         The minimum size of shapelets used for explanation.
     max_shapelet_size : float, optional
         The maximum size of shapelets used for explanation.
+    coverage_probability : float, optional
+        The probability that a time step is covered by a
+        shapelet, in the range 0 < coverage_probability <= 1.
+
+        - For larger `coverage_probability`, we get larger shapelets.
+        - For smaller `coverage_probability`, we get shorter shapelets.
+    variability : float, optional
+        Controls the shape of the Beta distribution used to
+        sample shapelets. Defaults to 1.
+
+        - Higher `variability` creates more uniform intervals.
+        - Lower `variability` creates more variable intervals sizes.
     metric : str, optional
         The metric.
     metric_params : str, optional
@@ -943,6 +955,8 @@ class ShapeletImportance(ExplainerMixin, PermuteImportance):
         n_shapelets=10,
         min_shapelet_size=0.0,
         max_shapelet_size=1.0,
+        coverage_probability=None,
+        variability=1,
         metric="euclidean",
         metric_params=None,
         random_state=None,
@@ -955,6 +969,8 @@ class ShapeletImportance(ExplainerMixin, PermuteImportance):
         self.n_shapelets = n_shapelets
         self.min_shapelet_size = min_shapelet_size
         self.max_shapelet_size = max_shapelet_size
+        self.coverage_probability = coverage_probability
+        self.variability = variability
         self.metric = metric
         self.metric_params = metric_params
 
