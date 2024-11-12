@@ -7,7 +7,7 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 import numpy as np
-from libc.math cimport log, sqrt, pow
+from libc.math cimport log, sqrt, pow, floor
 from libc.stdlib cimport free, malloc
 
 
@@ -192,3 +192,75 @@ cdef void shuffle(Py_ssize_t *values, Py_ssize_t length, uint32_t *seed) noexcep
     for i in range(length - 1, 0, -1):
         j = rand_int(0, i, seed)
         values[i], values[j] = values[j], values[i]
+
+
+cdef void rand_uniform_length_interval(
+    double min_len,
+    double max_len,
+    uint32_t *random_seed,
+    double *start,
+    double *end,
+) noexcept nogil:
+    cdef double length = rand_uniform(min_len, max_len, random_seed)
+    start[0] = rand_uniform(0, 1 - length, random_seed)
+    end[0] = start[0] + length
+
+
+cdef void rand_uniform_start_interval(
+    double min_len,
+    double max_len,
+    uint32_t *random_seed,
+    double *start,
+    double *end,
+) noexcept nogil:
+    start[0] = rand_uniform(0, 1 - min_len, random_seed)
+    cdef double length = rand_uniform(min_len, min(max_len, 1 - start[0]), random_seed)
+    end[0] = start[0] + length
+
+
+cdef void rand_beta_interval(
+    double v, double p, uint32_t *random_seed, double *low, double *high
+) noexcept nogil:
+    """
+    Generate a random interval [low, high] in [0, 1] using beta distributions.
+
+    Parameters
+    ----------
+    v : double
+        Shape parameter for the beta distribution affecting interval width
+    p : double
+        Probability parameter affecting the number of intervals
+    n : Py_ssize_t
+        The size parameter controlling interval granularity. Must be
+        floor(1/p).
+    random_seed : uint32_t*
+        Pointer to the random seed for random number generation
+    low : double*
+        Output parameter for the lower bound of the interval
+    high : double*
+        Output parameter for the upper bound of the interval
+
+    Notes
+    -----
+    The function generates intervals using a two-step process:
+    1. Generate a random lower bound using Beta(v*z, v*(n-z))
+    2. Generate the interval width using Beta(v, v*(n-z-1)) where z is a random
+       integer in [0, n).
+
+    E[low-high] ~= p, and each point has p probability of being covered.
+    """
+    cdef Py_ssize_t n = <Py_ssize_t> floor(1 / p)
+    if rand_uniform(0, 1, random_seed) > n * (n + 1) * p - n:
+        n += 1
+
+    cdef Py_ssize_t z = rand_int(0, n, random_seed)
+
+    low[0] = 0
+    if z != 0:
+        low[0] = rand_beta(v * z, v * (n - z), random_seed)
+
+    cdef double w = 1.0
+    if z != n - 1:
+        w = rand_beta(v, v * (n - z - 1), random_seed)
+
+    high[0] = low[0] + (1 - low[0]) * w

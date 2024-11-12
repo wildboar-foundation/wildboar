@@ -35,6 +35,26 @@ cdef double rand_beta(double alpha, double beta, uint32_t *random_state) noexcep
 
 cdef void shuffle(Py_ssize_t *values, Py_ssize_t length, uint32_t *seed) noexcept nogil
 
+cdef void rand_beta_interval(
+    double v, double p, uint32_t *random_seed, double *low, double *high
+) noexcept nogil
+
+cdef void rand_uniform_length_interval(
+    double min_len,
+    double max_len,
+    uint32_t *random_seed,
+    double *start,
+    double *end,
+) noexcept nogil
+
+cdef void rand_uniform_start_interval(
+    double min_len,
+    double max_len,
+    uint32_t *random_seed,
+    double *start,
+    double *end,
+) noexcept nogil
+
 cdef class RandomSampler:
 
     cdef const double[::1] weights
