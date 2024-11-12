@@ -1015,6 +1015,8 @@ class ShapeletImportance(ExplainerMixin, PermuteImportance):
             metric=self.metric,
             min_shapelet_size=self.min_shapelet_size,
             max_shapelet_size=self.max_shapelet_size,
+            coverage_probability=self.coverage_probability,
+            variability=self.variability,
             random_state=random_state.randint(np.iinfo(np.int32).max),
         ).fit(X)
 
