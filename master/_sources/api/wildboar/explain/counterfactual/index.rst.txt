@@ -660,7 +660,7 @@ Functions
           !! processed by numpydoc !!
 
 
-.. py:class:: NiceCounterfactual(reward='compactness', metric='euclidean', metric_params=None, verbose=0)
+.. py:class:: NiceCounterfactual(n_neighbors=1, *, reward='compactness', metric='euclidean', metric_params=None, verbose=0)
 
 
 
@@ -680,6 +680,9 @@ Functions
    being explained.
 
    :Parameters:
+
+       **n_neighbors** : int, optional
+           The number of neighbors.
 
        **reward** : str or callable, optional
            The reward function to optimize the counterfactual explanations. Can be
