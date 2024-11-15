@@ -1,8 +1,9 @@
+import numbers
 from copy import deepcopy
 
 import numpy as np
 from sklearn.base import _fit_context
-from sklearn.utils._param_validation import StrOptions
+from sklearn.utils._param_validation import Interval, StrOptions
 
 from ...base import (
     BaseEstimator,
@@ -55,10 +56,6 @@ def _proximity_reward(
     new_candidates,
     new_candidates_prediction,
 ):
-    compactness_reward = new_candidates_prediction - current_prediction
-    distance_reward = pairwise_distance(original, new_candidates) - pairwise_distance(
-        original, current_candidate
-    )
     """
     Calculate the proximity reward for a given candidate solution.
 
@@ -84,6 +81,10 @@ def _proximity_reward(
     float
         The calculated proximity reward.
     """
+    compactness_reward = new_candidates_prediction - current_prediction
+    distance_reward = pairwise_distance(
+        original, new_candidates
+    ).mean() - pairwise_distance(original, current_candidate)
     return compactness_reward / (distance_reward + 0.0000001)
 
 
@@ -105,6 +106,8 @@ def _best_first_search(
         Original input samples.
     nearest_neighbors : array-like of shape (n_samples, n_timestep)
         Nearest neighbors for each sample in `X`.
+    verbose : int
+        Print debug information.
 
     Returns
     -------
@@ -123,7 +126,7 @@ def _best_first_search(
             difference_idx = ~np.isclose(
                 counterfactuals[sample_idx], nearest_neighbors[sample_idx]
             )
-            difference_idx = np.where(difference_idx)[0]
+            nn_diff, difference_idx = np.where(difference_idx)
 
             if len(difference_idx) > 0:
                 class_index = class_indices[sample_idx]
@@ -132,9 +135,11 @@ def _best_first_search(
                 )
 
                 # Create candidates with each of the possible changes.
-                for candidate_index, timestep in enumerate(difference_idx):
+                for candidate_index, (nn_idx, timestep) in enumerate(
+                    zip(nn_diff, difference_idx)
+                ):
                     candidates[candidate_index, timestep] = nearest_neighbors[
-                        sample_idx, timestep
+                        sample_idx, nn_idx, timestep
                     ]
 
                 candidate_predictions = estimator.predict_proba(candidates)
@@ -187,6 +192,8 @@ class NiceCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimator):
 
     Parameters
     ----------
+    n_neighbors : int, optional
+        The number of neighbors.
     reward : str or callable, optional
         The reward function to optimize the counterfactual explanations. Can be
         a string specifying one of the predefined reward functions or a custom
@@ -206,6 +213,7 @@ class NiceCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimator):
     """
 
     _parameter_constraints: dict = {
+        "n_neighbors": [Interval(numbers.Real, 1, None, closed="left")],
         "metric": [StrOptions(_METRICS.keys())],
         "metric_params": [None, dict],
         "reward": [StrOptions(_REWARD.keys()), callable],
@@ -214,11 +222,14 @@ class NiceCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimator):
 
     def __init__(
         self,
+        n_neighbors=1,
+        *,
         reward="compactness",
         metric="euclidean",
         metric_params=None,
         verbose=0,
     ):
+        self.n_neighbors = n_neighbors
         self.reward = reward
         self.metric = metric
         self.metric_params = metric_params
@@ -279,7 +290,9 @@ class NiceCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimator):
             self.classes_, y, sorter=np.argsort(self.classes_)
         )
 
-        nearest_neighbors = np.empty_like(X)
+        nearest_neighbors = np.empty(
+            shape=(X.shape[0], self.n_neighbors, X.shape[-1]), dtype=X.dtype
+        )
         for current_class in np.unique(y):
             current_class_mask = y == current_class
             neighbor_candidates = self.neighbors_[current_class]
@@ -288,13 +301,15 @@ class NiceCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimator):
             neighbor_candidate_index = argmin_distance(
                 X[current_class_mask],
                 neighbor_candidates,
-                k=1,
+                k=self.n_neighbors,
                 metric=self.metric,
                 metric_params=self.metric_params,
-            )[:, 0]
-            nearest_neighbors[current_class_mask] = neighbor_candidates[
-                neighbor_candidate_index
-            ]
+            )
+            nearest_neighbors[current_class_mask] = np.take(
+                neighbor_candidates,
+                neighbor_candidate_index,
+                axis=0,
+            )
 
         return _best_first_search(
             self.estimator_,
