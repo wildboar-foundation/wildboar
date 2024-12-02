@@ -15,8 +15,21 @@ from ._attribute_transform import (
 class FftTransform(TransformerMixin, BaseEstimator):
     """
     Discrete Fourier Transform.
+
+    Parameters
+    ----------
+    spectrum : {"amplitude", "phase"}, optional
+       The spectrum of FFT transformation.
     """
 
+    _parameter_constraints = {
+        "spectrum": [StrOptions({"amplitude", "phase"})],
+    }
+
+    def __init__(self, spectrum="amplitude"):
+        self.spectrum = spectrum
+
+    @_fit_context(prefer_skip_nested_validation=True)
     def fit(self, X, y=None):
         """
         Fit the estimator.
@@ -34,6 +47,7 @@ class FftTransform(TransformerMixin, BaseEstimator):
             This instance.
         """
         self._validate_data(X, allow_3d=True)
+        self.spectrum_ = self.spectrum
         return self
 
     def transform(self, X):
@@ -51,8 +65,14 @@ class FftTransform(TransformerMixin, BaseEstimator):
             The transformed data. If n_timesteps is even m_timesteps is
             (n_timesteps/2) + 1; otherwise (n_timesteps + 1) / 2.
         """
+        check_is_fitted(self)
         X = self._validate_data(X, allow_3d=True, reset=False)
-        return np.abs(np.fft.rfft(X))
+
+        fft = np.fft.rfft(X)
+        if self.spectrum_ == "amplitude":
+            return np.abs(fft)
+        else:
+            return np.angle(fft)
 
 
 class DiffTransform(TransformerMixin, BaseEstimator):

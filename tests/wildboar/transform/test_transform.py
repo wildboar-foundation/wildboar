@@ -21,6 +21,7 @@ from wildboar.transform import (
     RocketTransform,
     ShapeletTransform,
 )
+from wildboar.transform._diff import FftTransform
 from wildboar.utils._testing import (
     assert_exhaustive_parameter_checks,
     assert_parameter_checks,
@@ -41,6 +42,7 @@ from wildboar.utils.estimator_checks import check_estimator
         (PivotTransform(), ["metric_factories"]),
         (SAX(), []),
         (PAA(), []),
+        (FftTransform(), []),
         (HydraTransform(), []),
         (DilatedShapeletTransform(), []),
         (CastorTransform(), []),
