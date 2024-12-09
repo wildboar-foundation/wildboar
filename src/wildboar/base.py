@@ -287,7 +287,7 @@ class ExplainerMixin:
 
     _estimator_type = "explainer"
 
-    def _validate_estimator(self, estimator, allow_3d=False):
+    def _validate_estimator(self, estimator, allow_3d=False, require_classes=True):
         """
         Check the estimator.
 
@@ -299,6 +299,8 @@ class ExplainerMixin:
             The estimator object to check.
         allow_3d : bool, optional
             If estimator fit with 3d-arrays are supported.
+        require_classes : bool, optional
+            If the estimator require the `classes_` attribute.
 
         Returns
         -------
@@ -331,14 +333,16 @@ class ExplainerMixin:
                 )
             )
 
-        if hasattr(estimator, "classes_"):
-            self.classes_ = estimator.classes_
-        else:
-            raise ValueError(
-                "Unable to find the `classes_` attribute from {}".format(
-                    type(estimator).__qualname__
+        if require_classes:
+            if hasattr(estimator, "classes_"):
+                self.classes_ = estimator.classes_
+            else:
+                raise ValueError(
+                    "Unable to find the `classes_` attribute from {}".format(
+                        type(estimator).__qualname__
+                    )
                 )
-            )
+
         return estimator
 
     def fit_explain(self, estimator, x=None, y=None, **kwargs):
