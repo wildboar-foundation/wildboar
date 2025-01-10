@@ -38,8 +38,9 @@ jobs:
           CIBW_TEST_COMMAND: python -m pytest {package}/tests --benchmark-skip
           CIBW_TEST_SKIP: "*-macosx_arm64 *-macosx_universal2:arm64"
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
+          name: wildboar-${{matrix.os}}-${{matrix.pyver}}
           path: ./wheelhouse/*.whl
 
   build_sdist:
@@ -63,8 +64,9 @@ jobs:
         run: |
           python -m build --sdist
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
+          name: wildboar-sdist
           path: dist/*.tar.gz
 
   # Check that a tag is annotated with a Release messages.
@@ -164,7 +166,8 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
         with:
-          name: artifact
+          name: wildboar-*
+          merge-multiple: true
           path: dist
 
       - uses: pypa/gh-action-pypi-publish@release/v1
