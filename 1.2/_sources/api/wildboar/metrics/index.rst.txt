@@ -78,6 +78,8 @@ Functions
        **average** : bool, optional
            Compute average score over all dimensions.
 
+
+
    :Returns:
 
        float
@@ -104,8 +106,6 @@ Functions
    .. only:: latex
 
       
-
-
 
 
    ..
@@ -144,6 +144,8 @@ Functions
            If True, return the average score for all labels in y_counterfactual;
            otherwise, return the score for the individual labels (ordered as np.unique).
 
+
+
    :Returns:
 
        ndarray or float
@@ -172,8 +174,6 @@ Functions
    .. only:: latex
 
       
-
-
 
 
    ..
@@ -205,6 +205,8 @@ Functions
            Read more about the parameters in the
            :ref:`User guide <list_of_metrics>`.
 
+
+
    :Returns:
 
        float
@@ -234,8 +236,6 @@ Functions
    .. only:: latex
 
       
-
-
 
 
    ..
@@ -273,6 +273,8 @@ Functions
        **average** : bool, optional
            Return the average redundancy over all intervals.
 
+
+
    :Returns:
 
        ndarray of shape (n_intervals, ) or float
@@ -292,8 +294,6 @@ Functions
 
    The samples in `x_counterfactual` and `x_factual` should be aligned such
    that the i:th counterfacutal sample is derived from the i:th factual sample.
-
-
 
 
 
@@ -344,6 +344,8 @@ Functions
        **average** : bool, optional
            Average the relative proximity of all labels in y_counterfactual.
 
+
+
    :Returns:
 
        ndarray or float
@@ -373,8 +375,6 @@ Functions
       
 
 
-
-
    ..
        !! processed by numpydoc !!
 
@@ -399,6 +399,8 @@ Functions
            The metric parameters. Read more about the metrics and their parameters
            in the :ref:`User guide <list_of_metrics>`.
 
+
+
    :Returns:
 
        ndarray of shape (n_samples, )
@@ -415,8 +417,6 @@ Functions
 
    This is a convenient wrapper around :ref:`sklearn.metrics.silhouette_samples`
    using Wildboar native metrics.
-
-
 
 
 
@@ -453,6 +453,8 @@ Functions
            Determines random number generation for selecting a subset of samples.
            Used when ``sample_size is not None``.
 
+
+
    :Returns:
 
        float
@@ -469,8 +471,6 @@ Functions
 
    This is a convenient wrapper around :ref:`sklearn.metrics.silhouette_score`
    using Wildboar native metrics.
-
-
 
 
 
@@ -494,6 +494,8 @@ Functions
 
        **sample_weight** : array-like of shape (n_samples, ), optional
            The sample weight.
+
+
 
    :Returns:
 
@@ -520,8 +522,6 @@ Functions
    .. only:: latex
 
       
-
-
 
 
    ..

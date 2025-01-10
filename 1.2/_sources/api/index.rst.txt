@@ -122,14 +122,14 @@ more details and examples.
 
 
 
+
+
 .. rubric:: Examples
 
 >>> from wildboar.datasets import load_dataset
 >>> X, y = load_dataset("GunPoint")
 >>> X.shape
 (200, 60)
-
-
 
 ..
     !! processed by numpydoc !!

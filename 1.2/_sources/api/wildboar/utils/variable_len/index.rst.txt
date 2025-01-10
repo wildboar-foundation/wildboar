@@ -39,6 +39,8 @@ Functions
        **x** : time-series
            The input.
 
+
+
    :Returns:
 
        float or ndarray
@@ -72,8 +74,6 @@ Functions
    >>> get_variable_length([[1, 2, eos, eos]])
    [2]
 
-
-
    ..
        !! processed by numpydoc !!
 
@@ -88,12 +88,12 @@ Functions
        **x** : ndarray
            Input array.
 
+
+
    :Returns:
 
        ndarray
            Boolean indicator array.
-
-
 
 
 
@@ -119,12 +119,12 @@ Functions
        **x** : time-series
            The input.
 
+
+
    :Returns:
 
        bool
            True if time series contains EoS.
-
-
 
 
 

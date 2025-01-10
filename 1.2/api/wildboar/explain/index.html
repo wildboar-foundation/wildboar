@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>wildboar.explain &#8212; Wildboar 1.2.0 documentation</title>
+    <title>wildboar.explain &#8212; Wildboar 1.2.1 documentation</title>
   
   
   
@@ -16,32 +16,35 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "auto";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "auto";
   </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
-<link href="../../../_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-  
-  <link href="../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
-
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=11f2bc40" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=451fe87e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=fd3f3429" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/tabs.css?v=4c969af8" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=87e54e7c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css?v=584e34e5" />
     <link rel="stylesheet" type="text/css" href="../../../_static/css/pygments-override.css?v=9e853fe2" />
   
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
-  <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=6efca38a"></script>
+    <script src="../../../_static/documentation_options.js?v=ca842793"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -51,16 +54,18 @@
     <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/wildboar/explain/index';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.15.3';
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://wildboar.dev/_versions.json';
         DOCUMENTATION_OPTIONS.theme_switcher_version_match = '1.2';
-        DOCUMENTATION_OPTIONS.show_version_warning_banner = true;
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
         </script>
     <script src="../../../_static/js/fa.js?v=744fd48f"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.2.1" />
   </head>
   
   
@@ -76,19 +81,8 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="../../../search.html"
       method="get">
@@ -96,7 +90,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search the docs ..."
          aria-label="Search the docs ..."
          autocomplete="off"
@@ -104,8 +97,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -114,7 +107,7 @@
   
     <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <button class="sidebar-toggle primary-toggle" aria-label="Site navigation">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
   </button>
   
@@ -123,6 +116,8 @@
     
       <div class="navbar-item">
 
+  
+    
   
 
 <a class="navbar-brand logo" href="../../../index.html">
@@ -137,7 +132,7 @@
     
     
     <img src="../../../_static/logo.png" class="logo__image only-light" alt=""/>
-    <script>document.write(`<img src="../../../_static/logo.png" class="logo__image only-dark" alt=""/>`);</script>
+    <img src="../../../_static/logo.png" class="logo__image only-dark pst-js-only" alt=""/>
   
   
     <p class="title logo__title">Wildboar</p>
@@ -145,28 +140,24 @@
 </a></div>
     
       <div class="navbar-item">
-<script>
-document.write(`
-  <div class="version-switcher__container dropdown">
-    <button id="pst-version-switcher-button-2"
-      type="button"
-      class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle"
-      data-bs-toggle="dropdown"
-      aria-haspopup="listbox"
-      aria-controls="pst-version-switcher-list-2"
-      aria-label="Version switcher list"
-    >
-      Choose version  <!-- this text may get changed later by javascript -->
-      <span class="caret"></span>
-    </button>
-    <div id="pst-version-switcher-list-2"
-      class="version-switcher__menu dropdown-menu list-group-flush py-0"
-      role="listbox" aria-labelledby="pst-version-switcher-button-2">
-      <!-- dropdown will be populated by javascript on page load -->
-    </div>
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
   </div>
-`);
-</script></div>
+</div></div>
     
   </div>
   
@@ -175,38 +166,38 @@ document.write(`
     <div class="me-auto navbar-header-items__center">
       
         <div class="navbar-item">
-<nav class="navbar-nav">
+<nav>
   <ul class="bd-navbar-elements navbar-nav">
     
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../install.html">
     Install
   </a>
 </li>
 
 
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../guide.html">
     User Guide
   </a>
 </li>
 
 
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../index.html">
     API
   </a>
 </li>
 
 
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../examples.html">
     Examples
   </a>
 </li>
 
 
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../more/whatsnew.html">
     What’s new
   </a>
@@ -223,31 +214,23 @@ document.write(`
         <div class="navbar-item navbar-persistent--container">
           
 
- <script>
- document.write(`
-   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
         </div>
       
       
         <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
-    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
-    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
       
-        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+        <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
         <li class="nav-item">
           
@@ -258,7 +241,7 @@ document.write(`
           
           
           
-          <a href="https://github.com/wildboar-foundation/wildboar/" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i></span>
+          <a href="https://github.com/wildboar-foundation/wildboar/" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
             <span class="sr-only">GitHub</span></a>
         </li>
         <li class="nav-item">
@@ -270,7 +253,7 @@ document.write(`
           
           
           
-          <a href="https://pypi.org/project/wildboar/" title="PyPI" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-custom fa-pypi fa-lg" aria-hidden="true"></i></span>
+          <a href="https://pypi.org/project/wildboar/" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-custom fa-pypi fa-lg" aria-hidden="true"></i>
             <span class="sr-only">PyPI</span></a>
         </li>
 </ul></div>
@@ -282,20 +265,16 @@ document.write(`
   
     <div class="navbar-persistent--mobile">
 
- <script>
- document.write(`
-   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
     </div>
   
 
   
-    <button class="sidebar-toggle secondary-toggle" aria-label="On this page">
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
       <span class="fa-solid fa-outdent"></span>
     </button>
   
@@ -309,7 +288,8 @@ document.write(`
       
       
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -321,38 +301,38 @@ document.write(`
           
           
             <div class="navbar-item">
-<nav class="navbar-nav">
+<nav>
   <ul class="bd-navbar-elements navbar-nav">
     
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../install.html">
     Install
   </a>
 </li>
 
 
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../guide.html">
     User Guide
   </a>
 </li>
 
 
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../index.html">
     API
   </a>
 </li>
 
 
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../examples.html">
     Examples
   </a>
 </li>
 
 
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../more/whatsnew.html">
     What’s new
   </a>
@@ -370,17 +350,13 @@ document.write(`
         
           <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
-    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
-    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
         
-          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+          <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
         <li class="nav-item">
           
@@ -391,7 +367,7 @@ document.write(`
           
           
           
-          <a href="https://github.com/wildboar-foundation/wildboar/" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i></span>
+          <a href="https://github.com/wildboar-foundation/wildboar/" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
             <span class="sr-only">GitHub</span></a>
         </li>
         <li class="nav-item">
@@ -403,7 +379,7 @@ document.write(`
           
           
           
-          <a href="https://pypi.org/project/wildboar/" title="PyPI" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-custom fa-pypi fa-lg" aria-hidden="true"></i></span>
+          <a href="https://pypi.org/project/wildboar/" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-custom fa-pypi fa-lg" aria-hidden="true"></i>
             <span class="sr-only">PyPI</span></a>
         </li>
 </ul></div>
@@ -426,9 +402,14 @@ document.write(`
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -446,8 +427,6 @@ document.write(`
       
         <div class="header-article-item">
 
-
-
 <nav aria-label="Breadcrumb" class="d-print-none">
   <ul class="bd-breadcrumbs">
     
@@ -456,7 +435,7 @@ document.write(`
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page"><code...</li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain</span></code></span></li>
   </ul>
 </nav>
 </div>
@@ -518,14 +497,14 @@ document.write(`
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.explain.AmplitudeImportance">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.</span></span><span class="sig-name descname"><span class="pre">AmplitudeImportance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binning</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'normal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_repeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/explain/_importance.py#L489-L768"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.AmplitudeImportance" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.</span></span><span class="sig-name descname"><span class="pre">AmplitudeImportance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binning</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'normal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_repeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.1/src/wildboar/explain/_importance.py#L489-L768"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.AmplitudeImportance" title="Link to this definition">#</a></dt>
 <dd><p>Compute the importance of equi-probable amplitude intervals.</p>
 <p>The implementation uses
 <code class="xref py py-class docutils literal notranslate"><span class="pre">transform.SAX</span></code> to discretize the time series and then for each bin permute
 the samples along that bin.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.AmplitudeImportance.fit_explain">
-<span class="sig-name descname"><span class="pre">fit_explain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/base.py#L295-L314"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.AmplitudeImportance.fit_explain" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit_explain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.1/src/wildboar/base.py#L295-L314"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.AmplitudeImportance.fit_explain" title="Link to this definition">#</a></dt>
 <dd><p>Fit and return the explanation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -551,14 +530,14 @@ the samples along that bin.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.AmplitudeImportance.get_metadata_routing">
-<span class="sig-name descname"><span class="pre">get_metadata_routing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/explain.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.AmplitudeImportance.get_metadata_routing" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_metadata_routing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.1/src/wildboar/explain.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.AmplitudeImportance.get_metadata_routing" title="Link to this definition">#</a></dt>
 <dd><p>Get metadata routing of this object.</p>
-<p>Please check <a class="reference external" href="https://scikit-learn.org/stable/metadata_routing.html#metadata-routing" title="(in scikit-learn v1.5)"><span class="xref std std-ref">User Guide</span></a> on how the routing
+<p>Please check <a class="reference external" href="https://scikit-learn.org/stable/metadata_routing.html#metadata-routing" title="(in scikit-learn v1.6)"><span class="xref std std-ref">User Guide</span></a> on how the routing
 mechanism works.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>routing</strong><span class="classifier">MetadataRequest</span></dt><dd><p>A <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.utils.metadata_routing.MetadataRequest.html#sklearn.utils.metadata_routing.MetadataRequest" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetadataRequest</span></code></a> encapsulating
+<dt><strong>routing</strong><span class="classifier">MetadataRequest</span></dt><dd><p>A <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.utils.metadata_routing.MetadataRequest.html#sklearn.utils.metadata_routing.MetadataRequest" title="(in scikit-learn v1.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetadataRequest</span></code></a> encapsulating
 routing information.</p>
 </dd>
 </dl>
@@ -568,7 +547,7 @@ routing information.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.AmplitudeImportance.get_params">
-<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/explain.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.AmplitudeImportance.get_params" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.1/src/wildboar/explain.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.AmplitudeImportance.get_params" title="Link to this definition">#</a></dt>
 <dd><p>Get parameters for this estimator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -589,7 +568,7 @@ contained subobjects that are estimators.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.AmplitudeImportance.plot">
-<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preprocess</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/explain/_importance.py#L604-L768"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.AmplitudeImportance.plot" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preprocess</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.1/src/wildboar/explain/_importance.py#L604-L768"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.AmplitudeImportance.plot" title="Link to this definition">#</a></dt>
 <dd><p>Plot the importances.</p>
 <p>If x is given, the importances are plotted over the samples optionally
 labeling each sample using the supplied labels. If x is not give, the
@@ -636,10 +615,10 @@ Only returned if ax is not None and x is not None.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.AmplitudeImportance.set_params">
-<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/explain.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.AmplitudeImportance.set_params" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.1/src/wildboar/explain.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.AmplitudeImportance.set_params" title="Link to this definition">#</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
-(such as <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+(such as <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
 parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it’s
 possible to update each component of a nested object.</p>
 <dl class="field-list simple">
@@ -662,11 +641,11 @@ possible to update each component of a nested object.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.explain.FrequencyImportance">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.</span></span><span class="sig-name descname"><span class="pre">FrequencyImportance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_repeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/explain/_importance.py#L400-L486"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.FrequencyImportance" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.</span></span><span class="sig-name descname"><span class="pre">FrequencyImportance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_repeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.1/src/wildboar/explain/_importance.py#L400-L486"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.FrequencyImportance" title="Link to this definition">#</a></dt>
 <dd><p>Mixin class for all explainers in wildboar.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.FrequencyImportance.fit_explain">
-<span class="sig-name descname"><span class="pre">fit_explain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/base.py#L295-L314"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.FrequencyImportance.fit_explain" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit_explain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.1/src/wildboar/base.py#L295-L314"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.FrequencyImportance.fit_explain" title="Link to this definition">#</a></dt>
 <dd><p>Fit and return the explanation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -692,14 +671,14 @@ possible to update each component of a nested object.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.FrequencyImportance.get_metadata_routing">
-<span class="sig-name descname"><span class="pre">get_metadata_routing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/explain.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.FrequencyImportance.get_metadata_routing" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_metadata_routing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.1/src/wildboar/explain.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.FrequencyImportance.get_metadata_routing" title="Link to this definition">#</a></dt>
 <dd><p>Get metadata routing of this object.</p>
-<p>Please check <a class="reference external" href="https://scikit-learn.org/stable/metadata_routing.html#metadata-routing" title="(in scikit-learn v1.5)"><span class="xref std std-ref">User Guide</span></a> on how the routing
+<p>Please check <a class="reference external" href="https://scikit-learn.org/stable/metadata_routing.html#metadata-routing" title="(in scikit-learn v1.6)"><span class="xref std std-ref">User Guide</span></a> on how the routing
 mechanism works.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>routing</strong><span class="classifier">MetadataRequest</span></dt><dd><p>A <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.utils.metadata_routing.MetadataRequest.html#sklearn.utils.metadata_routing.MetadataRequest" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetadataRequest</span></code></a> encapsulating
+<dt><strong>routing</strong><span class="classifier">MetadataRequest</span></dt><dd><p>A <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.utils.metadata_routing.MetadataRequest.html#sklearn.utils.metadata_routing.MetadataRequest" title="(in scikit-learn v1.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetadataRequest</span></code></a> encapsulating
 routing information.</p>
 </dd>
 </dl>
@@ -709,7 +688,7 @@ routing information.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.FrequencyImportance.get_params">
-<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/explain.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.FrequencyImportance.get_params" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.1/src/wildboar/explain.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.FrequencyImportance.get_params" title="Link to this definition">#</a></dt>
 <dd><p>Get parameters for this estimator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -730,7 +709,7 @@ contained subobjects that are estimators.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.FrequencyImportance.plot">
-<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/explain/_importance.py#L440-L486"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.FrequencyImportance.plot" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.1/src/wildboar/explain/_importance.py#L440-L486"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.FrequencyImportance.plot" title="Link to this definition">#</a></dt>
 <dd><p>Plot the explanation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -744,10 +723,10 @@ contained subobjects that are estimators.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.FrequencyImportance.set_params">
-<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/explain.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.FrequencyImportance.set_params" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.1/src/wildboar/explain.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.FrequencyImportance.set_params" title="Link to this definition">#</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
-(such as <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+(such as <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
 parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it’s
 possible to update each component of a nested object.</p>
 <dl class="field-list simple">
@@ -770,7 +749,7 @@ possible to update each component of a nested object.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.explain.IntervalImportance">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.</span></span><span class="sig-name descname"><span class="pre">IntervalImportance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_repeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/explain/_importance.py#L181-L397"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.IntervalImportance" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.</span></span><span class="sig-name descname"><span class="pre">IntervalImportance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_repeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.1/src/wildboar/explain/_importance.py#L181-L397"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.IntervalImportance" title="Link to this definition">#</a></dt>
 <dd><p>Interval importance for time series.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -813,7 +792,7 @@ function.</p>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.IntervalImportance.fit_explain">
-<span class="sig-name descname"><span class="pre">fit_explain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/base.py#L295-L314"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.IntervalImportance.fit_explain" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit_explain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.1/src/wildboar/base.py#L295-L314"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.IntervalImportance.fit_explain" title="Link to this definition">#</a></dt>
 <dd><p>Fit and return the explanation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -839,14 +818,14 @@ function.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.IntervalImportance.get_metadata_routing">
-<span class="sig-name descname"><span class="pre">get_metadata_routing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/explain.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.IntervalImportance.get_metadata_routing" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_metadata_routing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.1/src/wildboar/explain.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.IntervalImportance.get_metadata_routing" title="Link to this definition">#</a></dt>
 <dd><p>Get metadata routing of this object.</p>
-<p>Please check <a class="reference external" href="https://scikit-learn.org/stable/metadata_routing.html#metadata-routing" title="(in scikit-learn v1.5)"><span class="xref std std-ref">User Guide</span></a> on how the routing
+<p>Please check <a class="reference external" href="https://scikit-learn.org/stable/metadata_routing.html#metadata-routing" title="(in scikit-learn v1.6)"><span class="xref std std-ref">User Guide</span></a> on how the routing
 mechanism works.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>routing</strong><span class="classifier">MetadataRequest</span></dt><dd><p>A <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.utils.metadata_routing.MetadataRequest.html#sklearn.utils.metadata_routing.MetadataRequest" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetadataRequest</span></code></a> encapsulating
+<dt><strong>routing</strong><span class="classifier">MetadataRequest</span></dt><dd><p>A <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.utils.metadata_routing.MetadataRequest.html#sklearn.utils.metadata_routing.MetadataRequest" title="(in scikit-learn v1.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetadataRequest</span></code></a> encapsulating
 routing information.</p>
 </dd>
 </dl>
@@ -856,7 +835,7 @@ routing information.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.IntervalImportance.get_params">
-<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/explain.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.IntervalImportance.get_params" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.1/src/wildboar/explain.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.IntervalImportance.get_params" title="Link to this definition">#</a></dt>
 <dd><p>Get parameters for this estimator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -877,7 +856,7 @@ contained subobjects that are estimators.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.IntervalImportance.plot">
-<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/explain/_importance.py#L293-L397"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.IntervalImportance.plot" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.1/src/wildboar/explain/_importance.py#L293-L397"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.IntervalImportance.plot" title="Link to this definition">#</a></dt>
 <dd><p>Plot the explanation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -891,10 +870,10 @@ contained subobjects that are estimators.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.IntervalImportance.set_params">
-<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/explain.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.IntervalImportance.set_params" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.1/src/wildboar/explain.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.IntervalImportance.set_params" title="Link to this definition">#</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
-(such as <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+(such as <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
 parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it’s
 possible to update each component of a nested object.</p>
 <dl class="field-list simple">
@@ -917,7 +896,7 @@ possible to update each component of a nested object.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.explain.ShapeletImportance">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.</span></span><span class="sig-name descname"><span class="pre">ShapeletImportance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_repeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_shapelets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/explain/_importance.py#L771-L1034"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.ShapeletImportance" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.</span></span><span class="sig-name descname"><span class="pre">ShapeletImportance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_repeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_shapelets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.1/src/wildboar/explain/_importance.py#L771-L1034"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.ShapeletImportance" title="Link to this definition">#</a></dt>
 <dd><p>Compute the importance of shapelets.</p>
 <p>The importance is given by permuting time series sections with
 the minimum distance to shapelets.</p>
@@ -942,10 +921,10 @@ the minimum distance to shapelets.</p>
 <ul class="simple">
 <li><p>If <cite>int</cite>, <cite>random_state</cite> is the seed used by the
 random number generator.</p></li>
-<li><p>If <a class="reference external" href="https://numpy.org/doc/stable/reference/random/legacy.html#numpy.random.RandomState" title="(in NumPy v2.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code></a> instance, <cite>random_state</cite> is the
+<li><p>If <a class="reference external" href="https://numpy.org/doc/stable/reference/random/legacy.html#numpy.random.RandomState" title="(in NumPy v2.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code></a> instance, <cite>random_state</cite> is the
 random number generator.</p></li>
 <li><p>If <cite>None</cite>, the random number generator is the
-<a class="reference external" href="https://numpy.org/doc/stable/reference/random/legacy.html#numpy.random.RandomState" title="(in NumPy v2.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code></a> instance used by
+<a class="reference external" href="https://numpy.org/doc/stable/reference/random/legacy.html#numpy.random.RandomState" title="(in NumPy v2.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code></a> instance used by
 <code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random</span></code>.</p></li>
 </ul>
 </dd>
@@ -960,7 +939,7 @@ random number generator.</p></li>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.ShapeletImportance.fit_explain">
-<span class="sig-name descname"><span class="pre">fit_explain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/base.py#L295-L314"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.ShapeletImportance.fit_explain" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit_explain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.1/src/wildboar/base.py#L295-L314"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.ShapeletImportance.fit_explain" title="Link to this definition">#</a></dt>
 <dd><p>Fit and return the explanation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -986,14 +965,14 @@ random number generator.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.ShapeletImportance.get_metadata_routing">
-<span class="sig-name descname"><span class="pre">get_metadata_routing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/explain.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.ShapeletImportance.get_metadata_routing" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_metadata_routing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.1/src/wildboar/explain.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.ShapeletImportance.get_metadata_routing" title="Link to this definition">#</a></dt>
 <dd><p>Get metadata routing of this object.</p>
-<p>Please check <a class="reference external" href="https://scikit-learn.org/stable/metadata_routing.html#metadata-routing" title="(in scikit-learn v1.5)"><span class="xref std std-ref">User Guide</span></a> on how the routing
+<p>Please check <a class="reference external" href="https://scikit-learn.org/stable/metadata_routing.html#metadata-routing" title="(in scikit-learn v1.6)"><span class="xref std std-ref">User Guide</span></a> on how the routing
 mechanism works.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>routing</strong><span class="classifier">MetadataRequest</span></dt><dd><p>A <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.utils.metadata_routing.MetadataRequest.html#sklearn.utils.metadata_routing.MetadataRequest" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetadataRequest</span></code></a> encapsulating
+<dt><strong>routing</strong><span class="classifier">MetadataRequest</span></dt><dd><p>A <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.utils.metadata_routing.MetadataRequest.html#sklearn.utils.metadata_routing.MetadataRequest" title="(in scikit-learn v1.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetadataRequest</span></code></a> encapsulating
 routing information.</p>
 </dd>
 </dl>
@@ -1003,7 +982,7 @@ routing information.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.ShapeletImportance.get_params">
-<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/explain.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.ShapeletImportance.get_params" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.1/src/wildboar/explain.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.ShapeletImportance.get_params" title="Link to this definition">#</a></dt>
 <dd><p>Get parameters for this estimator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1024,7 +1003,7 @@ contained subobjects that are estimators.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.ShapeletImportance.plot">
-<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/explain/_importance.py#L930-L1030"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.ShapeletImportance.plot" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.1/src/wildboar/explain/_importance.py#L930-L1030"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.ShapeletImportance.plot" title="Link to this definition">#</a></dt>
 <dd><p>Plot the explanation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -1038,10 +1017,10 @@ contained subobjects that are estimators.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.ShapeletImportance.set_params">
-<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/explain.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.ShapeletImportance.set_params" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.1/src/wildboar/explain.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.ShapeletImportance.set_params" title="Link to this definition">#</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
-(such as <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+(such as <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
 parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it’s
 possible to update each component of a nested object.</p>
 <dl class="field-list simple">
@@ -1064,7 +1043,7 @@ possible to update each component of a nested object.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.explain.plot_importances">
-<span class="sig-prename descclassname"><span class="pre">wildboar.explain.</span></span><span class="sig-name descname"><span class="pre">plot_importances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">importances</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/explain/_importance.py#L41-L71"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.plot_importances" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.explain.</span></span><span class="sig-name descname"><span class="pre">plot_importances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">importances</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.1/src/wildboar/explain/_importance.py#L41-L71"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.plot_importances" title="Link to this definition">#</a></dt>
 <dd><p>Plot the importances as a boxplot.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1108,7 +1087,8 @@ len(importances) Axes objects.</p>
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -1164,13 +1144,13 @@ len(importances) Axes objects.</p>
   </nav></div>
 
   <div class="sidebar-secondary-item">
-
-  <div class="tocsection sourcelink">
-    <a href="../../../_sources/api/wildboar/explain/index.rst.txt">
-      <i class="fa-solid fa-file-lines"></i> Show Source
-    </a>
-  </div>
-</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/api/wildboar/explain/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
 
 </div></div>
               
@@ -1185,8 +1165,8 @@ len(importances) Axes objects.</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
-<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1206,7 +1186,7 @@ len(importances) Axes objects.</p>
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
     <br/>
   </p>
 </div>
@@ -1219,7 +1199,8 @@ len(importances) Axes objects.</p>
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.3.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>

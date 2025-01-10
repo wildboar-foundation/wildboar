@@ -161,6 +161,8 @@ Functions
           **value**
               Data to normalize.
 
+
+
       :Returns:
 
           **result** : masked array
@@ -182,8 +184,6 @@ Functions
       converted to np.float32, and larger types are converted to np.float64.
       Preserving float32 when possible, and using in-place operations,
       greatly improves speed for large arrays.
-
-
 
 
 
@@ -248,6 +248,8 @@ Functions
        **cmap** : str, optional
            The colormap.
 
+
+
    :Returns:
 
        Axes
@@ -268,8 +270,6 @@ Functions
    >>> from wildboar.datasets import load_gun_point
    >>> X, y = load_gun_point(X, y)
    >>> plot_frequency_domain(X, y, n_sample=10)
-
-
 
    ..
        !! processed by numpydoc !!
@@ -315,6 +315,8 @@ Functions
            - if int, show the legend if the number of labels are lower than the
              show_legend parameter value
 
+
+
    :Returns:
 
        Axes
@@ -335,8 +337,6 @@ Functions
    >>> from wildboar.datasets import load_gun_point
    >>> X, y = load_gun_point(X, y)
    >>> plot_time_domain(X, y, n_sample=10)
-
-
 
    ..
        !! processed by numpydoc !!

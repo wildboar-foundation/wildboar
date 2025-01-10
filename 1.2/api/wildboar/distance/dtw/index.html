@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>wildboar.distance.dtw &#8212; Wildboar 1.2.0 documentation</title>
+    <title>wildboar.distance.dtw &#8212; Wildboar 1.2.1 documentation</title>
   
   
   
@@ -16,32 +16,35 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "auto";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "auto";
   </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../../_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
-<link href="../../../../_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
-<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link href="../../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-  
-  <link href="../../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
-
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=11f2bc40" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=451fe87e" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=fd3f3429" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/tabs.css?v=4c969af8" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/sphinx-design.min.css?v=87e54e7c" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/css/custom.css?v=584e34e5" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/css/pygments-override.css?v=9e853fe2" />
   
+  <!-- So that users can add custom icons -->
+  <script src="../../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
-<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
-  <script src="../../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
+  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../../_static/documentation_options.js?v=6efca38a"></script>
+    <script src="../../../../_static/documentation_options.js?v=ca842793"></script>
     <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -51,16 +54,18 @@
     <script src="../../../../_static/design-tabs.js?v=f930bc37"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/wildboar/distance/dtw/index';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.15.3';
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://wildboar.dev/_versions.json';
         DOCUMENTATION_OPTIONS.theme_switcher_version_match = '1.2';
-        DOCUMENTATION_OPTIONS.show_version_warning_banner = true;
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
         </script>
     <script src="../../../../_static/js/fa.js?v=744fd48f"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.2.1" />
   </head>
   
   
@@ -76,19 +81,8 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="../../../../search.html"
       method="get">
@@ -96,7 +90,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search the docs ..."
          aria-label="Search the docs ..."
          autocomplete="off"
@@ -104,8 +97,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -114,7 +107,7 @@
   
     <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <button class="sidebar-toggle primary-toggle" aria-label="Site navigation">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
   </button>
   
@@ -123,6 +116,8 @@
     
       <div class="navbar-item">
 
+  
+    
   
 
 <a class="navbar-brand logo" href="../../../../index.html">
@@ -137,7 +132,7 @@
     
     
     <img src="../../../../_static/logo.png" class="logo__image only-light" alt=""/>
-    <script>document.write(`<img src="../../../../_static/logo.png" class="logo__image only-dark" alt=""/>`);</script>
+    <img src="../../../../_static/logo.png" class="logo__image only-dark pst-js-only" alt=""/>
   
   
     <p class="title logo__title">Wildboar</p>
@@ -145,28 +140,24 @@
 </a></div>
     
       <div class="navbar-item">
-<script>
-document.write(`
-  <div class="version-switcher__container dropdown">
-    <button id="pst-version-switcher-button-2"
-      type="button"
-      class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle"
-      data-bs-toggle="dropdown"
-      aria-haspopup="listbox"
-      aria-controls="pst-version-switcher-list-2"
-      aria-label="Version switcher list"
-    >
-      Choose version  <!-- this text may get changed later by javascript -->
-      <span class="caret"></span>
-    </button>
-    <div id="pst-version-switcher-list-2"
-      class="version-switcher__menu dropdown-menu list-group-flush py-0"
-      role="listbox" aria-labelledby="pst-version-switcher-button-2">
-      <!-- dropdown will be populated by javascript on page load -->
-    </div>
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
   </div>
-`);
-</script></div>
+</div></div>
     
   </div>
   
@@ -175,38 +166,38 @@ document.write(`
     <div class="me-auto navbar-header-items__center">
       
         <div class="navbar-item">
-<nav class="navbar-nav">
+<nav>
   <ul class="bd-navbar-elements navbar-nav">
     
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../../install.html">
     Install
   </a>
 </li>
 
 
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../../guide.html">
     User Guide
   </a>
 </li>
 
 
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../index.html">
     API
   </a>
 </li>
 
 
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../../examples.html">
     Examples
   </a>
 </li>
 
 
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../../more/whatsnew.html">
     What’s new
   </a>
@@ -223,31 +214,23 @@ document.write(`
         <div class="navbar-item navbar-persistent--container">
           
 
- <script>
- document.write(`
-   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
         </div>
       
       
         <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
-    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
-    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
       
-        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+        <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
         <li class="nav-item">
           
@@ -258,7 +241,7 @@ document.write(`
           
           
           
-          <a href="https://github.com/wildboar-foundation/wildboar/" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i></span>
+          <a href="https://github.com/wildboar-foundation/wildboar/" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
             <span class="sr-only">GitHub</span></a>
         </li>
         <li class="nav-item">
@@ -270,7 +253,7 @@ document.write(`
           
           
           
-          <a href="https://pypi.org/project/wildboar/" title="PyPI" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-custom fa-pypi fa-lg" aria-hidden="true"></i></span>
+          <a href="https://pypi.org/project/wildboar/" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-custom fa-pypi fa-lg" aria-hidden="true"></i>
             <span class="sr-only">PyPI</span></a>
         </li>
 </ul></div>
@@ -282,20 +265,16 @@ document.write(`
   
     <div class="navbar-persistent--mobile">
 
- <script>
- document.write(`
-   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
     </div>
   
 
   
-    <button class="sidebar-toggle secondary-toggle" aria-label="On this page">
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
       <span class="fa-solid fa-outdent"></span>
     </button>
   
@@ -309,7 +288,8 @@ document.write(`
       
       
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -321,38 +301,38 @@ document.write(`
           
           
             <div class="navbar-item">
-<nav class="navbar-nav">
+<nav>
   <ul class="bd-navbar-elements navbar-nav">
     
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../../install.html">
     Install
   </a>
 </li>
 
 
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../../guide.html">
     User Guide
   </a>
 </li>
 
 
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../index.html">
     API
   </a>
 </li>
 
 
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../../examples.html">
     Examples
   </a>
 </li>
 
 
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../../more/whatsnew.html">
     What’s new
   </a>
@@ -370,17 +350,13 @@ document.write(`
         
           <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
-    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
-    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
         
-          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+          <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
         <li class="nav-item">
           
@@ -391,7 +367,7 @@ document.write(`
           
           
           
-          <a href="https://github.com/wildboar-foundation/wildboar/" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i></span>
+          <a href="https://github.com/wildboar-foundation/wildboar/" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
             <span class="sr-only">GitHub</span></a>
         </li>
         <li class="nav-item">
@@ -403,7 +379,7 @@ document.write(`
           
           
           
-          <a href="https://pypi.org/project/wildboar/" title="PyPI" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-custom fa-pypi fa-lg" aria-hidden="true"></i></span>
+          <a href="https://pypi.org/project/wildboar/" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-custom fa-pypi fa-lg" aria-hidden="true"></i>
             <span class="sr-only">PyPI</span></a>
         </li>
 </ul></div>
@@ -426,9 +402,14 @@ document.write(`
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -446,8 +427,6 @@ document.write(`
       
         <div class="header-article-item">
 
-
-
 <nav aria-label="Breadcrumb" class="d-print-none">
   <ul class="bd-breadcrumbs">
     
@@ -456,7 +435,7 @@ document.write(`
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page"><code...</li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance.dtw</span></code></span></li>
   </ul>
 </nav>
 </div>
@@ -523,7 +502,7 @@ computing DTW alignments and distances.</p>
 </div>
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.distance.dtw.ddtw_distance">
-<span class="sig-prename descclassname"><span class="pre">wildboar.distance.dtw.</span></span><span class="sig-name descname"><span class="pre">ddtw_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/distance/dtw.py#L70-L94"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.dtw.ddtw_distance" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.distance.dtw.</span></span><span class="sig-name descname"><span class="pre">ddtw_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.1/src/wildboar/distance/dtw.py#L70-L94"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.dtw.ddtw_distance" title="Link to this definition">#</a></dt>
 <dd><p>Compute the derivative dynamic time warping distance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -554,7 +533,7 @@ computing DTW alignments and distances.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.distance.dtw.dtw_alignment">
-<span class="sig-prename descclassname"><span class="pre">wildboar.distance.dtw.</span></span><span class="sig-name descname"><span class="pre">dtw_alignment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/distance/dtw.py#L244-L288"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.dtw.dtw_alignment" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.distance.dtw.</span></span><span class="sig-name descname"><span class="pre">dtw_alignment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.1/src/wildboar/distance/dtw.py#L244-L288"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.dtw.dtw_alignment" title="Link to this definition">#</a></dt>
 <dd><p>Compute the Dynamic time warping alignment matrix.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -592,7 +571,7 @@ instead.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.distance.dtw.dtw_average">
-<span class="sig-prename descclassname"><span class="pre">wildboar.distance.dtw.</span></span><span class="sig-name descname"><span class="pre">dtw_average</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'random'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mm'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_stable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epoch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_cost</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/distance/dtw.py#L427-L588"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.dtw.dtw_average" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.distance.dtw.</span></span><span class="sig-name descname"><span class="pre">dtw_average</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'random'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mm'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_stable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epoch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_cost</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.1/src/wildboar/distance/dtw.py#L427-L588"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.dtw.dtw_average" title="Link to this definition">#</a></dt>
 <dd><p>Compute the DTW barycenter average (DBA).</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -647,8 +626,8 @@ if <cite>method=’ssg’</cite>.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">load_two_lead_ecg</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">wildboar.distance.dtw</span> <span class="kn">import</span> <span class="n">dtw_average</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">wildboar.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_two_lead_ecg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">wildboar.distance.dtw</span><span class="w"> </span><span class="kn">import</span> <span class="n">dtw_average</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_two_lead_ecg</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dtw_average</span><span class="p">(</span><span class="n">X</span><span class="p">[:</span><span class="mi">5</span><span class="p">],</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;mm&quot;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="go">array([-2.27442791e-01,  3.19807473e-02,  1.77490053e-01,  1.60441308e-01,</span>
@@ -678,7 +657,7 @@ if <cite>method=’ssg’</cite>.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.distance.dtw.dtw_distance">
-<span class="sig-prename descclassname"><span class="pre">wildboar.distance.dtw.</span></span><span class="sig-name descname"><span class="pre">dtw_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/distance/dtw.py#L43-L67"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.dtw.dtw_distance" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.distance.dtw.</span></span><span class="sig-name descname"><span class="pre">dtw_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.1/src/wildboar/distance/dtw.py#L43-L67"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.dtw.dtw_distance" title="Link to this definition">#</a></dt>
 <dd><p>Compute the dynamic time warping distance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -709,7 +688,7 @@ if <cite>method=’ssg’</cite>.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.distance.dtw.dtw_envelop">
-<span class="sig-prename descclassname"><span class="pre">wildboar.distance.dtw.</span></span><span class="sig-name descname"><span class="pre">dtw_envelop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/distance/dtw.py#L155-L181"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.dtw.dtw_envelop" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.distance.dtw.</span></span><span class="sig-name descname"><span class="pre">dtw_envelop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.1/src/wildboar/distance/dtw.py#L155-L181"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.dtw.dtw_envelop" title="Link to this definition">#</a></dt>
 <dd><p>Compute the envelop for LB_keogh.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -739,7 +718,7 @@ In 28th International Conference on Very Large Data Bases.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.distance.dtw.dtw_lb_keogh">
-<span class="sig-prename descclassname"><span class="pre">wildboar.distance.dtw.</span></span><span class="sig-name descname"><span class="pre">dtw_lb_keogh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/distance/dtw.py#L184-L241"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.dtw.dtw_lb_keogh" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.distance.dtw.</span></span><span class="sig-name descname"><span class="pre">dtw_lb_keogh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.1/src/wildboar/distance/dtw.py#L184-L241"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.dtw.dtw_lb_keogh" title="Link to this definition">#</a></dt>
 <dd><p>LB_keogh lower bound.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -781,7 +760,7 @@ In 28th International Conference on Very Large Data Bases.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.distance.dtw.dtw_mapping">
-<span class="sig-prename descclassname"><span class="pre">wildboar.distance.dtw.</span></span><span class="sig-name descname"><span class="pre">dtw_mapping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alignment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/distance/dtw.py#L360-L424"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.dtw.dtw_mapping" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.distance.dtw.</span></span><span class="sig-name descname"><span class="pre">dtw_mapping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alignment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.1/src/wildboar/distance/dtw.py#L360-L424"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.dtw.dtw_mapping" title="Link to this definition">#</a></dt>
 <dd><p>Optimal warping path between two series or from a given alignment matrix.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -818,7 +797,7 @@ the optimal alignment path..</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.distance.dtw.jeong_weight">
-<span class="sig-prename descclassname"><span class="pre">wildboar.distance.dtw.</span></span><span class="sig-name descname"><span class="pre">jeong_weight</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/distance/dtw.py#L328-L357"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.dtw.jeong_weight" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.distance.dtw.</span></span><span class="sig-name descname"><span class="pre">jeong_weight</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.1/src/wildboar/distance/dtw.py#L328-L357"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.dtw.jeong_weight" title="Link to this definition">#</a></dt>
 <dd><p>Weighting described by Jeong et. al. (2011)[R4bf7d056babf-1]_.</p>
 <p>Uses <cite>g</cite> as the penalty control.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">w</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">g</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">n_samples</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
@@ -853,7 +832,7 @@ Pattern Recognition 44, 2231-2240</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.distance.dtw.wddtw_distance">
-<span class="sig-prename descclassname"><span class="pre">wildboar.distance.dtw.</span></span><span class="sig-name descname"><span class="pre">wddtw_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/distance/dtw.py#L126-L152"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.dtw.wddtw_distance" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.distance.dtw.</span></span><span class="sig-name descname"><span class="pre">wddtw_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.1/src/wildboar/distance/dtw.py#L126-L152"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.dtw.wddtw_distance" title="Link to this definition">#</a></dt>
 <dd><p>Compute the weighted derivative dynamic time warping distance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -886,7 +865,7 @@ Pattern Recognition 44, 2231-2240</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.distance.dtw.wdtw_alignment">
-<span class="sig-prename descclassname"><span class="pre">wildboar.distance.dtw.</span></span><span class="sig-name descname"><span class="pre">wdtw_alignment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/distance/dtw.py#L291-L325"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.dtw.wdtw_alignment" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.distance.dtw.</span></span><span class="sig-name descname"><span class="pre">wdtw_alignment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.1/src/wildboar/distance/dtw.py#L291-L325"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.dtw.wdtw_alignment" title="Link to this definition">#</a></dt>
 <dd><p>Weighted dynamic time warping alignment.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -927,7 +906,7 @@ Pattern Recognition 44, 2231-2240</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.distance.dtw.wdtw_distance">
-<span class="sig-prename descclassname"><span class="pre">wildboar.distance.dtw.</span></span><span class="sig-name descname"><span class="pre">wdtw_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0/src/wildboar/distance/dtw.py#L97-L123"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.dtw.wdtw_distance" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.distance.dtw.</span></span><span class="sig-name descname"><span class="pre">wdtw_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.1/src/wildboar/distance/dtw.py#L97-L123"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.dtw.wdtw_distance" title="Link to this definition">#</a></dt>
 <dd><p>Compute the weighted dynamic time warping distance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -978,7 +957,8 @@ Pattern Recognition 44, 2231-2240</p>
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -1008,13 +988,13 @@ Pattern Recognition 44, 2231-2240</p>
   </nav></div>
 
   <div class="sidebar-secondary-item">
-
-  <div class="tocsection sourcelink">
-    <a href="../../../../_sources/api/wildboar/distance/dtw/index.rst.txt">
-      <i class="fa-solid fa-file-lines"></i> Show Source
-    </a>
-  </div>
-</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../../_sources/api/wildboar/distance/dtw/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
 
 </div></div>
               
@@ -1029,8 +1009,8 @@ Pattern Recognition 44, 2231-2240</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../../../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
-<script src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
+  <script defer src="../../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1050,7 +1030,7 @@ Pattern Recognition 44, 2231-2240</p>
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
     <br/>
   </p>
 </div>
@@ -1063,7 +1043,8 @@ Pattern Recognition 44, 2231-2240</p>
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.3.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>

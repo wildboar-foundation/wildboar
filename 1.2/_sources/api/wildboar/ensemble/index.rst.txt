@@ -156,6 +156,8 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+
+
       :Returns:
 
           **score** : ndarray of shape (n_samples, k)
@@ -163,8 +165,6 @@ Classes
               to the classes in sorted order, as they appear in the attribute
               ``classes_``. Regression and binary classification are special
               cases with ``k == 1``, otherwise ``k==n_classes``.
-
-
 
 
 
@@ -212,12 +212,12 @@ Classes
                   See :ref:`Metadata Routing User Guide <metadata_routing>` for
                   more details.
 
+
+
       :Returns:
 
           **self** : object
               Fitted estimator.
-
-
 
 
 
@@ -242,13 +242,13 @@ Classes
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -276,12 +276,12 @@ Classes
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -312,12 +312,12 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+
+
       :Returns:
 
           **y** : ndarray of shape (n_samples,)
               The predicted classes.
-
-
 
 
 
@@ -348,13 +348,13 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+
+
       :Returns:
 
           **p** : ndarray of shape (n_samples, n_classes)
               The class log-probabilities of the input samples. The order of the
               classes corresponds to that in the attribute :term:`classes_`.
-
-
 
 
 
@@ -388,13 +388,13 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+
+
       :Returns:
 
           **p** : ndarray of shape (n_samples, n_classes)
               The class probabilities of the input samples. The order of the
               classes corresponds to that in the attribute :term:`classes_`.
-
-
 
 
 
@@ -430,12 +430,12 @@ Classes
           **sample_weight** : array-like of shape (n_samples,), default=None
               Sample weights.
 
+
+
       :Returns:
 
           **score** : float
               Mean accuracy of ``self.predict(X)`` w.r.t. `y`.
-
-
 
 
 
@@ -466,12 +466,12 @@ Classes
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -488,6 +488,7 @@ Classes
 
 
    .. py:property:: estimators_samples_
+
       
       The subset of drawn samples for each base estimator.
 
@@ -628,12 +629,12 @@ Classes
                   See :ref:`Metadata Routing User Guide <metadata_routing>` for
                   more details.
 
+
+
       :Returns:
 
           **self** : object
               Fitted estimator.
-
-
 
 
 
@@ -658,13 +659,13 @@ Classes
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -692,12 +693,12 @@ Classes
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -727,12 +728,12 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+
+
       :Returns:
 
           **y** : ndarray of shape (n_samples,)
               The predicted values.
-
-
 
 
 
@@ -776,6 +777,8 @@ Classes
           **sample_weight** : array-like of shape (n_samples,), default=None
               Sample weights.
 
+
+
       :Returns:
 
           **score** : float
@@ -799,8 +802,6 @@ Classes
 
 
 
-
-
       ..
           !! processed by numpydoc !!
 
@@ -820,12 +821,12 @@ Classes
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -842,6 +843,7 @@ Classes
 
 
    .. py:property:: estimators_samples_
+
       
       The subset of drawn samples for each base estimator.
 
@@ -928,12 +930,12 @@ Classes
                   See :ref:`Metadata Routing User Guide <metadata_routing>` for
                   more details.
 
+
+
       :Returns:
 
           **self** : object
               Fitted estimator.
-
-
 
 
 
@@ -958,13 +960,13 @@ Classes
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -992,12 +994,12 @@ Classes
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -1028,12 +1030,12 @@ Classes
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -1050,6 +1052,7 @@ Classes
 
 
    .. py:property:: estimators_samples_
+
       
       The subset of drawn samples for each base estimator.
 
@@ -1109,6 +1112,12 @@ Classes
        **n_jobs** : int, optional
            The number of paralell jobs.
 
+   :Attributes:
+
+       **scores** : tuple
+           A tuple of metric name and cross-validation score.
+
+
 
 
 
@@ -1145,12 +1154,6 @@ Classes
    >>> clf.score(X_test, y_test)
    0.9866666666666667
 
-   :Attributes:
-
-       **scores** : tuple
-           A tuple of metric name and cross-validation score.
-
-
    ..
        !! processed by numpydoc !!
 
@@ -1168,12 +1171,12 @@ Classes
           **y** : array-like of shape (n_samples, )
               The input labels.
 
+
+
       :Returns:
 
           object
               This estimator.
-
-
 
 
 
@@ -1198,13 +1201,13 @@ Classes
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -1232,12 +1235,12 @@ Classes
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -1264,12 +1267,12 @@ Classes
           **x** : array-like of shape (n_samples, n_timesteps) or (n_samples, n_dim, n_timesteps)
               The input samples.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, )
               The class label for each sample.
-
-
 
 
 
@@ -1296,12 +1299,12 @@ Classes
           **x** : array-like of shape (n_samples, n_timesteps) or (n_samples, n_dim, n_timesteps)
               The input time series.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, n_classes)
               The probabilities.
-
-
 
 
 
@@ -1337,12 +1340,12 @@ Classes
           **sample_weight** : array-like of shape (n_samples,), default=None
               Sample weights.
 
+
+
       :Returns:
 
           **score** : float
               Mean accuracy of ``self.predict(X)`` w.r.t. `y`.
-
-
 
 
 
@@ -1373,12 +1376,12 @@ Classes
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -1505,6 +1508,8 @@ Classes
 
 
 
+
+
    .. rubric:: Examples
 
    >>> from wildboar.ensemble import ExtraShapeletTreesClassifier
@@ -1514,8 +1519,6 @@ Classes
    >>> f.fit(x, y)
    ExtraShapeletTreesClassifier(metric='scaled_euclidean')
    >>> y_hat = f.predict(x)
-
-
 
    ..
        !! processed by numpydoc !!
@@ -1532,6 +1535,8 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+
+
       :Returns:
 
           **score** : ndarray of shape (n_samples, k)
@@ -1539,8 +1544,6 @@ Classes
               to the classes in sorted order, as they appear in the attribute
               ``classes_``. Regression and binary classification are special
               cases with ``k == 1``, otherwise ``k==n_classes``.
-
-
 
 
 
@@ -1588,12 +1591,12 @@ Classes
                   See :ref:`Metadata Routing User Guide <metadata_routing>` for
                   more details.
 
+
+
       :Returns:
 
           **self** : object
               Fitted estimator.
-
-
 
 
 
@@ -1618,13 +1621,13 @@ Classes
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -1652,12 +1655,12 @@ Classes
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -1688,12 +1691,12 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+
+
       :Returns:
 
           **y** : ndarray of shape (n_samples,)
               The predicted classes.
-
-
 
 
 
@@ -1724,13 +1727,13 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+
+
       :Returns:
 
           **p** : ndarray of shape (n_samples, n_classes)
               The class log-probabilities of the input samples. The order of the
               classes corresponds to that in the attribute :term:`classes_`.
-
-
 
 
 
@@ -1764,13 +1767,13 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+
+
       :Returns:
 
           **p** : ndarray of shape (n_samples, n_classes)
               The class probabilities of the input samples. The order of the
               classes corresponds to that in the attribute :term:`classes_`.
-
-
 
 
 
@@ -1806,12 +1809,12 @@ Classes
           **sample_weight** : array-like of shape (n_samples,), default=None
               Sample weights.
 
+
+
       :Returns:
 
           **score** : float
               Mean accuracy of ``self.predict(X)`` w.r.t. `y`.
-
-
 
 
 
@@ -1842,12 +1845,12 @@ Classes
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -1864,6 +1867,7 @@ Classes
 
 
    .. py:property:: estimators_samples_
+
       
       The subset of drawn samples for each base estimator.
 
@@ -1992,6 +1996,8 @@ Classes
 
 
 
+
+
    .. rubric:: Examples
 
    >>> from wildboar.ensemble import ExtraShapeletTreesRegressor
@@ -2001,8 +2007,6 @@ Classes
    >>> f.fit(x, y)
    ExtraShapeletTreesRegressor(metric='scaled_euclidean')
    >>> y_hat = f.predict(x)
-
-
 
    ..
        !! processed by numpydoc !!
@@ -2039,12 +2043,12 @@ Classes
                   See :ref:`Metadata Routing User Guide <metadata_routing>` for
                   more details.
 
+
+
       :Returns:
 
           **self** : object
               Fitted estimator.
-
-
 
 
 
@@ -2069,13 +2073,13 @@ Classes
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -2103,12 +2107,12 @@ Classes
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -2138,12 +2142,12 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+
+
       :Returns:
 
           **y** : ndarray of shape (n_samples,)
               The predicted values.
-
-
 
 
 
@@ -2187,6 +2191,8 @@ Classes
           **sample_weight** : array-like of shape (n_samples,), default=None
               Sample weights.
 
+
+
       :Returns:
 
           **score** : float
@@ -2210,8 +2216,6 @@ Classes
 
 
 
-
-
       ..
           !! processed by numpydoc !!
 
@@ -2231,12 +2235,12 @@ Classes
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -2253,6 +2257,7 @@ Classes
 
 
    .. py:property:: estimators_samples_
+
       
       The subset of drawn samples for each base estimator.
 
@@ -2319,6 +2324,8 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+
+
       :Returns:
 
           **score** : ndarray of shape (n_samples, k)
@@ -2326,8 +2333,6 @@ Classes
               to the classes in sorted order, as they appear in the attribute
               ``classes_``. Regression and binary classification are special
               cases with ``k == 1``, otherwise ``k==n_classes``.
-
-
 
 
 
@@ -2375,12 +2380,12 @@ Classes
                   See :ref:`Metadata Routing User Guide <metadata_routing>` for
                   more details.
 
+
+
       :Returns:
 
           **self** : object
               Fitted estimator.
-
-
 
 
 
@@ -2405,13 +2410,13 @@ Classes
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -2439,12 +2444,12 @@ Classes
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -2475,12 +2480,12 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+
+
       :Returns:
 
           **y** : ndarray of shape (n_samples,)
               The predicted classes.
-
-
 
 
 
@@ -2511,13 +2516,13 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+
+
       :Returns:
 
           **p** : ndarray of shape (n_samples, n_classes)
               The class log-probabilities of the input samples. The order of the
               classes corresponds to that in the attribute :term:`classes_`.
-
-
 
 
 
@@ -2551,13 +2556,13 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+
+
       :Returns:
 
           **p** : ndarray of shape (n_samples, n_classes)
               The class probabilities of the input samples. The order of the
               classes corresponds to that in the attribute :term:`classes_`.
-
-
 
 
 
@@ -2593,12 +2598,12 @@ Classes
           **sample_weight** : array-like of shape (n_samples,), default=None
               Sample weights.
 
+
+
       :Returns:
 
           **score** : float
               Mean accuracy of ``self.predict(X)`` w.r.t. `y`.
-
-
 
 
 
@@ -2629,12 +2634,12 @@ Classes
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -2651,6 +2656,7 @@ Classes
 
 
    .. py:property:: estimators_samples_
+
       
       The subset of drawn samples for each base estimator.
 
@@ -2737,12 +2743,12 @@ Classes
                   See :ref:`Metadata Routing User Guide <metadata_routing>` for
                   more details.
 
+
+
       :Returns:
 
           **self** : object
               Fitted estimator.
-
-
 
 
 
@@ -2767,13 +2773,13 @@ Classes
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -2801,12 +2807,12 @@ Classes
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -2836,12 +2842,12 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+
+
       :Returns:
 
           **y** : ndarray of shape (n_samples,)
               The predicted values.
-
-
 
 
 
@@ -2885,6 +2891,8 @@ Classes
           **sample_weight** : array-like of shape (n_samples,), default=None
               Sample weights.
 
+
+
       :Returns:
 
           **score** : float
@@ -2908,8 +2916,6 @@ Classes
 
 
 
-
-
       ..
           !! processed by numpydoc !!
 
@@ -2929,12 +2935,12 @@ Classes
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -2951,6 +2957,7 @@ Classes
 
 
    .. py:property:: estimators_samples_
+
       
       The subset of drawn samples for each base estimator.
 
@@ -3071,6 +3078,12 @@ Classes
              :class:`numpy.random.RandomState` instance used by
              :func:`numpy.random`.
 
+   :Attributes:
+
+       **offset_** : float
+           The offset for computing the final decision
+
+
 
 
 
@@ -3099,12 +3112,6 @@ Classes
    >>> y_pred = f.predict(x_test)
    >>> balanced_accuracy_score(y_test, y_pred) # doctest: +NUMBER
    0.8674
-
-   :Attributes:
-
-       **offset_** : float
-           The offset for computing the final decision
-
 
    ..
        !! processed by numpydoc !!
@@ -3141,12 +3148,12 @@ Classes
                   See :ref:`Metadata Routing User Guide <metadata_routing>` for
                   more details.
 
+
+
       :Returns:
 
           **self** : object
               Fitted estimator.
-
-
 
 
 
@@ -3182,12 +3189,12 @@ Classes
               
               .. versionadded:: 1.4
 
+
+
       :Returns:
 
           **y** : ndarray of shape (n_samples,)
               1 for inliers, -1 for outliers.
-
-
 
 
 
@@ -3212,13 +3219,13 @@ Classes
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -3246,12 +3253,12 @@ Classes
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -3282,12 +3289,12 @@ Classes
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -3304,6 +3311,7 @@ Classes
 
 
    .. py:property:: estimators_samples_
+
       
       The subset of drawn samples for each base estimator.
 
@@ -3370,6 +3378,8 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+
+
       :Returns:
 
           **score** : ndarray of shape (n_samples, k)
@@ -3377,8 +3387,6 @@ Classes
               to the classes in sorted order, as they appear in the attribute
               ``classes_``. Regression and binary classification are special
               cases with ``k == 1``, otherwise ``k==n_classes``.
-
-
 
 
 
@@ -3426,12 +3434,12 @@ Classes
                   See :ref:`Metadata Routing User Guide <metadata_routing>` for
                   more details.
 
+
+
       :Returns:
 
           **self** : object
               Fitted estimator.
-
-
 
 
 
@@ -3456,13 +3464,13 @@ Classes
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -3490,12 +3498,12 @@ Classes
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -3526,12 +3534,12 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+
+
       :Returns:
 
           **y** : ndarray of shape (n_samples,)
               The predicted classes.
-
-
 
 
 
@@ -3562,13 +3570,13 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+
+
       :Returns:
 
           **p** : ndarray of shape (n_samples, n_classes)
               The class log-probabilities of the input samples. The order of the
               classes corresponds to that in the attribute :term:`classes_`.
-
-
 
 
 
@@ -3602,13 +3610,13 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+
+
       :Returns:
 
           **p** : ndarray of shape (n_samples, n_classes)
               The class probabilities of the input samples. The order of the
               classes corresponds to that in the attribute :term:`classes_`.
-
-
 
 
 
@@ -3644,12 +3652,12 @@ Classes
           **sample_weight** : array-like of shape (n_samples,), default=None
               Sample weights.
 
+
+
       :Returns:
 
           **score** : float
               Mean accuracy of ``self.predict(X)`` w.r.t. `y`.
-
-
 
 
 
@@ -3680,12 +3688,12 @@ Classes
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -3702,6 +3710,7 @@ Classes
 
 
    .. py:property:: estimators_samples_
+
       
       The subset of drawn samples for each base estimator.
 
@@ -3840,6 +3849,8 @@ Classes
 
 
 
+
+
    .. rubric:: References
 
    Lucas, Benjamin, Ahmed Shifaz, Charlotte Pelletier, Lachlan O'Neill, Nayyar Zaidi,     Bart Goethals, François Petitjean, and Geoffrey I. Webb. (2019)
@@ -3849,8 +3860,6 @@ Classes
    .. only:: latex
 
       
-
-
 
 
    ..
@@ -3868,6 +3877,8 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+
+
       :Returns:
 
           **score** : ndarray of shape (n_samples, k)
@@ -3875,8 +3886,6 @@ Classes
               to the classes in sorted order, as they appear in the attribute
               ``classes_``. Regression and binary classification are special
               cases with ``k == 1``, otherwise ``k==n_classes``.
-
-
 
 
 
@@ -3924,12 +3933,12 @@ Classes
                   See :ref:`Metadata Routing User Guide <metadata_routing>` for
                   more details.
 
+
+
       :Returns:
 
           **self** : object
               Fitted estimator.
-
-
 
 
 
@@ -3954,13 +3963,13 @@ Classes
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -3988,12 +3997,12 @@ Classes
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -4024,12 +4033,12 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+
+
       :Returns:
 
           **y** : ndarray of shape (n_samples,)
               The predicted classes.
-
-
 
 
 
@@ -4060,13 +4069,13 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+
+
       :Returns:
 
           **p** : ndarray of shape (n_samples, n_classes)
               The class log-probabilities of the input samples. The order of the
               classes corresponds to that in the attribute :term:`classes_`.
-
-
 
 
 
@@ -4100,13 +4109,13 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+
+
       :Returns:
 
           **p** : ndarray of shape (n_samples, n_classes)
               The class probabilities of the input samples. The order of the
               classes corresponds to that in the attribute :term:`classes_`.
-
-
 
 
 
@@ -4142,12 +4151,12 @@ Classes
           **sample_weight** : array-like of shape (n_samples,), default=None
               Sample weights.
 
+
+
       :Returns:
 
           **score** : float
               Mean accuracy of ``self.predict(X)`` w.r.t. `y`.
-
-
 
 
 
@@ -4178,12 +4187,12 @@ Classes
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -4200,6 +4209,7 @@ Classes
 
 
    .. py:property:: estimators_samples_
+
       
       The subset of drawn samples for each base estimator.
 
@@ -4266,6 +4276,8 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+
+
       :Returns:
 
           **score** : ndarray of shape (n_samples, k)
@@ -4273,8 +4285,6 @@ Classes
               to the classes in sorted order, as they appear in the attribute
               ``classes_``. Regression and binary classification are special
               cases with ``k == 1``, otherwise ``k==n_classes``.
-
-
 
 
 
@@ -4322,12 +4332,12 @@ Classes
                   See :ref:`Metadata Routing User Guide <metadata_routing>` for
                   more details.
 
+
+
       :Returns:
 
           **self** : object
               Fitted estimator.
-
-
 
 
 
@@ -4352,13 +4362,13 @@ Classes
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -4386,12 +4396,12 @@ Classes
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -4422,12 +4432,12 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+
+
       :Returns:
 
           **y** : ndarray of shape (n_samples,)
               The predicted classes.
-
-
 
 
 
@@ -4458,13 +4468,13 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+
+
       :Returns:
 
           **p** : ndarray of shape (n_samples, n_classes)
               The class log-probabilities of the input samples. The order of the
               classes corresponds to that in the attribute :term:`classes_`.
-
-
 
 
 
@@ -4498,13 +4508,13 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+
+
       :Returns:
 
           **p** : ndarray of shape (n_samples, n_classes)
               The class probabilities of the input samples. The order of the
               classes corresponds to that in the attribute :term:`classes_`.
-
-
 
 
 
@@ -4540,12 +4550,12 @@ Classes
           **sample_weight** : array-like of shape (n_samples,), default=None
               Sample weights.
 
+
+
       :Returns:
 
           **score** : float
               Mean accuracy of ``self.predict(X)`` w.r.t. `y`.
-
-
 
 
 
@@ -4576,12 +4586,12 @@ Classes
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -4598,6 +4608,7 @@ Classes
 
 
    .. py:property:: estimators_samples_
+
       
       The subset of drawn samples for each base estimator.
 
@@ -4775,12 +4786,12 @@ Classes
                   See :ref:`Metadata Routing User Guide <metadata_routing>` for
                   more details.
 
+
+
       :Returns:
 
           **self** : object
               Fitted estimator.
-
-
 
 
 
@@ -4805,13 +4816,13 @@ Classes
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -4839,12 +4850,12 @@ Classes
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -4874,12 +4885,12 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+
+
       :Returns:
 
           **y** : ndarray of shape (n_samples,)
               The predicted values.
-
-
 
 
 
@@ -4923,6 +4934,8 @@ Classes
           **sample_weight** : array-like of shape (n_samples,), default=None
               Sample weights.
 
+
+
       :Returns:
 
           **score** : float
@@ -4946,8 +4959,6 @@ Classes
 
 
 
-
-
       ..
           !! processed by numpydoc !!
 
@@ -4967,12 +4978,12 @@ Classes
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -4989,6 +5000,7 @@ Classes
 
 
    .. py:property:: estimators_samples_
+
       
       The subset of drawn samples for each base estimator.
 
@@ -5147,6 +5159,8 @@ Classes
 
 
 
+
+
    .. rubric:: Examples
 
    >>> from wildboar.ensemble import ShapeletForestClassifier
@@ -5156,8 +5170,6 @@ Classes
    >>> f.fit(x, y)
    ShapeletForestClassifier(metric='scaled_euclidean')
    >>> y_hat = f.predict(x)
-
-
 
    ..
        !! processed by numpydoc !!
@@ -5174,6 +5186,8 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+
+
       :Returns:
 
           **score** : ndarray of shape (n_samples, k)
@@ -5181,8 +5195,6 @@ Classes
               to the classes in sorted order, as they appear in the attribute
               ``classes_``. Regression and binary classification are special
               cases with ``k == 1``, otherwise ``k==n_classes``.
-
-
 
 
 
@@ -5230,12 +5242,12 @@ Classes
                   See :ref:`Metadata Routing User Guide <metadata_routing>` for
                   more details.
 
+
+
       :Returns:
 
           **self** : object
               Fitted estimator.
-
-
 
 
 
@@ -5260,13 +5272,13 @@ Classes
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -5294,12 +5306,12 @@ Classes
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -5330,12 +5342,12 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+
+
       :Returns:
 
           **y** : ndarray of shape (n_samples,)
               The predicted classes.
-
-
 
 
 
@@ -5366,13 +5378,13 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+
+
       :Returns:
 
           **p** : ndarray of shape (n_samples, n_classes)
               The class log-probabilities of the input samples. The order of the
               classes corresponds to that in the attribute :term:`classes_`.
-
-
 
 
 
@@ -5406,13 +5418,13 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+
+
       :Returns:
 
           **p** : ndarray of shape (n_samples, n_classes)
               The class probabilities of the input samples. The order of the
               classes corresponds to that in the attribute :term:`classes_`.
-
-
 
 
 
@@ -5448,12 +5460,12 @@ Classes
           **sample_weight** : array-like of shape (n_samples,), default=None
               Sample weights.
 
+
+
       :Returns:
 
           **score** : float
               Mean accuracy of ``self.predict(X)`` w.r.t. `y`.
-
-
 
 
 
@@ -5484,12 +5496,12 @@ Classes
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -5506,6 +5518,7 @@ Classes
 
 
    .. py:property:: estimators_samples_
+
       
       The subset of drawn samples for each base estimator.
 
@@ -5688,12 +5701,12 @@ Classes
                   See :ref:`Metadata Routing User Guide <metadata_routing>` for
                   more details.
 
+
+
       :Returns:
 
           **self** : object
               Fitted estimator.
-
-
 
 
 
@@ -5718,13 +5731,13 @@ Classes
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -5752,12 +5765,12 @@ Classes
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -5787,12 +5800,12 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+
+
       :Returns:
 
           **y** : ndarray of shape (n_samples,)
               The predicted values.
-
-
 
 
 
@@ -5836,6 +5849,8 @@ Classes
           **sample_weight** : array-like of shape (n_samples,), default=None
               Sample weights.
 
+
+
       :Returns:
 
           **score** : float
@@ -5859,8 +5874,6 @@ Classes
 
 
 
-
-
       ..
           !! processed by numpydoc !!
 
@@ -5880,12 +5893,12 @@ Classes
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -5902,6 +5915,7 @@ Classes
 
 
    .. py:property:: estimators_samples_
+
       
       The subset of drawn samples for each base estimator.
 
@@ -6050,6 +6064,8 @@ Classes
 
 
 
+
+
    .. rubric:: Examples
 
    >>> from wildboar.ensemble import ShapeletForestRegressor
@@ -6059,8 +6075,6 @@ Classes
    >>> f.fit(x, y)
    ShapeletForestRegressor(metric='scaled_euclidean')
    >>> y_hat = f.predict(x)
-
-
 
    ..
        !! processed by numpydoc !!
@@ -6097,12 +6111,12 @@ Classes
                   See :ref:`Metadata Routing User Guide <metadata_routing>` for
                   more details.
 
+
+
       :Returns:
 
           **self** : object
               Fitted estimator.
-
-
 
 
 
@@ -6127,13 +6141,13 @@ Classes
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -6161,12 +6175,12 @@ Classes
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -6196,12 +6210,12 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+
+
       :Returns:
 
           **y** : ndarray of shape (n_samples,)
               The predicted values.
-
-
 
 
 
@@ -6245,6 +6259,8 @@ Classes
           **sample_weight** : array-like of shape (n_samples,), default=None
               Sample weights.
 
+
+
       :Returns:
 
           **score** : float
@@ -6268,8 +6284,6 @@ Classes
 
 
 
-
-
       ..
           !! processed by numpydoc !!
 
@@ -6289,12 +6303,12 @@ Classes
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -6311,6 +6325,7 @@ Classes
 
 
    .. py:property:: estimators_samples_
+
       
       The subset of drawn samples for each base estimator.
 

@@ -56,6 +56,8 @@ Functions
        **r** : float, optional
            The warping window in [0, 1] as a fraction of max(x_timestep, y_timestep).
 
+
+
    :Returns:
 
        float
@@ -74,8 +76,6 @@ Functions
            compute the dtw distance
        
        
-
-
 
 
 
@@ -105,6 +105,8 @@ Functions
        **out** : array-like of shape (x_timestep, y_timestep), optional
            Store the warping path in this array.
 
+
+
    :Returns:
 
        ndarray of shape (x_timestep, y_timestep)
@@ -127,8 +129,6 @@ Functions
 
    If only the distance between two series is required use `dtw_distance`
    instead.
-
-
 
 
 
@@ -196,6 +196,8 @@ Functions
        **random_state** : int or RandomState, optional
            Pseudo-random number generator.
 
+
+
    :Returns:
 
        **mean** : array-like of shape (m_timestep, ) or (n_timestep, )
@@ -241,8 +243,6 @@ Functions
            4.40259039e-01,  3.59657389e-01,  3.52170730e-01,  3.54666287e-01,
            1.93690730e-01,  2.23968406e-01])
 
-
-
    ..
        !! processed by numpydoc !!
 
@@ -262,6 +262,8 @@ Functions
 
        **r** : float, optional
            The warping window in [0, 1] as a fraction of `max(x_timestep, y_timestep)`.
+
+
 
    :Returns:
 
@@ -284,8 +286,6 @@ Functions
 
 
 
-
-
    ..
        !! processed by numpydoc !!
 
@@ -302,6 +302,8 @@ Functions
 
        **r** : float, optional
            The warping window in [0, 1] as a fraction of `max(x_timestep, y_timestep)`.
+
+
 
    :Returns:
 
@@ -330,8 +332,6 @@ Functions
       
 
 
-
-
    ..
        !! processed by numpydoc !!
 
@@ -357,6 +357,8 @@ Functions
 
        **r** : float, optional
            The warping window in [0, 1] as a fraction of `max(x_timestep, y_timestep)`.
+
+
 
    :Returns:
 
@@ -390,8 +392,6 @@ Functions
       
 
 
-
-
    ..
        !! processed by numpydoc !!
 
@@ -418,6 +418,8 @@ Functions
        **return_index** : bool, optional
            Return the indices of the warping path.
 
+
+
    :Returns:
 
        **indicator** : ndarray of shape (x_timestep, y_timestep)
@@ -439,8 +441,6 @@ Functions
    - either x and y or alignment must be provided
    - if alignment is given x and y are ignored
    - if alignment is given r is ignored
-
-
 
 
 
@@ -466,6 +466,8 @@ Functions
        **g** : float, optional
            Penalty control.
 
+
+
    :Returns:
 
        ndarray of shape (n, )
@@ -488,8 +490,6 @@ Functions
    .. only:: latex
 
       [R4bf7d056babf-1]_
-
-
 
 
    ..
@@ -515,6 +515,8 @@ Functions
        **g** : float, optional
            Penalization for points deviating the diagonal.
 
+
+
    :Returns:
 
        float
@@ -533,8 +535,6 @@ Functions
            compute the dtw distance
        
        
-
-
 
 
 
@@ -569,6 +569,8 @@ Functions
        **out** : array-like of shape (x_timestep, y_timestep), optional
            Store the warping path in this array.
 
+
+
    :Returns:
 
        ndarray of shape (x_timestep, y_timestep)
@@ -591,8 +593,6 @@ Functions
    .. only:: latex
 
       [Raec1aca773ed-1]_
-
-
 
 
    ..
@@ -618,6 +618,8 @@ Functions
        **g** : float, optional
            Penalization for points deviating the diagonal.
 
+
+
    :Returns:
 
        float
@@ -636,8 +638,6 @@ Functions
            compute the dtw distance
        
        
-
-
 
 
 

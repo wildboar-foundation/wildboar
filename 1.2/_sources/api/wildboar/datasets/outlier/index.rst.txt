@@ -72,6 +72,8 @@ Functions
            - If `None`, the random number generator is the `RandomState` instance used
                by `np.random`.
 
+
+
    :Returns:
 
        **x_outlier** : ndarray of shape (n_inliers + n_outliers, n_timestep)
@@ -79,8 +81,6 @@ Functions
 
        **y_outlier** : ndarray of shape (n_inliers + n_outliers, )
            The inliers (labeled as 1) and outlier (labled as -1).
-
-
 
 
 
@@ -175,6 +175,8 @@ Functions
            - If `None`, the random number generator is the `RandomState` instance used
                by `np.random`.
 
+
+
    :Returns:
 
        **x_outlier** : ndarray of shape (n_inliers + n_outliers, n_timestep)
@@ -216,8 +218,6 @@ Functions
       
 
 
-
-
    ..
        !! processed by numpydoc !!
 
@@ -250,6 +250,8 @@ Functions
            - If `None`, the random number generator is the `RandomState` instance used
                by `np.random`.
 
+
+
    :Returns:
 
        **x_outlier** : ndarray of shape (n_inliers + n_outliers, n_timestep)
@@ -257,8 +259,6 @@ Functions
 
        **y_outlier** : ndarray of shape (n_inliers + n_outliers, )
            The inliers (labeled as 1) and outlier (labled as -1).
-
-
 
 
 
@@ -296,6 +296,8 @@ Functions
            - If `None`, the random number generator is the `RandomState` instance used
                by `np.random`.
 
+
+
    :Returns:
 
        **x_outlier** : ndarray of shape (n_inliers + n_outliers, n_timestep)
@@ -303,8 +305,6 @@ Functions
 
        **y_outlier** : ndarray of shape (n_inliers + n_outliers, )
            The inliers (labeled as 1) and outlier (labled as -1).
-
-
 
 
 
@@ -345,6 +345,8 @@ Functions
            - If `None`, the random number generator is the `RandomState` instance used
                by `np.random`.
 
+
+
    :Returns:
 
        **x_outlier** : ndarray of shape (n_inliers + n_outliers, n_timestep)
@@ -352,8 +354,6 @@ Functions
 
        **y_outlier** : ndarray of shape (n_inliers + n_outliers, )
            The inliers (labeled as 1) and outlier (labled as -1).
-
-
 
 
 

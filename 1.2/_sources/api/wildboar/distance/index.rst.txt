@@ -119,17 +119,6 @@ Functions
            Determines random number generation for centroid initialization and
            barycentering when fitting with `metric="dtw"`.
 
-
-
-
-
-
-
-
-
-
-
-
    :Attributes:
 
        **n_iter_** : int
@@ -140,6 +129,17 @@ Functions
 
        **labels_** : ndarray of shape (n_samples, )
            The cluster assignment.
+
+
+
+
+
+
+
+
+
+
+
 
 
    ..
@@ -159,12 +159,12 @@ Functions
           **y** : Ignored, optional
               Not used.
 
+
+
       :Returns:
 
           object
               Fitted estimator.
-
-
 
 
 
@@ -199,12 +199,12 @@ Functions
               
               .. versionadded:: 1.4
 
+
+
       :Returns:
 
           **labels** : ndarray of shape (n_samples,), dtype=np.int64
               Cluster labels.
-
-
 
 
 
@@ -239,12 +239,12 @@ Functions
           **\*\*fit_params** : dict
               Additional fit parameters.
 
+
+
       :Returns:
 
           **X_new** : ndarray array of shape (n_samples, n_features_new)
               Transformed array.
-
-
 
 
 
@@ -269,13 +269,13 @@ Functions
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -303,12 +303,12 @@ Functions
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -335,12 +335,12 @@ Functions
           **x** : univariate time-series
               The input samples.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, )
               Index of the cluster each sample belongs to.
-
-
 
 
 
@@ -377,12 +377,12 @@ Functions
               .. versionadded:: 1.4
                   `"polars"` option was added.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -413,12 +413,12 @@ Functions
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -445,12 +445,12 @@ Functions
           **x** : univariate time-series
               The input samples.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, n_clusters)
               The distance between each sample and each cluster.
-
-
 
 
 
@@ -515,17 +515,6 @@ Functions
            Determines random number generation for centroid initialization and
            barycentering when fitting with `metric="dtw"`.
 
-
-
-
-
-
-
-
-
-
-
-
    :Attributes:
 
        **n_iter_** : int
@@ -539,6 +528,17 @@ Functions
 
        **labels_** : ndarray of shape (n_samples, )
            The cluster assignment.
+
+
+
+
+
+
+
+
+
+
+
 
 
    ..
@@ -558,12 +558,12 @@ Functions
           **y** : Ignored, optional
               Not used.
 
+
+
       :Returns:
 
           object
               Fitted estimator.
-
-
 
 
 
@@ -598,12 +598,12 @@ Functions
               
               .. versionadded:: 1.4
 
+
+
       :Returns:
 
           **labels** : ndarray of shape (n_samples,), dtype=np.int64
               Cluster labels.
-
-
 
 
 
@@ -638,12 +638,12 @@ Functions
           **\*\*fit_params** : dict
               Additional fit parameters.
 
+
+
       :Returns:
 
           **X_new** : ndarray array of shape (n_samples, n_features_new)
               Transformed array.
-
-
 
 
 
@@ -668,13 +668,13 @@ Functions
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -702,12 +702,12 @@ Functions
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -734,12 +734,12 @@ Functions
           **x** : univariate time-series
               The input samples.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, )
               Index of the cluster each sample belongs to.
-
-
 
 
 
@@ -776,12 +776,12 @@ Functions
               .. versionadded:: 1.4
                   `"polars"` option was added.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -812,12 +812,12 @@ Functions
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -844,12 +844,12 @@ Functions
           **x** : univariate time-series
               The input samples.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, n_clusters)
               The distance between each sample and each cluster.
-
-
 
 
 
@@ -890,21 +890,21 @@ Functions
        **n_jobs** : int, optional
            The number of parallel jobs.
 
-
-
-
-
-
-
-
-
-
-
-
    :Attributes:
 
        **classes_** : ndarray of shapel (n_classes, )
            Known class labels.
+
+
+
+
+
+
+
+
+
+
+
 
 
    ..
@@ -924,12 +924,12 @@ Functions
           **y** : array-like of shape (n_samples, )
               The input labels.
 
+
+
       :Returns:
 
           KNeighborClassifier
               This instance.
-
-
 
 
 
@@ -954,13 +954,13 @@ Functions
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -988,12 +988,12 @@ Functions
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -1020,12 +1020,12 @@ Functions
           **x** : univariate time-series or multivariate time-series
               The input samples.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, )
               The class label for each sample.
-
-
 
 
 
@@ -1052,12 +1052,12 @@ Functions
           **x** : univariate time-series or multivariate time-series
               The input samples.
 
+
+
       :Returns:
 
           ndarray of shape (n_samples, len(self.classes_))
               The probability of each class for each sample.
-
-
 
 
 
@@ -1093,12 +1093,12 @@ Functions
           **sample_weight** : array-like of shape (n_samples,), default=None
               Sample weights.
 
+
+
       :Returns:
 
           **score** : float
               Mean accuracy of ``self.predict(X)`` w.r.t. `y`.
-
-
 
 
 
@@ -1129,12 +1129,12 @@ Functions
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -1216,12 +1216,12 @@ Functions
 
 
 
+
+
    .. rubric:: Notes
 
    This implementation is a convenience wrapper around
    :class:`sklearn.manifold.MDS` to when using Wildboar metrics.
-
-
 
 
 
@@ -1237,13 +1237,13 @@ Functions
       mechanism works.
 
 
+
+
       :Returns:
 
           **routing** : MetadataRequest
               A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
               routing information.
-
-
 
 
 
@@ -1271,12 +1271,12 @@ Functions
               If True, will return the parameters for this estimator and
               contained subobjects that are estimators.
 
+
+
       :Returns:
 
           **params** : dict
               Parameter names mapped to their values.
-
-
 
 
 
@@ -1307,12 +1307,12 @@ Functions
           **\*\*params** : dict
               Estimator parameters.
 
+
+
       :Returns:
 
           **self** : estimator instance
               Estimator instance.
-
-
 
 
 
@@ -1368,6 +1368,8 @@ Functions
        **n_jobs** : int, optional
            The number of parallel jobs.
 
+
+
    :Returns:
 
        **indices** : ndarray of shape (n_samples, k)
@@ -1399,8 +1401,6 @@ Functions
            [1, 2]]),
     array([[ 8.24621125,  4.79583152],
            [10.24695077, 10.        ]]))
-
-
 
    ..
        !! processed by numpydoc !!
@@ -1448,6 +1448,8 @@ Functions
        **n_jobs** : int, optional
            The number of parallel jobs.
 
+
+
    :Returns:
 
        **indices** : ndarray of shape (n_samples, k)
@@ -1477,8 +1479,6 @@ Functions
    >>> s = np.lib.stride_tricks.sliding_window_view(X[0], window_shape=10)
    >>> x = np.broadcast_to(X[0], shape=(s.shape[0], X.shape[1]))
    >>> argmin_subsequence_distance(s, x, k=4)
-
-
 
    ..
        !! processed by numpydoc !!
@@ -1528,6 +1528,8 @@ Functions
        **n_jobs** : int, optional
            The number of parallel jobs to run.
 
+
+
    :Returns:
 
        ndarray of shape (n_samples, output_size) or (output_size, )
@@ -1563,8 +1565,6 @@ Functions
    ... )[0, :10]
    array([8.01881424, 7.15083281, 7.48856368, 6.83139294, 6.75595579,
           6.30073636, 6.65346307, 6.27919601, 6.25666948, 6.0961576 ])
-
-
 
    ..
        !! processed by numpydoc !!
@@ -1611,6 +1611,8 @@ Functions
        **return_index** : bool, optional
            Return the matrix profile index.
 
+
+
    :Returns:
 
        **mp** : ndarray of shape (profile_size, ) or (n_samples, profile_size)
@@ -1643,8 +1645,6 @@ Functions
    .. only:: latex
 
       
-
-
 
 
    ..
@@ -1681,6 +1681,8 @@ Functions
        **n_jobs** : int, optional
            The number of parallel jobs.
 
+
+
    :Returns:
 
        ndarray
@@ -1699,8 +1701,6 @@ Functions
 
        Passing a callable to the `metric` parameter has a significant performance
        implication.
-
-
 
 
 
@@ -1751,6 +1751,8 @@ Functions
        **n_jobs** : int, optional
            The number of parallel jobs to run.
 
+
+
    :Returns:
 
        **dist** : float, ndarray
@@ -1770,8 +1772,6 @@ Functions
 
        Passing a callable to the `metric` parameter has a significant performance
        implication.
-
-
 
 
 
@@ -1844,6 +1844,8 @@ Functions
        **n_jobs** : int, optional
            The number of parallel jobs to run. Ignored.
 
+
+
    :Returns:
 
        **indicies** : ndarray of shape (n_samples, )
@@ -1861,8 +1863,6 @@ Functions
 
        Passing a callable to the `metric` parameter has a significant performance
        implication.
-
-
 
 
 
@@ -1902,6 +1902,8 @@ Functions
        **n_jobs** : int, optional
            The number of parallel jobs.
 
+
+
    :Returns:
 
        float or ndarray
@@ -1924,8 +1926,6 @@ Functions
 
        Passing a callable to the `metric` parameter has a significant performance
        implication.
-
-
 
 
 
@@ -1976,6 +1976,8 @@ Functions
        **n_jobs** : int, optional
            The number of parallel jobs.
 
+
+
    :Returns:
 
        **dist** : float, ndarray
@@ -2005,8 +2007,6 @@ Functions
 
        Passing a callable to the `metric` parameter has a significant performance
        implication.
-
-
 
 
 
@@ -2084,6 +2084,8 @@ Functions
        **n_jobs** : int, optional
            The number of parallel jobs to run.
 
+
+
    :Returns:
 
        **indicies** : ndarray of shape (n_samples, ) or (n_matches, )
@@ -2105,8 +2107,6 @@ Functions
 
        Passing a callable to the `metric` parameter has a significant performance
        implication.
-
-
 
 
 

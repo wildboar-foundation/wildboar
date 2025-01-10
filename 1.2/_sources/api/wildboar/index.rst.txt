@@ -93,12 +93,12 @@ Attributes
        **x** : array-like
            The array.
 
+
+
    :Returns:
 
        ndarray
            Boolean indicator array.
-
-
 
 
 
