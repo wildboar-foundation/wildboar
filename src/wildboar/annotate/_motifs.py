@@ -55,8 +55,8 @@ def motifs(  # noqa: PLR0912, PLR0915
 
     Returns
     -------
-    motif_indicies : list
-        List of arrays of motif neighbour indicies
+    motif_indices : list
+        List of arrays of motif neighbour indices
     motif_distance : list, optional
         List of arrays of distance from motif to neighbours
 
@@ -90,8 +90,6 @@ def motifs(  # noqa: PLR0912, PLR0915
                 "automatically set window from the supplied matrix profile."
                 % (window, w)
             )
-        else:
-            raise ValueError("window must be 'auto' or float, got %r" % window)
 
         mp = np.atleast_2d(mp).copy()
     else:
@@ -133,16 +131,23 @@ def motifs(  # noqa: PLR0912, PLR0915
         )
 
     motif_distances = []
-    motif_indicies = []
+    motif_indices = []
+    check_scalar(max_motifs, "max_motifs", numbers.Integral, min_val=1)
+    check_scalar(min_neighbors, "min_neighbors", numbers.Integral, min_val=1)
+    check_scalar(
+        max_neighbors, "max_neighbors", numbers.Integral, min_val=min_neighbors
+    )
+
     for i in range(x.shape[0]):
         motif_distance = []
         motif_index = []
+        current_cutoff = max_distance
         if callable(max_distance):
-            cutoff = max_distance(mp[i])
+            current_cutoff = max_distance(mp[i])
 
-        while len(motif_index) < max_motifs and not np.all(np.isinf(mp)):
+        while len(motif_index) < max_motifs and not np.all(np.isinf(mp[i])):
             candidate = np.argmin(mp[i])
-            if mp[i, candidate] > cutoff:
+            if mp[i, candidate] > current_cutoff:
                 break
 
             if (
@@ -178,9 +183,9 @@ def motifs(  # noqa: PLR0912, PLR0915
                 mp[i, start:end] = np.inf
 
         motif_distances.append(motif_distance)
-        motif_indicies.append(motif_index)
+        motif_indices.append(motif_index)
 
     if return_distance:
-        return motif_indicies, motif_distances
+        return motif_indices, motif_distances
     else:
-        return motif_indicies
+        return motif_indices
