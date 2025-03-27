@@ -112,17 +112,19 @@ def plot_tree(
             n_node_samples=tree.n_node_samples[node_id],
         )
 
-    def _make_tree(node_id, et, depth=0):
-        if et.left[node_id] != -1 and (max_depth is None or depth <= max_depth):
+    def _make_tree(node_id, event_tree, depth=0):
+        left_exists = event_tree.left[node_id] != -1
+        depth_ok = max_depth is None or depth <= max_depth
+        if left_exists and depth_ok:
             children = [
-                _make_tree(et.left[node_id], et, depth=depth + 1),
-                _make_tree(et.right[node_id], et, depth=depth + 1),
+                _make_tree(event_tree.left[node_id], event_tree, depth=depth + 1),
+                _make_tree(event_tree.right[node_id], event_tree, depth=depth + 1),
             ]
             tree = Tree(str(node_id), node_id, *children)
         else:
             tree = Tree(str(node_id), node_id)
 
-        setattr(tree, "_attr", node_attributes(et, node_id))
+        setattr(tree, "_attr", node_attributes(event_tree, node_id))
         return tree
 
     if node_labeler is None:
