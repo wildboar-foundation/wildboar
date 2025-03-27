@@ -102,7 +102,7 @@ def plot_time_domain(
     --------
     >>> from wildboar.utils.plot import plot_time_domain
     >>> from wildboar.datasets import load_gun_point
-    >>> X, y = load_gun_point(X, y)
+    >>> X, y = load_gun_point()
     >>> plot_time_domain(X, y, n_sample=10)
     """
     if ax is None:
@@ -202,7 +202,7 @@ def plot_frequency_domain(
     --------
     >>> from wildboar.utils.plot import plot_frequency_domain
     >>> from wildboar.datasets import load_gun_point
-    >>> X, y = load_gun_point(X, y)
+    >>> X, y = load_gun_point()
     >>> plot_frequency_domain(X, y, n_sample=10)
     """
     if spectrum not in ("amplitude", "phase"):
