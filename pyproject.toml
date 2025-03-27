@@ -1,10 +1,10 @@
 [project]
 name = "wildboar"
 authors = [{ name = "Isak Samsten", email = "isak@samsten.se" }]
-# readme = "README.md"
 description = "Time series learning with Python."
 dynamic = ["version", "readme"]
-license = { file = "LICENSE" }
+license = "BSD-3-Clause"
+license-files = ["LICENSE"]
 requires-python = ">=3.9"
 dependencies = [
   "numpy>=1.19.5",
@@ -15,7 +15,6 @@ classifiers = [
   "Programming Language :: Python :: 3",
   "Topic :: Scientific/Engineering :: Artificial Intelligence",
   "Intended Audience :: Science/Research",
-  "License :: OSI Approved :: BSD License",
   "Operating System :: Microsoft :: Windows",
   "Operating System :: POSIX",
   "Operating System :: Unix",
