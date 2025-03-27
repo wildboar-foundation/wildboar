@@ -1383,7 +1383,7 @@ cdef class CastorAttributeGenerator(AttributeGenerator):
             sizeof(double) * max_exponent * self.n_shapelets
         )
         cdef double *shapelet
-        cdef double *x
+        cdef const double *x
 
         if X.shape[1] > 1:
             dim = rand_int(0, X.shape[1], seed)
