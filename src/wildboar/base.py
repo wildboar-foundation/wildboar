@@ -226,8 +226,9 @@ class BaseEstimator(SklearnBaseEstimator):
 
         return X
 
-    # We override sklearn but delegate to wildboar's check_array
-    # and check_X_y
+    # sklearn has recently migrated away from this, to a specific
+    # method for validation. We keep it because it's easier to extend
+    # for consumers of our classes.
     def _validate_data(
         self,
         X="no_validation",

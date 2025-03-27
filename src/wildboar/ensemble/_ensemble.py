@@ -312,6 +312,10 @@ class BaggingClassifier(BaseBagging, SklearnBaggingClassifier):
             return ShapeletTreeClassifier(strategy="random")
         return self.estimator
 
+    def predict_proba(self, X):
+        X = self._validate_data(X, reset=False, allow_3d=True, dtype=float)
+        return super().predict_proba(X)
+
 
 class BaseForestClassifier(ForestMixin, BaggingClassifier, metaclass=ABCMeta):
     @abstractmethod
