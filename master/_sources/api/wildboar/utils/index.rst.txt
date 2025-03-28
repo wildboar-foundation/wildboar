@@ -46,7 +46,7 @@ Functions
 
    <br />
 
-.. py:function:: check_X_y(x, y, *, dtype=float, order='C', copy=False, ensure_2d=True, ensure_ts_array=False, allow_3d=False, allow_nd=False, force_all_finite=True, multi_output=False, ensure_min_samples=1, ensure_min_timesteps=1, ensure_min_dims=1, allow_eos=False, y_numeric=False, y_contiguous=True, estimator=None)
+.. py:function:: check_X_y(x, y, *, dtype=float, order='C', copy=False, ensure_2d=True, ensure_ts_array=False, allow_3d=False, allow_nd=False, force_all_finite='deprecated', ensure_all_finite=None, multi_output=False, ensure_min_samples=1, ensure_min_timesteps=1, ensure_min_dims=1, allow_eos=False, y_numeric=False, y_contiguous=True, estimator=None)
 
    
    Check both X and y.
@@ -82,6 +82,13 @@ Functions
            Allow `X` to have 2 or more dimensions.
 
        **force_all_finite** : bool, optional
+           Require every value in `X` to be finite.
+           
+           .. deprecated:: 1.3
+              `force_all_finite` was renamed to `ensure_all_finite` and will be removed
+              in 1.4.
+
+       **ensure_all_finite** : bool, optional
            Require every value in `X` to be finite.
 
        **multi_output** : bool, optional
@@ -131,7 +138,7 @@ Functions
    ..
        !! processed by numpydoc !!
 
-.. py:function:: check_array(array, *, dtype='numeric', order='C', copy=False, ravel_1d=False, ensure_2d=True, ensure_ts_array=False, allow_3d=False, allow_nd=False, allow_eos=False, force_all_finite=True, ensure_min_samples=1, ensure_min_timesteps=1, ensure_min_dims=1, estimator=None, input_name='')
+.. py:function:: check_array(array, *, dtype='numeric', order='C', copy=False, ravel_1d=False, ensure_2d=True, ensure_ts_array=False, allow_3d=False, allow_nd=False, allow_eos=False, force_all_finite='deprecated', ensure_all_finite=None, ensure_min_samples=1, ensure_min_timesteps=1, ensure_min_dims=1, estimator=None, input_name='')
 
    
    Input validation on time-series.

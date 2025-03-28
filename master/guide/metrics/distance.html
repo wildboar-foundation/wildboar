@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Distance &#8212; Wildboar 1.3.0.dev165+g281c87203 documentation</title>
+    <title>Distance &#8212; Wildboar 1.3.0.dev183+gf0c0bd87c documentation</title>
   
   
   
@@ -16,8 +16,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "auto";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "auto";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -27,11 +27,11 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=11f2bc40" />
-    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=451fe87e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/tabs.css?v=4c969af8" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
@@ -39,13 +39,13 @@
     <link rel="stylesheet" type="text/css" href="../../_static/css/pygments-override.css?v=9e853fe2" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../_static/documentation_options.js?v=0c40adc9"></script>
-    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/documentation_options.js?v=68d6d1c0"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
@@ -55,10 +55,11 @@
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'guide/metrics/distance';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://wildboar.dev/_versions.json';
         DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
-        DOCUMENTATION_OPTIONS.show_version_warning_banner = true;
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
         </script>
     <script src="../../_static/js/fa.js?v=744fd48f"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -67,7 +68,7 @@
     <link rel="prev" title="Metrics" href="../metrics.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.3.0.dev165+g281c87203" />
+  <meta name="docsearch:version" content="1.3.0.dev183+gf0c0bd87c" />
   </head>
   
   
@@ -422,9 +423,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -485,8 +491,8 @@ pair from time series of a single array as:</p>
 <div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
 <div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
 <div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">load_two_lead_ecg</span>
-<span class="kn">from</span> <span class="nn">wildboar.distance</span> <span class="kn">import</span> <span class="n">pairwise_distance</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">wildboar.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_two_lead_ecg</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wildboar.distance</span><span class="w"> </span><span class="kn">import</span> <span class="n">pairwise_distance</span>
 
 <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_two_lead_ecg</span><span class="p">()</span>
 <span class="n">pairwise_distance</span><span class="p">(</span><span class="n">X</span><span class="p">[:</span><span class="mi">3</span><span class="p">])</span>
@@ -684,7 +690,7 @@ broadcast to a uniform shape.</p>
 <div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
 <div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
 <div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wildboar.distance</span> <span class="kn">import</span> <span class="n">paired_distance</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">wildboar.distance</span><span class="w"> </span><span class="kn">import</span> <span class="n">paired_distance</span>
 
 <span class="n">paired_distance</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">])</span>
 </pre></div>
@@ -769,12 +775,12 @@ with the lowest distance:</p>
 </div>
 </div>
 </div>
-<p>Or if we want to return the <cite>k</cite> closest, we can use <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.argpartition.html#numpy.argpartition" title="(in NumPy v2.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">argpartition</span></code></a>
+<p>Or if we want to return the <cite>k</cite> closest, we can use <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.argpartition.html#numpy.argpartition" title="(in NumPy v2.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">argpartition</span></code></a>
 (here <code class="docutils literal notranslate"><span class="pre">k=4</span></code>):</p>
 <div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
 <div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
 <div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">argpartition</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="kn">import</span> <span class="n">argpartition</span>
 
 <span class="n">argpartition</span><span class="p">(</span><span class="n">pairwise_distance</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">11</span><span class="p">:</span><span class="mi">300</span><span class="p">]),</span> <span class="mi">4</span><span class="p">)[:,</span> <span class="p">:</span><span class="mi">4</span><span class="p">]</span>
 </pre></div>
@@ -785,7 +791,7 @@ with the lowest distance:</p>
        <span class="o">...</span><span class="p">,</span>
        <span class="p">[</span><span class="mi">204</span><span class="p">,</span> <span class="mi">101</span><span class="p">,</span> <span class="mi">274</span><span class="p">,</span> <span class="mi">109</span><span class="p">],</span>
        <span class="p">[</span><span class="mi">208</span><span class="p">,</span> <span class="mi">213</span><span class="p">,</span> <span class="mi">146</span><span class="p">,</span> <span class="mi">193</span><span class="p">],</span>
-       <span class="p">[</span><span class="mi">246</span><span class="p">,</span> <span class="mi">111</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span>  <span class="mi">43</span><span class="p">]])</span>
+       <span class="p">[</span><span class="mi">246</span><span class="p">,</span> <span class="mi">111</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span>  <span class="mi">43</span><span class="p">]],</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -797,7 +803,7 @@ series that would never be among the closest.</p>
 <div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
 <div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
 <div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wildboar.distance</span> <span class="kn">import</span> <span class="n">argmin_distance</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">wildboar.distance</span><span class="w"> </span><span class="kn">import</span> <span class="n">argmin_distance</span>
 
 <span class="n">argmin_distance</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">11</span><span class="p">:</span><span class="mi">300</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 </pre></div>
@@ -808,7 +814,7 @@ series that would never be among the closest.</p>
        <span class="o">...</span><span class="p">,</span>
        <span class="p">[</span><span class="mi">109</span><span class="p">,</span> <span class="mi">274</span><span class="p">,</span> <span class="mi">101</span><span class="p">,</span> <span class="mi">204</span><span class="p">],</span>
        <span class="p">[</span><span class="mi">193</span><span class="p">,</span> <span class="mi">213</span><span class="p">,</span> <span class="mi">146</span><span class="p">,</span> <span class="mi">208</span><span class="p">],</span>
-       <span class="p">[</span> <span class="mi">43</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">246</span><span class="p">,</span> <span class="mi">111</span><span class="p">]])</span>
+       <span class="p">[</span> <span class="mi">43</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">246</span><span class="p">,</span> <span class="mi">111</span><span class="p">]],</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -826,7 +832,7 @@ bounds.</p>
 <div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
 <div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
 <div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wildboar.distance.lb</span> <span class="kn">import</span> <span class="n">DtwKeoghLowerBound</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">wildboar.distance.lb</span><span class="w"> </span><span class="kn">import</span> <span class="n">DtwKeoghLowerBound</span>
 
 <span class="n">lb_keogh</span> <span class="o">=</span> <span class="n">DtwKeoghLowerBound</span><span class="p">(</span><span class="n">r</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">11</span><span class="p">:</span><span class="mi">300</span><span class="p">])</span>
 <span class="n">argmin_distance</span><span class="p">(</span>
@@ -1013,7 +1019,7 @@ timestep.</p>
 <div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
 <div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
 <div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wildboar.distance</span> <span class="kn">import</span> <span class="n">pairwise_subsequence_distance</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">wildboar.distance</span><span class="w"> </span><span class="kn">import</span> <span class="n">pairwise_subsequence_distance</span>
 
 <span class="n">pairwise_subsequence_distance</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">30</span><span class="p">:</span><span class="mi">60</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">12</span><span class="p">])</span>
 </pre></div>
@@ -1087,7 +1093,7 @@ dimension of every sample, with consistent output.</p>
 <div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
 <div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
 <div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">pairwise_sd_full</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">pairwise_sd_full</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span>
         <span class="p">[</span><span class="n">pairwise_subsequence_distance</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="n">dim</span><span class="p">)</span> <span class="k">for</span> <span class="n">dim</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])],</span>
         <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
@@ -1488,14 +1494,14 @@ utilize, or to <code class="docutils literal notranslate"><span class="pre">-1</
 <div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
 <div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
 <div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 
 <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
 <span class="n">pairwise_distance</span><span class="p">(</span><span class="n">X</span><span class="p">[:</span><span class="mi">100</span><span class="p">],</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;dtw&quot;</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span>
 </pre></div>
 </div>
-<div class="sd-mt-0 execute-return highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mf">0.07931826899999805</span>
+<div class="sd-mt-0 execute-return highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mf">0.09571664700001747</span>
 </pre></div>
 </div>
 </div>
@@ -1505,14 +1511,14 @@ utilize, or to <code class="docutils literal notranslate"><span class="pre">-1</
 <div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
 <div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
 <div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 
 <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
 <span class="n">pairwise_distance</span><span class="p">(</span><span class="n">X</span><span class="p">[:</span><span class="mi">100</span><span class="p">],</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;dtw&quot;</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span>
 </pre></div>
 </div>
-<div class="sd-mt-0 execute-return highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mf">0.1298655460000191</span>
+<div class="sd-mt-0 execute-return highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mf">0.12823146200003066</span>
 </pre></div>
 </div>
 </div>
@@ -1594,13 +1600,13 @@ approximately 160 milliseconds.</p>
   </nav></div>
 
   <div class="sidebar-secondary-item">
-
-  <div class="tocsection sourcelink">
-    <a href="../../_sources/guide/metrics/distance.rst.txt">
-      <i class="fa-solid fa-file-lines"></i> Show Source
-    </a>
-  </div>
-</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/guide/metrics/distance.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
 
 </div></div>
               
@@ -1615,8 +1621,8 @@ approximately 160 milliseconds.</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1636,7 +1642,7 @@ approximately 160 milliseconds.</p>
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     <br/>
   </p>
 </div>
@@ -1649,7 +1655,8 @@ approximately 160 milliseconds.</p>
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>

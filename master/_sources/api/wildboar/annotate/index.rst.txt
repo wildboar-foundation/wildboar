@@ -92,8 +92,8 @@ Functions
 
    :Returns:
 
-       **motif_indicies** : list
-           List of arrays of motif neighbour indicies
+       **motif_indices** : list
+           List of arrays of motif neighbour indices
 
        **motif_distance** : list, optional
            List of arrays of distance from motif to neighbours

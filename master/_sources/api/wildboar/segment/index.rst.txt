@@ -55,6 +55,26 @@ Classes
    Compute the Fast Low-cost Unipotent Semantic Segmentation (FLUSS)
    as described by Gharghabi (2017).
 
+   The algorithm works by analyzing similarity relationships in time series data:
+
+   1. For each position in the time series:
+      - It finds its nearest neighbor (most similar subsequence)
+      - Creates an "arc" connecting these two positions
+
+   2. The arc curve is computed by:
+      - Counting how many arcs pass over each position (including all
+        positions between the start and end points of each arc)
+      - Normalizing the counts to account for edge effects
+
+   3. The resulting curve is used to find segment boundaries:
+      - Low points (valleys) in the arc curve indicate natural boundaries
+      - These are positions with few similarity relationships crossing them
+      - High arc counts suggest positions within coherent segments
+
+   The intuition is that segment boundaries occur where the time series behavior
+   changes, which is reflected by fewer similarity relationships (arcs) crossing
+   these points.
+
    :Parameters:
 
        **n_segments** : int, optional

@@ -1603,7 +1603,7 @@ Functions
           !! processed by numpydoc !!
 
 
-.. py:class:: FftTransform
+.. py:class:: FftTransform(spectrum='amplitude')
 
 
 
@@ -1611,6 +1611,10 @@ Functions
    Discrete Fourier Transform.
 
 
+   :Parameters:
+
+       **spectrum** : {"amplitude", "phase"}, optional
+           The spectrum of FFT transformation.
 
 
 
