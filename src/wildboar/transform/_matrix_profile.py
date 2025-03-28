@@ -127,5 +127,7 @@ class MatrixProfileTransform(TransformerMixin, BaseEstimator):
         else:
             return func(x)
 
-    def _more_tags(self):
-        return {"X_types": ["2darray", "3darray"]}
+    def __sklearn_tags__(self):
+        tags = super().__sklearn_tags__()
+        tags.input_tags.three_d_array = True
+        return tags

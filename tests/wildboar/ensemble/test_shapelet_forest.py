@@ -12,11 +12,15 @@ from wildboar.utils.estimator_checks import check_estimator
 def test_check_estimator():
     check_estimator(
         ShapeletForestClassifier(n_shapelets=10, n_estimators=10),
-        ignore=["check_sample_weights_invariance"],
+        expected_failed_checks={
+            "check_sample_weight_equivalence_on_dense_data": "not working",
+        },
     )
     check_estimator(
         ShapeletForestRegressor(n_shapelets=10, n_estimators=10),
-        ignore=["check_sample_weights_invariance"],
+        expected_failed_checks={
+            "check_sample_weight_equivalence_on_dense_data": "not working",
+        },
     )
 
 

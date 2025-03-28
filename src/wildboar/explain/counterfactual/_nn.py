@@ -267,6 +267,3 @@ class KNeighborsCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimato
                 x_counterfactuals[label_indices, :] = closest
 
         return x_counterfactuals
-
-    def _more_tags():
-        return {"X_types": []}

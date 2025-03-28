@@ -14,10 +14,16 @@ def test_shap_for():
 
 def test_check_estimator():
     check_estimator(
-        ExtraShapeletTreesClassifier(), ignore=["check_sample_weights_invariance"]
+        ExtraShapeletTreesClassifier(),
+        expected_failed_checks={
+            "check_sample_weight_equivalence_on_dense_data": "not working",
+        },
     )
     check_estimator(
-        ExtraShapeletTreesRegressor(), ignore=["check_sample_weights_invariance"]
+        ExtraShapeletTreesRegressor(),
+        expected_failed_checks={
+            "check_sample_weight_equivalence_on_dense_data": "not working",
+        },
     )
 
 

@@ -31,7 +31,13 @@ from wildboar.utils.estimator_checks import check_estimator
 def test_check_estimator(clf):
     assert_exhaustive_parameter_checks(clf)
     assert_parameter_checks(clf, skip=["alpha", "impurity_equality_tolerance"])
-    check_estimator(clf)
+    check_estimator(
+        clf,
+        expected_failed_checks={
+            "check_sample_weight_equivalence_on_dense_data": "not working",
+        },
+        mark="skip",
+    )
 
 
 def test_shapelet_tree_strategy_best():

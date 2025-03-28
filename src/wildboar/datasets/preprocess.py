@@ -320,8 +320,10 @@ class Interpolate(TransformerMixin, BaseEstimator):
         return filled.reshape(X.shape)
         # return interpolate(X, self.method)
 
-    def _more_tags(self):
-        return {"allow_nan": True}
+    def __sklearn_tags__(self):
+        tags = super().__sklearn_tags__()
+        tags.input_tags.allow_nan = True
+        return tags
 
 
 class Truncate(TransformerMixin, BaseEstimator):
@@ -374,8 +376,10 @@ class Truncate(TransformerMixin, BaseEstimator):
         else:
             return X
 
-    def _more_tags(self):
-        return {"allow_nan": True}
+    def __sklearn_tags__(self):
+        tags = super().__sklearn_tags__()
+        tags.input_tags.allow_nan = True
+        return tags
 
 
 class MinMaxScale(TransformerMixin, BaseEstimator):
@@ -453,8 +457,10 @@ class MinMaxScale(TransformerMixin, BaseEstimator):
         X = (X - X_min) / (X_max - X_min)
         return X * (self.max - self.min) + self.min
 
-    def _more_tags(self):
-        return {"allow_nan": True}
+    def __sklearn_tags__(self):
+        tags = super().__sklearn_tags__()
+        tags.input_tags.allow_nan = True
+        return tags
 
 
 class MaxAbsScale(TransformerMixin, BaseEstimator):
@@ -543,8 +549,10 @@ class Standardize(TransformerMixin, BaseEstimator):
         std[std == 0] = 1  # Avoid division by zero
         return (X - np.nanmean(X, axis=-1, keepdims=True)) / std
 
-    def _more_tags(self):
-        return {"allow_nan": True}
+    def __sklearn_tags__(self):
+        tags = super().__sklearn_tags__()
+        tags.input_tags.allow_nan = True
+        return tags
 
 
 _PREPROCESS = {

@@ -241,10 +241,10 @@ class SAX(TransformerMixin, BaseEstimator):
     def intervals(self):
         return self.paa_.intervals
 
-    def _more_tags(self):
-        return {
-            "preserves_dtype": [],
-        }
+    def __sklearn_tags__(self):
+        tags = super().__sklearn_tags__()
+        tags.transformer_tags.preserves_dtype = []
+        return tags
 
 
 class PAA(TransformerMixin, BaseEstimator):

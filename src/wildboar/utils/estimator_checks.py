@@ -8,6 +8,7 @@ from unittest.case import SkipTest
 import numpy as np
 from sklearn.base import clone, is_classifier, is_regressor
 from sklearn.exceptions import SkipTestWarning
+from sklearn.utils._tags import get_tags
 from sklearn.utils._testing import (
     assert_allclose_dense_sparse,
     ignore_warnings,
@@ -16,11 +17,10 @@ from sklearn.utils._testing import (
 )
 from sklearn.utils.estimator_checks import (
     _enforce_estimator_tags_y,
-    _maybe_skip,
-    _safe_tags,
+    _maybe_mark,
 )
 from sklearn.utils.estimator_checks import (
-    _yield_all_checks as _yield_all_checks_sklearn,
+    estimator_checks_generator as estimator_checks_generator_sklearn,
 )
 from sklearn.utils.validation import has_fit_parameter
 
@@ -75,13 +75,15 @@ def _yield_all_checks(estimator):
         if hasattr(estimator, "estimator_params"):
             yield _check_consistent_estimator_params
 
-        if "3darray" in _safe_tags(estimator, "X_types"):
+        if get_tags(estimator).input_tags.three_d_array:
             yield _check_force_n_dims_raises
             yield _check_force_n_dims
 
 
 # noqa: H0002
-def check_estimator(estimator, generate_only=False, ignore=None, skip_scikit=False):
+def check_estimator(
+    estimator, expected_failed_checks=None, mark="skip", ignore=None, skip_scikit=False
+):
     """
     Check if estimator adheres to scikit-learn (and wildboar) conventions.
 
@@ -98,13 +100,24 @@ def check_estimator(estimator, generate_only=False, ignore=None, skip_scikit=Fal
     ----------
     estimator : estimator object
         Estimator instance to check.
-    generate_only : bool, default=False
-        When `False`, checks are evaluated when `check_estimator` is called.
-        When `True`, `check_estimator` returns a generator that yields
-        (estimator, check) tuples. The check is run by calling
-        `check(estimator)`.
+    expected_failed_checks : dict, optional
+        A dictionary of the form::
+
+            {
+                "check_name": "this check is expected to fail because ...",
+            }
+
+        Where `"check_name"` is the name of the check, and `"my reason"` is why
+        the check fails.
+
+        .. versionadded:: 1.3
+    mark : {"skip"} or None, optional
+        Marking a test as "skip" is done via wrapping the check in a function
+        that raises a :class:`~sklearn.exceptions.SkipTest` exception.
     ignore : list, optional
         Ignore the checks in the list.
+
+        .. deprecated:: 1.3
     skip_scikit : bool, optional
         Skip all scikit-learn tests.
 
@@ -123,22 +136,32 @@ def check_estimator(estimator, generate_only=False, ignore=None, skip_scikit=Fal
     def checks_generator():
         if not skip_scikit:
             if estimator is not None:
-                if hasattr(estimator, "_more_tags"):
-                    _more_tags = estimator._more_tags().copy()
-                    _more_tags.update({"poor_score": True})
+                if hasattr(estimator, "__sklearn_tags__"):
+                    __sklearn_tags__ = estimator.__sklearn_tags__()
+                    if __sklearn_tags__.classifier_tags is not None:
+                        __sklearn_tags__.classifier_tags.poor_score = True
+                    if __sklearn_tags__.regressor_tags is not None:
+                        __sklearn_tags__.regressor_tags.poor_score = True
 
-                old_more_tags = estimator.__class__._more_tags
+                old__sklearn_tags__ = estimator.__class__.__sklearn_tags__
 
-                def _new_more_tags_skip_low_score(self):
-                    return _more_tags
+                def _new_sklearn_tags_skip_low_score(self):
+                    return __sklearn_tags__
 
                 # Monkey-patch the estimator to always have the tag "poor_score" set
                 # to true. We have specific tests in wildboar for testing performance.
                 setattr(
-                    estimator.__class__, "_more_tags", _new_more_tags_skip_low_score
+                    estimator.__class__,
+                    "__sklearn_tags__",
+                    _new_sklearn_tags_skip_low_score,
                 )
 
-            for check in _yield_all_checks_sklearn(estimator):
+            for _, check in estimator_checks_generator_sklearn(
+                estimator,
+                legacy=True,
+                expected_failed_checks=expected_failed_checks,
+                mark=mark,
+            ):
                 check_name = (
                     check.func.__name__
                     if isinstance(check, partial)
@@ -147,17 +170,18 @@ def check_estimator(estimator, generate_only=False, ignore=None, skip_scikit=Fal
 
                 # Silently ignore any scikit-learn tess in the ignore list
                 if check_name not in ignore:
-                    yield estimator, partial(_maybe_skip(estimator, check), name)
+                    yield estimator, check
 
             if estimator is not None:
-                # Reset the old _more_tags() method
-                setattr(estimator.__class__, "_more_tags", old_more_tags)
+                setattr(estimator.__class__, "__sklearn_tags__", old__sklearn_tags__)
 
         for check in _yield_all_checks(estimator):
-            yield estimator, partial(_maybe_skip(estimator, check), name)
-
-    if generate_only:
-        return checks_generator()
+            yield _maybe_mark(
+                estimator,
+                partial(check, name),
+                expected_failed_checks=expected_failed_checks,
+                mark=mark,
+            )
 
     for estimator, check in checks_generator():
         try:

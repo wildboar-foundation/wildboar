@@ -4,6 +4,7 @@
 import numpy as np
 import pytest
 from numpy.testing import assert_equal
+
 from wildboar.datasets import load_gun_point
 from wildboar.ensemble import ProximityForestClassifier
 from wildboar.utils.estimator_checks import check_estimator
@@ -12,11 +13,15 @@ from wildboar.utils.estimator_checks import check_estimator
 def test_check_estimator():
     check_estimator(
         ProximityForestClassifier(n_estimators=10),
-        ignore=["check_sample_weights_invariance"],
+        expected_failed_checks={
+            "check_sample_weight_equivalence_on_dense_data": "not working",
+        },
     )
     check_estimator(
         ProximityForestClassifier(n_estimators=10),
-        ignore=["check_sample_weights_invariance"],
+        expected_failed_checks={
+            "check_sample_weight_equivalence_on_dense_data": "not working",
+        },
     )
 
 

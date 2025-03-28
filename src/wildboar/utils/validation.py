@@ -259,6 +259,33 @@ def _num_timesteps(X):
         raise TypeError(message) from err
 
 
+# TODO(1.4): remove force_all_finite and change the default value of ensure_all_finite
+# to True (remove None without deprecation).
+def _deprecate_force_all_finite(force_all_finite, ensure_all_finite):
+    """Helper to deprecate force_all_finite in favor of ensure_all_finite."""
+    if force_all_finite != "deprecated":
+        import warnings
+
+        warnings.warn(
+            "'force_all_finite' was renamed to 'ensure_all_finite' in 1.3 and will be "
+            "removed in 1.4.",
+            FutureWarning,
+        )
+
+        if ensure_all_finite is not None:
+            raise ValueError(
+                "'force_all_finite' and 'ensure_all_finite' cannot be used together. "
+                "Pass `ensure_all_finite` only."
+            )
+
+        return force_all_finite
+
+    if ensure_all_finite is None:
+        return True
+
+    return ensure_all_finite
+
+
 def check_X_y(  # noqa: PLR0913, N802
     x,
     y,
@@ -270,7 +297,8 @@ def check_X_y(  # noqa: PLR0913, N802
     ensure_ts_array=False,
     allow_3d=False,
     allow_nd=False,
-    force_all_finite=True,
+    force_all_finite="deprecated",
+    ensure_all_finite=None,
     multi_output=False,
     ensure_min_samples=1,
     ensure_min_timesteps=1,
@@ -305,6 +333,12 @@ def check_X_y(  # noqa: PLR0913, N802
         Allow `X` to have 2 or more dimensions.
     force_all_finite : bool, optional
         Require every value in `X` to be finite.
+
+        .. deprecated:: 1.3
+           `force_all_finite` was renamed to `ensure_all_finite` and will be removed
+           in 1.4.
+    ensure_all_finite : bool, optional
+        Require every value in `X` to be finite.
     multi_output : bool, optional
         Allow `y` to be a multi output array.
     ensure_min_samples : int, optional
@@ -337,6 +371,7 @@ def check_X_y(  # noqa: PLR0913, N802
         raise ValueError(
             f"{estimator_name} requires y to be passed, but the target y is None"
         )
+    ensure_all_finite = _deprecate_force_all_finite(force_all_finite, ensure_all_finite)
     x = check_array(
         x,
         allow_3d=allow_3d,
@@ -344,7 +379,7 @@ def check_X_y(  # noqa: PLR0913, N802
         ensure_min_samples=ensure_min_samples,
         ensure_min_dims=ensure_min_dims,
         ensure_min_timesteps=ensure_min_timesteps,
-        force_all_finite=force_all_finite,
+        ensure_all_finite=ensure_all_finite,
         allow_eos=allow_eos,
         order=order,
         copy=copy,
@@ -378,7 +413,8 @@ def check_array(  # noqa: PLR0913, PLR0912
     allow_3d=False,
     allow_nd=False,
     allow_eos=False,
-    force_all_finite=True,
+    force_all_finite="deprecated",
+    ensure_all_finite=None,
     ensure_min_samples=1,
     ensure_min_timesteps=1,
     ensure_min_dims=1,
@@ -464,13 +500,14 @@ def check_array(  # noqa: PLR0913, PLR0912
     object
         The converted and validated array.
     """
+    ensure_all_finite = _deprecate_force_all_finite(force_all_finite, ensure_all_finite)
     check_params = dict(
         accept_sparse=False,
         accept_large_sparse=False,
         dtype=dtype,
         order=None if ensure_ts_array else order,
         copy=copy,
-        force_all_finite=False,
+        ensure_all_finite=ensure_all_finite,
         ensure_2d=ensure_2d,
         allow_nd=allow_3d or allow_nd,
         ensure_min_samples=ensure_min_samples,
@@ -478,10 +515,10 @@ def check_array(  # noqa: PLR0913, PLR0912
         estimator=estimator,
         input_name=input_name,
     )
-    if force_all_finite not in (True, False, "allow-nan"):
+    if ensure_all_finite not in (True, False, "allow-nan"):
         raise ValueError(
-            'force_all_finite should be a bool or "allow-nan".'
-            f"Got {force_all_finite} instead"
+            'ensure_all_finite should be a bool or "allow-nan".'
+            f"Got {ensure_all_finite} instead"
         )
 
     array = sklearn_check_array(array, **check_params)
@@ -539,7 +576,7 @@ def check_array(  # noqa: PLR0913, PLR0912
                 f"Input {padded_input_name}expected time series of equal length."
             )
 
-        if force_all_finite is True:
+        if ensure_all_finite is True:
             if allow_eos:
                 anynan = np.logical_and(np.isnan(array), ~is_end_of_series(array)).any()
             else:
@@ -548,7 +585,7 @@ def check_array(  # noqa: PLR0913, PLR0912
             if anynan:
                 raise ValueError(f"Input {padded_input_name}contains NaN.")
 
-        if force_all_finite and np.isinf(array).any():
+        if ensure_all_finite and np.isinf(array).any():
             raise ValueError(f"Input {padded_input_name}contains infinity.")
 
     return _check_ts_array(array) if ensure_ts_array else array

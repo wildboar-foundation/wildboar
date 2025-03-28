@@ -146,8 +146,15 @@ class BaseBagging(BaseEstimator, SklearnBaseBagging, metaclass=ABCMeta):
             estimator._force_n_dims = self.n_dims_in_
         return estimator
 
-    def _more_tags(self):
-        return {"X_types": ["2darray", "3darray"]}
+    def __sklearn_tags__(self):
+        tags = super().__sklearn_tags__()
+        tags.input_tags.two_d_array = True
+        tags.input_tags.three_d_array = (
+            self.estimator.__sklearn_tags__().input_tags.three_d_array
+            if self.estimator is not None
+            else True  # Default estimator support three_d_array
+        )
+        return tags
 
 
 class ForestMixin:
@@ -906,6 +913,10 @@ class BaggingRegressor(BaseBagging, SklearnBaggingRegressor):
             check_input=False,
         )
         return self
+
+    def predict(self, X):
+        X = self._validate_data(X, allow_3d=True, dtype=float, reset=False)
+        return super().predict(X)
 
     def _get_estimator(self):
         if self.estimator is None:
@@ -1807,14 +1818,10 @@ class IsolationShapeletForest(OutlierMixin, ForestMixin, BaseBagging):
             score_samples[i] = _score_samples(x[[i]], estimators, self.max_samples_)
         return score_samples
 
-    def _more_tags(self):
-        return {
-            "_xfail_checks": {
-                "check_sample_weights_invariance": (
-                    "zero sample_weight is not equivalent to removing samples"
-                ),
-            }
-        }
+    def __sklearn_tags__(self):
+        tags = super().__sklearn_tags__()
+        tags.input_tags.three_d_array = True
+        return tags
 
 
 def _score_samples(x, estimators, max_samples):

@@ -4,13 +4,19 @@ import pytest
 from numpy.testing import assert_almost_equal
 from sklearn.metrics import balanced_accuracy_score
 from sklearn.model_selection import train_test_split
+
 from wildboar.datasets import load_two_lead_ecg, outlier
 from wildboar.ensemble import IsolationShapeletForest
 from wildboar.utils.estimator_checks import check_estimator
 
 
 def test_estimator_checks():
-    check_estimator(IsolationShapeletForest())
+    check_estimator(
+        IsolationShapeletForest(),
+        expected_failed_checks={
+            "check_sample_weight_equivalence_on_dense_data": "not working",
+        },
+    )
 
 
 def load_test_dataset():

@@ -884,5 +884,7 @@ class ShapeletTransform(ShapeletMixin, BaseAttributeTransform):
         self.coverage_probability = coverage_probability
         self.variability = variability
 
-    def _more_tags(self):
-        return {"requires_y": self.strategy == "best"}
+    def __sklearn_tags__(self):
+        tags = super().__sklearn_tags__()
+        tags.target_tags.required = self.strategy == "best"
+        return tags

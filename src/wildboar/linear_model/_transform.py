@@ -157,16 +157,6 @@ class TransformRidgeClassifierCV(BaseTransformClassifier):
             decision_2d = decision
         return softmax(decision_2d, copy=False)
 
-    def _more_tags(self):
-        return {
-            "_xfail_checks": {
-                "check_sample_weights_invariance": (
-                    "zero sample_weight is not equivalent to removing samples"
-                ),
-                "_check_sample_weights_invariance_samples_order": ("test"),
-            }
-        }
-
 
 class TransformRidgeCV(BaseTransformRegressor):
     _parameter_constraints = {
@@ -215,13 +205,3 @@ class TransformRidgeCV(BaseTransformRegressor):
             pipeline.insert(1, ("normalize", SparseScaler()))
 
         return pipeline
-
-    def _more_tags(self):
-        return {
-            "_xfail_checks": {
-                "check_sample_weights_invariance": (
-                    "zero sample_weight is not equivalent to removing samples"
-                ),
-                "_check_sample_weights_invariance_samples_order": ("test"),
-            }
-        }

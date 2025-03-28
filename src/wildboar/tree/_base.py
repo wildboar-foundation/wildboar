@@ -133,8 +133,11 @@ class BaseTree(BaseEstimator, metaclass=ABCMeta):
 
         return self.tree_.apply(x)
 
-    def _more_tags(self):
-        return {"X_types": ["2darray", "3darray"]}
+    def __sklearn_tags__(self):
+        tags = super().__sklearn_tags__()
+        tags.input_tags.two_d_array = True
+        tags.input_tags.three_d_array = True
+        return tags
 
 
 class BaseTreeRegressor(RegressorMixin, BaseTree, metaclass=ABCMeta):

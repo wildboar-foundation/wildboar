@@ -7,10 +7,12 @@ import warnings
 
 import numpy as np
 from sklearn.base import BaseEstimator as SklearnBaseEstimator
+from sklearn.utils._tags import get_tags
 from sklearn.utils.fixes import parse_version
 from sklearn.utils.validation import _check_y, check_is_fitted
 
 from . import __version__
+from ._tags import WildboarTags, _tags_from_sklearn
 from .utils.validation import _num_timesteps, check_array, check_X_y
 
 __all__ = [
@@ -147,8 +149,10 @@ class BaseEstimator(SklearnBaseEstimator):
         except AttributeError:
             self.__dict__.update(state)
 
-    def _more_tags(self):
-        return _DEFAULT_TAGS
+    def __sklearn_tags__(self) -> WildboarTags:
+        tags = _tags_from_sklearn(super().__sklearn_tags__())
+        tags.allow_eos = False
+        return tags
 
     # Disable feature names since there are no feature names
     # NOTE: Consider adding support for named dimensions for multivariate time series.
@@ -188,8 +192,8 @@ class BaseEstimator(SklearnBaseEstimator):
 
         if n_timesteps != self.n_timesteps_in_:
             raise ValueError(
-                f"X has {n_timesteps} timesteps, but {self.__class__.__name__} "
-                f"is expecting {self.n_timesteps_in_} timesteps as input."
+                f"X has {n_timesteps} features, but {self.__class__.__name__} "
+                f"is expecting {self.n_timesteps_in_} features as input."
             )
         if n_dims != self.n_dims_in_:
             raise ValueError(
@@ -237,7 +241,7 @@ class BaseEstimator(SklearnBaseEstimator):
         validate_separately=False,
         **check_params,
     ):
-        if y is None and self._get_tags()["requires_y"]:
+        if y is None and get_tags(self).target_tags.required:
             raise ValueError(
                 f"This {self.__class__.__name__} estimator "
                 "requires y to be passed, but the target y is None."
@@ -390,13 +394,19 @@ class ExplainerMixin:
 
         plot_time_domain(self.explain(x, y), y, ax=ax)
 
-    def _more_tags(self):
-        return {"requires_estimator": True}
+    def __sklearn_tags__(self):
+        from ._tags import ExplainerTags
+
+        tags = super().__sklearn_tags__()
+        tags.estimator_type = "explainer"
+        tags.explainer_tags = ExplainerTags()
+        return tags
 
 
 class CounterfactualMixin:
     """Mixin class for counterfactual explainer."""
 
+    # TODO(1.4) Remove
     _estimator_type = "counterfactual"
 
     def score(self, x, y):
@@ -418,6 +428,14 @@ class CounterfactualMixin:
         from .metrics import proximity_score
 
         return proximity_score(x, self.explain(x, y))
+
+    def __sklearn_tags__(self):
+        from ._tags import ExplainerTags
+
+        tags = super().__sklearn_tags__()
+        tags.estimator_type = "counterfactual"
+        tags.explainer_tags = ExplainerTags()
+        return tags
 
 
 def is_counterfactual(estimator):

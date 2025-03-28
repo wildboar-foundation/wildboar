@@ -16,7 +16,9 @@ from wildboar.utils.estimator_checks import check_estimator
 def test_check_estimator():
     check_estimator(
         ProximityTreeClassifier(metric=[("euclidean", None)]),
-        ignore=["check_sample_weights_invariance"],
+        expected_failed_checks={
+            "check_sample_weight_equivalence_on_dense_data": "not working",
+        },
     )
     assert_exhaustive_parameter_checks(ProximityTreeClassifier())
     assert_parameter_checks(ProximityTreeClassifier(), skip="metric")
