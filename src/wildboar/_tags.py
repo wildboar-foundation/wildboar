@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from dataclasses import dataclass
 
 from sklearn.utils._tags import Tags, _dataclass_args
