@@ -507,7 +507,7 @@ def check_array(  # noqa: PLR0913, PLR0912
         dtype=dtype,
         order=None if ensure_ts_array else order,
         copy=copy,
-        ensure_all_finite=ensure_all_finite,
+        ensure_all_finite=False,
         ensure_2d=ensure_2d,
         allow_nd=allow_3d or allow_nd,
         ensure_min_samples=ensure_min_samples,
