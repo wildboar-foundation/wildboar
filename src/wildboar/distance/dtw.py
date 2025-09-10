@@ -397,7 +397,7 @@ def dtw_mapping(x=None, y=None, *, alignment=None, r=1, return_index=False):
     else:
         alignment = check_array(
             alignment,
-            force_all_finite=False,
+            ensure_all_finite=False,
             order=None,
             allow_eos=True,  # FIXME!
             input_name="alignment",

@@ -73,7 +73,7 @@ def test_check_array_force_all_finite():
         check_array(
             [1, 2, 3, np.inf, np.nan, -np.inf],
             ensure_2d=False,
-            force_all_finite=True,
+            ensure_all_finite=True,
             allow_eos=False,
         )
 
@@ -81,12 +81,12 @@ def test_check_array_force_all_finite():
         check_array(
             [1, 2, 3, np.inf, np.nan, -np.inf],
             ensure_2d=False,
-            force_all_finite="allow-nan",
+            ensure_all_finite="allow-nan",
             allow_eos=True,
         )
 
     check_array(
-        [1, 2, 3, np.inf, np.nan, -np.inf], ensure_2d=False, force_all_finite=False
+        [1, 2, 3, np.inf, np.nan, -np.inf], ensure_2d=False, ensure_all_finite=False
     )
 
 
@@ -94,7 +94,9 @@ def test_check_array_allow_eos():
     with pytest.raises(ValueError, match=".*equal length.*"):
         check_array([[1, 2, 3, 4, eos]], allow_eos=False)
 
-    check_array([[1, np.nan, 3, eos, 10]], force_all_finite="allow-nan", allow_eos=True)
+    check_array(
+        [[1, np.nan, 3, eos, 10]], ensure_all_finite="allow-nan", allow_eos=True
+    )
 
     with pytest.raises(ValueError, match=".*NaN.*"):
         check_array([[1, eos, eos, np.nan, 1]], allow_eos=True)

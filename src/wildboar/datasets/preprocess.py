@@ -287,7 +287,7 @@ class Interpolate(TransformerMixin, BaseEstimator):
         object
             Returns the instance of the fitted model.
         """
-        self._validate_data(X, allow_3d=True, force_all_finite="allow-nan")
+        self._validate_data(X, allow_3d=True, ensure_all_finite="allow-nan")
         return self
 
     def transform(self, X):
@@ -305,12 +305,14 @@ class Interpolate(TransformerMixin, BaseEstimator):
             The transformed data after applying the interpolation method.
         """
         X = self._validate_data(
-            X, reset=False, allow_3d=True, force_all_finite="allow-nan"
+            X, reset=False, allow_3d=True, ensure_all_finite="allow-nan"
         )
         check_is_fitted(self)
 
         Method = check_option(_INTERPOLATE_METHOD, self.method, "method")
-        X = check_array(X, allow_3d=True, allow_eos=False, force_all_finite="allow-nan")
+        X = check_array(
+            X, allow_3d=True, allow_eos=False, ensure_all_finite="allow-nan"
+        )
         index = np.arange(X.shape[-1])
         new_shape = int(np.prod(X.shape[:-1]))
         filled = np.empty_like(X).reshape(new_shape, -1)
@@ -348,7 +350,7 @@ class Truncate(TransformerMixin, BaseEstimator):
             Returns the instance of the fitted model.
         """
         self._validate_data(
-            X, allow_3d=True, allow_eos=True, force_all_finite="allow-nan"
+            X, allow_3d=True, allow_eos=True, ensure_all_finite="allow-nan"
         )
         return self
 
@@ -368,7 +370,7 @@ class Truncate(TransformerMixin, BaseEstimator):
         """
         check_is_fitted(self)
         X = self._validate_data(
-            X, reset=False, allow_3d=True, allow_eos=True, force_all_finite="allow-nan"
+            X, reset=False, allow_3d=True, allow_eos=True, ensure_all_finite="allow-nan"
         )
         eos = np.nonzero(is_end_of_series(X))[-1]
         if eos.size > 0:
@@ -429,7 +431,7 @@ class MinMaxScale(TransformerMixin, BaseEstimator):
         object
             Returns the instance of the fitted model.
         """
-        self._validate_data(X, allow_3d=True, force_all_finite="allow-nan")
+        self._validate_data(X, allow_3d=True, ensure_all_finite="allow-nan")
         if self.min > self.max:
             raise ValueError()
         return self
@@ -449,7 +451,7 @@ class MinMaxScale(TransformerMixin, BaseEstimator):
             The transformed data after applying the interpolation method.
         """
         X = self._validate_data(
-            X, reset=False, allow_3d=True, force_all_finite="allow-nan"
+            X, reset=False, allow_3d=True, ensure_all_finite="allow-nan"
         )
         check_is_fitted(self)
         X_min = np.nanmin(X, axis=-1, keepdims=True)
@@ -524,7 +526,7 @@ class Standardize(TransformerMixin, BaseEstimator):
         object
             Returns the instance of the fitted model.
         """
-        self._validate_data(X, allow_3d=True, force_all_finite="allow-nan")
+        self._validate_data(X, allow_3d=True, ensure_all_finite="allow-nan")
         return self
 
     def transform(self, X):
@@ -542,7 +544,7 @@ class Standardize(TransformerMixin, BaseEstimator):
             The transformed data after applying the interpolation method.
         """
         X = self._validate_data(
-            X, reset=False, allow_3d=True, force_all_finite="allow-nan"
+            X, reset=False, allow_3d=True, ensure_all_finite="allow-nan"
         )
         check_is_fitted(self)
         std = np.nanstd(X, axis=-1, keepdims=True)
