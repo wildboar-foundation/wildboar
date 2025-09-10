@@ -1,6 +1,7 @@
 import numpy as np
 import pytest
 from numpy.testing import assert_almost_equal
+
 from wildboar.datasets import load_two_lead_ecg
 from wildboar.distance import matrix_profile, paired_matrix_profile
 
@@ -62,26 +63,14 @@ def test_matrix_profile_n_jobs(window, n_jobs):
     X, y = load_two_lead_ecg()
     # self-join
     assert_almost_equal(
-        matrix_profile(X[:10], window=window, n_jobs=n_jobs),
-        matrix_profile(X[:10], window=window, n_jobs=None),
+        matrix_profile(X[:10], window=window, kind="paired", n_jobs=n_jobs),
+        matrix_profile(X[:10], window=window, kind="paired", n_jobs=None),
     )
     # ab-join
     assert_almost_equal(
-        matrix_profile(X[:10], X[20:30], window=window, n_jobs=n_jobs),
-        matrix_profile(X[:10], X[20:30], window=window, n_jobs=None),
+        matrix_profile(X[:10], X[20:30], window=window, kind="paired", n_jobs=n_jobs),
+        matrix_profile(X[:10], X[20:30], window=window, kind="paired", n_jobs=None),
     )
-
-
-def test_matrix_profile_equal_ab_join():
-    X, y = load_two_lead_ecg()
-
-    # TODO(1.4) Remove test
-    # We test that the old behavior corresponds the inverse of the new, i.e.,
-    #  - (NEW) every subsequence in X is annotated with the closest match in Y;
-    #  - (OLD) every subsequence in Y is annotated with the closest match in X.
-    mp1 = paired_matrix_profile(X[:10], X[10:20])
-    mp2 = matrix_profile(X[10:20], X[:10])
-    assert_almost_equal(mp1, mp2)
 
 
 def test_matrix_profile_self_join_performance(benchmark):
@@ -96,7 +85,7 @@ def test_matrix_profile_ab_join_performance(benchmark):
 
 def test_matrix_profile_self_join():
     X, y = load_two_lead_ecg()
-    mp = matrix_profile(X[:10].reshape(-1))
+    mp = matrix_profile(X[:10].reshape(-1), kind="paired")
 
     desired = np.array(
         [
@@ -117,7 +106,7 @@ def test_matrix_profile_self_join():
 
 def test_matrix_profile_self_join_n_samples():
     X, y = load_two_lead_ecg()
-    mp = matrix_profile(X[:10])
+    mp = matrix_profile(X[:10], kind="paired")
     desired = np.array(
         [
             [
