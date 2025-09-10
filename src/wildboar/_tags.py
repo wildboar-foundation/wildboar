@@ -4,15 +4,15 @@ import dataclasses
 import sys
 from dataclasses import dataclass
 
-from sklearn.utils._tags import Tags, _dataclass_args
+from sklearn.utils import Tags
 
 
-@dataclass(**_dataclass_args())
+@dataclass(slots=True)
 class ExplainerTags:
     require_estimator: bool = True
 
 
-@dataclass(**_dataclass_args())
+@dataclass(slots=True)
 class WildboarTags(Tags):
     allow_eos: bool = False
     explainer_tags: ExplainerTags | None = None
