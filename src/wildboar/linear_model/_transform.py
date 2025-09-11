@@ -107,8 +107,7 @@ class TransformRidgeClassifierCV(BaseTransformClassifier):
         **RidgeClassifierCV._parameter_constraints,
         "normalize": [bool, StrOptions({"sparse"})],
     }
-    _parameter_constraints.pop("store_cv_values")
-    _parameter_constraints.pop("store_cv_results")
+    _parameter_constraints.pop("store_cv_results", None)
 
     def __init__(
         self,
@@ -165,8 +164,8 @@ class TransformRidgeCV(BaseTransformRegressor):
         "normalize": [bool, StrOptions({"sparse"})],
     }
 
-    for param in ("store_cv_values", "store_cv_results", "alpha_per_target"):
-        _parameter_constraints.pop(param)
+    for param in ("store_cv_results", "alpha_per_target"):
+        _parameter_constraints.pop(param, None)
 
     def __init__(
         self,
