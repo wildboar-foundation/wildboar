@@ -1070,7 +1070,7 @@ Functions
    .. py:method:: score(X, y, sample_weight=None)
 
       
-      Return the mean accuracy on the given test data and labels.
+      Return :ref:`accuracy <accuracy_score>` on provided data and labels.
 
       In multi-label classification, this is the subset accuracy
       which is a harsh metric since you require for each sample that

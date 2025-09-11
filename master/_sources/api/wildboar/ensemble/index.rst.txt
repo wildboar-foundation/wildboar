@@ -147,7 +147,7 @@ Classes
    ..
        !! processed by numpydoc !!
 
-   .. py:method:: decision_function(X)
+   .. py:method:: decision_function(X, **params)
 
       
       Average of the decision functions of the base classifiers.
@@ -158,6 +158,17 @@ Classes
           **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
+
+          **\*\*params** : dict
+              Parameters routed to the `decision_function` method of the sub-estimators
+              via the metadata routing API.
+              
+              .. versionadded:: 1.7
+              
+                  Only available if
+                  `sklearn.set_config(enable_metadata_routing=True)` is set. See
+                  :ref:`Metadata Routing User Guide <metadata_routing>` for more
+                  details.
 
 
 
@@ -300,7 +311,7 @@ Classes
           !! processed by numpydoc !!
 
 
-   .. py:method:: predict(X)
+   .. py:method:: predict(X, **params)
 
       
       Predict class for X.
@@ -314,6 +325,17 @@ Classes
           **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
+
+          **\*\*params** : dict
+              Parameters routed to the `predict_proba` (if available) or the `predict`
+              method (otherwise) of the sub-estimators via the metadata routing API.
+              
+              .. versionadded:: 1.7
+              
+                  Only available if
+                  `sklearn.set_config(enable_metadata_routing=True)` is set. See
+                  :ref:`Metadata Routing User Guide <metadata_routing>` for more
+                  details.
 
 
 
@@ -336,7 +358,7 @@ Classes
           !! processed by numpydoc !!
 
 
-   .. py:method:: predict_log_proba(X)
+   .. py:method:: predict_log_proba(X, **params)
 
       
       Predict class log-probabilities for X.
@@ -350,6 +372,19 @@ Classes
           **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
+
+          **\*\*params** : dict
+              Parameters routed to the `predict_log_proba`, the `predict_proba` or the
+              `proba` method of the sub-estimators via the metadata routing API. The
+              routing is tried in the mentioned order depending on whether this method is
+              available on the sub-estimator.
+              
+              .. versionadded:: 1.7
+              
+                  Only available if
+                  `sklearn.set_config(enable_metadata_routing=True)` is set. See
+                  :ref:`Metadata Routing User Guide <metadata_routing>` for more
+                  details.
 
 
 
@@ -391,6 +426,17 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+          **\*\*params** : dict
+              Parameters routed to the `predict_proba` (if available) or the `predict`
+              method (otherwise) of the sub-estimators via the metadata routing API.
+              
+              .. versionadded:: 1.7
+              
+                  Only available if
+                  `sklearn.set_config(enable_metadata_routing=True)` is set. See
+                  :ref:`Metadata Routing User Guide <metadata_routing>` for more
+                  details.
+
 
 
       :Returns:
@@ -416,7 +462,7 @@ Classes
    .. py:method:: score(X, y, sample_weight=None)
 
       
-      Return the mean accuracy on the given test data and labels.
+      Return :ref:`accuracy <accuracy_score>` on provided data and labels.
 
       In multi-label classification, this is the subset accuracy
       which is a harsh metric since you require for each sample that
@@ -731,6 +777,17 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+          **\*\*params** : dict
+              Parameters routed to the `predict` method of the sub-estimators via the
+              metadata routing API.
+              
+              .. versionadded:: 1.7
+              
+                  Only available if
+                  `sklearn.set_config(enable_metadata_routing=True)` is set. See
+                  :ref:`Metadata Routing User Guide <metadata_routing>` for more
+                  details.
+
 
 
       :Returns:
@@ -755,9 +812,9 @@ Classes
    .. py:method:: score(X, y, sample_weight=None)
 
       
-      Return the coefficient of determination of the prediction.
+      Return :ref:`coefficient of determination <r2_score>` on test data.
 
-      The coefficient of determination :math:`R^2` is defined as
+      The coefficient of determination, :math:`R^2`, is defined as
       :math:`(1 - \frac{u}{v})`, where :math:`u` is the residual
       sum of squares ``((y_true - y_pred)** 2).sum()`` and :math:`v`
       is the total sum of squares ``((y_true - y_true.mean()) ** 2).sum()``.
@@ -1326,7 +1383,7 @@ Classes
    .. py:method:: score(X, y, sample_weight=None)
 
       
-      Return the mean accuracy on the given test data and labels.
+      Return :ref:`accuracy <accuracy_score>` on provided data and labels.
 
       In multi-label classification, this is the subset accuracy
       which is a harsh metric since you require for each sample that
@@ -1540,7 +1597,7 @@ Classes
    ..
        !! processed by numpydoc !!
 
-   .. py:method:: decision_function(X)
+   .. py:method:: decision_function(X, **params)
 
       
       Average of the decision functions of the base classifiers.
@@ -1551,6 +1608,17 @@ Classes
           **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
+
+          **\*\*params** : dict
+              Parameters routed to the `decision_function` method of the sub-estimators
+              via the metadata routing API.
+              
+              .. versionadded:: 1.7
+              
+                  Only available if
+                  `sklearn.set_config(enable_metadata_routing=True)` is set. See
+                  :ref:`Metadata Routing User Guide <metadata_routing>` for more
+                  details.
 
 
 
@@ -1693,7 +1761,7 @@ Classes
           !! processed by numpydoc !!
 
 
-   .. py:method:: predict(X)
+   .. py:method:: predict(X, **params)
 
       
       Predict class for X.
@@ -1707,6 +1775,17 @@ Classes
           **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
+
+          **\*\*params** : dict
+              Parameters routed to the `predict_proba` (if available) or the `predict`
+              method (otherwise) of the sub-estimators via the metadata routing API.
+              
+              .. versionadded:: 1.7
+              
+                  Only available if
+                  `sklearn.set_config(enable_metadata_routing=True)` is set. See
+                  :ref:`Metadata Routing User Guide <metadata_routing>` for more
+                  details.
 
 
 
@@ -1729,7 +1808,7 @@ Classes
           !! processed by numpydoc !!
 
 
-   .. py:method:: predict_log_proba(X)
+   .. py:method:: predict_log_proba(X, **params)
 
       
       Predict class log-probabilities for X.
@@ -1743,6 +1822,19 @@ Classes
           **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
+
+          **\*\*params** : dict
+              Parameters routed to the `predict_log_proba`, the `predict_proba` or the
+              `proba` method of the sub-estimators via the metadata routing API. The
+              routing is tried in the mentioned order depending on whether this method is
+              available on the sub-estimator.
+              
+              .. versionadded:: 1.7
+              
+                  Only available if
+                  `sklearn.set_config(enable_metadata_routing=True)` is set. See
+                  :ref:`Metadata Routing User Guide <metadata_routing>` for more
+                  details.
 
 
 
@@ -1784,6 +1876,17 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+          **\*\*params** : dict
+              Parameters routed to the `predict_proba` (if available) or the `predict`
+              method (otherwise) of the sub-estimators via the metadata routing API.
+              
+              .. versionadded:: 1.7
+              
+                  Only available if
+                  `sklearn.set_config(enable_metadata_routing=True)` is set. See
+                  :ref:`Metadata Routing User Guide <metadata_routing>` for more
+                  details.
+
 
 
       :Returns:
@@ -1809,7 +1912,7 @@ Classes
    .. py:method:: score(X, y, sample_weight=None)
 
       
-      Return the mean accuracy on the given test data and labels.
+      Return :ref:`accuracy <accuracy_score>` on provided data and labels.
 
       In multi-label classification, this is the subset accuracy
       which is a harsh metric since you require for each sample that
@@ -2173,6 +2276,17 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+          **\*\*params** : dict
+              Parameters routed to the `predict` method of the sub-estimators via the
+              metadata routing API.
+              
+              .. versionadded:: 1.7
+              
+                  Only available if
+                  `sklearn.set_config(enable_metadata_routing=True)` is set. See
+                  :ref:`Metadata Routing User Guide <metadata_routing>` for more
+                  details.
+
 
 
       :Returns:
@@ -2197,9 +2311,9 @@ Classes
    .. py:method:: score(X, y, sample_weight=None)
 
       
-      Return the coefficient of determination of the prediction.
+      Return :ref:`coefficient of determination <r2_score>` on test data.
 
-      The coefficient of determination :math:`R^2` is defined as
+      The coefficient of determination, :math:`R^2`, is defined as
       :math:`(1 - \frac{u}{v})`, where :math:`u` is the residual
       sum of squares ``((y_true - y_pred)** 2).sum()`` and :math:`v`
       is the total sum of squares ``((y_true - y_true.mean()) ** 2).sum()``.
@@ -2435,7 +2549,7 @@ Classes
    ..
        !! processed by numpydoc !!
 
-   .. py:method:: decision_function(X)
+   .. py:method:: decision_function(X, **params)
 
       
       Average of the decision functions of the base classifiers.
@@ -2446,6 +2560,17 @@ Classes
           **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
+
+          **\*\*params** : dict
+              Parameters routed to the `decision_function` method of the sub-estimators
+              via the metadata routing API.
+              
+              .. versionadded:: 1.7
+              
+                  Only available if
+                  `sklearn.set_config(enable_metadata_routing=True)` is set. See
+                  :ref:`Metadata Routing User Guide <metadata_routing>` for more
+                  details.
 
 
 
@@ -2588,7 +2713,7 @@ Classes
           !! processed by numpydoc !!
 
 
-   .. py:method:: predict(X)
+   .. py:method:: predict(X, **params)
 
       
       Predict class for X.
@@ -2602,6 +2727,17 @@ Classes
           **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
+
+          **\*\*params** : dict
+              Parameters routed to the `predict_proba` (if available) or the `predict`
+              method (otherwise) of the sub-estimators via the metadata routing API.
+              
+              .. versionadded:: 1.7
+              
+                  Only available if
+                  `sklearn.set_config(enable_metadata_routing=True)` is set. See
+                  :ref:`Metadata Routing User Guide <metadata_routing>` for more
+                  details.
 
 
 
@@ -2624,7 +2760,7 @@ Classes
           !! processed by numpydoc !!
 
 
-   .. py:method:: predict_log_proba(X)
+   .. py:method:: predict_log_proba(X, **params)
 
       
       Predict class log-probabilities for X.
@@ -2638,6 +2774,19 @@ Classes
           **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
+
+          **\*\*params** : dict
+              Parameters routed to the `predict_log_proba`, the `predict_proba` or the
+              `proba` method of the sub-estimators via the metadata routing API. The
+              routing is tried in the mentioned order depending on whether this method is
+              available on the sub-estimator.
+              
+              .. versionadded:: 1.7
+              
+                  Only available if
+                  `sklearn.set_config(enable_metadata_routing=True)` is set. See
+                  :ref:`Metadata Routing User Guide <metadata_routing>` for more
+                  details.
 
 
 
@@ -2679,6 +2828,17 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+          **\*\*params** : dict
+              Parameters routed to the `predict_proba` (if available) or the `predict`
+              method (otherwise) of the sub-estimators via the metadata routing API.
+              
+              .. versionadded:: 1.7
+              
+                  Only available if
+                  `sklearn.set_config(enable_metadata_routing=True)` is set. See
+                  :ref:`Metadata Routing User Guide <metadata_routing>` for more
+                  details.
+
 
 
       :Returns:
@@ -2704,7 +2864,7 @@ Classes
    .. py:method:: score(X, y, sample_weight=None)
 
       
-      Return the mean accuracy on the given test data and labels.
+      Return :ref:`accuracy <accuracy_score>` on provided data and labels.
 
       In multi-label classification, this is the subset accuracy
       which is a harsh metric since you require for each sample that
@@ -3046,6 +3206,17 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+          **\*\*params** : dict
+              Parameters routed to the `predict` method of the sub-estimators via the
+              metadata routing API.
+              
+              .. versionadded:: 1.7
+              
+                  Only available if
+                  `sklearn.set_config(enable_metadata_routing=True)` is set. See
+                  :ref:`Metadata Routing User Guide <metadata_routing>` for more
+                  details.
+
 
 
       :Returns:
@@ -3070,9 +3241,9 @@ Classes
    .. py:method:: score(X, y, sample_weight=None)
 
       
-      Return the coefficient of determination of the prediction.
+      Return :ref:`coefficient of determination <r2_score>` on test data.
 
-      The coefficient of determination :math:`R^2` is defined as
+      The coefficient of determination, :math:`R^2`, is defined as
       :math:`(1 - \frac{u}{v})`, where :math:`u` is the residual
       sum of squares ``((y_true - y_pred)** 2).sum()`` and :math:`v`
       is the total sum of squares ``((y_true - y_true.mean()) ** 2).sum()``.
@@ -3570,7 +3741,7 @@ Classes
    ..
        !! processed by numpydoc !!
 
-   .. py:method:: decision_function(X)
+   .. py:method:: decision_function(X, **params)
 
       
       Average of the decision functions of the base classifiers.
@@ -3581,6 +3752,17 @@ Classes
           **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
+
+          **\*\*params** : dict
+              Parameters routed to the `decision_function` method of the sub-estimators
+              via the metadata routing API.
+              
+              .. versionadded:: 1.7
+              
+                  Only available if
+                  `sklearn.set_config(enable_metadata_routing=True)` is set. See
+                  :ref:`Metadata Routing User Guide <metadata_routing>` for more
+                  details.
 
 
 
@@ -3723,7 +3905,7 @@ Classes
           !! processed by numpydoc !!
 
 
-   .. py:method:: predict(X)
+   .. py:method:: predict(X, **params)
 
       
       Predict class for X.
@@ -3737,6 +3919,17 @@ Classes
           **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
+
+          **\*\*params** : dict
+              Parameters routed to the `predict_proba` (if available) or the `predict`
+              method (otherwise) of the sub-estimators via the metadata routing API.
+              
+              .. versionadded:: 1.7
+              
+                  Only available if
+                  `sklearn.set_config(enable_metadata_routing=True)` is set. See
+                  :ref:`Metadata Routing User Guide <metadata_routing>` for more
+                  details.
 
 
 
@@ -3759,7 +3952,7 @@ Classes
           !! processed by numpydoc !!
 
 
-   .. py:method:: predict_log_proba(X)
+   .. py:method:: predict_log_proba(X, **params)
 
       
       Predict class log-probabilities for X.
@@ -3773,6 +3966,19 @@ Classes
           **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
+
+          **\*\*params** : dict
+              Parameters routed to the `predict_log_proba`, the `predict_proba` or the
+              `proba` method of the sub-estimators via the metadata routing API. The
+              routing is tried in the mentioned order depending on whether this method is
+              available on the sub-estimator.
+              
+              .. versionadded:: 1.7
+              
+                  Only available if
+                  `sklearn.set_config(enable_metadata_routing=True)` is set. See
+                  :ref:`Metadata Routing User Guide <metadata_routing>` for more
+                  details.
 
 
 
@@ -3814,6 +4020,17 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+          **\*\*params** : dict
+              Parameters routed to the `predict_proba` (if available) or the `predict`
+              method (otherwise) of the sub-estimators via the metadata routing API.
+              
+              .. versionadded:: 1.7
+              
+                  Only available if
+                  `sklearn.set_config(enable_metadata_routing=True)` is set. See
+                  :ref:`Metadata Routing User Guide <metadata_routing>` for more
+                  details.
+
 
 
       :Returns:
@@ -3839,7 +4056,7 @@ Classes
    .. py:method:: score(X, y, sample_weight=None)
 
       
-      Return the mean accuracy on the given test data and labels.
+      Return :ref:`accuracy <accuracy_score>` on provided data and labels.
 
       In multi-label classification, this is the subset accuracy
       which is a harsh metric since you require for each sample that
@@ -4069,7 +4286,7 @@ Classes
    ..
        !! processed by numpydoc !!
 
-   .. py:method:: decision_function(X)
+   .. py:method:: decision_function(X, **params)
 
       
       Average of the decision functions of the base classifiers.
@@ -4080,6 +4297,17 @@ Classes
           **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
+
+          **\*\*params** : dict
+              Parameters routed to the `decision_function` method of the sub-estimators
+              via the metadata routing API.
+              
+              .. versionadded:: 1.7
+              
+                  Only available if
+                  `sklearn.set_config(enable_metadata_routing=True)` is set. See
+                  :ref:`Metadata Routing User Guide <metadata_routing>` for more
+                  details.
 
 
 
@@ -4222,7 +4450,7 @@ Classes
           !! processed by numpydoc !!
 
 
-   .. py:method:: predict(X)
+   .. py:method:: predict(X, **params)
 
       
       Predict class for X.
@@ -4236,6 +4464,17 @@ Classes
           **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
+
+          **\*\*params** : dict
+              Parameters routed to the `predict_proba` (if available) or the `predict`
+              method (otherwise) of the sub-estimators via the metadata routing API.
+              
+              .. versionadded:: 1.7
+              
+                  Only available if
+                  `sklearn.set_config(enable_metadata_routing=True)` is set. See
+                  :ref:`Metadata Routing User Guide <metadata_routing>` for more
+                  details.
 
 
 
@@ -4258,7 +4497,7 @@ Classes
           !! processed by numpydoc !!
 
 
-   .. py:method:: predict_log_proba(X)
+   .. py:method:: predict_log_proba(X, **params)
 
       
       Predict class log-probabilities for X.
@@ -4272,6 +4511,19 @@ Classes
           **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
+
+          **\*\*params** : dict
+              Parameters routed to the `predict_log_proba`, the `predict_proba` or the
+              `proba` method of the sub-estimators via the metadata routing API. The
+              routing is tried in the mentioned order depending on whether this method is
+              available on the sub-estimator.
+              
+              .. versionadded:: 1.7
+              
+                  Only available if
+                  `sklearn.set_config(enable_metadata_routing=True)` is set. See
+                  :ref:`Metadata Routing User Guide <metadata_routing>` for more
+                  details.
 
 
 
@@ -4313,6 +4565,17 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+          **\*\*params** : dict
+              Parameters routed to the `predict_proba` (if available) or the `predict`
+              method (otherwise) of the sub-estimators via the metadata routing API.
+              
+              .. versionadded:: 1.7
+              
+                  Only available if
+                  `sklearn.set_config(enable_metadata_routing=True)` is set. See
+                  :ref:`Metadata Routing User Guide <metadata_routing>` for more
+                  details.
+
 
 
       :Returns:
@@ -4338,7 +4601,7 @@ Classes
    .. py:method:: score(X, y, sample_weight=None)
 
       
-      Return the mean accuracy on the given test data and labels.
+      Return :ref:`accuracy <accuracy_score>` on provided data and labels.
 
       In multi-label classification, this is the subset accuracy
       which is a harsh metric since you require for each sample that
@@ -4564,7 +4827,7 @@ Classes
    ..
        !! processed by numpydoc !!
 
-   .. py:method:: decision_function(X)
+   .. py:method:: decision_function(X, **params)
 
       
       Average of the decision functions of the base classifiers.
@@ -4575,6 +4838,17 @@ Classes
           **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
+
+          **\*\*params** : dict
+              Parameters routed to the `decision_function` method of the sub-estimators
+              via the metadata routing API.
+              
+              .. versionadded:: 1.7
+              
+                  Only available if
+                  `sklearn.set_config(enable_metadata_routing=True)` is set. See
+                  :ref:`Metadata Routing User Guide <metadata_routing>` for more
+                  details.
 
 
 
@@ -4717,7 +4991,7 @@ Classes
           !! processed by numpydoc !!
 
 
-   .. py:method:: predict(X)
+   .. py:method:: predict(X, **params)
 
       
       Predict class for X.
@@ -4731,6 +5005,17 @@ Classes
           **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
+
+          **\*\*params** : dict
+              Parameters routed to the `predict_proba` (if available) or the `predict`
+              method (otherwise) of the sub-estimators via the metadata routing API.
+              
+              .. versionadded:: 1.7
+              
+                  Only available if
+                  `sklearn.set_config(enable_metadata_routing=True)` is set. See
+                  :ref:`Metadata Routing User Guide <metadata_routing>` for more
+                  details.
 
 
 
@@ -4753,7 +5038,7 @@ Classes
           !! processed by numpydoc !!
 
 
-   .. py:method:: predict_log_proba(X)
+   .. py:method:: predict_log_proba(X, **params)
 
       
       Predict class log-probabilities for X.
@@ -4767,6 +5052,19 @@ Classes
           **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
+
+          **\*\*params** : dict
+              Parameters routed to the `predict_log_proba`, the `predict_proba` or the
+              `proba` method of the sub-estimators via the metadata routing API. The
+              routing is tried in the mentioned order depending on whether this method is
+              available on the sub-estimator.
+              
+              .. versionadded:: 1.7
+              
+                  Only available if
+                  `sklearn.set_config(enable_metadata_routing=True)` is set. See
+                  :ref:`Metadata Routing User Guide <metadata_routing>` for more
+                  details.
 
 
 
@@ -4808,6 +5106,17 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+          **\*\*params** : dict
+              Parameters routed to the `predict_proba` (if available) or the `predict`
+              method (otherwise) of the sub-estimators via the metadata routing API.
+              
+              .. versionadded:: 1.7
+              
+                  Only available if
+                  `sklearn.set_config(enable_metadata_routing=True)` is set. See
+                  :ref:`Metadata Routing User Guide <metadata_routing>` for more
+                  details.
+
 
 
       :Returns:
@@ -4833,7 +5142,7 @@ Classes
    .. py:method:: score(X, y, sample_weight=None)
 
       
-      Return the mean accuracy on the given test data and labels.
+      Return :ref:`accuracy <accuracy_score>` on provided data and labels.
 
       In multi-label classification, this is the subset accuracy
       which is a harsh metric since you require for each sample that
@@ -5185,6 +5494,17 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+          **\*\*params** : dict
+              Parameters routed to the `predict` method of the sub-estimators via the
+              metadata routing API.
+              
+              .. versionadded:: 1.7
+              
+                  Only available if
+                  `sklearn.set_config(enable_metadata_routing=True)` is set. See
+                  :ref:`Metadata Routing User Guide <metadata_routing>` for more
+                  details.
+
 
 
       :Returns:
@@ -5209,9 +5529,9 @@ Classes
    .. py:method:: score(X, y, sample_weight=None)
 
       
-      Return the coefficient of determination of the prediction.
+      Return :ref:`coefficient of determination <r2_score>` on test data.
 
-      The coefficient of determination :math:`R^2` is defined as
+      The coefficient of determination, :math:`R^2`, is defined as
       :math:`(1 - \frac{u}{v})`, where :math:`u` is the residual
       sum of squares ``((y_true - y_pred)** 2).sum()`` and :math:`v`
       is the total sum of squares ``((y_true - y_true.mean()) ** 2).sum()``.
@@ -5496,7 +5816,7 @@ Classes
    ..
        !! processed by numpydoc !!
 
-   .. py:method:: decision_function(X)
+   .. py:method:: decision_function(X, **params)
 
       
       Average of the decision functions of the base classifiers.
@@ -5507,6 +5827,17 @@ Classes
           **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
+
+          **\*\*params** : dict
+              Parameters routed to the `decision_function` method of the sub-estimators
+              via the metadata routing API.
+              
+              .. versionadded:: 1.7
+              
+                  Only available if
+                  `sklearn.set_config(enable_metadata_routing=True)` is set. See
+                  :ref:`Metadata Routing User Guide <metadata_routing>` for more
+                  details.
 
 
 
@@ -5649,7 +5980,7 @@ Classes
           !! processed by numpydoc !!
 
 
-   .. py:method:: predict(X)
+   .. py:method:: predict(X, **params)
 
       
       Predict class for X.
@@ -5663,6 +5994,17 @@ Classes
           **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
+
+          **\*\*params** : dict
+              Parameters routed to the `predict_proba` (if available) or the `predict`
+              method (otherwise) of the sub-estimators via the metadata routing API.
+              
+              .. versionadded:: 1.7
+              
+                  Only available if
+                  `sklearn.set_config(enable_metadata_routing=True)` is set. See
+                  :ref:`Metadata Routing User Guide <metadata_routing>` for more
+                  details.
 
 
 
@@ -5685,7 +6027,7 @@ Classes
           !! processed by numpydoc !!
 
 
-   .. py:method:: predict_log_proba(X)
+   .. py:method:: predict_log_proba(X, **params)
 
       
       Predict class log-probabilities for X.
@@ -5699,6 +6041,19 @@ Classes
           **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
+
+          **\*\*params** : dict
+              Parameters routed to the `predict_log_proba`, the `predict_proba` or the
+              `proba` method of the sub-estimators via the metadata routing API. The
+              routing is tried in the mentioned order depending on whether this method is
+              available on the sub-estimator.
+              
+              .. versionadded:: 1.7
+              
+                  Only available if
+                  `sklearn.set_config(enable_metadata_routing=True)` is set. See
+                  :ref:`Metadata Routing User Guide <metadata_routing>` for more
+                  details.
 
 
 
@@ -5740,6 +6095,17 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+          **\*\*params** : dict
+              Parameters routed to the `predict_proba` (if available) or the `predict`
+              method (otherwise) of the sub-estimators via the metadata routing API.
+              
+              .. versionadded:: 1.7
+              
+                  Only available if
+                  `sklearn.set_config(enable_metadata_routing=True)` is set. See
+                  :ref:`Metadata Routing User Guide <metadata_routing>` for more
+                  details.
+
 
 
       :Returns:
@@ -5765,7 +6131,7 @@ Classes
    .. py:method:: score(X, y, sample_weight=None)
 
       
-      Return the mean accuracy on the given test data and labels.
+      Return :ref:`accuracy <accuracy_score>` on provided data and labels.
 
       In multi-label classification, this is the subset accuracy
       which is a harsh metric since you require for each sample that
@@ -6136,6 +6502,17 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+          **\*\*params** : dict
+              Parameters routed to the `predict` method of the sub-estimators via the
+              metadata routing API.
+              
+              .. versionadded:: 1.7
+              
+                  Only available if
+                  `sklearn.set_config(enable_metadata_routing=True)` is set. See
+                  :ref:`Metadata Routing User Guide <metadata_routing>` for more
+                  details.
+
 
 
       :Returns:
@@ -6160,9 +6537,9 @@ Classes
    .. py:method:: score(X, y, sample_weight=None)
 
       
-      Return the coefficient of determination of the prediction.
+      Return :ref:`coefficient of determination <r2_score>` on test data.
 
-      The coefficient of determination :math:`R^2` is defined as
+      The coefficient of determination, :math:`R^2`, is defined as
       :math:`(1 - \frac{u}{v})`, where :math:`u` is the residual
       sum of squares ``((y_true - y_pred)** 2).sum()`` and :math:`v`
       is the total sum of squares ``((y_true - y_true.mean()) ** 2).sum()``.
@@ -6570,6 +6947,17 @@ Classes
               The training input samples. Sparse matrices are accepted only if
               they are supported by the base estimator.
 
+          **\*\*params** : dict
+              Parameters routed to the `predict` method of the sub-estimators via the
+              metadata routing API.
+              
+              .. versionadded:: 1.7
+              
+                  Only available if
+                  `sklearn.set_config(enable_metadata_routing=True)` is set. See
+                  :ref:`Metadata Routing User Guide <metadata_routing>` for more
+                  details.
+
 
 
       :Returns:
@@ -6594,9 +6982,9 @@ Classes
    .. py:method:: score(X, y, sample_weight=None)
 
       
-      Return the coefficient of determination of the prediction.
+      Return :ref:`coefficient of determination <r2_score>` on test data.
 
-      The coefficient of determination :math:`R^2` is defined as
+      The coefficient of determination, :math:`R^2`, is defined as
       :math:`(1 - \frac{u}{v})`, where :math:`u` is the residual
       sum of squares ``((y_true - y_pred)** 2).sum()`` and :math:`v`
       is the total sum of squares ``((y_true - y_true.mean()) ** 2).sum()``.
