@@ -6,7 +6,7 @@
 <h1 align="center">wildboar</h1>
 
 <p align="center">
-	<img src="https://img.shields.io/badge/python-3.8%20|%203.9%20|%203.10-blue" />
+	<img src="https://img.shields.io/badge/python-3.10%20|%203.11%20|%203.12-blue" />
 	<img src="https://github.com/wildboar-foundation/wildboar/workflows/Build,%20test%20and%20upload%20to%20PyPI/badge.svg"/>
 	<a href="https://badge.fury.io/py/wildboar"><img src="https://badge.fury.io/py/wildboar.svg" /></a>
 	<a href="https://pepy.tech/project/wildboar"><img src="https://static.pepy.tech/personalized-badge/wildboar?period=total&units=international_system&left_color=black&right_color=orange&left_text=downloads" /></a>
@@ -52,7 +52,7 @@ See the [documentation](https://wildboar.dev/master/) for examples.
 
     pip install wildboar
 
-Universal binaries are compiled for Python 3.9, 3.10, 3.11 and 3.12 running on
+Universal binaries are compiled for Python 3.10, 3.11 and 3.12 running on
 GNU/Linux, Windows and macOS.
 
 ### Compilation
