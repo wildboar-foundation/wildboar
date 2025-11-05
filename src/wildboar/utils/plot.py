@@ -61,6 +61,7 @@ def plot_time_domain(
     linewidth=0.5,
     zorder=-1,
     cmap="Dark2",
+    color=None,
     show_legend=8,
 ):
     """
@@ -133,7 +134,7 @@ def plot_time_domain(
     x_axis = np.arange(x.shape[-1] + 1)
     collection = LineCollection(
         [list(zip(x_axis, x[i])) for i in range(x.shape[0])],
-        colors=[cmap(inv[i]) for i in range(x.shape[0])],
+        colors=[cmap(inv[i]) if color is None else color for i in range(x.shape[0])],
         zorder=zorder,
         linewidth=linewidth,
         alpha=alpha,
