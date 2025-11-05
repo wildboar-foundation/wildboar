@@ -67,14 +67,9 @@ class BaseEstimator(SklearnBaseEstimator):
             % version_url
         )
 
-    def _doc_link_url_param_generator(self, other):
+    def _doc_link_url_param_generator(self):
         """
         Generate URL parameter dictionary for documentation linking.
-
-        Parameters
-        ----------
-        other : object
-            Another estimator object used for comparison.
 
         Returns
         -------
