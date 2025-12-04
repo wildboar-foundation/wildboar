@@ -488,7 +488,7 @@ def _filter_by_max_dist(indicies, distances, max_dist):
     distances : list
         List of distances corresponding to the indices.
     max_dist : callable
-        A function that takes a distance and returns the maximum distance index.
+        A function that takes a distance and returns a boolean mask
 
     Returns
     -------
@@ -499,14 +499,14 @@ def _filter_by_max_dist(indicies, distances, max_dist):
     """
     indicies_tmp = []
     distances_tmp = []
-    for index, distance in zip(indicies, distances):
+    for sample, (index, distance) in enumerate(zip(indicies, distances)):
         if index is None:
             indicies_tmp.append(None)
             distances_tmp.append(None)
         else:
-            idx = max_dist(distance)
-            indicies_tmp.append(index[idx])
-            distances_tmp.append(distance[idx])
+            mask = max_dist(sample, distance)
+            indicies_tmp.append(index[mask])
+            distances_tmp.append(distance[mask])
 
     return indicies_tmp, distances_tmp
 
@@ -768,9 +768,10 @@ def subsequence_match(  # noqa: PLR0912, PLR0915
         is selected, `max_matches` defaults to 10.
 
         - if float, return all matches closer than threshold
-        - if callable, return all matches closer than the treshold computed by the
-          threshold function, given all distances to the subsequence
+        - if callable, return all matches closer than the threshold computed by
+          the threshold function, given all distances to the subsequence
         - if str, return all matches according to the named threshold.
+        - if array-like, use the i:th threshold for the i:th sample
     dim : int, optional
         The dim to search for shapelets.
     metric : str or callable, optional
@@ -847,20 +848,33 @@ def subsequence_match(  # noqa: PLR0912, PLR0915
     if callable(threshold):
         threshold_fn = threshold
 
-        def max_dist(d):
+        def max_dist(_, d):
             return d <= threshold_fn(d)
 
         threshold = np.inf
     elif isinstance(threshold, str):
         threshold_fn = check_option(_THRESHOLD, threshold, "threshold")
 
-        def max_dist(d):
+        def max_dist(_, d):
             return d <= threshold_fn(d)
+
+        threshold = np.inf
+    elif _is_arraylike(threshold):
+        threshold_array = np.asarray(threshold)
+        n_samples = x.shape[0] if x.ndim > 1 else 1
+        if len(threshold_array) != n_samples:
+            raise ValueError(
+                f"threshold array length ({len(threshold_array)}) must match "
+                f"the number of samples ({n_samples})"
+            )
+
+        def max_dist(i, d):
+            return d <= threshold_array[i]
 
         threshold = np.inf
     elif not isinstance(threshold, numbers.Real):
         raise TypeError(
-            "threshold must be str, callable or float, not %s"
+            "threshold must be str, callable, array-like or float, not %s"
             % type(threshold).__qualname__
         )
     else:
