@@ -3,7 +3,6 @@
 
 import math
 import numbers
-import warnings
 from abc import ABCMeta, abstractmethod
 from collections import namedtuple
 
@@ -16,7 +15,8 @@ from sklearn.utils._param_validation import Interval, StrOptions
 from sklearn.utils.validation import check_is_fitted, check_random_state, check_scalar
 
 from ..base import BaseEstimator, ExplainerMixin
-from ..distance import pairwise_subsequence_distance
+from ..distance import pairwise_subsequence_distance, subsequence_match
+from ..transform._interval import IntervalTransform
 from ..transform._sax import SAX
 from ..transform._shapelet import RandomShapeletMixin, ShapeletTransform
 from ..utils.validation import check_array, check_option
@@ -110,6 +110,24 @@ def _unpack_scores(orig_score, perm_score):
 
 
 class PermuteImportance(BaseEstimator, metaclass=ABCMeta):
+    """
+    Base class for permutation importance.
+
+    Parameters
+    ----------
+    scoring : str, list, dict or callable, optional
+        The scoring function. By default the estimators score function is used.
+    n_repeat : int, optional
+        The number of repeated permutations.
+    random_state : int or RandomState, optional
+        Controls the random resampling of the original dataset.
+
+        - If `int`, `random_state` is the seed used by the random number generator
+        - If `RandomState` instance, `random_state` is the random number generator
+        - If `None`, the random number generator is the `RandomState` instance used
+          by `np.random`.
+    """
+
     _parameter_constraints: dict = {
         "scoring": [None, str, list, dict, callable],
         "n_repeat": [Interval(numbers.Integral, 1, None, closed="left")],
@@ -121,18 +139,62 @@ class PermuteImportance(BaseEstimator, metaclass=ABCMeta):
         self.n_repeat = n_repeat
         self.random_state = random_state
 
-    @abstractmethod
-    def _yield_components(self):
-        pass
-
     def _reset_component(self, X, component):
+        """
+        Reset the component.
+
+        This method is called before each component is permuted. It can be used
+        to precompute values that are needed for the permutation.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_timesteps)
+            The input data.
+        component : object
+            The component to permute.
+        """
         pass
 
     @abstractmethod
     def _permute_component(self, X, component, random_state):
+        """
+        Permute the component.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_timesteps)
+            The input data.
+        component : object
+            The component to permute.
+        random_state : RandomState
+            The random state.
+
+        Returns
+        -------
+        array-like of shape (n_samples, n_timesteps)
+            The permuted data.
+        """
         pass
 
-    def _fit(self, estimator, X, y, random_state, sample_weight=None):  # noqa: PLR0912
+    def _fit(self, estimator, components, X, y, random_state, sample_weight=None):  # noqa: PLR0912
+        """
+        Fit the importance.
+
+        Parameters
+        ----------
+        estimator : object
+            The estimator.
+        components : list
+            The components to permute.
+        X : array-like of shape (n_samples, n_timesteps)
+            The input data.
+        y : array-like of shape (n_samples, )
+            The target values.
+        random_state : RandomState
+            The random state.
+        sample_weight : array-like of shape (n_samples, ), optional
+            The sample weights.
+        """
         if callable(self.scoring):
             scoring = self.scoring
         elif self.scoring is None or isinstance(self.scoring, str):
@@ -141,7 +203,7 @@ class PermuteImportance(BaseEstimator, metaclass=ABCMeta):
             scoring_dict = _check_multimetric_scoring(estimator, self.scoring)
             scoring = _MultimetricScorer(**scoring_dict)
 
-        self.components_ = np.array(list(self._yield_components()), dtype=object)
+        self.components_ = np.array(components, dtype=object)
         scores = []
         for component in self.components_:
             self._reset_component(X, component)
@@ -196,8 +258,14 @@ class IntervalImportance(ExplainerMixin, PermuteImportance):
         - if "log2", the number of intervals is the log2 of n_timestep.
         - if int, exact number of intervals.
     window : int, optional
-        The window size. If specicied, n_intervals is ignored and the number of
+        The window size. If specified, n_intervals is ignored and the number of
         intervals is computed such that each interval is (at least) of size window.
+    depth : int, optional
+        The depth of the dyadic intervals.
+    coverage_probability : float, optional
+        The probability that a time step is covered by an interval.
+    variability : float, optional
+        Controls the variability of the interval sizes.
     random_state : int or RandomState
         - If `int`, `random_state` is the seed used by the random number generator
         - If `RandomState` instance, `random_state` is the random number generator
@@ -222,6 +290,9 @@ class IntervalImportance(ExplainerMixin, PermuteImportance):
             Interval(numbers.Integral, 1, None, closed="left"),
         ],
         "window": [Interval(numbers.Integral, 1, None, closed="left"), None],
+        "depth": [Interval(numbers.Integral, 1, None, closed="left"), None],
+        "coverage_probability": [Interval(numbers.Real, 0, 1, closed="right"), None],
+        "variability": [Interval(numbers.Real, 0, None, closed="neither"), None],
     }
 
     def __init__(
@@ -231,43 +302,17 @@ class IntervalImportance(ExplainerMixin, PermuteImportance):
         n_repeat=5,
         n_intervals="sqrt",
         window=None,
+        depth=None,
+        coverage_probability=None,
+        variability=1,
         random_state=None,
     ):
         super().__init__(scoring=scoring, n_repeat=n_repeat, random_state=random_state)
         self.n_intervals = n_intervals
         self.window = window
-
-    def _yield_components(self):
-        if self.window is not None:
-            if self.window > self.n_timesteps_in_:
-                raise ValueError(
-                    f"The window parameter of {type(self).__name__} must be "
-                    "<= n_timesteps_in_"
-                )
-
-            n_intervals = self.n_timesteps_in_ // self.window
-        elif self.n_intervals == "sqrt":
-            n_intervals = math.ceil(math.sqrt(self.n_timesteps_in_))
-        elif self.n_intervals in {"log", "log2"}:
-            if self.n_intervals == "log":
-                warnings.warn(
-                    "The value 'log' for parameter n_intervals of "
-                    f"{type(self).__name__} has been renamed to log2 in 1.2 and will "
-                    "be removed in 1.4"
-                )
-
-            n_intervals = math.ceil(math.log2(self.n_timesteps_in_))
-        elif isinstance(self.n_intervals, numbers.Integral):
-            if self.n_intervals > self.n_timesteps_in_:
-                raise ValueError(
-                    f"The n_intervals parameter of {type(self).__name__} must be "
-                    "<= n_timesteps_in_"
-                )
-            n_intervals = self.n_intervals
-        else:
-            n_intervals = math.ceil(self.n_timesteps_in_ * self.n_intervals)
-
-        return _intervals(self.n_timesteps_in_, n_intervals)
+        self.depth = depth
+        self.coverage_probability = coverage_probability
+        self.variability = variability
 
     def _permute_component(self, X, component, random_state):
         X_perm = X.copy()
@@ -275,20 +320,65 @@ class IntervalImportance(ExplainerMixin, PermuteImportance):
         random_state.shuffle(X_perm[:, start:end])
         return X_perm
 
-    def fit(self, estimator, x, y, sample_weight=None):
+    def fit(self, estimator, X, y, sample_weight=None):
         self._validate_params()
         estimator = self._validate_estimator(estimator)
-        x, y = self._validate_data(x, y, reset=False, allow_3d=False)
+        X, y = self._validate_data(X, y, reset=False, allow_3d=False)
         random_state = check_random_state(self.random_state)
-        self._fit(estimator, x, y, random_state, sample_weight=sample_weight)
+
+        intervals = "fixed"
+        n_intervals = self.n_intervals
+        extra_params = {}
+        if self.depth is not None:
+            intervals = "dyadic"
+            extra_params = {"depth": self.depth}
+        elif self.coverage_probability is not None:
+            intervals = "random"
+            extra_params = {
+                "coverage_probability": self.coverage_probability,
+                "variability": self.variability,
+            }
+        elif self.window is not None:
+            if self.window > self.n_timesteps_in_:
+                raise ValueError(
+                    f"The window parameter of {type(self).__name__} must be "
+                    "<= n_timesteps_in_"
+                )
+            n_intervals = self.n_timesteps_in_ // self.window
+
+        interval_transform = IntervalTransform(
+            intervals=intervals,
+            n_intervals=n_intervals,
+            random_state=random_state.randint(np.iinfo(np.int32).max),
+            **extra_params,
+        ).fit(X)
+
+        components = [
+            (start, start + length)
+            for _dim, (start, length, _) in interval_transform.embedding_.attributes
+        ]
+
+        self._fit(
+            estimator,
+            components,
+            X,
+            y,
+            random_state,
+            sample_weight=sample_weight,
+        )
         return self
 
     def explain(self, x, y=None):
         check_is_fitted(self)
         x = self._validate_data(x, reset=False)
-        importances = np.empty(self.n_timesteps_in_, dtype=float)
+        importances = np.zeros(self.n_timesteps_in_, dtype=float)
+        counts = np.zeros(self.n_timesteps_in_, dtype=float)
         for i, (start, end) in enumerate(self.components_):
-            importances[start:end] = self.importances_.mean[i]
+            importances[start:end] += self.importances_.mean[i] / (end - start)
+            counts[start:end] += 1
+
+        mask = counts > 0
+        importances[mask] /= counts[mask]
         return np.broadcast_to(importances, (x.shape[0], self.n_timesteps_in_))
 
     def plot(  # noqa: PLR0912
@@ -353,11 +443,11 @@ class IntervalImportance(ExplainerMixin, PermuteImportance):
             # vmin=importances[order[-1]],
             # vmax=importances[order[0]],
             # midpoint=0.0,
-            vmin=0.0,
+            vmin=-1.0,
             vmax=1.0,
             midpoint=0.0,
         )
-        cmap = get_cmap("coolwarm")
+        cmap = get_cmap("jet")
 
         if show_grid:
             for start, _ in self.components_:
@@ -396,6 +486,70 @@ class IntervalImportance(ExplainerMixin, PermuteImportance):
             return ax
         else:
             return ax, mappable
+
+
+def _exponential_frequency_bands(n_timesteps, n_bands, growth_factor):
+    """
+    Yield frequency bands for permutation.
+
+    Returns frequency bands with configurable growth, ensuring consecutive
+    indices within each band. Each band represents a range of FFT bins,
+    where bin k corresponds to frequency f[k] = k * fs/N Hz, where:
+
+    - fs is the sampling frequency
+    - N is the number of samples (n_timesteps)
+    - k is the bin index
+
+
+    Parameter
+    ---------
+    n_timesteps : int
+        The number of time steps.
+    n_bands : int
+        The number of frequency bands to create
+    growth_factor : float
+        The growth_factor parameter controls band sizes:
+
+        - growth_factor > 1: exponential growth (more detail at lower frequencies)
+        - growth_factor = 1: linear growth (equal-sized bands)
+        - growth_factor < 1: logarithmic decay (more detail at higher frequencies)
+
+    Returns
+    -------
+    list of tuples
+        Tuples with start and end band indices.
+    """
+    n_frequencies = n_timesteps // 2
+    if n_timesteps % 2 == 0:  # even length, exclude Nyquist bin
+        n_frequencies -= 1
+    if n_bands > n_frequencies:
+        raise ValueError(
+            f"The window parameter of {type(self).__name__} must be <= n_timesteps // 2"
+        )
+
+    if growth_factor == 1:
+        bands = np.linspace(1, n_frequencies, n_bands + 1, dtype=int)
+    else:
+        bands = np.zeros(n_bands + 1, dtype=int)
+        bands[0] = 1  # skip DC component
+        for i in range(1, n_bands + 1):
+            bands[i] = int(
+                max(
+                    bands[i - 1] + 1,  # Ensure at least 1 bin difference
+                    np.round(
+                        1
+                        + (n_frequencies - 1)
+                        * ((growth_factor**i - 1) / (growth_factor**n_bands - 1))
+                    ),
+                )
+            )
+        bands[-1] = n_frequencies
+
+    intervals = []
+    for start, end in zip(bands[:-1], bands[1:]):
+        intervals.append((start, end))
+
+    return intervals
 
 
 class FrequencyImportance(ExplainerMixin, PermuteImportance):
@@ -468,54 +622,6 @@ class FrequencyImportance(ExplainerMixin, PermuteImportance):
         self.spectrum = spectrum
         self.growth_factor = growth_factor
 
-    def _yield_components(self):
-        """
-        Yield frequency bands for permutation.
-
-        Returns frequency bands with configurable growth, ensuring consecutive
-        indices within each band. Each band represents a range of FFT bins,
-        where bin k corresponds to frequency f[k] = k * fs/N Hz, where:
-
-        - fs is the sampling frequency
-        - N is the number of samples (self.n_timesteps_in_)
-        - k is the bin index
-
-        The growth_factor parameter controls band sizes:
-        - growth_factor > 1: exponential growth (more detail at lower frequencies)
-        - growth_factor = 1: linear growth (equal-sized bands)
-        - growth_factor < 1: logarithmic decay (more detail at higher frequencies)
-        """
-        n_bands = self.n_timesteps_in_ // 2
-        if self.n_bands > n_bands:
-            raise ValueError(
-                f"The window parameter of {type(self).__name__} must be "
-                "<= n_timesteps_in_ // 2"
-            )
-
-        if self.growth_factor == 1:
-            bands = np.linspace(1, n_bands, self.n_bands + 1, dtype=int)
-        else:
-            bands = np.zeros(self.n_bands + 1, dtype=int)
-            bands[0] = 1  # skip DC component
-            for i in range(1, self.n_bands + 1):
-                bands[i] = int(
-                    max(
-                        bands[i - 1] + 1,  # Ensure at least 1 bin difference
-                        np.round(
-                            1
-                            + (n_bands - 1)
-                            * (
-                                (self.growth_factor**i - 1)
-                                / (self.growth_factor**self.n_bands - 1)
-                            )
-                        ),
-                    )
-                )
-            bands[-1] = n_bands
-
-        for start, end in zip(bands[:-1], bands[1:]):
-            yield start, end
-
     def _permute_component(self, X, component, random_state):
         start, end = component
         X_fft = np.fft.rfft(X, axis=1)
@@ -538,10 +644,42 @@ class FrequencyImportance(ExplainerMixin, PermuteImportance):
         estimator = self._validate_estimator(estimator)
         X, y = self._validate_data(X, y, reset=False, allow_3d=False)
         random_state = check_random_state(self.random_state)
-        self._fit(estimator, X, y, random_state, sample_weight=sample_weight)
+        self._fit(
+            estimator,
+            _exponential_frequency_bands(
+                self.n_timesteps_in_, self.n_bands, self.growth_factor
+            ),
+            X,
+            y,
+            random_state,
+            sample_weight=sample_weight,
+        )
         return self
 
-    def plot(self, X=None, y=None, ax=None, k=None, sample_spacing=1, jitter=False):
+    def explain(self, X, y=None):
+        check_is_fitted(self)
+        X = self._validate_data(X, reset=False)
+        X_fft = np.fft.rfft(X, axis=1)
+        importances = np.zeros(X_fft.shape[1], dtype=float)
+        counts = np.zeros(X_fft.shape[1], dtype=float)
+        for i, (start, end) in enumerate(self.components_):
+            importances[start:end] += self.importances_.mean[i] / (end - start)
+            counts[start:end] += 1
+
+        mask = counts > 0
+        importances[mask] /= counts[mask]
+        return np.broadcast_to(importances, (X.shape[0], X_fft.shape[1]))
+
+    def plot(
+        self,
+        X=None,
+        y=None,
+        ax=None,
+        k=None,
+        sample_spacing=1,
+        jitter=False,
+        show_grid=True,
+    ):
         check_is_fitted(self)
         frequencies = np.fft.fftfreq(self.n_timesteps_in_, d=sample_spacing)
 
@@ -560,6 +698,19 @@ class FrequencyImportance(ExplainerMixin, PermuteImportance):
             fig, ax = subplots()
         else:
             fig = None
+
+        if show_grid:
+            for start, _ in self.components_:
+                ax.axvline(
+                    start,
+                    0,
+                    1,
+                    color="gray",
+                    linestyle="dashed",
+                    linewidth=0.5,
+                    dashes=(5, 5),
+                    zorder=-2,
+                )
 
         order = np.argsort(importances)[::-1]
         norm = MidpointNormalize(
@@ -593,7 +744,7 @@ class FrequencyImportance(ExplainerMixin, PermuteImportance):
         )
         ax.set_xticklabels(
             [
-                f"{frequencies[int((start + end) / 2) if end-start > 1 else start]:.2f}Hz"
+                f"{frequencies[int((start + end) / 2) if end - start > 1 else start]:.2f}Hz"
                 for start, end in self.components_
             ],
             rotation=90,
@@ -612,9 +763,47 @@ class AmplitudeImportance(ExplainerMixin, PermuteImportance):
     """
     Compute the importance of equi-probable amplitude intervals.
 
-    The implementation uses
-    :class:`transform.SAX` to discretize the time series and then for each bin permute
-    the samples along that bin.
+    The implementation uses :class:`transform.SAX` to discretize the time
+    series and then for each bin permute the samples along that bin.
+
+    Parameters
+    ----------
+    scoring : str, list, dict or callable, optional
+        The scoring function. By default the estimators score function is used.
+    n_intervals : str or int, optional
+        The number of intervals.
+
+        - if "sqrt", the number of intervals is the square root of n_timestep.
+        - if "log2", the number of intervals is the log2 of n_timestep.
+        - if int, exact number of intervals.
+    window : int, optional
+        The window size. If specified, n_intervals is ignored and the number of
+        intervals is computed such that each interval is (at least) of size window.
+    binning : {"normal", "uniform"}, optional
+        The binning strategy.
+
+        - "normal": bins are computed such that they are equi-probable under a
+          standard normal distribution.
+        - "uniform": bins are computed such that they are equi-width.
+    n_bins : int, optional
+        The number of bins.
+    n_repeat : int, optional
+        The number of repeated permutations.
+    random_state : int or RandomState, optional
+        Controls the random resampling of the original dataset.
+
+        - If `int`, `random_state` is the seed used by the random number generator
+        - If `RandomState` instance, `random_state` is the random number generator
+        - If `None`, the random number generator is the `RandomState` instance used
+          by `np.random`.
+
+    Attributes
+    ----------
+    importances_ : dict or Importance
+        The importance scores for each interval. If dict, one value per scoring
+        function.
+    sax_ : SAX
+        The fitted SAX transformer.
     """
 
     _parameter_constraints: dict = {
@@ -622,6 +811,9 @@ class AmplitudeImportance(ExplainerMixin, PermuteImportance):
         "binning": [StrOptions({"normal", "uniform"})],
         "n_bins": [Interval(numbers.Integral, 1, None, closed="left")],
     }
+    _parameter_constraints.pop("depth")
+    _parameter_constraints.pop("coverage_probability")
+    _parameter_constraints.pop("variability")
 
     def __init__(
         self,
@@ -642,9 +834,6 @@ class AmplitudeImportance(ExplainerMixin, PermuteImportance):
         self.window = window
         self.binning = binning
         self.n_bins = n_bins
-
-    def _yield_components(self):
-        return (b for b in range(self.n_bins))
 
     def _permute_component(self, X, component, random_state):
         X_perm = np.empty_like(X)
@@ -694,7 +883,15 @@ class AmplitudeImportance(ExplainerMixin, PermuteImportance):
         ).fit(X)
         self.x_sax_ = self.sax_.transform(X)
         random_state = check_random_state(self.random_state)
-        self._fit(estimator, X, y, random_state, sample_weight=sample_weight)
+        components = [b for b in range(self.n_bins)]
+        self._fit(
+            estimator,
+            components,
+            X,
+            y,
+            random_state,
+            sample_weight=sample_weight,
+        )
         return self
 
     def explain(self, X, y=None):
@@ -834,7 +1031,7 @@ class AmplitudeImportance(ExplainerMixin, PermuteImportance):
         order = np.argsort(importances)[: -(k + 1) : -1]
         norm = MidpointNormalize(
             # vmin=importances[order[-1]], vmax=importances[order[0]], midpoint=0.0
-            vmin=0,
+            vmin=-1,
             vmax=1,
             midpoint=0.0,
         )
@@ -905,6 +1102,13 @@ class ShapeletImportance(ExplainerMixin, PermuteImportance):
         The number of repeated permutations.
     n_shapelets : int, optional
         The number of shapelets to sample for the explanation.
+    k_best : int, optional
+        Select the top-k shapelets according to `score_func`
+    score_func : callable, optional
+        Score function to evaluate the performance of a shapelet.
+    alpha : float, optional
+        Define matching shapelets as dist < min_dist * (1 + alpha). If None
+        (default) only use the best match.
     min_shapelet_size : float, optional
         The minimum size of shapelets used for explanation.
     max_shapelet_size : float, optional
@@ -946,13 +1150,19 @@ class ShapeletImportance(ExplainerMixin, PermuteImportance):
     _parameter_constraints: dict = {
         **PermuteImportance._parameter_constraints,
         **RandomShapeletMixin._parameter_constraints,
+        "k_best": [Interval(numbers.Integral, 1, None, closed="neither"), None],
+        "score_func": [callable, None],
+        "alpha": [Interval(numbers.Real, 0.0, None, closed="neither"), None],
     }
 
     def __init__(
         self,
         scoring=None,
         n_repeat=1,
-        n_shapelets=10,
+        n_shapelets=1000,
+        k_best=None,
+        alpha=None,
+        score_func=None,
         min_shapelet_size=0.0,
         max_shapelet_size=1.0,
         coverage_probability=None,
@@ -966,6 +1176,9 @@ class ShapeletImportance(ExplainerMixin, PermuteImportance):
             n_repeat=n_repeat,
             random_state=random_state,
         )
+        self.k_best = k_best
+        self.score_func = score_func
+        self.alpha = alpha
         self.n_shapelets = n_shapelets
         self.min_shapelet_size = min_shapelet_size
         self.max_shapelet_size = max_shapelet_size
@@ -975,17 +1188,24 @@ class ShapeletImportance(ExplainerMixin, PermuteImportance):
         self.metric_params = metric_params
 
     def _reset_component(self, X, component):
-        _, self._shapelet_idx = pairwise_subsequence_distance(
+        min_dist, self._shapelet_idx = pairwise_subsequence_distance(
             component,
             X,
             metric=self.metric,
             metric_params=self.metric_params,
             return_index=True,
         )
-
-    def _yield_components(self):
-        for _dim, (_, shapelet) in self.shapelet_transform_.embedding_.attributes:
-            yield shapelet
+        if self.alpha is not None:
+            self._threshold = min_dist * (1 + self.alpha)
+            self._shapelet_idx = subsequence_match(
+                component,
+                X,
+                metric=self.metric,
+                metric_params=self.metric_params,
+                threshold=self._threshold,
+            )
+        else:
+            self._shapelet_idx = [np.array([idx]) for idx in self._shapelet_idx]
 
     def _permute_component(self, X, component, random_state):
         X_perm = np.empty_like(X)
@@ -994,13 +1214,18 @@ class ShapeletImportance(ExplainerMixin, PermuteImportance):
         for i in range(X.shape[0]):
             j = idx[i]
 
-            i_shapelet_idx = self._shapelet_idx[i]
-            j_shapelet_idx = self._shapelet_idx[j]
+            i_shapelet_indices = self._shapelet_idx[i]
+            j_shapelet_indices = self._shapelet_idx[j]
+
             X_perm[j] = X[j]
-            if i != j:
-                X_perm[j, j_shapelet_idx : (j_shapelet_idx + component.size)] = X[
-                    i, i_shapelet_idx : (i_shapelet_idx + component.size)
-                ]
+            if i != j and len(i_shapelet_indices) > 0:
+                for j_shapelet_idx in j_shapelet_indices:
+                    i_shapelet_idx = i_shapelet_indices[
+                        random_state.randint(0, len(i_shapelet_indices))
+                    ]
+                    X_perm[j, j_shapelet_idx : (j_shapelet_idx + component.size)] = X[
+                        i, i_shapelet_idx : (i_shapelet_idx + component.size)
+                    ]
 
         return X_perm
 
@@ -1010,8 +1235,9 @@ class ShapeletImportance(ExplainerMixin, PermuteImportance):
         X, y = self._validate_data(X, y, reset=False)
 
         random_state = check_random_state(self.random_state)
-        self.shapelet_transform_ = ShapeletTransform(
+        shapelet_transform = ShapeletTransform(
             n_shapelets=self.n_shapelets,
+            strategy="random",
             metric=self.metric,
             min_shapelet_size=self.min_shapelet_size,
             max_shapelet_size=self.max_shapelet_size,
@@ -1019,11 +1245,54 @@ class ShapeletImportance(ExplainerMixin, PermuteImportance):
             variability=self.variability,
             random_state=random_state.randint(np.iinfo(np.int32).max),
         ).fit(X)
+        if self.k_best is not None and self.k_best < self.n_shapelets:
+            Xt = shapelet_transform.transform(X)
+            score = self.score_func(Xt, y)
+            k_best = np.argpartition(score, -self.k_best)[-self.k_best :]
+        else:
+            k_best = range(self.n_shapelets)
 
-        self._fit(estimator, X, y, random_state, sample_weight=sample_weight)
+        attributes = shapelet_transform.embedding_.attributes
+        components = [attributes[i][1][1] for i in k_best]
+        self._fit(
+            estimator,
+            components,
+            X,
+            y,
+            random_state,
+            sample_weight=sample_weight,
+        )
         return self
 
-    def explain(self, X, y=None, kernel_scale=0.25):
+    def explain(self, X, y=None, kernel_scale=None):
+        check_is_fitted(self)
+        distances, indices = pairwise_subsequence_distance(
+            self.components_,
+            X,
+            metric=self.metric,
+            metric_params=self.metric_params,
+            return_index=True,
+        )
+        if kernel_scale is not None:
+            weights = self._distance_weight(distances, kernel_scale)
+        else:
+            weights = np.broadcast_to(1, shape=(X.shape[0], len(self.components_)))
+
+        importances = self.importances_.mean
+        explanation = np.zeros_like(X)
+        norm = np.zeros_like(X)
+        for j, shapelet in enumerate(self.components_):
+            importance = importances[j]
+            for i in range(X.shape[0]):
+                index = indices[i, j]
+                weight = weights[i, j]
+                explanation[i, index : (index + shapelet.size)] += weight * importance
+                norm[i, index : (index + shapelet.size)] += 1
+        explanation[norm > 0] /= norm[norm > 0]
+        return explanation
+
+    def explain_shapelet(self, X, y=None, kernel_scale=0.25):
+        check_is_fitted(self)
         distances, indices = pairwise_subsequence_distance(
             self.components_,
             X,
@@ -1032,11 +1301,10 @@ class ShapeletImportance(ExplainerMixin, PermuteImportance):
             return_index=True,
         )
 
-        weights = (
-            self._distance_weight(distances, kernel_scale)
-            if kernel_scale is not None
-            else np.broadcast_to(1, shape=(X.shape[0], len(self.components_)))
-        )
+        if kernel_scale is not None:
+            weights = self._distance_weight(distances, kernel_scale)
+        else:
+            weights = np.broadcast_to(1, shape=(X.shape[0], len(self.components_)))
         importances = self.importances_.mean
 
         if y is None:
@@ -1091,7 +1359,7 @@ class ShapeletImportance(ExplainerMixin, PermuteImportance):
             k = importances.size
 
         if y is None:
-            explanation = self.explain(X, kernel_scale=kernel_scale)
+            explanation = self.explain_shapelet(X, kernel_scale=kernel_scale)
             if ax is None:
                 fig, ax = subplots()
             else:
@@ -1105,7 +1373,7 @@ class ShapeletImportance(ExplainerMixin, PermuteImportance):
             else:
                 return ax, mappable
         else:
-            explanation = self.explain(X, y, kernel_scale=kernel_scale)
+            explanation = self.explain_shapelet(X, y, kernel_scale=kernel_scale)
             distances, index = pairwise_subsequence_distance(
                 self.components_,
                 X,
@@ -1115,8 +1383,7 @@ class ShapeletImportance(ExplainerMixin, PermuteImportance):
             )
             cmap = get_cmap("coolwarm")
             norm = MidpointNormalize(
-                # vmin=importances[:k].min(), vmax=importances[:k].max(), midpoint=0
-                vmin=0.0,
+                vmin=-1.0,
                 vmax=1.0,
                 midpoint=0.0,
             )
@@ -1137,10 +1404,14 @@ class ShapeletImportance(ExplainerMixin, PermuteImportance):
                 if kernel_scale is not None
                 else np.broadcast_to(1, shape=(X.shape[0], len(self.components_)))
             )
+            label_cmap = get_cmap("Dark2", lut=len(labels))
             for i in range(len(labels)):
                 for j in range(k):
                     plot_time_domain(
-                        X[y == labels[i]], n_samples=lbl_count[i], ax=ax[j, i]
+                        X[y == labels[i]],
+                        n_samples=lbl_count[i],
+                        ax=ax[j, i],
+                        color=label_cmap(i),
                     )
 
             for i in range(0, X.shape[0]):
@@ -1170,5 +1441,26 @@ class ShapeletImportance(ExplainerMixin, PermuteImportance):
                 return ax, mappable
 
     def _distance_weight(self, distances, kernel_scale=0.25):
+        """
+        Compute similarity weights using a Gaussian kernel.
+
+        The weight of each sample is computed using a Gaussian (RBF) kernel, where the
+        kernel width is adapted based on the size of each component. Samples with smaller
+        distances get higher weights (closer to 1) while samples further away get lower
+        weights (closer to 0).
+
+        Parameters
+        ----------
+        distances : array-like
+            The pairwise distances between samples
+        kernel_scale : float, default=0.25
+            Scaling factor for the kernel width. Higher values result in slower
+            decay of weights with distance.
+
+        Returns
+        -------
+        ndarray
+            Computed weights for each sample, where each weight is in [0, 1]
+        """
         kernel_width = [np.sqrt(s.size) * kernel_scale for s in self.components_]
         return np.sqrt(np.exp(-(distances**2) / np.array(kernel_width) ** 2))

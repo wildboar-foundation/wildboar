@@ -1,6 +1,7 @@
 import numpy as np
 import pytest
 from numpy.testing import assert_almost_equal
+
 from wildboar.base import is_explainer
 from wildboar.datasets import load_two_lead_ecg
 from wildboar.explain import AmplitudeImportance, IntervalImportance, ShapeletImportance
@@ -71,7 +72,7 @@ def test_shapelet_importance():
     clf = ShapeletTreeClassifier(n_shapelets=1000, strategy="random", random_state=123)
     clf.fit(x_train, y_train)
 
-    imp = ShapeletImportance(scoring="accuracy", random_state=123)
+    imp = ShapeletImportance(scoring="accuracy", n_shapelets=10, random_state=123)
     imp.fit(clf, x_test, y_test)
 
     actual_scores = imp.importances_.mean
