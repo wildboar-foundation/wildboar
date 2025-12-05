@@ -8,7 +8,7 @@ from ..utils cimport TSArray
 from ..utils._misc cimport List
 
 # Threshold for when standard deviation is considered to be zero.
-cdef double EPSILON = 1e-13
+cdef const double EPSILON = 1e-13
 
 cdef class MetricList(List):
 
