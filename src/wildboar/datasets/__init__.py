@@ -534,8 +534,9 @@ def load_datasets(
 
         if filter is None:
             yield dataset, data
-        elif hasattr(filter, "__call__") and filter(dataset, x, y):
-            yield dataset, data
+        elif hasattr(filter, "__call__"):
+            if filter(dataset, x, y):
+                yield dataset, data
         elif make_filter(filter)(dataset, x, y):
             yield dataset, data
 
