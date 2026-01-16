@@ -45,6 +45,7 @@ Classes
    wildboar.distance.KMedoids
    wildboar.distance.KNeighborsClassifier
    wildboar.distance.MDS
+   wildboar.distance.NearestNeighbors
 
 
 
@@ -232,6 +233,7 @@ Functions
 
           **\*\*fit_params** : dict
               Additional fit parameters.
+              Pass only if the estimator accepts additional params in its `fit` method.
 
 
 
@@ -631,6 +633,7 @@ Functions
 
           **\*\*fit_params** : dict
               Additional fit parameters.
+              Pass only if the estimator accepts additional params in its `fit` method.
 
 
 
@@ -1144,7 +1147,7 @@ Functions
           !! processed by numpydoc !!
 
 
-.. py:class:: MDS(n_components=2, *, metric=True, n_init=4, max_iter=300, verbose=0, eps=0.001, n_jobs=None, random_state=None, dissimilarity='euclidean', dissimilarity_params=None, normalized_stress='auto')
+.. py:class:: MDS(n_components=2, *, metric_mds=True, n_init=4, max_iter=300, verbose=0, eps=0.001, n_jobs=None, random_state=None, metric='euclidean', metric_params=None, normalized_stress='auto')
 
 
 
@@ -1271,6 +1274,311 @@ Functions
 
           **params** : dict
               Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+.. py:class:: NearestNeighbors(n_neighbors=5, *, metric='euclidean', metric_params=None, n_jobs=None)
+
+
+
+   
+   Unsupervised learner for implementing neighbor searches.
+
+
+   :Parameters:
+
+       **n_neighbors** : int, optional
+           The number of neighbors.
+
+       **metric** : str, optional
+           The distance metric.
+
+       **metric_params** : dict, optional
+           Optional parameters to the distance metric.
+           
+           Read more about the metrics and their parameters in the
+           :ref:`User guide <list_of_metrics>`.
+
+       **n_jobs** : int, optional
+           The number of parallel jobs.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+   .. py:method:: fit(x, y=None)
+
+      
+      Fit the nearest neighbors estimator from the training dataset.
+
+
+      :Parameters:
+
+          **x** : univariate time-series or multivaraite time-series
+              The input samples.
+
+          **y** : Ignored
+              Not used, present for API consistency by convention.
+
+
+
+      :Returns:
+
+          NearestNeighbors
+              The fitted estimator.
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: fit_transform(X, y=None, **fit_params)
+
+      
+      Fit to data, then transform it.
+
+      Fits transformer to `X` and `y` with optional parameters `fit_params`
+      and returns a transformed version of `X`.
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_features)
+              Input samples.
+
+          **y** :  array-like of shape (n_samples,) or (n_samples, n_outputs),                 default=None
+              Target values (None for unsupervised transformations).
+
+          **\*\*fit_params** : dict
+              Additional fit parameters.
+              Pass only if the estimator accepts additional params in its `fit` method.
+
+
+
+      :Returns:
+
+          **X_new** : ndarray array of shape (n_samples, n_features_new)
+              Transformed array.
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: kneighbors(x=None, n_neighbors=None, return_distance=True)
+
+      
+      Finds the K-neighbors of a point.
+
+      Returns indices of and distances to the neighbors of each point.
+
+      :Parameters:
+
+          **x** : univariate time-series or multivariate time-series, optional
+              The query samples. If not provided, neighbors of each indexed point
+              are returned. In this case, the query point is not considered its
+              own neighbor.
+
+          **n_neighbors** : int, optional
+              Number of neighbors to get (default is the value passed to the
+              constructor).
+
+          **return_distance** : bool, optional
+              If False, distances will not be returned.
+
+
+
+      :Returns:
+
+          **dist** : ndarray of shape (n_samples, n_neighbors)
+              Array representing the lengths to points, only present if
+              return_distance=True.
+
+          **ind** : ndarray of shape (n_samples, n_neighbors)
+              Indices of the nearest points in the population matrix.
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+   .. py:method:: set_output(*, transform=None)
+
+      
+      Set output container.
+
+      See :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py`
+      for an example on how to use the API.
+
+      :Parameters:
+
+          **transform** : {"default", "pandas", "polars"}, default=None
+              Configure output of `transform` and `fit_transform`.
+              
+              - `"default"`: Default output format of a transformer
+              - `"pandas"`: DataFrame output
+              - `"polars"`: Polars output
+              - `None`: Transform configuration is unchanged
+              
+              .. versionadded:: 1.4
+                  `"polars"` option was added.
+
+
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
 
 
 
@@ -2134,9 +2442,10 @@ Functions
            is selected, `max_matches` defaults to 10.
            
            - if float, return all matches closer than threshold
-           - if callable, return all matches closer than the treshold computed by the
-             threshold function, given all distances to the subsequence
+           - if callable, return all matches closer than the threshold computed by
+             the threshold function, given all distances to the subsequence
            - if str, return all matches according to the named threshold.
+           - if array-like, use the i:th threshold for the i:th sample
 
        **dim** : int, optional
            The dim to search for shapelets.

@@ -211,9 +211,12 @@ Classes
               regression).
 
           **sample_weight** : array-like of shape (n_samples,), default=None
-              Sample weights. If None, then samples are equally weighted.
-              Note that this is supported only if the base estimator supports
-              sample weighting.
+              Sample weights. If None, then samples are equally weighted. Used as
+              probabilities to sample the training set. Note that the expected
+              frequency semantics for the `sample_weight` parameter are only
+              fulfilled when sampling with replacement `bootstrap=True` and using
+              a float or integer `max_samples` (instead of the default
+              `max_samples=None`).
 
           **\*\*fit_params** : dict
               Parameters to pass to the underlying estimators.
@@ -663,9 +666,12 @@ Classes
               regression).
 
           **sample_weight** : array-like of shape (n_samples,), default=None
-              Sample weights. If None, then samples are equally weighted.
-              Note that this is supported only if the base estimator supports
-              sample weighting.
+              Sample weights. If None, then samples are equally weighted. Used as
+              probabilities to sample the training set. Note that the expected
+              frequency semantics for the `sample_weight` parameter are only
+              fulfilled when sampling with replacement `bootstrap=True` and using
+              a float or integer `max_samples` (instead of the default
+              `max_samples=None`).
 
           **\*\*fit_params** : dict
               Parameters to pass to the underlying estimators.
@@ -975,9 +981,12 @@ Classes
               regression).
 
           **sample_weight** : array-like of shape (n_samples,), default=None
-              Sample weights. If None, then samples are equally weighted.
-              Note that this is supported only if the base estimator supports
-              sample weighting.
+              Sample weights. If None, then samples are equally weighted. Used as
+              probabilities to sample the training set. Note that the expected
+              frequency semantics for the `sample_weight` parameter are only
+              fulfilled when sampling with replacement `bootstrap=True` and using
+              a float or integer `max_samples` (instead of the default
+              `max_samples=None`).
 
           **\*\*fit_params** : dict
               Parameters to pass to the underlying estimators.
@@ -1661,9 +1670,12 @@ Classes
               regression).
 
           **sample_weight** : array-like of shape (n_samples,), default=None
-              Sample weights. If None, then samples are equally weighted.
-              Note that this is supported only if the base estimator supports
-              sample weighting.
+              Sample weights. If None, then samples are equally weighted. Used as
+              probabilities to sample the training set. Note that the expected
+              frequency semantics for the `sample_weight` parameter are only
+              fulfilled when sampling with replacement `bootstrap=True` and using
+              a float or integer `max_samples` (instead of the default
+              `max_samples=None`).
 
           **\*\*fit_params** : dict
               Parameters to pass to the underlying estimators.
@@ -2162,9 +2174,12 @@ Classes
               regression).
 
           **sample_weight** : array-like of shape (n_samples,), default=None
-              Sample weights. If None, then samples are equally weighted.
-              Note that this is supported only if the base estimator supports
-              sample weighting.
+              Sample weights. If None, then samples are equally weighted. Used as
+              probabilities to sample the training set. Note that the expected
+              frequency semantics for the `sample_weight` parameter are only
+              fulfilled when sampling with replacement `bootstrap=True` and using
+              a float or integer `max_samples` (instead of the default
+              `max_samples=None`).
 
           **\*\*fit_params** : dict
               Parameters to pass to the underlying estimators.
@@ -2613,9 +2628,12 @@ Classes
               regression).
 
           **sample_weight** : array-like of shape (n_samples,), default=None
-              Sample weights. If None, then samples are equally weighted.
-              Note that this is supported only if the base estimator supports
-              sample weighting.
+              Sample weights. If None, then samples are equally weighted. Used as
+              probabilities to sample the training set. Note that the expected
+              frequency semantics for the `sample_weight` parameter are only
+              fulfilled when sampling with replacement `bootstrap=True` and using
+              a float or integer `max_samples` (instead of the default
+              `max_samples=None`).
 
           **\*\*fit_params** : dict
               Parameters to pass to the underlying estimators.
@@ -3092,9 +3110,12 @@ Classes
               regression).
 
           **sample_weight** : array-like of shape (n_samples,), default=None
-              Sample weights. If None, then samples are equally weighted.
-              Note that this is supported only if the base estimator supports
-              sample weighting.
+              Sample weights. If None, then samples are equally weighted. Used as
+              probabilities to sample the training set. Note that the expected
+              frequency semantics for the `sample_weight` parameter are only
+              fulfilled when sampling with replacement `bootstrap=True` and using
+              a float or integer `max_samples` (instead of the default
+              `max_samples=None`).
 
           **\*\*fit_params** : dict
               Parameters to pass to the underlying estimators.
@@ -3508,9 +3529,12 @@ Classes
               regression).
 
           **sample_weight** : array-like of shape (n_samples,), default=None
-              Sample weights. If None, then samples are equally weighted.
-              Note that this is supported only if the base estimator supports
-              sample weighting.
+              Sample weights. If None, then samples are equally weighted. Used as
+              probabilities to sample the training set. Note that the expected
+              frequency semantics for the `sample_weight` parameter are only
+              fulfilled when sampling with replacement `bootstrap=True` and using
+              a float or integer `max_samples` (instead of the default
+              `max_samples=None`).
 
           **\*\*fit_params** : dict
               Parameters to pass to the underlying estimators.
@@ -3805,9 +3829,12 @@ Classes
               regression).
 
           **sample_weight** : array-like of shape (n_samples,), default=None
-              Sample weights. If None, then samples are equally weighted.
-              Note that this is supported only if the base estimator supports
-              sample weighting.
+              Sample weights. If None, then samples are equally weighted. Used as
+              probabilities to sample the training set. Note that the expected
+              frequency semantics for the `sample_weight` parameter are only
+              fulfilled when sampling with replacement `bootstrap=True` and using
+              a float or integer `max_samples` (instead of the default
+              `max_samples=None`).
 
           **\*\*fit_params** : dict
               Parameters to pass to the underlying estimators.
@@ -4350,9 +4377,12 @@ Classes
               regression).
 
           **sample_weight** : array-like of shape (n_samples,), default=None
-              Sample weights. If None, then samples are equally weighted.
-              Note that this is supported only if the base estimator supports
-              sample weighting.
+              Sample weights. If None, then samples are equally weighted. Used as
+              probabilities to sample the training set. Note that the expected
+              frequency semantics for the `sample_weight` parameter are only
+              fulfilled when sampling with replacement `bootstrap=True` and using
+              a float or integer `max_samples` (instead of the default
+              `max_samples=None`).
 
           **\*\*fit_params** : dict
               Parameters to pass to the underlying estimators.
@@ -4891,9 +4921,12 @@ Classes
               regression).
 
           **sample_weight** : array-like of shape (n_samples,), default=None
-              Sample weights. If None, then samples are equally weighted.
-              Note that this is supported only if the base estimator supports
-              sample weighting.
+              Sample weights. If None, then samples are equally weighted. Used as
+              probabilities to sample the training set. Note that the expected
+              frequency semantics for the `sample_weight` parameter are only
+              fulfilled when sampling with replacement `bootstrap=True` and using
+              a float or integer `max_samples` (instead of the default
+              `max_samples=None`).
 
           **\*\*fit_params** : dict
               Parameters to pass to the underlying estimators.
@@ -5380,9 +5413,12 @@ Classes
               regression).
 
           **sample_weight** : array-like of shape (n_samples,), default=None
-              Sample weights. If None, then samples are equally weighted.
-              Note that this is supported only if the base estimator supports
-              sample weighting.
+              Sample weights. If None, then samples are equally weighted. Used as
+              probabilities to sample the training set. Note that the expected
+              frequency semantics for the `sample_weight` parameter are only
+              fulfilled when sampling with replacement `bootstrap=True` and using
+              a float or integer `max_samples` (instead of the default
+              `max_samples=None`).
 
           **\*\*fit_params** : dict
               Parameters to pass to the underlying estimators.
@@ -5880,9 +5916,12 @@ Classes
               regression).
 
           **sample_weight** : array-like of shape (n_samples,), default=None
-              Sample weights. If None, then samples are equally weighted.
-              Note that this is supported only if the base estimator supports
-              sample weighting.
+              Sample weights. If None, then samples are equally weighted. Used as
+              probabilities to sample the training set. Note that the expected
+              frequency semantics for the `sample_weight` parameter are only
+              fulfilled when sampling with replacement `bootstrap=True` and using
+              a float or integer `max_samples` (instead of the default
+              `max_samples=None`).
 
           **\*\*fit_params** : dict
               Parameters to pass to the underlying estimators.
@@ -6388,9 +6427,12 @@ Classes
               regression).
 
           **sample_weight** : array-like of shape (n_samples,), default=None
-              Sample weights. If None, then samples are equally weighted.
-              Note that this is supported only if the base estimator supports
-              sample weighting.
+              Sample weights. If None, then samples are equally weighted. Used as
+              probabilities to sample the training set. Note that the expected
+              frequency semantics for the `sample_weight` parameter are only
+              fulfilled when sampling with replacement `bootstrap=True` and using
+              a float or integer `max_samples` (instead of the default
+              `max_samples=None`).
 
           **\*\*fit_params** : dict
               Parameters to pass to the underlying estimators.
@@ -6833,9 +6875,12 @@ Classes
               regression).
 
           **sample_weight** : array-like of shape (n_samples,), default=None
-              Sample weights. If None, then samples are equally weighted.
-              Note that this is supported only if the base estimator supports
-              sample weighting.
+              Sample weights. If None, then samples are equally weighted. Used as
+              probabilities to sample the training set. Note that the expected
+              frequency semantics for the `sample_weight` parameter are only
+              fulfilled when sampling with replacement `bootstrap=True` and using
+              a float or integer `max_samples` (instead of the default
+              `max_samples=None`).
 
           **\*\*fit_params** : dict
               Parameters to pass to the underlying estimators.

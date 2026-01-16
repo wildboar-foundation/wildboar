@@ -63,11 +63,54 @@ Functions
    
    Compute the importance of equi-probable amplitude intervals.
 
-   The implementation uses
-   :class:`transform.SAX` to discretize the time series and then for each bin permute
-   the samples along that bin.
+   The implementation uses :class:`transform.SAX` to discretize the time
+   series and then for each bin permute the samples along that bin.
 
+   :Parameters:
 
+       **scoring** : str, list, dict or callable, optional
+           The scoring function. By default the estimators score function is used.
+
+       **n_intervals** : str or int, optional
+           The number of intervals.
+           
+           - if "sqrt", the number of intervals is the square root of n_timestep.
+           - if "log2", the number of intervals is the log2 of n_timestep.
+           - if int, exact number of intervals.
+
+       **window** : int, optional
+           The window size. If specified, n_intervals is ignored and the number of
+           intervals is computed such that each interval is (at least) of size window.
+
+       **binning** : {"normal", "uniform"}, optional
+           The binning strategy.
+           
+           - "normal": bins are computed such that they are equi-probable under a
+             standard normal distribution.
+           - "uniform": bins are computed such that they are equi-width.
+
+       **n_bins** : int, optional
+           The number of bins.
+
+       **n_repeat** : int, optional
+           The number of repeated permutations.
+
+       **random_state** : int or RandomState, optional
+           Controls the random resampling of the original dataset.
+           
+           - If `int`, `random_state` is the seed used by the random number generator
+           - If `RandomState` instance, `random_state` is the random number generator
+           - If `None`, the random number generator is the `RandomState` instance used
+             by `np.random`.
+
+   :Attributes:
+
+       **importances_** : dict or Importance
+           The importance scores for each interval. If dict, one value per scoring
+           function.
+
+       **sax_** : SAX
+           The fitted SAX transformer.
 
 
 
@@ -471,7 +514,7 @@ Functions
           !! processed by numpydoc !!
 
 
-   .. py:method:: plot(X=None, y=None, ax=None, k=None, sample_spacing=1, jitter=False)
+   .. py:method:: plot(X=None, y=None, ax=None, k=None, sample_spacing=1, jitter=False, show_grid=True)
 
       
       Plot the explanation.
@@ -545,7 +588,7 @@ Functions
           !! processed by numpydoc !!
 
 
-.. py:class:: IntervalImportance(*, scoring=None, n_repeat=5, n_intervals='sqrt', window=None, random_state=None)
+.. py:class:: IntervalImportance(*, scoring=None, n_repeat=5, n_intervals='sqrt', window=None, depth=None, coverage_probability=None, variability=1, random_state=None)
 
 
 
@@ -569,8 +612,17 @@ Functions
            - if int, exact number of intervals.
 
        **window** : int, optional
-           The window size. If specicied, n_intervals is ignored and the number of
+           The window size. If specified, n_intervals is ignored and the number of
            intervals is computed such that each interval is (at least) of size window.
+
+       **depth** : int, optional
+           The depth of the dyadic intervals.
+
+       **coverage_probability** : float, optional
+           The probability that a time step is covered by an interval.
+
+       **variability** : float, optional
+           Controls the variability of the interval sizes.
 
        **random_state** : int or RandomState
            - If `int`, `random_state` is the seed used by the random number generator
@@ -781,7 +833,7 @@ Functions
           !! processed by numpydoc !!
 
 
-.. py:class:: ShapeletImportance(scoring=None, n_repeat=1, n_shapelets=10, min_shapelet_size=0.0, max_shapelet_size=1.0, coverage_probability=None, variability=1, metric='euclidean', metric_params=None, random_state=None)
+.. py:class:: ShapeletImportance(scoring=None, n_repeat=1, n_shapelets=1000, k_best=None, alpha=None, score_func=None, min_shapelet_size=0.0, max_shapelet_size=1.0, coverage_probability=None, variability=1, metric='euclidean', metric_params=None, random_state=None)
 
 
 
@@ -801,6 +853,16 @@ Functions
 
        **n_shapelets** : int, optional
            The number of shapelets to sample for the explanation.
+
+       **k_best** : int, optional
+           Select the top-k shapelets according to `score_func`
+
+       **score_func** : callable, optional
+           Score function to evaluate the performance of a shapelet.
+
+       **alpha** : float, optional
+           Define matching shapelets as dist < min_dist * (1 + alpha). If None
+           (default) only use the best match.
 
        **min_shapelet_size** : float, optional
            The minimum size of shapelets used for explanation.

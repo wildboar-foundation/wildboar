@@ -39,6 +39,14 @@ Classes
 
 
 
+Functions
+---------
+
+.. autoapisummary::
+
+   wildboar.segment.detect_changepoints
+
+
 
 
 .. raw:: html
@@ -193,6 +201,7 @@ Classes
 
           **\*\*fit_params** : dict
               Additional fit parameters.
+              Pass only if the estimator accepts additional params in its `fit` method.
 
 
 
@@ -424,4 +433,51 @@ Classes
       ..
           !! processed by numpydoc !!
 
+
+.. py:function:: detect_changepoints(x, method='pelt', n_changepoints=None, min_segment_size=5, penalty=None)
+
+   
+   Detect change points signal where behavior changes.
+
+
+   :Parameters:
+
+       **x** : ndarray of shape (n_timesteps,)
+           The time series
+
+       **method** : str, default="pelt"
+           Change point detection method:
+           - "pelt": Pruned Exact Linear Time (automatic number of changepoints)
+           - "binseg": Binary segmentation (requires n_changepoints)
+
+       **n_changepoints** : int, optional
+           Number of changepoints to find. Required for "binseg".
+           For "pelt", this is ignored (automatic detection).
+
+       **min_segment_size** : int, default=5
+           Minimum size of segments between changepoints.
+
+       **penalty** : float, optional
+           Penalty for adding changepoints (for "pelt" method).
+           Higher values = fewer changepoints. If None, uses BIC.
+
+
+
+   :Returns:
+
+       **changepoints** : ndarray
+           Indices where changepoints occur (sorted).
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
