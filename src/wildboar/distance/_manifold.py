@@ -59,15 +59,15 @@ class MDS(BaseEstimator):
 
     _parameter_constraints: dict = {
         "n_components": [Interval(Integral, 1, None, closed="left")],
-        "metric": ["boolean"],
+        "metric_mds": ["boolean"],
         "n_init": [Interval(Integral, 1, None, closed="left")],
         "max_iter": [Interval(Integral, 1, None, closed="left")],
         "verbose": ["verbose"],
         "eps": [Interval(Real, 0.0, None, closed="left")],
         "n_jobs": [None, Integral],
         "random_state": ["random_state"],
-        "dissimilarity": [StrOptions(_METRICS.keys())],
-        "dissimilarity_params": [None, dict],
+        "metric": [StrOptions(_METRICS.keys())],
+        "metric_params": [None, dict],
         "normalized_stress": [
             "boolean",
             StrOptions({"auto"}),
@@ -78,19 +78,19 @@ class MDS(BaseEstimator):
         self,
         n_components=2,
         *,
-        metric=True,
+        metric_mds=True,
         n_init=4,
         max_iter=300,
         verbose=0,
         eps=1e-3,
         n_jobs=None,
         random_state=None,
-        dissimilarity="euclidean",
-        dissimilarity_params=None,
+        metric="euclidean",
+        metric_params=None,
         normalized_stress="auto",
     ):
         self.n_components = n_components
-        self.metric = metric
+        self.metric_mds = metric_mds
         self.n_init = n_init
         self.max_iter = max_iter
         self.verbose = verbose
@@ -98,8 +98,8 @@ class MDS(BaseEstimator):
         self.n_jobs = n_jobs
         self.random_state = random_state
         self.normalized_stress = normalized_stress
-        self.dissimilarity = dissimilarity
-        self.dissimilarity_params = dissimilarity_params
+        self.metric = metric
+        self.metric_params = metric_params
 
     def fit(self, x, y=None):
         x = self._validate_data(x, allow_3d=True)
@@ -111,22 +111,22 @@ class MDS(BaseEstimator):
         x = self._validate_data(x, allow_3d=True, reset=False)
         self.mds_ = Sklearn_MDS(
             n_components=self.n_components,
-            metric=self.metric,
+            metric_mds=self.metric_mds,
             n_init=self.n_init,
             max_iter=self.max_iter,
             verbose=self.verbose,
             eps=self.eps,
             n_jobs=self.n_jobs,
             random_state=self.random_state,
-            dissimilarity="precomputed",
+            metric="precomputed",
             normalized_stress=self.normalized_stress,
         )
         return self.mds_.fit_transform(
             pairwise_distance(
                 x,
                 dim="mean",
-                metric=self.dissimilarity,
+                metric=self.metric,
                 n_jobs=self.n_jobs,
-                metric_params=self.dissimilarity_params,
+                metric_params=self.metric_params,
             )
         )

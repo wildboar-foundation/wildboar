@@ -17,7 +17,7 @@ def test_mds_default(sample_data):
 
 
 def test_mds_nonmetric(sample_data):
-    mds = MDS(metric=False)
+    mds = MDS(metric_mds=False)
     transformed_data = mds.fit_transform(sample_data)
     assert transformed_data.shape == (3, 2)
 
@@ -30,7 +30,7 @@ def test_mds_custom_params(sample_data):
 
 def test_mds_invalid_dissimilarity():
     with pytest.raises(ValueError):
-        mds = MDS(dissimilarity="invalid_metric")
+        mds = MDS(metric="invalid_metric")
         mds.fit_transform(np.array([[0.0, 1.0], [1.0, 0.0]]))
 
 
