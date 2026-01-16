@@ -27,7 +27,7 @@ from ._distance import (
 )
 from ._manifold import MDS
 from ._matrix_profile import matrix_profile, paired_matrix_profile
-from ._neighbors import KMeans, KMedoids, KNeighborsClassifier
+from ._neighbors import KMeans, KMedoids, KNeighborsClassifier, NearestNeighbors
 
 __all__ = [
     "argmin_distance",
@@ -42,6 +42,7 @@ __all__ = [
     "matrix_profile",
     "paired_matrix_profile",
     "KNeighborsClassifier",
+    "NearestNeighbors",
     "KMeans",
     "KMedoids",
     "MDS",

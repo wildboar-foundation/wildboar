@@ -15,6 +15,160 @@ from ._distance import _METRICS, argmin_distance, paired_distance, pairwise_dist
 from .dtw import dtw_average
 
 
+class NearestNeighbors(TransformerMixin, BaseEstimator):
+    """
+    Unsupervised learner for implementing neighbor searches.
+
+    Parameters
+    ----------
+    n_neighbors : int, optional
+        The number of neighbors.
+    metric : str, optional
+        The distance metric.
+    metric_params : dict, optional
+        Optional parameters to the distance metric.
+
+        Read more about the metrics and their parameters in the
+        :ref:`User guide <list_of_metrics>`.
+    n_jobs : int, optional
+        The number of parallel jobs.
+    """
+
+    _parameter_constraints: dict = {
+        "n_neighbors": [Interval(numbers.Integral, 1, None, closed="left")],
+        "metric": [StrOptions(_METRICS.keys())],
+        "metric_params": [dict, None],
+        "n_jobs": [numbers.Integral, None],
+    }
+
+    def __init__(
+        self,
+        n_neighbors=5,
+        *,
+        metric="euclidean",
+        metric_params=None,
+        n_jobs=None,
+    ):
+        self.n_neighbors = n_neighbors
+        self.metric = metric
+        self.metric_params = metric_params
+        self.n_jobs = n_jobs
+
+    def fit(self, x, y=None):
+        """
+        Fit the nearest neighbors estimator from the training dataset.
+
+        Parameters
+        ----------
+        x : univariate time-series or multivaraite time-series
+            The input samples.
+        y : Ignored
+            Not used, present for API consistency by convention.
+
+        Returns
+        -------
+        NearestNeighbors
+            The fitted estimator.
+        """
+        self._validate_params()
+        x = self._validate_data(x, allow_3d=True)
+        self._fit_X = x.copy()
+        return self
+
+    def kneighbors(self, x=None, n_neighbors=None, return_distance=True):
+        """
+        Finds the K-neighbors of a point.
+
+        Returns indices of and distances to the neighbors of each point.
+
+        Parameters
+        ----------
+        x : univariate time-series or multivariate time-series, optional
+            The query samples. If not provided, neighbors of each indexed point
+            are returned. In this case, the query point is not considered its
+            own neighbor.
+        n_neighbors : int, optional
+            Number of neighbors to get (default is the value passed to the
+            constructor).
+        return_distance : bool, optional
+            If False, distances will not be returned.
+
+        Returns
+        -------
+        dist : ndarray of shape (n_samples, n_neighbors)
+            Array representing the lengths to points, only present if
+            return_distance=True.
+        ind : ndarray of shape (n_samples, n_neighbors)
+            Indices of the nearest points in the population matrix.
+        """
+        check_is_fitted(self)
+        if n_neighbors is None:
+            n_neighbors = self.n_neighbors
+
+        if x is not None:
+            query_is_train = False
+            x = self._validate_data(x, allow_3d=True, reset=False)
+        else:
+            query_is_train = True
+            x = self._fit_X
+
+        # Treat a multivariate time series with a single dimension as a
+        # univariate time series to ensure that we use the fast path.
+        if x.ndim == 3 and x.shape[1] == 1:
+            x = x.reshape(x.shape[0], -1)
+
+        if x.ndim == 3:
+            dists = pairwise_distance(
+                x,
+                self._fit_X,
+                dim="mean",
+                metric=self.metric,
+                metric_params=self.metric_params,
+                n_jobs=self.n_jobs,
+            )
+
+            if query_is_train:
+                np.fill_diagonal(dists, np.inf)
+
+            sample_range = np.arange(x.shape[0])[:, None]
+            neigh_ind = np.argpartition(dists, n_neighbors - 1, axis=1)[:, :n_neighbors]
+            neigh_dist = dists[sample_range, neigh_ind]
+            sort_inds = np.argsort(neigh_dist, axis=1)
+            neigh_ind = neigh_ind[sample_range, sort_inds]
+
+            if return_distance:
+                neigh_dist = neigh_dist[sample_range, sort_inds]
+                return neigh_dist, neigh_ind
+            else:
+                return neigh_ind
+        else:
+            if query_is_train:
+                k = n_neighbors + 1
+            else:
+                k = n_neighbors
+
+            indices, distances = argmin_distance(
+                x,
+                self._fit_X,
+                metric=self.metric,
+                metric_params=self.metric_params,
+                k=k,
+                n_jobs=self.n_jobs,
+                return_distance=True,
+                sorted=True,
+            )
+
+            if query_is_train:
+                mask = indices != np.arange(x.shape[0])[:, None]
+                indices = indices[mask].reshape(x.shape[0], -1)
+                distances = distances[mask].reshape(x.shape[0], -1)
+
+            if return_distance:
+                return distances, indices
+            else:
+                return indices
+
+
 class KNeighborsClassifier(ClassifierMixin, BaseEstimator):
     """
     Classifier implementing k-nearest neighbors.
