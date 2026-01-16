@@ -1444,7 +1444,7 @@ def argmin_distance(
         indices, distances = _argmin_distance(x, y, dim, metric, k, lower_bound, n_jobs)
 
         if sorted:
-            sort = np.argsort(distances, axis=1)
+            sort = np.argsort(distances, axis=1, kind="stable")
             indices = np.take_along_axis(indices, sort, axis=1)
             if return_distance:
                 distances = np.take_along_axis(distances, sort, axis=1)
