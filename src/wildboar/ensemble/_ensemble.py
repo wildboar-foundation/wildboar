@@ -17,7 +17,7 @@ from sklearn.ensemble._bagging import BaseBagging as SklearnBaseBagging
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.utils import check_random_state, compute_sample_weight
 from sklearn.utils._param_validation import HasMethods, Interval, StrOptions
-from sklearn.utils.validation import check_is_fitted, check_scalar
+from sklearn.utils.validation import _check_sample_weight, check_is_fitted, check_scalar
 
 from ..base import BaseEstimator
 from ..transform._shapelet import RandomShapeletMixin
@@ -135,6 +135,8 @@ class BaseBagging(BaseEstimator, SklearnBaseBagging, metaclass=ABCMeta):
     def fit(self, x, y, sample_weight=None):
         self._validate_params()
         x, y = self._validate_data(x, y, allow_3d=True, dtype=float)
+        if sample_weight is not None:
+            sample_weight = _check_sample_weight(sample_weight, x, dtype=None)
         self._fit(
             x, y, self.max_samples, self.max_depth, sample_weight, check_input=False
         )
@@ -296,6 +298,9 @@ class BaggingClassifier(BaseBagging, SklearnBaggingClassifier):
     def fit(self, x, y, sample_weight=None):
         self._validate_params()
         x, y = self._validate_data(x, y, allow_3d=True, dtype=float)
+
+        if sample_weight is not None:
+            sample_weight = _check_sample_weight(sample_weight, x, dtype=None)
 
         if self.class_weight is not None:
             class_weight = compute_sample_weight(self.class_weight, y)
@@ -903,6 +908,8 @@ class BaggingRegressor(BaseBagging, SklearnBaggingRegressor):
 
     def fit(self, x, y, sample_weight=None):
         x, y = self._validate_data(x, y, allow_3d=True, dtype=float, y_numeric=True)
+        if sample_weight is not None:
+            sample_weight = _check_sample_weight(sample_weight, x, dtype=None)
 
         super()._fit(
             x,
@@ -1761,6 +1768,9 @@ class IsolationShapeletForest(OutlierMixin, ForestMixin, BaseBagging):
                 )
                 * x.shape[0]
             )
+
+        if sample_weight is not None:
+            sample_weight = _check_sample_weight(sample_weight, x, dtype=None)
 
         max_depth = int(np.ceil(np.log2(max(max_samples, 2))))
         super(IsolationShapeletForest, self)._fit(
