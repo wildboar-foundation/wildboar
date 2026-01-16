@@ -6,7 +6,7 @@
 <h1 align="center">wildboar</h1>
 
 <p align="center">
-	<img src="https://img.shields.io/badge/python-3.10%20|%203.11%20|%203.12-blue" />
+	<img src="https://img.shields.io/badge/python-3.11%20|%203.12%20|%203.13|%203.14-blue" />
 	<img src="https://github.com/wildboar-foundation/wildboar/workflows/Build,%20test%20and%20upload%20to%20PyPI/badge.svg"/>
 	<a href="https://badge.fury.io/py/wildboar"><img src="https://badge.fury.io/py/wildboar.svg" /></a>
 	<a href="https://pepy.tech/project/wildboar"><img src="https://static.pepy.tech/personalized-badge/wildboar?period=total&units=international_system&left_color=black&right_color=orange&left_text=downloads" /></a>
@@ -118,13 +118,11 @@ citations to the paper:
 - Karlsson, I., Papapetrou, P. Boström, H., 2016.
   _Generalized Random Shapelet Forests_. In the Data Mining and
   Knowledge Discovery Journal
-
   - `ShapeletForestClassifier`
 
 - Isak Samsten, 2020. isaksamsten/wildboar: wildboar. Zenodo. doi:10.5281/zenodo.4264063
 - Karlsson, I., Rebane, J., Papapetrou, P. et al.
   Locally and globally explainable time series tweaking.
   Knowl Inf Syst 62, 1671–1700 (2020)
-
   - `ShapeletForestCounterfactual`
   - `KNearestCounterfactual`
