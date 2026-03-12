@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Tree-based estimators &#8212; Wildboar 1.3.0.dev204+g254d6aa0d documentation</title>
+    <title>Tree-based estimators &#8212; Wildboar 1.3.0.dev205+g87345106a documentation</title>
   
   
   
@@ -44,9 +44,9 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../_static/documentation_options.js?v=f1efec38"></script>
-    <script src="../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/documentation_options.js?v=913ff624"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../_static/tabs.js?v=3ee01567"></script>
@@ -67,7 +67,7 @@
     <link rel="prev" title="Supervised learning" href="../supervised.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.3.0.dev204+g254d6aa0d" />
+  <meta name="docsearch:version" content="1.3.0.dev205+g87345106a" />
   </head>
   
   
@@ -5842,7 +5842,7 @@ a.param-doc-link::before {
     cursor: pointer;
 }
 </style><body><div id="sk-container-id-45" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>IntervalTreeClassifier(random_state=1,
-                       summarizer=[&lt;function mean at 0x7f177d73a8f0&gt;])</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-63" type="checkbox" checked><label for="sk-estimator-id-63" class="sk-toggleable__label fitted sk-toggleable__label-arrow"><div><div>IntervalTreeClassifier</div></div><div><a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://wildboar.dev/master/api/wildboar/tree/index.html#wildboar.tree.IntervalTreeClassifier">?<span>Documentation for IntervalTreeClassifier</span></a><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></div></label><div class="sk-toggleable__content fitted" data-param-prefix="">
+                       summarizer=[&lt;function mean at 0x7fe7f4f5c070&gt;])</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-63" type="checkbox" checked><label for="sk-estimator-id-63" class="sk-toggleable__label fitted sk-toggleable__label-arrow"><div><div>IntervalTreeClassifier</div></div><div><a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://wildboar.dev/master/api/wildboar/tree/index.html#wildboar.tree.IntervalTreeClassifier">?<span>Documentation for IntervalTreeClassifier</span></a><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></div></label><div class="sk-toggleable__content fitted" data-param-prefix="">
         <div class="estimator-table">
             <details>
                 <summary>Parameters</summary>
@@ -6053,7 +6053,7 @@ a.param-doc-link::before {
             <span class="param-doc-description">summarizer: str or list, optional<br><br>The method to summarize each interval.<br><br>- if str, the summarizer is determined by `_SUMMARIZERS.keys()`.<br>- if list, the summarizer is a list of functions `f(x) -> float`, where<br>  `x` is a numpy array.<br><br>The default summarizer summarizes each interval as its mean, variance<br>and slope.</span>
         </a>
     </td>
-            <td class="value">[&lt;function mea...x7f177d73a8f0&gt;]</td>
+            <td class="value">[&lt;function mea...x7fe7f4f5c070&gt;]</td>
         </tr>
     
 
@@ -7289,7 +7289,7 @@ prediction for a sample:</p>
         <span class="k">continue</span>
 
     <span class="c1"># check if value of the split feature for sample 0 is below threshold</span>
-    <span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">shapelet</span><span class="p">))</span> <span class="o">=</span> <span class="n">attribute</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span>
+    <span class="n">dim</span><span class="p">,</span> <span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">shapelet</span><span class="p">)</span> <span class="o">=</span> <span class="n">attribute</span><span class="p">[</span><span class="n">node_id</span><span class="p">]</span>
     <span class="n">dist</span> <span class="o">=</span> <span class="n">pairwise_subsequence_distance</span><span class="p">(</span>
         <span class="n">shapelet</span><span class="p">,</span> <span class="n">X_test</span><span class="p">[</span><span class="n">sample_id</span><span class="p">],</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;scaled_euclidean&quot;</span>
     <span class="p">)</span>
@@ -7329,8 +7329,8 @@ prediction for a sample:</p>
 <div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
 <div class="sd-card sd-sphinx-override sd-w-auto sd-m-auto sd-shadow-none sd-text-center docutils">
 <div class="sd-card-body docutils">
-<img alt="../../_images/trees-17.png" class="only-light card-image align-center" src="../../_images/trees-17.png" />
-<img alt="../../_images/trees-18.png" class="only-dark card-image align-center" src="../../_images/trees-18.png" />
+<img alt="../../_images/trees-17.png" class="align-center only-light card-image" src="../../_images/trees-17.png" />
+<img alt="../../_images/trees-18.png" class="align-center only-dark card-image" src="../../_images/trees-18.png" />
 </div>
 </div>
 </div>
@@ -7354,8 +7354,8 @@ node, the prediction, denoted by <cite>Pred: y</cite>, is assigned to the sample
 <div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
 <div class="sd-card sd-sphinx-override sd-w-auto sd-m-auto sd-shadow-none sd-text-center docutils">
 <div class="sd-card-body docutils">
-<img alt="../../_images/trees-19.png" class="only-light card-image align-center" src="../../_images/trees-19.png" />
-<img alt="../../_images/trees-20.png" class="only-dark card-image align-center" src="../../_images/trees-20.png" />
+<img alt="../../_images/trees-19.png" class="align-center only-light card-image" src="../../_images/trees-19.png" />
+<img alt="../../_images/trees-20.png" class="align-center only-dark card-image" src="../../_images/trees-20.png" />
 </div>
 </div>
 </div>
@@ -7467,7 +7467,7 @@ node, the prediction, denoted by <cite>Pred: y</cite>, is assigned to the sample
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
     <br/>
   </p>
 </div>
