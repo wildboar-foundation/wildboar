@@ -14,7 +14,11 @@ from sklearn.utils._param_validation import Interval, StrOptions
 from sklearn.utils.validation import check_is_fitted, check_random_state
 
 from ...base import BaseEstimator, CounterfactualMixin, ExplainerMixin
-from ...distance import NearestNeighbors, pairwise_subsequence_distance
+from ...distance import (
+    NearestNeighbors,
+    pairwise_distance,
+    pairwise_subsequence_distance,
+)
 from ...distance.dtw import (
     dtw_alignment,
     dtw_mapping,
@@ -730,6 +734,7 @@ class CostFunction:
         adaptive=False,
         lipschitz=None,
         lipschitz_smoothing=0.1,
+        mean_distance=None,
     ):
         self.threshold = threshold
         self.x_original = x_original
@@ -740,11 +745,16 @@ class CostFunction:
         if self.x_norm == 0:
             self.x_norm = 1.0
 
-        self.min_step_size = 0.005 * self.x_norm
-        self.max_step_size = 0.1 * self.x_norm
+        if mean_distance is not None and mean_distance > 0:
+            self.min_step_size = 0.02 * mean_distance
+            self.max_step_size = 0.5 * mean_distance
+        else:
+            self.min_step_size = 0.01 * self.x_norm
+            self.max_step_size = 0.3 * self.x_norm
 
         if lipschitz is None:
-            self.lipschitz = self.threshold / self.x_norm
+            scale = mean_distance if mean_distance is not None else self.x_norm
+            self.lipschitz = threshold / max(scale, 1e-8)
         else:
             self.lipschitz = lipschitz
         self.lipschitz_smoothing = lipschitz_smoothing
@@ -766,7 +776,7 @@ class CostFunction:
             Estimated distance to boundary.
         """
         if prob is None:
-            return 0.05 * self.x_norm
+            return 0.1 * (self.max_step_size + self.min_step_size)
 
         prob = np.clip(prob, 0.0, 1.0)
         margin = max(0.0, self.threshold - prob)
@@ -839,13 +849,12 @@ class CostFunction:
             return
 
         local_L = delta_prob / delta_dist
-        if local_L > self.lipschitz:
-            self.lipschitz = np.clip(
-                (1 - self.lipschitz_smoothing) * self.lipschitz
-                + self.lipschitz_smoothing * local_L,
-                1e-8,
-                np.inf,
-            )
+        self.lipschitz = np.clip(
+            (1 - self.lipschitz_smoothing) * self.lipschitz
+            + self.lipschitz_smoothing * local_L,
+            1e-8,
+            np.inf,
+        )
 
 
 _REFINERS = {}
@@ -1046,9 +1055,10 @@ class OptimizationStrategy(abc.ABC):
         Default step size for moves.
     """
 
-    def __init__(self, target_evaluator, step_size):
+    def __init__(self, target_evaluator, step_size, mean_distance=None):
         self.target_evaluator = target_evaluator
         self.step_size = step_size
+        self.mean_distance = mean_distance
 
     @abc.abstractmethod
     def optimize(self, x, y, sampler, random_state):
@@ -1107,12 +1117,13 @@ class GreedySearch(OptimizationStrategy):
         target_evaluator,
         step_size,
         max_iter,
+        mean_distance=None,
         line_search_iter=10,
         step_increase=1.2,
         step_decrease=0.5,
         min_step=1e-4,
     ):
-        super().__init__(target_evaluator, step_size)
+        super().__init__(target_evaluator, step_size, mean_distance=mean_distance)
         self.max_iter = max_iter
         self.line_search_iter = line_search_iter
         self.step_increase = step_increase
@@ -1127,6 +1138,7 @@ class GreedySearch(OptimizationStrategy):
             x_original,
             threshold=self.target_evaluator.threshold,
             adaptive=True,
+            mean_distance=self.mean_distance,
         )
 
         for _ in range(self.max_iter):
@@ -1221,10 +1233,11 @@ class BeamSearch(OptimizationStrategy):
         target_evaluator,
         step_size,
         max_iter,
+        mean_distance=None,
         beam_width=5,
         n_branches=3,
     ):
-        super().__init__(target_evaluator, step_size)
+        super().__init__(target_evaluator, step_size, mean_distance=mean_distance)
         self.max_iter = max_iter
         self.beam_width = beam_width
         self.n_branches = n_branches
@@ -1261,6 +1274,7 @@ class BeamSearch(OptimizationStrategy):
             x,
             threshold=self.target_evaluator.threshold,
             adaptive=True,
+            mean_distance=self.mean_distance,
         )
         is_cf, prob = self.target_evaluator.evaluate(x, y)
         initial_score = self._score(x, cost, prob, is_cf)
@@ -1371,12 +1385,13 @@ class BestFirstSearch(OptimizationStrategy):
         target_evaluator,
         step_size,
         max_iter=100,
+        mean_distance=None,
         n_branches=10,
         proximity_weight=0.5,
         lipschitz_init=None,
         lipschitz_momentum=0.1,
     ):
-        super().__init__(target_evaluator, step_size)
+        super().__init__(target_evaluator, step_size, mean_distance=mean_distance)
         self.max_iter = max_iter
         self.n_branches = n_branches
         self.proximity_weight = proximity_weight
@@ -1419,6 +1434,7 @@ class BestFirstSearch(OptimizationStrategy):
             adaptive=True,
             lipschitz=self.lipschitz_init,
             lipschitz_smoothing=self.lipschitz_momentum,
+            mean_distance=self.mean_distance,
         )
 
         counter = 0
@@ -1524,9 +1540,10 @@ class PrototypeCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimator
         - 'adaptive': Automatically estimates an appropriate step size using
           a Lipschitz-based estimate of the distance to the decision boundary.
           This typically leads to faster convergence.
-        - float: Uses a fixed step size computed as ``step_size * ||x||``,
-          where ``||x||`` is the norm of the current sample. Values between
-          0.01 and 0.1 are typical.
+        - float: Uses a fixed step size computed as ``step_size * mean_dist``,
+          where ``mean_dist`` is the mean positive pairwise distance in the
+          training data. For example, ``step_size=0.2`` moves 20% of the
+          typical inter-sample spacing per iteration.
 
         Default is 'adaptive'.
 
@@ -1819,6 +1836,10 @@ class PrototypeCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimator
                 best_indices = np.argsort(scores)[-self.k_best_shapelets :]
                 shapelets[c] = [attributes[i][1][1] for i in best_indices]
 
+        pw = pairwise_distance(x, metric=self.metric)
+        pw_pos = pw[pw > 0]
+        self.mean_distance_ = float(np.mean(pw_pos)) if len(pw_pos) > 0 else 1.0
+
         self.partitions_ = {}
         for c in self.classes_:
             x_partition = x[y == c]
@@ -1854,25 +1875,33 @@ class PrototypeCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimator
                 **method_params,
             )
 
+        if isinstance(self.step_size, str) and self.step_size == "adaptive":
+            resolved_step_size = "adaptive"
+        else:
+            resolved_step_size = float(self.step_size) * self.mean_distance_
+
         if self.optimizer == "greedy":
             self.optimizer_ = GreedySearch(
                 max_iter=self.max_iter,
                 target_evaluator=self.target_,
-                step_size=self.step_size,
+                step_size=resolved_step_size,
+                mean_distance=self.mean_distance_,
             )
         elif self.optimizer == "beam":
             self.optimizer_ = BeamSearch(
                 target_evaluator=self.target_,
                 max_iter=self.max_iter,
-                step_size=self.step_size,
+                step_size=resolved_step_size,
+                mean_distance=self.mean_distance_,
                 beam_width=self.beam_width,
                 n_branches=self.n_branches,
             )
         elif self.optimizer == "best_first":
             self.optimizer_ = BestFirstSearch(
                 target_evaluator=self.target_,
-                step_size=self.step_size,
+                step_size=resolved_step_size,
                 max_iter=self.max_iter,
+                mean_distance=self.mean_distance_,
                 n_branches=self.n_branches,
             )
         return self
