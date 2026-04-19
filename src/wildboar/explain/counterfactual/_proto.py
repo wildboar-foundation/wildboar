@@ -39,10 +39,6 @@ class TargetEvaluator(abc.ABC):
 
     def __init__(self, estimator):
         self.estimator = estimator
-        if hasattr(self.estimator, "classes_"):
-            self.threshold = 1.0 / len(self.estimator.classes_)
-        else:
-            self.threshold = 0.5
 
     def is_counterfactual(self, x, y):
         """
@@ -67,7 +63,7 @@ class TargetEvaluator(abc.ABC):
 
     def get_score(self, x, y):
         """
-        Get the score (probability or confidence) for the target class.
+        Get the decision score for the target class.
 
         Parameters
         ----------
@@ -79,7 +75,8 @@ class TargetEvaluator(abc.ABC):
         Returns
         -------
         float or None
-            Score for the target class, or None if scoring is not supported.
+            Decision score for the target class, or None if scoring is not
+            supported.
         """
         return self._get_score(x.reshape(1, -1), y)
 
@@ -95,16 +92,29 @@ class TargetEvaluator(abc.ABC):
 class PredictEvaluator(TargetEvaluator):
     """Evaluate if a counterfactual is predicted as y."""
 
+    def __init__(self, estimator):
+        super().__init__(estimator)
+        self.threshold = 0.0
+
+    def _predict_proba(self, x):
+        if not hasattr(self.estimator, "predict_proba"):
+            raise ValueError("estimator must support predict_proba")
+
+        return self.estimator.predict_proba(x)
+
     def _is_counterfactual(self, x, y):
-        return self.estimator.predict(x)[0] == y
+        y_pred = self._predict_proba(x)
+        y_idx = (self.estimator.classes_ == y).nonzero()[0][0]
+        return np.argmax(y_pred[0]) == y_idx
 
     def _get_score(self, x, y):
-        """Return None for hard predictions as there is no continuous score."""
-        if hasattr(self.estimator, "predict_proba"):
-            y_pred = self.estimator.predict_proba(x)
-            y_idx = (self.estimator.classes_ == y).nonzero()[0][0]
-            return y_pred[0, y_idx]
-        return None
+        """Return the one-vs-rest margin for the target class."""
+        y_pred = self._predict_proba(x)
+        y_idx = (self.estimator.classes_ == y).nonzero()[0][0]
+        y_prob = y_pred[0, y_idx]
+        other_probs = np.delete(y_pred[0], y_idx)
+        max_other = np.max(other_probs) if other_probs.size > 0 else 0.0
+        return y_prob - max_other
 
 
 class ProbabilityEvaluator(TargetEvaluator):
@@ -686,42 +696,40 @@ class CostFunction:
     The cost function J(s) combines two terms:
 
     - g(s): Normalized distance from original = ||s - x|| / ||x||
-    - h(s): Normalized margin to decision boundary
+    - h(s): Normalized gap to the decision boundary
 
     This can be interpreted in two ways:
 
     1. **Weighted sum**: J = w*g + (1-w)*h
        where w = distance_weight
 
-    2. **Lipschitz A***: J = g + h (when w=0.5 and default L)
-       The heuristic h estimates minimum distance to decision boundary
-       based on Lipschitz continuity of the probability function.
+    2. **Lipschitz guidance**: J = g + h (when w=0.5 and default L)
+       The heuristic h estimates the minimum distance to the decision
+       boundary based on Lipschitz continuity of the decision score.
 
     Parameters
     ----------
     x_original : ndarray
         Original sample being explained.
     threshold : float
-        Target counterfactual class.
+        Decision threshold for the score returned by the target evaluator.
+        For argmax targets this is 0 and the score is the multiclass margin;
+        for probability targets this is the requested probability threshold.
     distance_weight : float, default=0.5
         Weight for distance term. Higher values prioritize staying close
         to the original; lower values prioritize crossing the boundary.
     adaptive : bool, default=False
         If True, adaptively estimate Lipschitz constant from observed gradients.
     lipschitz : float, optional
-        Initial Lipschitz estimate. If None (default), uses threshold/||x||
-        which matches the non-adaptive assumption.
+        Initial Lipschitz estimate. If None (default), uses a scale derived
+        from the decision threshold and the mean inter-sample distance.
     lipschitz_smoothing : float, default=0.1
         EMA smoothing factor for Lipschitz updates (only used if adaptive=True).
 
     Notes
     -----
-    When adaptive=False (default), h(s) = margin / threshold, which
-    assumes the probability changes by `threshold` over distance ||x||.
-    This is equivalent to Lipschitz constant L = threshold / ||x||.
-
     When adaptive=True, the Lipschitz constant is estimated from observed
-    probability changes during search, and h(s) = (margin / L) / ||x||,
+    decision-score changes during search, and h(s) = (gap / L) / ||x||,
     representing the estimated minimum distance to reach the boundary.
     """
 
@@ -754,42 +762,42 @@ class CostFunction:
 
         if lipschitz is None:
             scale = mean_distance if mean_distance is not None else self.x_norm
-            self.lipschitz = threshold / max(scale, 1e-8)
+            base_scale = max(abs(threshold), 1.0)
+            self.lipschitz = base_scale / max(scale, 1e-8)
         else:
             self.lipschitz = lipschitz
         self.lipschitz_smoothing = lipschitz_smoothing
 
-    def get_distance_estimate(self, prob):
+    def get_distance_estimate(self, score):
         """
         Estimate the distance needed to reach the decision boundary.
 
-        Uses the Lipschitz assumption to estimate: d_need = margin / L.
+        Uses the Lipschitz assumption to estimate: d_need = gap / L.
 
         Parameters
         ----------
-        prob : float or None
-            Current probability for target class.
+        score : float or None
+            Current decision score for the target class.
 
         Returns
         -------
         float
             Estimated distance to boundary.
         """
-        if prob is None:
+        if score is None:
             return 0.1 * (self.max_step_size + self.min_step_size)
 
-        prob = np.clip(prob, 0.0, 1.0)
-        margin = max(0.0, self.threshold - prob)
+        gap = max(0.0, self.threshold - score)
 
-        if margin <= 1e-9:
+        if gap <= 1e-9:
             return self.min_step_size
 
         L = np.clip(self.lipschitz, 1e-9, np.inf)
-        d_need = margin / L
+        d_need = gap / L
 
         return np.clip(d_need, self.min_step_size, self.max_step_size)
 
-    def evaluate(self, state, prob, is_cf):
+    def evaluate(self, state, score, is_cf):
         """
         Compute cost for a state.
 
@@ -797,9 +805,8 @@ class CostFunction:
         ----------
         state : ndarray
             Current sample state.
-        prob : float, optional
-            Pre-computed probability for the state. If None, will be computed
-            using the target evaluator.
+        score : float, optional
+            Pre-computed decision score for the state.
 
         Returns
         -------
@@ -811,17 +818,16 @@ class CostFunction:
 
         if is_cf:
             h = 0.0
-        elif prob is None:
+        elif score is None:
             h = 1.0
         else:
-            prob = float(np.clip(prob, 0.0, 1.0))
-            margin = max(0.0, self.threshold - prob)
+            gap = max(0.0, self.threshold - score)
             L = np.clip(self.lipschitz, 1e-8, np.inf)
-            h = (margin / L) / self.x_norm
+            h = (gap / L) / self.x_norm
 
         return self.distance_weight * g + (1.0 - self.distance_weight) * h
 
-    def update(self, state_old, prob_old, state_new, prob_new):
+    def update(self, state_old, score_old, state_new, score_new):
         """
         Update Lipschitz estimate from observed transition.
 
@@ -829,26 +835,26 @@ class CostFunction:
         ----------
         state_old : ndarray
             Previous state.
-        prob_old : float or None
-            Probability at previous state.
+        score_old : float or None
+            Decision score at previous state.
         state_new : ndarray
             New state.
-        prob_new : float or None
-            Probability at new state.
+        score_new : float or None
+            Decision score at new state.
         """
         if not self.adaptive:
             return
 
-        if prob_old is None or prob_new is None:
+        if score_old is None or score_new is None:
             return
 
-        delta_prob = abs(prob_new - prob_old)
+        delta_score = abs(score_new - score_old)
         delta_dist = np.linalg.norm(state_new - state_old)
 
-        if delta_dist <= 1e-10 or delta_prob <= 1e-10:
+        if delta_dist <= 1e-10 or delta_score <= 1e-10:
             return
 
-        local_L = delta_prob / delta_dist
+        local_L = delta_score / delta_dist
         self.lipschitz = np.clip(
             (1 - self.lipschitz_smoothing) * self.lipschitz
             + self.lipschitz_smoothing * local_L,
@@ -1142,10 +1148,10 @@ class GreedySearch(OptimizationStrategy):
         )
 
         for _ in range(self.max_iter):
-            is_cf, prob = self.target_evaluator.evaluate(o, y)
+            is_cf, score = self.target_evaluator.evaluate(o, y)
             transform = sampler.sample_transform(o, random_state)
             o_new, crossed, used_transform = self._line_search(
-                o, transform, y, cost, prob
+                o, transform, y, cost, score
             )
             if used_transform:
                 path.append(transform)
@@ -1156,9 +1162,9 @@ class GreedySearch(OptimizationStrategy):
 
         return o, path
 
-    def _line_search(self, current, transform, y, cost, current_prob):
+    def _line_search(self, current, transform, y, cost, current_score):
         current_cost = cost.evaluate(
-            current, current_prob, self.target_evaluator.is_counterfactual(current, y)
+            current, current_score, self.target_evaluator.is_counterfactual(current, y)
         )
         best = current.copy()
         best_cost = current_cost
@@ -1166,7 +1172,7 @@ class GreedySearch(OptimizationStrategy):
         improved = False
 
         if self.step_size == "adaptive":
-            step = cost.get_distance_estimate(current_prob)
+            step = cost.get_distance_estimate(current_score)
         else:
             step = self.step_size
 
@@ -1175,9 +1181,9 @@ class GreedySearch(OptimizationStrategy):
                 break
 
             candidate = transform.move(current, step)
-            is_cf, prob = self.target_evaluator.evaluate(candidate, y)
+            is_cf, score = self.target_evaluator.evaluate(candidate, y)
 
-            cost.update(current, current_prob, candidate, prob)
+            cost.update(current, current_score, candidate, score)
 
             if is_cf:
                 crossed = True
@@ -1185,7 +1191,7 @@ class GreedySearch(OptimizationStrategy):
                 improved = True
                 break
 
-            new_cost = cost.evaluate(candidate, prob, is_cf)
+            new_cost = cost.evaluate(candidate, score, is_cf)
             if new_cost < best_cost:
                 best = candidate
                 best_cost = new_cost
@@ -1276,8 +1282,8 @@ class BeamSearch(OptimizationStrategy):
             adaptive=True,
             mean_distance=self.mean_distance,
         )
-        is_cf, prob = self.target_evaluator.evaluate(x, y)
-        initial_score = self._score(x, cost, prob, is_cf)
+        is_cf, score = self.target_evaluator.evaluate(x, y)
+        initial_score = self._score(x, cost, score, is_cf)
         beam = [_BeamState(x.copy(), [], initial_score)]
 
         best_cf = None
@@ -1295,20 +1301,20 @@ class BeamSearch(OptimizationStrategy):
                         best_cf_distance = dist
                         best_cf_path = beam_state.path.copy()
 
-                current_prob = self.target_evaluator.get_score(beam_state.state, y)
+                current_score = self.target_evaluator.get_score(beam_state.state, y)
                 for _ in range(self.n_branches):
                     transform = sampler.sample_transform(beam_state.state, random_state)
                     if self.step_size == "adaptive":
-                        step = cost.get_distance_estimate(current_prob)
+                        step = cost.get_distance_estimate(current_score)
                     else:
                         step = self.step_size
                     new_state = transform.move(beam_state.state, step)
                     new_path = beam_state.path + [transform]
 
-                    is_cf, prob = self.target_evaluator.evaluate(new_state, y)
-                    cost.update(beam_state.state, current_prob, new_state, prob)
+                    is_cf, score = self.target_evaluator.evaluate(new_state, y)
+                    cost.update(beam_state.state, current_score, new_state, score)
 
-                    new_score = self._score(new_state, cost, prob, is_cf)
+                    new_score = self._score(new_state, cost, score, is_cf)
                     candidates.append(_BeamState(new_state, new_path, new_score))
 
             if not candidates:
@@ -1332,7 +1338,7 @@ class BeamSearch(OptimizationStrategy):
             return beam[0].state, beam[0].path
         return x, []
 
-    def _score(self, state, cost, prob, is_cf):
+    def _score(self, state, cost, score, is_cf):
         """
         Parameters
         ----------
@@ -1340,15 +1346,15 @@ class BeamSearch(OptimizationStrategy):
             State to score.
         cost : CostFunction
             Cost function for evaluation.
-        prob : float, optional
-            Pre-computed probability for the state.
+        score : float, optional
+            Pre-computed decision score for the state.
 
         Returns
         -------
         float
             Score (higher is better). CFs score in (1, 2], non-CFs in [0, 1].
         """
-        return 1.0 - cost.evaluate(state, prob, is_cf)
+        return 1.0 - cost.evaluate(state, score, is_cf)
 
 
 class BestFirstSearch(OptimizationStrategy):
@@ -1375,7 +1381,7 @@ class BestFirstSearch(OptimizationStrategy):
         Higher values prioritize staying close to original.
     lipschitz_init : float, optional
         Initial Lipschitz constant estimate. If None (default), uses
-        threshold/||x|| which matches the non-adaptive assumption.
+            a unit decision-score change over one mean inter-sample distance.
     lipschitz_momentum : float, optional
         Momentum factor for Lipschitz EMA updates. Default is 0.1.
     """
@@ -1438,10 +1444,10 @@ class BestFirstSearch(OptimizationStrategy):
         )
 
         counter = 0
-        is_cf, initial_prob = self.target_evaluator.evaluate(x, y)
-        initial_cost = cost.evaluate(x, initial_prob, is_cf)
-        # (cost, counter, state, path, prob)
-        heap = [(initial_cost, counter, x.copy(), [], initial_prob)]
+        is_cf, initial_score = self.target_evaluator.evaluate(x, y)
+        initial_cost = cost.evaluate(x, initial_score, is_cf)
+        # (cost, counter, state, path, score)
+        heap = [(initial_cost, counter, x.copy(), [], initial_score)]
         counter += 1
 
         visited = set()
@@ -1453,7 +1459,7 @@ class BestFirstSearch(OptimizationStrategy):
 
         expansions = 0
         while heap and expansions < self.max_iter:
-            _prev_cost, _, state, path, current_prob = heapq.heappop(heap)
+            _prev_cost, _, state, path, current_score = heapq.heappop(heap)
 
             if self.target_evaluator.is_counterfactual(state, y):
                 dist = np.linalg.norm(state - x_original)
@@ -1466,7 +1472,7 @@ class BestFirstSearch(OptimizationStrategy):
             expansions += 1
             for _ in range(self.n_branches):
                 if self.step_size == "adaptive":
-                    step = cost.get_distance_estimate(current_prob)
+                    step = cost.get_distance_estimate(current_score)
                 else:
                     step = self.step_size
                 transform = sampler.sample_transform(state, random_state)
@@ -1477,13 +1483,15 @@ class BestFirstSearch(OptimizationStrategy):
                     continue
                 visited.add(state_key)
 
-                is_cf, new_prob = self.target_evaluator.evaluate(new_state, y)
+                is_cf, new_score = self.target_evaluator.evaluate(new_state, y)
 
-                cost.update(state, current_prob, new_state, new_prob)
+                cost.update(state, current_score, new_state, new_score)
 
-                new_cost = cost.evaluate(new_state, new_prob, is_cf)
+                new_cost = cost.evaluate(new_state, new_score, is_cf)
                 new_path = path + [transform]
-                heapq.heappush(heap, (new_cost, counter, new_state, new_path, new_prob))
+                heapq.heappush(
+                    heap, (new_cost, counter, new_state, new_path, new_score)
+                )
                 counter += 1
 
         if best_cf is not None:
@@ -1571,7 +1579,7 @@ class PrototypeCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimator
         Defines when a counterfactual is considered successful.
 
         - 'predict': The counterfactual is valid when the classifier's
-          predicted label changes to the target class.
+          predicted probability for the target class becomes the argmax.
         - float (0.5-1.0): The counterfactual is valid when the predicted
           probability for the target class exceeds this threshold. Higher
           values produce more confident counterfactuals but may require
