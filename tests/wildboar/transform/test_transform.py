@@ -62,6 +62,24 @@ def test_random_shapelet_transform_equals_shapelet_transform_strategy_random():
     )
 
 
+@pytest.mark.parametrize("coverage_probability", [None, 0.5])
+def test_shapelet_transform_multiple_metrics(coverage_probability):
+    X = np.random.RandomState(0).normal(size=(10, 30))
+    transform = ShapeletTransform(
+        n_shapelets=8,
+        metric=[("euclidean", {}), ("scaled_euclidean", {})],
+        coverage_probability=coverage_probability,
+        variability=1,
+        random_state=0,
+    )
+
+    Xt = transform.fit_transform(X)
+
+    assert Xt.shape == (10, 8)
+    assert np.isfinite(Xt).all()
+    assert_almost_equal(Xt, transform.transform(X))
+
+
 def test_derivative_transform():
     t = DerivativeTransform(method="slope")
     X = np.array([[1, 7, 3, 4], [4, 2, 6, 7]])

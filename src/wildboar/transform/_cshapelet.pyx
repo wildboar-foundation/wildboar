@@ -332,8 +332,6 @@ cdef class MultiMetricShapeletAttributeGenerator(AttributeGenerator):
 
     def __init__(
         self,
-        Py_ssize_t min_shapelet_size,
-        Py_ssize_t max_shapelet_size,
         list metrics,
         const double[::1] weights=None,
     ):
