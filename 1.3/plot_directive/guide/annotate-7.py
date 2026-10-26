@@ -1,0 +1,10 @@
+argmax = mp.argmax()
+argmin = mp.argmin()
+fig, ax = plt.subplots(ncols=2, figsize=(8, 2), sharex=True, sharey=True)
+ax[0].plot(X[argmin : argmin + 200], label=f"{argmin}")
+ax[0].plot(X[mpi[argmin] : mpi[argmin] + 200], label=f"mpi[{argmin}]")
+ax[0].legend()
+
+ax[1].plot(X[argmax : argmax + 200], label=f"{argmax}")
+ax[1].plot(X[mpi[argmax] : mpi[argmax] + 200], label=f"mpi[{argmax}]")
+ax[1].legend()

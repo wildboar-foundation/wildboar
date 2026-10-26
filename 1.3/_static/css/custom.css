@@ -1,0 +1,64 @@
+table.autosummary {
+  width: 100%;
+}
+
+table.autosummary thead tr th:first-child,
+table.autosummary tbody tr td:first-child {
+  width: 25%;
+  min-width: 25%;
+  max-width: 25%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+table.autosummary .caption-text {
+  display: block;
+  width: 100%;
+  background-color: var(--color-background-border);
+}
+
+table.autosummary a.headerlink {
+  display: none;
+}
+
+.nbinput .prompt,
+.nboutput .prompt {
+    display: none;
+}
+
+.wb-drop-shadow {
+    filter: drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4));
+}
+
+.card-image {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+div.execute-return div.highlight::before {
+  content: "Return";
+  color: var(--pst-color-text-base) !important;
+
+  position: absolute;
+  top: 0px;
+  left: 4px;
+
+  font-size: 0.6em;
+  color: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+}
+
+div.execute-output div.highlight::before {
+  content: "Output";
+  /* font-weight: 900; */
+  color: var(--pst-color-text-base) !important;
+
+  position: absolute;
+  top: 0px;
+  left: 4px;
+
+  font-size: 0.6em;
+  color: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+}

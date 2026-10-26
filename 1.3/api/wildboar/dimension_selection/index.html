@@ -1,0 +1,2262 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" data-theme="auto">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>wildboar.dimension_selection &#8212; Wildboar 1.3.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "auto";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "auto";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=451fe87e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/tabs.css?v=4c969af8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css?v=584e34e5" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/pygments-override.css?v=9e853fe2" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
+
+    <script src="../../../_static/documentation_options.js?v=1f29e9d3"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/tabs.js?v=3ee01567"></script>
+    <script src="../../../_static/toggleprompt.js?v=5801b3bb"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/wildboar/dimension_selection/index';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://wildboar.dev/_versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '1.3';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../../../_static/js/fa.js?v=744fd48f"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="wildboar.distance" href="../distance/index.html" />
+    <link rel="prev" title="wildboar.datasets.preprocess" href="../datasets/preprocess/index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.3.0" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="auto">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/logo.png" class="logo__image only-light" alt=""/>
+    <img src="../../../_static/logo.png" class="logo__image only-dark pst-js-only" alt=""/>
+  
+  
+    <p class="title logo__title">Wildboar</p>
+  
+</a></div>
+    
+      <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../install.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../index.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../more/whatsnew.html">
+    What’s new
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/wildboar-foundation/wildboar/" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/wildboar/" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-custom fa-lg" data-prefix="fa-custom" data-icon="pypi" aria-hidden="true"></i><span class="visually-hidden">PyPI</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../install.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../index.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../more/whatsnew.html">
+    What’s new
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/wildboar-foundation/wildboar/" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/wildboar/" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-custom fa-lg" data-prefix="fa-custom" data-icon="pypi" aria-hidden="true"></i><span class="visually-hidden">PyPI</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../annotate/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.annotate</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.base</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../datasets/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../datasets/outlier/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.outlier</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../datasets/preprocess/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.preprocess</span></code></a></li>
+<li class="toctree-l1 current active"><a aria-current="page" class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.dimension_selection</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../distance/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../distance/dtw/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance.dtw</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../distance/lb/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance.lb</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ensemble/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.ensemble</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../explain/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../explain/counterfactual/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain.counterfactual</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../linear_model/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.linear_model</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.metrics</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model_selection/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.model_selection</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../segment/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.segment</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../transform/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.transform</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tree/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.tree</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utils/plot/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.plot</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utils/variable_len/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.variable_len</span></code></a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">API Reference</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.dimension_selection</span></code></span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-wildboar.dimension_selection">
+<span id="wildboar-dimension-selection"></span><h1><a class="reference internal" href="#module-wildboar.dimension_selection" title="wildboar.dimension_selection"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.dimension_selection</span></code></a><a class="headerlink" href="#module-wildboar.dimension_selection" title="Link to this heading">#</a></h1>
+<p>Select a subset of dimensions</p>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.dimension_selection.DistanceVarianceThreshold" title="wildboar.dimension_selection.DistanceVarianceThreshold"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DistanceVarianceThreshold</span></code></a></p></td>
+<td><p>Distance selector that removes dimensions with low variance.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.dimension_selection.ECSSelector" title="wildboar.dimension_selection.ECSSelector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ECSSelector</span></code></a></p></td>
+<td><p>ElbowClassSum (ECS) dimension selector.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.dimension_selection.SelectDimensionPercentile" title="wildboar.dimension_selection.SelectDimensionPercentile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SelectDimensionPercentile</span></code></a></p></td>
+<td><p>Select the fraction of dimensions with largest score.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.dimension_selection.SelectDimensionSignificance" title="wildboar.dimension_selection.SelectDimensionSignificance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SelectDimensionSignificance</span></code></a></p></td>
+<td><p>Select dimensions with a p-value below <cite>alpha</cite>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.dimension_selection.SelectDimensionTopK" title="wildboar.dimension_selection.SelectDimensionTopK"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SelectDimensionTopK</span></code></a></p></td>
+<td><p>Select the dimensions with the <cite>k</cite> highest scores.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.dimension_selection.SequentialDimensionSelector" title="wildboar.dimension_selection.SequentialDimensionSelector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SequentialDimensionSelector</span></code></a></p></td>
+<td><p>Sequentially select a subset of dimensions.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<br /><dl class="py class">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.DistanceVarianceThreshold">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">wildboar.dimension_selection.</span></span><span class="sig-name descname"><span class="pre">DistanceVarianceThreshold</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection/_variance.py#L10-L103"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.DistanceVarianceThreshold" title="Link to this definition">#</a></dt>
+<dd><p>Distance selector that removes dimensions with low variance.</p>
+<p>This dimension selector is suitable for unsupervised learning since it only
+considers the input data and not the labels.</p>
+<p>For each dimension, the pairwise distance between time series is computed
+and dimensions with variance below the specified threshold are removed.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>threshold</strong><span class="classifier">float, optional</span></dt><dd><p>The variance threshold.</p>
+</dd>
+<dt><strong>sample</strong><span class="classifier">int or float, optional</span></dt><dd><p>Draw a sample of time series for the pairwise distance calculation.</p>
+<ul class="simple">
+<li><p>If None, use all samples.</p></li>
+<li><p>If float, use the specified fraction of samples.</p></li>
+<li><p>If int, use the specified number of samples.</p></li>
+</ul>
+</dd>
+<dt><strong>metric</strong><span class="classifier">str, optional</span></dt><dd><p>The distance metric.</p>
+</dd>
+<dt><strong>metric_params</strong><span class="classifier">dict, optional</span></dt><dd><p>Optional parameters to the distance metric.</p>
+<p>Read more about the metrics and their parameters in the
+<a class="reference internal" href="../../../guide/metrics.html#list-of-metrics"><span class="std std-ref">User guide</span></a>.</p>
+</dd>
+<dt><strong>random_state</strong><span class="classifier">int or RandomState, optional</span></dt><dd><p>Controls the random sampling of kernels.</p>
+<ul class="simple">
+<li><p>If <cite>int</cite>, <cite>random_state</cite> is the seed used by the random number
+generator.</p></li>
+<li><p>If <a class="reference external" href="https://numpy.org/doc/stable/reference/random/legacy.html#numpy.random.RandomState" title="(in NumPy v2.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code></a> instance, <cite>random_state</cite> is
+the random number generator.</p></li>
+<li><p>If <cite>None</cite>, the random number generator is the
+<a class="reference external" href="https://numpy.org/doc/stable/reference/random/legacy.html#numpy.random.RandomState" title="(in NumPy v2.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code></a> instance used by
+<code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random</span></code>.</p></li>
+</ul>
+</dd>
+<dt><strong>n_jobs</strong><span class="classifier">int, optional</span></dt><dd><p>The number of parallel jobs.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">wildboar.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_ering</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">wildboar.dimension_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">DistanceVarianceThreshold</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_ering</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dv</span> <span class="o">=</span> <span class="n">DistanceVarianceThreshold</span><span class="p">(</span><span class="n">threshold</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dv</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="go">DistanceVarianceThreshold(threshold=9)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dv</span><span class="o">.</span><span class="n">get_dimensions</span><span class="p">()</span>
+<span class="go">array([ True, False,  True,  True])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dv</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.DistanceVarianceThreshold.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.DistanceVarianceThreshold.fit" title="Link to this definition">#</a></dt>
+<dd><p>Learn the dimensions to select.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_dims, n_timestep)</span></dt><dd><p>The training samples.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">array-like of shape (n_samples, ), optional</span></dt><dd><p>Ignored.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>object</dt><dd><p>The instance itself.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.DistanceVarianceThreshold.fit_transform">
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">fit_params</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.DistanceVarianceThreshold.fit_transform" title="Link to this definition">#</a></dt>
+<dd><p>Fit to data, then transform it.</p>
+<p>Fits transformer to <cite>X</cite> and <cite>y</cite> with optional parameters <cite>fit_params</cite>
+and returns a transformed version of <cite>X</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_features)</span></dt><dd><p>Input samples.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">array-like of shape (n_samples,) or (n_samples, n_outputs), default=None</span></dt><dd><p>Target values (None for unsupervised transformations).</p>
+</dd>
+<dt><strong>**fit_params</strong><span class="classifier">dict</span></dt><dd><p>Additional fit parameters.
+Pass only if the estimator accepts additional params in its <cite>fit</cite> method.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>X_new</strong><span class="classifier">ndarray array of shape (n_samples, n_features_new)</span></dt><dd><p>Transformed array.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.DistanceVarianceThreshold.get_dimensions">
+<span class="sig-name descname"><span class="pre">get_dimensions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection/_base.py#L22-L38"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.DistanceVarianceThreshold.get_dimensions" title="Link to this definition">#</a></dt>
+<dd><p>Get a boolean mask with the selected dimensions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>indices</strong><span class="classifier">bool, optional</span></dt><dd><p>If True, return the indices instead of a boolean mask.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray of shape (n_selected_dims, )</dt><dd><p>An index that selects the retained dimensions.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.DistanceVarianceThreshold.get_metadata_routing">
+<span class="sig-name descname"><span class="pre">get_metadata_routing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.DistanceVarianceThreshold.get_metadata_routing" title="Link to this definition">#</a></dt>
+<dd><p>Get metadata routing of this object.</p>
+<p>Please check <a class="reference external" href="https://scikit-learn.org/stable/metadata_routing.html#metadata-routing" title="(in scikit-learn v1.9)"><span class="xref std std-ref">User Guide</span></a> on how the routing
+mechanism works.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>routing</strong><span class="classifier">MetadataRequest</span></dt><dd><p>A <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.utils.metadata_routing.MetadataRequest.html#sklearn.utils.metadata_routing.MetadataRequest" title="(in scikit-learn v1.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetadataRequest</span></code></a> encapsulating
+routing information.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.DistanceVarianceThreshold.get_params">
+<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.DistanceVarianceThreshold.get_params" title="Link to this definition">#</a></dt>
+<dd><p>Get parameters for this estimator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deep</strong><span class="classifier">bool, default=True</span></dt><dd><p>If True, will return the parameters for this estimator and
+contained subobjects that are estimators.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>params</strong><span class="classifier">dict</span></dt><dd><p>Parameter names mapped to their values.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.DistanceVarianceThreshold.inverse_transform">
+<span class="sig-name descname"><span class="pre">inverse_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection/_base.py#L68-L94"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.DistanceVarianceThreshold.inverse_transform" title="Link to this definition">#</a></dt>
+<dd><p>Reverse the transformation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_selected_dims, n_timestep)</span></dt><dd><p>The samples.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray of shape (n_samples, n_dims, n_timestep)</dt><dd><p>The samples with zeros inserted where dimensions
+would have been removed by <a class="reference internal" href="#wildboar.dimension_selection.DistanceVarianceThreshold.transform" title="wildboar.dimension_selection.DistanceVarianceThreshold.transform"><code class="xref py py-meth docutils literal notranslate"><span class="pre">transform</span></code></a>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.DistanceVarianceThreshold.set_output">
+<span class="sig-name descname"><span class="pre">set_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.DistanceVarianceThreshold.set_output" title="Link to this definition">#</a></dt>
+<dd><p>Set output container.</p>
+<p>Refer to the <a class="reference external" href="https://scikit-learn.org/stable/modules/df_output_transform.html#df-output-transform" title="(in scikit-learn v1.9)"><span class="xref std std-ref">user guide</span></a> for more details
+and <a class="reference external" href="https://scikit-learn.org/stable/auto_examples/miscellaneous/plot_set_output.html#sphx-glr-auto-examples-miscellaneous-plot-set-output-py" title="(in scikit-learn v1.9)"><span>Introducing the set_output API</span></a> for an
+example on how to use the API.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>transform</strong><span class="classifier">{“default”, “pandas”, “polars”}, default=None</span></dt><dd><p>Configure output of <cite>transform</cite> and <cite>fit_transform</cite>.</p>
+<ul class="simple">
+<li><p><cite>“default”</cite>: Default output format of a transformer</p></li>
+<li><p><cite>“pandas”</cite>: DataFrame output</p></li>
+<li><p><cite>“polars”</cite>: Polars output</p></li>
+<li><p><cite>None</cite>: Transform configuration is unchanged</p></li>
+</ul>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 1.4: </span><cite>“polars”</cite> option was added.</p>
+</div>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.DistanceVarianceThreshold.set_params">
+<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.DistanceVarianceThreshold.set_params" title="Link to this definition">#</a></dt>
+<dd><p>Set the parameters of this estimator.</p>
+<p>The method works on simple estimators as well as on nested objects
+(such as <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it’s
+possible to update each component of a nested object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>**params</strong><span class="classifier">dict</span></dt><dd><p>Estimator parameters.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.DistanceVarianceThreshold.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.DistanceVarianceThreshold.transform" title="Link to this definition">#</a></dt>
+<dd><p>Reduce X to the selected dimensions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_dims, n_timestep)</span></dt><dd><p>The samples.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray of shape (n_samples, n_selected_dims, n_timestep)</dt><dd><p>The samples with only the selected dimensions.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.ECSSelector">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">wildboar.dimension_selection.</span></span><span class="sig-name descname"><span class="pre">ECSSelector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prototype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection/_ecp.py#L48-L140"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.ECSSelector" title="Link to this definition">#</a></dt>
+<dd><p>ElbowClassSum (ECS) dimension selector.</p>
+<p>Select time series dimensions based on the sum of distances between pairs
+of classes.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>prototype</strong><span class="classifier">{“mean”, “median”, “dtw”}, optional</span></dt><dd><p>The method for computing the class prototypes.</p>
+</dd>
+<dt><strong>r</strong><span class="classifier">float, optional</span></dt><dd><p>The warping width if <cite>prototype</cite> is “dtw”.</p>
+</dd>
+<dt><strong>metric</strong><span class="classifier">str, optional</span></dt><dd><p>The distance metric.</p>
+</dd>
+<dt><strong>metric_params</strong><span class="classifier">dict, optional</span></dt><dd><p>Optional parameters to the distance metric.</p>
+<p>Read more about the metrics and their parameters in the
+<a class="reference internal" href="../../../guide/metrics.html#list-of-metrics"><span class="std std-ref">User guide</span></a>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.ECSSelector.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.ECSSelector.fit" title="Link to this definition">#</a></dt>
+<dd><p>Learn the dimensions to select.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_dims, n_timestep)</span></dt><dd><p>The training samples.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">array-like of shape (n_samples, )</span></dt><dd><p>Ignored.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>object</dt><dd><p>The instance itself.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.ECSSelector.fit_transform">
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">fit_params</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.ECSSelector.fit_transform" title="Link to this definition">#</a></dt>
+<dd><p>Fit to data, then transform it.</p>
+<p>Fits transformer to <cite>X</cite> and <cite>y</cite> with optional parameters <cite>fit_params</cite>
+and returns a transformed version of <cite>X</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_features)</span></dt><dd><p>Input samples.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">array-like of shape (n_samples,) or (n_samples, n_outputs), default=None</span></dt><dd><p>Target values (None for unsupervised transformations).</p>
+</dd>
+<dt><strong>**fit_params</strong><span class="classifier">dict</span></dt><dd><p>Additional fit parameters.
+Pass only if the estimator accepts additional params in its <cite>fit</cite> method.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>X_new</strong><span class="classifier">ndarray array of shape (n_samples, n_features_new)</span></dt><dd><p>Transformed array.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.ECSSelector.get_dimensions">
+<span class="sig-name descname"><span class="pre">get_dimensions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection/_base.py#L22-L38"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.ECSSelector.get_dimensions" title="Link to this definition">#</a></dt>
+<dd><p>Get a boolean mask with the selected dimensions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>indices</strong><span class="classifier">bool, optional</span></dt><dd><p>If True, return the indices instead of a boolean mask.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray of shape (n_selected_dims, )</dt><dd><p>An index that selects the retained dimensions.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.ECSSelector.get_metadata_routing">
+<span class="sig-name descname"><span class="pre">get_metadata_routing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.ECSSelector.get_metadata_routing" title="Link to this definition">#</a></dt>
+<dd><p>Get metadata routing of this object.</p>
+<p>Please check <a class="reference external" href="https://scikit-learn.org/stable/metadata_routing.html#metadata-routing" title="(in scikit-learn v1.9)"><span class="xref std std-ref">User Guide</span></a> on how the routing
+mechanism works.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>routing</strong><span class="classifier">MetadataRequest</span></dt><dd><p>A <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.utils.metadata_routing.MetadataRequest.html#sklearn.utils.metadata_routing.MetadataRequest" title="(in scikit-learn v1.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetadataRequest</span></code></a> encapsulating
+routing information.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.ECSSelector.get_params">
+<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.ECSSelector.get_params" title="Link to this definition">#</a></dt>
+<dd><p>Get parameters for this estimator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deep</strong><span class="classifier">bool, default=True</span></dt><dd><p>If True, will return the parameters for this estimator and
+contained subobjects that are estimators.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>params</strong><span class="classifier">dict</span></dt><dd><p>Parameter names mapped to their values.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.ECSSelector.inverse_transform">
+<span class="sig-name descname"><span class="pre">inverse_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection/_base.py#L68-L94"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.ECSSelector.inverse_transform" title="Link to this definition">#</a></dt>
+<dd><p>Reverse the transformation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_selected_dims, n_timestep)</span></dt><dd><p>The samples.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray of shape (n_samples, n_dims, n_timestep)</dt><dd><p>The samples with zeros inserted where dimensions
+would have been removed by <a class="reference internal" href="#wildboar.dimension_selection.ECSSelector.transform" title="wildboar.dimension_selection.ECSSelector.transform"><code class="xref py py-meth docutils literal notranslate"><span class="pre">transform</span></code></a>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.ECSSelector.set_output">
+<span class="sig-name descname"><span class="pre">set_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.ECSSelector.set_output" title="Link to this definition">#</a></dt>
+<dd><p>Set output container.</p>
+<p>Refer to the <a class="reference external" href="https://scikit-learn.org/stable/modules/df_output_transform.html#df-output-transform" title="(in scikit-learn v1.9)"><span class="xref std std-ref">user guide</span></a> for more details
+and <a class="reference external" href="https://scikit-learn.org/stable/auto_examples/miscellaneous/plot_set_output.html#sphx-glr-auto-examples-miscellaneous-plot-set-output-py" title="(in scikit-learn v1.9)"><span>Introducing the set_output API</span></a> for an
+example on how to use the API.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>transform</strong><span class="classifier">{“default”, “pandas”, “polars”}, default=None</span></dt><dd><p>Configure output of <cite>transform</cite> and <cite>fit_transform</cite>.</p>
+<ul class="simple">
+<li><p><cite>“default”</cite>: Default output format of a transformer</p></li>
+<li><p><cite>“pandas”</cite>: DataFrame output</p></li>
+<li><p><cite>“polars”</cite>: Polars output</p></li>
+<li><p><cite>None</cite>: Transform configuration is unchanged</p></li>
+</ul>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 1.4: </span><cite>“polars”</cite> option was added.</p>
+</div>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.ECSSelector.set_params">
+<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.ECSSelector.set_params" title="Link to this definition">#</a></dt>
+<dd><p>Set the parameters of this estimator.</p>
+<p>The method works on simple estimators as well as on nested objects
+(such as <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it’s
+possible to update each component of a nested object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>**params</strong><span class="classifier">dict</span></dt><dd><p>Estimator parameters.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.ECSSelector.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.ECSSelector.transform" title="Link to this definition">#</a></dt>
+<dd><p>Reduce X to the selected dimensions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_dims, n_timestep)</span></dt><dd><p>The samples.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray of shape (n_samples, n_selected_dims, n_timestep)</dt><dd><p>The samples with only the selected dimensions.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.SelectDimensionPercentile">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">wildboar.dimension_selection.</span></span><span class="sig-name descname"><span class="pre">SelectDimensionPercentile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">score_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">f_classif</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">percentile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection/_distance.py#L49-L153"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.SelectDimensionPercentile" title="Link to this definition">#</a></dt>
+<dd><p>Select the fraction of dimensions with largest score.</p>
+<p>For each dimension, the pairwise distance between time series is computed
+and dimensions with the lowest scores are removed.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>score_func</strong><span class="classifier">callable, optional</span></dt><dd><p>Function taking two arrays X and y and returning scores and optionally
+p-values. The default is <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.f_classif.html#sklearn.feature_selection.f_classif" title="(in scikit-learn v1.9)"><code class="xref py py-func docutils literal notranslate"><span class="pre">f_classif</span></code></a>.</p>
+</dd>
+<dt><strong>sample</strong><span class="classifier">int or float, optional</span></dt><dd><p>Draw a sample of time series for the pairwise distance calculation.</p>
+<ul class="simple">
+<li><p>If None, use all samples.</p></li>
+<li><p>If float, use the specified fraction of samples.</p></li>
+<li><p>If int, use the specified number of samples.</p></li>
+</ul>
+</dd>
+<dt><strong>percentile</strong><span class="classifier">float, optional</span></dt><dd><p>Percent of dimensions to retain.</p>
+</dd>
+<dt><strong>metric</strong><span class="classifier">str, optional</span></dt><dd><p>The distance metric.</p>
+</dd>
+<dt><strong>metric_params</strong><span class="classifier">dict, optional</span></dt><dd><p>Optional parameters to the distance metric.</p>
+<p>Read more about the metrics and their parameters in the
+<a class="reference internal" href="../../../guide/metrics.html#list-of-metrics"><span class="std std-ref">User guide</span></a>.</p>
+</dd>
+<dt><strong>random_state</strong><span class="classifier">int or RandomState, optional</span></dt><dd><p>Controls the random sampling of kernels.</p>
+<ul class="simple">
+<li><p>If <cite>int</cite>, <cite>random_state</cite> is the seed used by the random number
+generator.</p></li>
+<li><p>If <a class="reference external" href="https://numpy.org/doc/stable/reference/random/legacy.html#numpy.random.RandomState" title="(in NumPy v2.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code></a> instance, <cite>random_state</cite> is
+the random number generator.</p></li>
+<li><p>If <cite>None</cite>, the random number generator is the
+<a class="reference external" href="https://numpy.org/doc/stable/reference/random/legacy.html#numpy.random.RandomState" title="(in NumPy v2.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code></a> instance used by
+<code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random</span></code>.</p></li>
+</ul>
+</dd>
+<dt><strong>random_state</strong><span class="classifier">int or RandomState, optional</span></dt><dd><p>Controls the random sampling of kernels.</p>
+<ul class="simple">
+<li><p>If <cite>int</cite>, <cite>random_state</cite> is the seed used by the random number
+generator.</p></li>
+<li><p>If <a class="reference external" href="https://numpy.org/doc/stable/reference/random/legacy.html#numpy.random.RandomState" title="(in NumPy v2.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code></a> instance, <cite>random_state</cite> is
+the random number generator.</p></li>
+<li><p>If <cite>None</cite>, the random number generator is the
+<a class="reference external" href="https://numpy.org/doc/stable/reference/random/legacy.html#numpy.random.RandomState" title="(in NumPy v2.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code></a> instance used by
+<code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random</span></code>.</p></li>
+</ul>
+</dd>
+<dt><strong>n_jobs</strong><span class="classifier">int, optional</span></dt><dd><p>The number of parallel jobs.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">wildboar.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_ering</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">wildboar.dimension_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">SelectDimensionPercentile</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_ering</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sdp</span> <span class="o">=</span> <span class="n">SelectDimensionPercentile</span><span class="p">(</span><span class="n">percentile</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sdp</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="go">SelectDimensionPercentile(percentile=50)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sdp</span><span class="o">.</span><span class="n">get_dimensions</span><span class="p">()</span>
+<span class="go">array([False, False,  True,  True])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sdp</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.SelectDimensionPercentile.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.SelectDimensionPercentile.fit" title="Link to this definition">#</a></dt>
+<dd><p>Learn the dimensions to select.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_dims, n_timestep)</span></dt><dd><p>The training samples.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">array-like of shape (n_samples, ), optional</span></dt><dd><p>Ignored.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>object</dt><dd><p>The instance itself.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.SelectDimensionPercentile.fit_transform">
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">fit_params</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.SelectDimensionPercentile.fit_transform" title="Link to this definition">#</a></dt>
+<dd><p>Fit to data, then transform it.</p>
+<p>Fits transformer to <cite>X</cite> and <cite>y</cite> with optional parameters <cite>fit_params</cite>
+and returns a transformed version of <cite>X</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_features)</span></dt><dd><p>Input samples.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">array-like of shape (n_samples,) or (n_samples, n_outputs), default=None</span></dt><dd><p>Target values (None for unsupervised transformations).</p>
+</dd>
+<dt><strong>**fit_params</strong><span class="classifier">dict</span></dt><dd><p>Additional fit parameters.
+Pass only if the estimator accepts additional params in its <cite>fit</cite> method.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>X_new</strong><span class="classifier">ndarray array of shape (n_samples, n_features_new)</span></dt><dd><p>Transformed array.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.SelectDimensionPercentile.get_dimensions">
+<span class="sig-name descname"><span class="pre">get_dimensions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection/_base.py#L22-L38"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.SelectDimensionPercentile.get_dimensions" title="Link to this definition">#</a></dt>
+<dd><p>Get a boolean mask with the selected dimensions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>indices</strong><span class="classifier">bool, optional</span></dt><dd><p>If True, return the indices instead of a boolean mask.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray of shape (n_selected_dims, )</dt><dd><p>An index that selects the retained dimensions.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.SelectDimensionPercentile.get_metadata_routing">
+<span class="sig-name descname"><span class="pre">get_metadata_routing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.SelectDimensionPercentile.get_metadata_routing" title="Link to this definition">#</a></dt>
+<dd><p>Get metadata routing of this object.</p>
+<p>Please check <a class="reference external" href="https://scikit-learn.org/stable/metadata_routing.html#metadata-routing" title="(in scikit-learn v1.9)"><span class="xref std std-ref">User Guide</span></a> on how the routing
+mechanism works.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>routing</strong><span class="classifier">MetadataRequest</span></dt><dd><p>A <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.utils.metadata_routing.MetadataRequest.html#sklearn.utils.metadata_routing.MetadataRequest" title="(in scikit-learn v1.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetadataRequest</span></code></a> encapsulating
+routing information.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.SelectDimensionPercentile.get_params">
+<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.SelectDimensionPercentile.get_params" title="Link to this definition">#</a></dt>
+<dd><p>Get parameters for this estimator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deep</strong><span class="classifier">bool, default=True</span></dt><dd><p>If True, will return the parameters for this estimator and
+contained subobjects that are estimators.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>params</strong><span class="classifier">dict</span></dt><dd><p>Parameter names mapped to their values.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.SelectDimensionPercentile.inverse_transform">
+<span class="sig-name descname"><span class="pre">inverse_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection/_base.py#L68-L94"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.SelectDimensionPercentile.inverse_transform" title="Link to this definition">#</a></dt>
+<dd><p>Reverse the transformation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_selected_dims, n_timestep)</span></dt><dd><p>The samples.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray of shape (n_samples, n_dims, n_timestep)</dt><dd><p>The samples with zeros inserted where dimensions
+would have been removed by <a class="reference internal" href="#wildboar.dimension_selection.SelectDimensionPercentile.transform" title="wildboar.dimension_selection.SelectDimensionPercentile.transform"><code class="xref py py-meth docutils literal notranslate"><span class="pre">transform</span></code></a>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.SelectDimensionPercentile.set_output">
+<span class="sig-name descname"><span class="pre">set_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.SelectDimensionPercentile.set_output" title="Link to this definition">#</a></dt>
+<dd><p>Set output container.</p>
+<p>Refer to the <a class="reference external" href="https://scikit-learn.org/stable/modules/df_output_transform.html#df-output-transform" title="(in scikit-learn v1.9)"><span class="xref std std-ref">user guide</span></a> for more details
+and <a class="reference external" href="https://scikit-learn.org/stable/auto_examples/miscellaneous/plot_set_output.html#sphx-glr-auto-examples-miscellaneous-plot-set-output-py" title="(in scikit-learn v1.9)"><span>Introducing the set_output API</span></a> for an
+example on how to use the API.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>transform</strong><span class="classifier">{“default”, “pandas”, “polars”}, default=None</span></dt><dd><p>Configure output of <cite>transform</cite> and <cite>fit_transform</cite>.</p>
+<ul class="simple">
+<li><p><cite>“default”</cite>: Default output format of a transformer</p></li>
+<li><p><cite>“pandas”</cite>: DataFrame output</p></li>
+<li><p><cite>“polars”</cite>: Polars output</p></li>
+<li><p><cite>None</cite>: Transform configuration is unchanged</p></li>
+</ul>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 1.4: </span><cite>“polars”</cite> option was added.</p>
+</div>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.SelectDimensionPercentile.set_params">
+<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.SelectDimensionPercentile.set_params" title="Link to this definition">#</a></dt>
+<dd><p>Set the parameters of this estimator.</p>
+<p>The method works on simple estimators as well as on nested objects
+(such as <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it’s
+possible to update each component of a nested object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>**params</strong><span class="classifier">dict</span></dt><dd><p>Estimator parameters.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.SelectDimensionPercentile.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.SelectDimensionPercentile.transform" title="Link to this definition">#</a></dt>
+<dd><p>Reduce X to the selected dimensions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_dims, n_timestep)</span></dt><dd><p>The samples.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray of shape (n_samples, n_selected_dims, n_timestep)</dt><dd><p>The samples with only the selected dimensions.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.SelectDimensionSignificance">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">wildboar.dimension_selection.</span></span><span class="sig-name descname"><span class="pre">SelectDimensionSignificance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">score_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">f_classif</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'fpr'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection/_distance.py#L247-L358"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.SelectDimensionSignificance" title="Link to this definition">#</a></dt>
+<dd><p>Select dimensions with a p-value below <cite>alpha</cite>.</p>
+<p>For each dimension, the pairwise distance between time series is computed
+and dimensions with p-values above <cite>alpha</cite> is removed.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>score_func</strong><span class="classifier">callable, optional</span></dt><dd><p>Function taking two arrays X and y and returning scores and optionally
+p-values. The default is <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.f_classif.html#sklearn.feature_selection.f_classif" title="(in scikit-learn v1.9)"><code class="xref py py-func docutils literal notranslate"><span class="pre">f_classif</span></code></a>.</p>
+</dd>
+<dt><strong>sample</strong><span class="classifier">int or float, optional</span></dt><dd><p>Draw a sample of time series for the pairwise distance calculation.</p>
+<ul class="simple">
+<li><p>If None, use all samples.</p></li>
+<li><p>If float, use the specified fraction of samples.</p></li>
+<li><p>If int, use the specified number of samples.</p></li>
+</ul>
+</dd>
+<dt><strong>alpha</strong><span class="classifier">int, optional</span></dt><dd><p>Percent of dimensions to retain.</p>
+</dd>
+<dt><strong>method</strong><span class="classifier">{“fpr”, “fdr”, “fwe”}, optional</span></dt><dd><p>The method for correcting the alpha value.</p>
+<ul class="simple">
+<li><p>If <cite>“fpr”</cite>, false positive rate, apply no correction.</p></li>
+<li><p>If <cite>“fdr”</cite>, false discovery rate, apply the Benjamini-Hochberg procedure.</p></li>
+<li><p>If <cite>“fwer”</cite>, family-wise error rate, apply the Bonferroni procedure.</p></li>
+</ul>
+</dd>
+<dt><strong>metric</strong><span class="classifier">str, optional</span></dt><dd><p>The distance metric.</p>
+</dd>
+<dt><strong>metric_params</strong><span class="classifier">dict, optional</span></dt><dd><p>Optional parameters to the distance metric.</p>
+<p>Read more about the metrics and their parameters in the
+<a class="reference internal" href="../../../guide/metrics.html#list-of-metrics"><span class="std std-ref">User guide</span></a>.</p>
+</dd>
+<dt><strong>random_state</strong><span class="classifier">int or RandomState, optional</span></dt><dd><p>Controls the random sampling of kernels.</p>
+<ul class="simple">
+<li><p>If <cite>int</cite>, <cite>random_state</cite> is the seed used by the random number
+generator.</p></li>
+<li><p>If <a class="reference external" href="https://numpy.org/doc/stable/reference/random/legacy.html#numpy.random.RandomState" title="(in NumPy v2.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code></a> instance, <cite>random_state</cite> is
+the random number generator.</p></li>
+<li><p>If <cite>None</cite>, the random number generator is the
+<a class="reference external" href="https://numpy.org/doc/stable/reference/random/legacy.html#numpy.random.RandomState" title="(in NumPy v2.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code></a> instance used by
+<code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random</span></code>.</p></li>
+</ul>
+</dd>
+<dt><strong>n_jobs</strong><span class="classifier">int, optional</span></dt><dd><p>The number of parallel jobs.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">wildboar.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_basic_motions</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">wildboar.dimension_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">SelectDimensionSignificance</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_basic_motions</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sds</span> <span class="o">=</span> <span class="n">SelectDimensionSignificance</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sds</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="go">SelectDimensionSignificance(alpha=0.01)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sds</span><span class="o">.</span><span class="n">get_dimensions</span><span class="p">()</span>
+<span class="go">array([ True,  True,  True,  True,  True,  True])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sds</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(80, 6, 100)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.SelectDimensionSignificance.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.SelectDimensionSignificance.fit" title="Link to this definition">#</a></dt>
+<dd><p>Learn the dimensions to select.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_dims, n_timestep)</span></dt><dd><p>The training samples.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">array-like of shape (n_samples, ), optional</span></dt><dd><p>Ignored.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>object</dt><dd><p>The instance itself.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.SelectDimensionSignificance.fit_transform">
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">fit_params</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.SelectDimensionSignificance.fit_transform" title="Link to this definition">#</a></dt>
+<dd><p>Fit to data, then transform it.</p>
+<p>Fits transformer to <cite>X</cite> and <cite>y</cite> with optional parameters <cite>fit_params</cite>
+and returns a transformed version of <cite>X</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_features)</span></dt><dd><p>Input samples.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">array-like of shape (n_samples,) or (n_samples, n_outputs), default=None</span></dt><dd><p>Target values (None for unsupervised transformations).</p>
+</dd>
+<dt><strong>**fit_params</strong><span class="classifier">dict</span></dt><dd><p>Additional fit parameters.
+Pass only if the estimator accepts additional params in its <cite>fit</cite> method.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>X_new</strong><span class="classifier">ndarray array of shape (n_samples, n_features_new)</span></dt><dd><p>Transformed array.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.SelectDimensionSignificance.get_dimensions">
+<span class="sig-name descname"><span class="pre">get_dimensions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection/_base.py#L22-L38"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.SelectDimensionSignificance.get_dimensions" title="Link to this definition">#</a></dt>
+<dd><p>Get a boolean mask with the selected dimensions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>indices</strong><span class="classifier">bool, optional</span></dt><dd><p>If True, return the indices instead of a boolean mask.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray of shape (n_selected_dims, )</dt><dd><p>An index that selects the retained dimensions.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.SelectDimensionSignificance.get_metadata_routing">
+<span class="sig-name descname"><span class="pre">get_metadata_routing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.SelectDimensionSignificance.get_metadata_routing" title="Link to this definition">#</a></dt>
+<dd><p>Get metadata routing of this object.</p>
+<p>Please check <a class="reference external" href="https://scikit-learn.org/stable/metadata_routing.html#metadata-routing" title="(in scikit-learn v1.9)"><span class="xref std std-ref">User Guide</span></a> on how the routing
+mechanism works.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>routing</strong><span class="classifier">MetadataRequest</span></dt><dd><p>A <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.utils.metadata_routing.MetadataRequest.html#sklearn.utils.metadata_routing.MetadataRequest" title="(in scikit-learn v1.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetadataRequest</span></code></a> encapsulating
+routing information.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.SelectDimensionSignificance.get_params">
+<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.SelectDimensionSignificance.get_params" title="Link to this definition">#</a></dt>
+<dd><p>Get parameters for this estimator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deep</strong><span class="classifier">bool, default=True</span></dt><dd><p>If True, will return the parameters for this estimator and
+contained subobjects that are estimators.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>params</strong><span class="classifier">dict</span></dt><dd><p>Parameter names mapped to their values.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.SelectDimensionSignificance.inverse_transform">
+<span class="sig-name descname"><span class="pre">inverse_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection/_base.py#L68-L94"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.SelectDimensionSignificance.inverse_transform" title="Link to this definition">#</a></dt>
+<dd><p>Reverse the transformation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_selected_dims, n_timestep)</span></dt><dd><p>The samples.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray of shape (n_samples, n_dims, n_timestep)</dt><dd><p>The samples with zeros inserted where dimensions
+would have been removed by <a class="reference internal" href="#wildboar.dimension_selection.SelectDimensionSignificance.transform" title="wildboar.dimension_selection.SelectDimensionSignificance.transform"><code class="xref py py-meth docutils literal notranslate"><span class="pre">transform</span></code></a>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.SelectDimensionSignificance.set_output">
+<span class="sig-name descname"><span class="pre">set_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.SelectDimensionSignificance.set_output" title="Link to this definition">#</a></dt>
+<dd><p>Set output container.</p>
+<p>Refer to the <a class="reference external" href="https://scikit-learn.org/stable/modules/df_output_transform.html#df-output-transform" title="(in scikit-learn v1.9)"><span class="xref std std-ref">user guide</span></a> for more details
+and <a class="reference external" href="https://scikit-learn.org/stable/auto_examples/miscellaneous/plot_set_output.html#sphx-glr-auto-examples-miscellaneous-plot-set-output-py" title="(in scikit-learn v1.9)"><span>Introducing the set_output API</span></a> for an
+example on how to use the API.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>transform</strong><span class="classifier">{“default”, “pandas”, “polars”}, default=None</span></dt><dd><p>Configure output of <cite>transform</cite> and <cite>fit_transform</cite>.</p>
+<ul class="simple">
+<li><p><cite>“default”</cite>: Default output format of a transformer</p></li>
+<li><p><cite>“pandas”</cite>: DataFrame output</p></li>
+<li><p><cite>“polars”</cite>: Polars output</p></li>
+<li><p><cite>None</cite>: Transform configuration is unchanged</p></li>
+</ul>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 1.4: </span><cite>“polars”</cite> option was added.</p>
+</div>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.SelectDimensionSignificance.set_params">
+<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.SelectDimensionSignificance.set_params" title="Link to this definition">#</a></dt>
+<dd><p>Set the parameters of this estimator.</p>
+<p>The method works on simple estimators as well as on nested objects
+(such as <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it’s
+possible to update each component of a nested object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>**params</strong><span class="classifier">dict</span></dt><dd><p>Estimator parameters.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.SelectDimensionSignificance.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.SelectDimensionSignificance.transform" title="Link to this definition">#</a></dt>
+<dd><p>Reduce X to the selected dimensions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_dims, n_timestep)</span></dt><dd><p>The samples.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray of shape (n_samples, n_selected_dims, n_timestep)</dt><dd><p>The samples with only the selected dimensions.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.SelectDimensionTopK">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">wildboar.dimension_selection.</span></span><span class="sig-name descname"><span class="pre">SelectDimensionTopK</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">score_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">f_classif</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection/_distance.py#L156-L244"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.SelectDimensionTopK" title="Link to this definition">#</a></dt>
+<dd><p>Select the dimensions with the <cite>k</cite> highest scores.</p>
+<p>For each dimension, the pairwise distance between time series is computed
+and dimensions with the lowest scores are removed.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>score_func</strong><span class="classifier">callable, optional</span></dt><dd><p>Function taking two arrays X and y and returning scores and optionally
+p-values. The default is <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.f_classif.html#sklearn.feature_selection.f_classif" title="(in scikit-learn v1.9)"><code class="xref py py-func docutils literal notranslate"><span class="pre">f_classif</span></code></a>.</p>
+</dd>
+<dt><strong>sample</strong><span class="classifier">int or float, optional</span></dt><dd><p>Draw a sample of time series for the pairwise distance calculation.</p>
+<ul class="simple">
+<li><p>If None, use all samples.</p></li>
+<li><p>If float, use the specified fraction of samples.</p></li>
+<li><p>If int, use the specified number of samples.</p></li>
+</ul>
+</dd>
+<dt><strong>k</strong><span class="classifier">int, optional</span></dt><dd><p>The number of top dimensions to select.</p>
+</dd>
+<dt><strong>metric</strong><span class="classifier">str, optional</span></dt><dd><p>The distance metric.</p>
+</dd>
+<dt><strong>metric_params</strong><span class="classifier">dict, optional</span></dt><dd><p>Optional parameters to the distance metric.</p>
+<p>Read more about the metrics and their parameters in the
+<a class="reference internal" href="../../../guide/metrics.html#list-of-metrics"><span class="std std-ref">User guide</span></a>.</p>
+</dd>
+<dt><strong>random_state</strong><span class="classifier">int or RandomState, optional</span></dt><dd><p>Controls the random sampling of kernels.</p>
+<ul class="simple">
+<li><p>If <cite>int</cite>, <cite>random_state</cite> is the seed used by the random number
+generator.</p></li>
+<li><p>If <a class="reference external" href="https://numpy.org/doc/stable/reference/random/legacy.html#numpy.random.RandomState" title="(in NumPy v2.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code></a> instance, <cite>random_state</cite> is
+the random number generator.</p></li>
+<li><p>If <cite>None</cite>, the random number generator is the
+<a class="reference external" href="https://numpy.org/doc/stable/reference/random/legacy.html#numpy.random.RandomState" title="(in NumPy v2.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code></a> instance used by
+<code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random</span></code>.</p></li>
+</ul>
+</dd>
+<dt><strong>n_jobs</strong><span class="classifier">int, optional</span></dt><dd><p>The number of parallel jobs.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">wildboar.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_ering</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">wildboar.dimension_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">SelectDimensionTopK</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_ering</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sdt</span> <span class="o">=</span> <span class="n">SelectDimensionTopK</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sdt</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="go">SelectDimensionTopK(k=1)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sdt</span><span class="o">.</span><span class="n">get_dimensions</span><span class="p">()</span>
+<span class="go">array([False, False,  True, False])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sdt</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(300, 65)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.SelectDimensionTopK.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.SelectDimensionTopK.fit" title="Link to this definition">#</a></dt>
+<dd><p>Learn the dimensions to select.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_dims, n_timestep)</span></dt><dd><p>The training samples.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">array-like of shape (n_samples, ), optional</span></dt><dd><p>Ignored.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>object</dt><dd><p>The instance itself.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.SelectDimensionTopK.fit_transform">
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">fit_params</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.SelectDimensionTopK.fit_transform" title="Link to this definition">#</a></dt>
+<dd><p>Fit to data, then transform it.</p>
+<p>Fits transformer to <cite>X</cite> and <cite>y</cite> with optional parameters <cite>fit_params</cite>
+and returns a transformed version of <cite>X</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_features)</span></dt><dd><p>Input samples.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">array-like of shape (n_samples,) or (n_samples, n_outputs), default=None</span></dt><dd><p>Target values (None for unsupervised transformations).</p>
+</dd>
+<dt><strong>**fit_params</strong><span class="classifier">dict</span></dt><dd><p>Additional fit parameters.
+Pass only if the estimator accepts additional params in its <cite>fit</cite> method.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>X_new</strong><span class="classifier">ndarray array of shape (n_samples, n_features_new)</span></dt><dd><p>Transformed array.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.SelectDimensionTopK.get_dimensions">
+<span class="sig-name descname"><span class="pre">get_dimensions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection/_base.py#L22-L38"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.SelectDimensionTopK.get_dimensions" title="Link to this definition">#</a></dt>
+<dd><p>Get a boolean mask with the selected dimensions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>indices</strong><span class="classifier">bool, optional</span></dt><dd><p>If True, return the indices instead of a boolean mask.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray of shape (n_selected_dims, )</dt><dd><p>An index that selects the retained dimensions.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.SelectDimensionTopK.get_metadata_routing">
+<span class="sig-name descname"><span class="pre">get_metadata_routing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.SelectDimensionTopK.get_metadata_routing" title="Link to this definition">#</a></dt>
+<dd><p>Get metadata routing of this object.</p>
+<p>Please check <a class="reference external" href="https://scikit-learn.org/stable/metadata_routing.html#metadata-routing" title="(in scikit-learn v1.9)"><span class="xref std std-ref">User Guide</span></a> on how the routing
+mechanism works.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>routing</strong><span class="classifier">MetadataRequest</span></dt><dd><p>A <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.utils.metadata_routing.MetadataRequest.html#sklearn.utils.metadata_routing.MetadataRequest" title="(in scikit-learn v1.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetadataRequest</span></code></a> encapsulating
+routing information.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.SelectDimensionTopK.get_params">
+<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.SelectDimensionTopK.get_params" title="Link to this definition">#</a></dt>
+<dd><p>Get parameters for this estimator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deep</strong><span class="classifier">bool, default=True</span></dt><dd><p>If True, will return the parameters for this estimator and
+contained subobjects that are estimators.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>params</strong><span class="classifier">dict</span></dt><dd><p>Parameter names mapped to their values.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.SelectDimensionTopK.inverse_transform">
+<span class="sig-name descname"><span class="pre">inverse_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection/_base.py#L68-L94"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.SelectDimensionTopK.inverse_transform" title="Link to this definition">#</a></dt>
+<dd><p>Reverse the transformation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_selected_dims, n_timestep)</span></dt><dd><p>The samples.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray of shape (n_samples, n_dims, n_timestep)</dt><dd><p>The samples with zeros inserted where dimensions
+would have been removed by <a class="reference internal" href="#wildboar.dimension_selection.SelectDimensionTopK.transform" title="wildboar.dimension_selection.SelectDimensionTopK.transform"><code class="xref py py-meth docutils literal notranslate"><span class="pre">transform</span></code></a>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.SelectDimensionTopK.set_output">
+<span class="sig-name descname"><span class="pre">set_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.SelectDimensionTopK.set_output" title="Link to this definition">#</a></dt>
+<dd><p>Set output container.</p>
+<p>Refer to the <a class="reference external" href="https://scikit-learn.org/stable/modules/df_output_transform.html#df-output-transform" title="(in scikit-learn v1.9)"><span class="xref std std-ref">user guide</span></a> for more details
+and <a class="reference external" href="https://scikit-learn.org/stable/auto_examples/miscellaneous/plot_set_output.html#sphx-glr-auto-examples-miscellaneous-plot-set-output-py" title="(in scikit-learn v1.9)"><span>Introducing the set_output API</span></a> for an
+example on how to use the API.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>transform</strong><span class="classifier">{“default”, “pandas”, “polars”}, default=None</span></dt><dd><p>Configure output of <cite>transform</cite> and <cite>fit_transform</cite>.</p>
+<ul class="simple">
+<li><p><cite>“default”</cite>: Default output format of a transformer</p></li>
+<li><p><cite>“pandas”</cite>: DataFrame output</p></li>
+<li><p><cite>“polars”</cite>: Polars output</p></li>
+<li><p><cite>None</cite>: Transform configuration is unchanged</p></li>
+</ul>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 1.4: </span><cite>“polars”</cite> option was added.</p>
+</div>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.SelectDimensionTopK.set_params">
+<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.SelectDimensionTopK.set_params" title="Link to this definition">#</a></dt>
+<dd><p>Set the parameters of this estimator.</p>
+<p>The method works on simple estimators as well as on nested objects
+(such as <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it’s
+possible to update each component of a nested object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>**params</strong><span class="classifier">dict</span></dt><dd><p>Estimator parameters.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.SelectDimensionTopK.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.SelectDimensionTopK.transform" title="Link to this definition">#</a></dt>
+<dd><p>Reduce X to the selected dimensions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_dims, n_timestep)</span></dt><dd><p>The samples.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray of shape (n_samples, n_selected_dims, n_timestep)</dt><dd><p>The samples with only the selected dimensions.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.SequentialDimensionSelector">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">wildboar.dimension_selection.</span></span><span class="sig-name descname"><span class="pre">SequentialDimensionSelector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_dims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'forward'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection/_sequential.py#L15-L173"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.SequentialDimensionSelector" title="Link to this definition">#</a></dt>
+<dd><p>Sequentially select a subset of dimensions.</p>
+<p>Sequentially select a set of dimensions by adding (forward)
+or removing (backward) dimensions to greedily form a subset.
+At each iteration, the algorithm chooses the best dimension
+to add or remove based on the cross validation score.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>estimator</strong><span class="classifier">estimator</span></dt><dd><p>An unfitted estimator.</p>
+</dd>
+<dt><strong>n_dims</strong><span class="classifier">{“auto”} or int, optional</span></dt><dd><p>The number of dimensions to select.</p>
+<p>If <cite>“auto”</cite>, the behavior depends on <cite>tol</cite>:</p>
+<ul class="simple">
+<li><p>if <cite>tol</cite> is not <cite>None</cite>, dimensions are selected as long as the
+increase in performance is larger than <cite>tol</cite>.</p></li>
+<li><p>otherwise, we select half of the dimensions.</p></li>
+</ul>
+<p>If integer, <cite>n_dims</cite> is the number of dimensions to select.</p>
+</dd>
+<dt><strong>cv</strong><span class="classifier">int, cross-validation generator or an iterable, optional</span></dt><dd><p>The cross-validation splitting strategy.</p>
+</dd>
+<dt><strong>scoring</strong><span class="classifier">str or callable, optional</span></dt><dd><p>A str (see: <a class="reference external" href="https://scikit-learn.org/stable/modules/model_evaluation.html#scoring-parameter" title="(in scikit-learn v1.9)"><span>The scoring parameter: defining model evaluation rules</span></a>) or callable to evaluate
+the predictions on the test set.</p>
+</dd>
+<dt><strong>direction</strong><span class="classifier">{“forward”, “backward”}, optional</span></dt><dd><p>Backward of forward selection.</p>
+</dd>
+<dt><strong>tol</strong><span class="classifier">float, optional</span></dt><dd><p>The tolerance. If the score is not increased by <cite>tol</cite> between two
+iterations, return.</p>
+<p>If <cite>direction=”backward”</cite>, <cite>tol</cite> can be negative to reduce the number
+of dimensions.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">wildboar.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_ering</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">wildboar.dimension_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">SequentialDimensionSelector</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">wildboar.distance</span><span class="w"> </span><span class="kn">import</span> <span class="n">KNeighborsClassifier</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_ering</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">KNeighborsClassifier</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sds</span> <span class="o">=</span> <span class="n">SequentialDimensionSelector</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">n_dims</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sds</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="go">SequentialDimensionSelector(estimator=KNeighborsClassifier(), n_dims=2)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sds</span><span class="o">.</span><span class="n">get_dimensions</span><span class="p">()</span>
+<span class="go">array([ True, False, False,  True])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sds</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(300, 2, 65)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.SequentialDimensionSelector.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection/_sequential.py#L98-L144"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.SequentialDimensionSelector.fit" title="Link to this definition">#</a></dt>
+<dd><p>Learn the dimensions to select.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_dims, n_timestep)</span></dt><dd><p>The training samples.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">array-like of shape (n_samples, )</span></dt><dd><p>The training labels.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>object</dt><dd><p>The instance itself.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.SequentialDimensionSelector.fit_transform">
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">fit_params</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.SequentialDimensionSelector.fit_transform" title="Link to this definition">#</a></dt>
+<dd><p>Fit to data, then transform it.</p>
+<p>Fits transformer to <cite>X</cite> and <cite>y</cite> with optional parameters <cite>fit_params</cite>
+and returns a transformed version of <cite>X</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_features)</span></dt><dd><p>Input samples.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">array-like of shape (n_samples,) or (n_samples, n_outputs), default=None</span></dt><dd><p>Target values (None for unsupervised transformations).</p>
+</dd>
+<dt><strong>**fit_params</strong><span class="classifier">dict</span></dt><dd><p>Additional fit parameters.
+Pass only if the estimator accepts additional params in its <cite>fit</cite> method.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>X_new</strong><span class="classifier">ndarray array of shape (n_samples, n_features_new)</span></dt><dd><p>Transformed array.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.SequentialDimensionSelector.get_dimensions">
+<span class="sig-name descname"><span class="pre">get_dimensions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection/_base.py#L22-L38"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.SequentialDimensionSelector.get_dimensions" title="Link to this definition">#</a></dt>
+<dd><p>Get a boolean mask with the selected dimensions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>indices</strong><span class="classifier">bool, optional</span></dt><dd><p>If True, return the indices instead of a boolean mask.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray of shape (n_selected_dims, )</dt><dd><p>An index that selects the retained dimensions.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.SequentialDimensionSelector.get_metadata_routing">
+<span class="sig-name descname"><span class="pre">get_metadata_routing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.SequentialDimensionSelector.get_metadata_routing" title="Link to this definition">#</a></dt>
+<dd><p>Get metadata routing of this object.</p>
+<p>Please check <a class="reference external" href="https://scikit-learn.org/stable/metadata_routing.html#metadata-routing" title="(in scikit-learn v1.9)"><span class="xref std std-ref">User Guide</span></a> on how the routing
+mechanism works.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>routing</strong><span class="classifier">MetadataRequest</span></dt><dd><p>A <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.utils.metadata_routing.MetadataRequest.html#sklearn.utils.metadata_routing.MetadataRequest" title="(in scikit-learn v1.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetadataRequest</span></code></a> encapsulating
+routing information.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.SequentialDimensionSelector.get_params">
+<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.SequentialDimensionSelector.get_params" title="Link to this definition">#</a></dt>
+<dd><p>Get parameters for this estimator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deep</strong><span class="classifier">bool, default=True</span></dt><dd><p>If True, will return the parameters for this estimator and
+contained subobjects that are estimators.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>params</strong><span class="classifier">dict</span></dt><dd><p>Parameter names mapped to their values.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.SequentialDimensionSelector.inverse_transform">
+<span class="sig-name descname"><span class="pre">inverse_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection/_base.py#L68-L94"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.SequentialDimensionSelector.inverse_transform" title="Link to this definition">#</a></dt>
+<dd><p>Reverse the transformation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_selected_dims, n_timestep)</span></dt><dd><p>The samples.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray of shape (n_samples, n_dims, n_timestep)</dt><dd><p>The samples with zeros inserted where dimensions
+would have been removed by <a class="reference internal" href="#wildboar.dimension_selection.SequentialDimensionSelector.transform" title="wildboar.dimension_selection.SequentialDimensionSelector.transform"><code class="xref py py-meth docutils literal notranslate"><span class="pre">transform</span></code></a>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.SequentialDimensionSelector.set_output">
+<span class="sig-name descname"><span class="pre">set_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.SequentialDimensionSelector.set_output" title="Link to this definition">#</a></dt>
+<dd><p>Set output container.</p>
+<p>Refer to the <a class="reference external" href="https://scikit-learn.org/stable/modules/df_output_transform.html#df-output-transform" title="(in scikit-learn v1.9)"><span class="xref std std-ref">user guide</span></a> for more details
+and <a class="reference external" href="https://scikit-learn.org/stable/auto_examples/miscellaneous/plot_set_output.html#sphx-glr-auto-examples-miscellaneous-plot-set-output-py" title="(in scikit-learn v1.9)"><span>Introducing the set_output API</span></a> for an
+example on how to use the API.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>transform</strong><span class="classifier">{“default”, “pandas”, “polars”}, default=None</span></dt><dd><p>Configure output of <cite>transform</cite> and <cite>fit_transform</cite>.</p>
+<ul class="simple">
+<li><p><cite>“default”</cite>: Default output format of a transformer</p></li>
+<li><p><cite>“pandas”</cite>: DataFrame output</p></li>
+<li><p><cite>“polars”</cite>: Polars output</p></li>
+<li><p><cite>None</cite>: Transform configuration is unchanged</p></li>
+</ul>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 1.4: </span><cite>“polars”</cite> option was added.</p>
+</div>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.SequentialDimensionSelector.set_params">
+<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.SequentialDimensionSelector.set_params" title="Link to this definition">#</a></dt>
+<dd><p>Set the parameters of this estimator.</p>
+<p>The method works on simple estimators as well as on nested objects
+(such as <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it’s
+possible to update each component of a nested object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>**params</strong><span class="classifier">dict</span></dt><dd><p>Estimator parameters.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.dimension_selection.SequentialDimensionSelector.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/dimension_selection.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection.SequentialDimensionSelector.transform" title="Link to this definition">#</a></dt>
+<dd><p>Reduce X to the selected dimensions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_dims, n_timestep)</span></dt><dd><p>The samples.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray of shape (n_samples, n_selected_dims, n_timestep)</dt><dd><p>The samples with only the selected dimensions.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../datasets/preprocess/index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.preprocess</span></code></p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../distance/index.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance</span></code></p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#classes">Classes</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.DistanceVarianceThreshold"><code class="docutils literal notranslate"><span class="pre">DistanceVarianceThreshold</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.DistanceVarianceThreshold.fit"><code class="docutils literal notranslate"><span class="pre">DistanceVarianceThreshold.fit</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.DistanceVarianceThreshold.fit_transform"><code class="docutils literal notranslate"><span class="pre">DistanceVarianceThreshold.fit_transform</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.DistanceVarianceThreshold.get_dimensions"><code class="docutils literal notranslate"><span class="pre">DistanceVarianceThreshold.get_dimensions</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.DistanceVarianceThreshold.get_metadata_routing"><code class="docutils literal notranslate"><span class="pre">DistanceVarianceThreshold.get_metadata_routing</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.DistanceVarianceThreshold.get_params"><code class="docutils literal notranslate"><span class="pre">DistanceVarianceThreshold.get_params</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.DistanceVarianceThreshold.inverse_transform"><code class="docutils literal notranslate"><span class="pre">DistanceVarianceThreshold.inverse_transform</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.DistanceVarianceThreshold.set_output"><code class="docutils literal notranslate"><span class="pre">DistanceVarianceThreshold.set_output</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.DistanceVarianceThreshold.set_params"><code class="docutils literal notranslate"><span class="pre">DistanceVarianceThreshold.set_params</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.DistanceVarianceThreshold.transform"><code class="docutils literal notranslate"><span class="pre">DistanceVarianceThreshold.transform</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.ECSSelector"><code class="docutils literal notranslate"><span class="pre">ECSSelector</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.ECSSelector.fit"><code class="docutils literal notranslate"><span class="pre">ECSSelector.fit</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.ECSSelector.fit_transform"><code class="docutils literal notranslate"><span class="pre">ECSSelector.fit_transform</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.ECSSelector.get_dimensions"><code class="docutils literal notranslate"><span class="pre">ECSSelector.get_dimensions</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.ECSSelector.get_metadata_routing"><code class="docutils literal notranslate"><span class="pre">ECSSelector.get_metadata_routing</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.ECSSelector.get_params"><code class="docutils literal notranslate"><span class="pre">ECSSelector.get_params</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.ECSSelector.inverse_transform"><code class="docutils literal notranslate"><span class="pre">ECSSelector.inverse_transform</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.ECSSelector.set_output"><code class="docutils literal notranslate"><span class="pre">ECSSelector.set_output</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.ECSSelector.set_params"><code class="docutils literal notranslate"><span class="pre">ECSSelector.set_params</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.ECSSelector.transform"><code class="docutils literal notranslate"><span class="pre">ECSSelector.transform</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.SelectDimensionPercentile"><code class="docutils literal notranslate"><span class="pre">SelectDimensionPercentile</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.SelectDimensionPercentile.fit"><code class="docutils literal notranslate"><span class="pre">SelectDimensionPercentile.fit</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.SelectDimensionPercentile.fit_transform"><code class="docutils literal notranslate"><span class="pre">SelectDimensionPercentile.fit_transform</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.SelectDimensionPercentile.get_dimensions"><code class="docutils literal notranslate"><span class="pre">SelectDimensionPercentile.get_dimensions</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.SelectDimensionPercentile.get_metadata_routing"><code class="docutils literal notranslate"><span class="pre">SelectDimensionPercentile.get_metadata_routing</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.SelectDimensionPercentile.get_params"><code class="docutils literal notranslate"><span class="pre">SelectDimensionPercentile.get_params</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.SelectDimensionPercentile.inverse_transform"><code class="docutils literal notranslate"><span class="pre">SelectDimensionPercentile.inverse_transform</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.SelectDimensionPercentile.set_output"><code class="docutils literal notranslate"><span class="pre">SelectDimensionPercentile.set_output</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.SelectDimensionPercentile.set_params"><code class="docutils literal notranslate"><span class="pre">SelectDimensionPercentile.set_params</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.SelectDimensionPercentile.transform"><code class="docutils literal notranslate"><span class="pre">SelectDimensionPercentile.transform</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.SelectDimensionSignificance"><code class="docutils literal notranslate"><span class="pre">SelectDimensionSignificance</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.SelectDimensionSignificance.fit"><code class="docutils literal notranslate"><span class="pre">SelectDimensionSignificance.fit</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.SelectDimensionSignificance.fit_transform"><code class="docutils literal notranslate"><span class="pre">SelectDimensionSignificance.fit_transform</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.SelectDimensionSignificance.get_dimensions"><code class="docutils literal notranslate"><span class="pre">SelectDimensionSignificance.get_dimensions</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.SelectDimensionSignificance.get_metadata_routing"><code class="docutils literal notranslate"><span class="pre">SelectDimensionSignificance.get_metadata_routing</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.SelectDimensionSignificance.get_params"><code class="docutils literal notranslate"><span class="pre">SelectDimensionSignificance.get_params</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.SelectDimensionSignificance.inverse_transform"><code class="docutils literal notranslate"><span class="pre">SelectDimensionSignificance.inverse_transform</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.SelectDimensionSignificance.set_output"><code class="docutils literal notranslate"><span class="pre">SelectDimensionSignificance.set_output</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.SelectDimensionSignificance.set_params"><code class="docutils literal notranslate"><span class="pre">SelectDimensionSignificance.set_params</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.SelectDimensionSignificance.transform"><code class="docutils literal notranslate"><span class="pre">SelectDimensionSignificance.transform</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.SelectDimensionTopK"><code class="docutils literal notranslate"><span class="pre">SelectDimensionTopK</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.SelectDimensionTopK.fit"><code class="docutils literal notranslate"><span class="pre">SelectDimensionTopK.fit</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.SelectDimensionTopK.fit_transform"><code class="docutils literal notranslate"><span class="pre">SelectDimensionTopK.fit_transform</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.SelectDimensionTopK.get_dimensions"><code class="docutils literal notranslate"><span class="pre">SelectDimensionTopK.get_dimensions</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.SelectDimensionTopK.get_metadata_routing"><code class="docutils literal notranslate"><span class="pre">SelectDimensionTopK.get_metadata_routing</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.SelectDimensionTopK.get_params"><code class="docutils literal notranslate"><span class="pre">SelectDimensionTopK.get_params</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.SelectDimensionTopK.inverse_transform"><code class="docutils literal notranslate"><span class="pre">SelectDimensionTopK.inverse_transform</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.SelectDimensionTopK.set_output"><code class="docutils literal notranslate"><span class="pre">SelectDimensionTopK.set_output</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.SelectDimensionTopK.set_params"><code class="docutils literal notranslate"><span class="pre">SelectDimensionTopK.set_params</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.SelectDimensionTopK.transform"><code class="docutils literal notranslate"><span class="pre">SelectDimensionTopK.transform</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.SequentialDimensionSelector"><code class="docutils literal notranslate"><span class="pre">SequentialDimensionSelector</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.SequentialDimensionSelector.fit"><code class="docutils literal notranslate"><span class="pre">SequentialDimensionSelector.fit</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.SequentialDimensionSelector.fit_transform"><code class="docutils literal notranslate"><span class="pre">SequentialDimensionSelector.fit_transform</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.SequentialDimensionSelector.get_dimensions"><code class="docutils literal notranslate"><span class="pre">SequentialDimensionSelector.get_dimensions</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.SequentialDimensionSelector.get_metadata_routing"><code class="docutils literal notranslate"><span class="pre">SequentialDimensionSelector.get_metadata_routing</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.SequentialDimensionSelector.get_params"><code class="docutils literal notranslate"><span class="pre">SequentialDimensionSelector.get_params</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.SequentialDimensionSelector.inverse_transform"><code class="docutils literal notranslate"><span class="pre">SequentialDimensionSelector.inverse_transform</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.SequentialDimensionSelector.set_output"><code class="docutils literal notranslate"><span class="pre">SequentialDimensionSelector.set_output</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.SequentialDimensionSelector.set_params"><code class="docutils literal notranslate"><span class="pre">SequentialDimensionSelector.set_params</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.dimension_selection.SequentialDimensionSelector.transform"><code class="docutils literal notranslate"><span class="pre">SequentialDimensionSelector.transform</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../../_sources/api/wildboar/dimension_selection/index.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2023, Isak Samsten.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.1.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

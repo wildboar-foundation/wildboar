@@ -1,0 +1,2502 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" data-theme="auto">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Index &#8212; Wildboar 1.3.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "auto";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "auto";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=451fe87e" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/tabs.css?v=4c969af8" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=584e34e5" />
+    <link rel="stylesheet" type="text/css" href="_static/css/pygments-override.css?v=9e853fe2" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
+
+    <script src="_static/documentation_options.js?v=1f29e9d3"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/tabs.js?v=3ee01567"></script>
+    <script src="_static/toggleprompt.js?v=5801b3bb"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'genindex';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://wildboar.dev/_versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '1.3';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="_static/js/fa.js?v=744fd48f"></script>
+    <link rel="index" title="Index" href="#" />
+    <link rel="search" title="Search" href="search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.3.0" />
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="auto">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt=""/>
+    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt=""/>
+  
+  
+    <p class="title logo__title">Wildboar</p>
+  
+</a></div>
+    
+      <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="install.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="api/index.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="more/whatsnew.html">
+    What’s new
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/wildboar-foundation/wildboar/" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/wildboar/" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-custom fa-lg" data-prefix="fa-custom" data-icon="pypi" aria-hidden="true"></i><span class="visually-hidden">PyPI</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="install.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="api/index.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="more/whatsnew.html">
+    What’s new
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/wildboar-foundation/wildboar/" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/wildboar/" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-custom fa-lg" data-prefix="fa-custom" data-icon="pypi" aria-hidden="true"></i><span class="visually-hidden">PyPI</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none"></div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+
+<h1 id="index">Index</h1>
+
+<div class="genindex-jumpbox">
+ <a href="#A"><strong>A</strong></a>
+ | <a href="#B"><strong>B</strong></a>
+ | <a href="#C"><strong>C</strong></a>
+ | <a href="#D"><strong>D</strong></a>
+ | <a href="#E"><strong>E</strong></a>
+ | <a href="#F"><strong>F</strong></a>
+ | <a href="#G"><strong>G</strong></a>
+ | <a href="#H"><strong>H</strong></a>
+ | <a href="#I"><strong>I</strong></a>
+ | <a href="#J"><strong>J</strong></a>
+ | <a href="#K"><strong>K</strong></a>
+ | <a href="#L"><strong>L</strong></a>
+ | <a href="#M"><strong>M</strong></a>
+ | <a href="#N"><strong>N</strong></a>
+ | <a href="#O"><strong>O</strong></a>
+ | <a href="#P"><strong>P</strong></a>
+ | <a href="#Q"><strong>Q</strong></a>
+ | <a href="#R"><strong>R</strong></a>
+ | <a href="#S"><strong>S</strong></a>
+ | <a href="#T"><strong>T</strong></a>
+ | <a href="#V"><strong>V</strong></a>
+ | <a href="#W"><strong>W</strong></a>
+ 
+</div>
+<h2 id="A">A</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/wildboar/explain/index.html#wildboar.explain.AmplitudeImportance">AmplitudeImportance (class in wildboar.explain)</a>
+</li>
+      <li><a href="api/wildboar/tree/index.html#wildboar.tree.ExtraShapeletTreeClassifier.apply">apply() (wildboar.tree.ExtraShapeletTreeClassifier method)</a>
+
+      <ul>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.ExtraShapeletTreeRegressor.apply">(wildboar.tree.ExtraShapeletTreeRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.IntervalTreeClassifier.apply">(wildboar.tree.IntervalTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.IntervalTreeRegressor.apply">(wildboar.tree.IntervalTreeRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.PivotTreeClassifier.apply">(wildboar.tree.PivotTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.ProximityTreeClassifier.apply">(wildboar.tree.ProximityTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.RocketTreeClassifier.apply">(wildboar.tree.RocketTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.RocketTreeRegressor.apply">(wildboar.tree.RocketTreeRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.ShapeletTreeClassifier.apply">(wildboar.tree.ShapeletTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.ShapeletTreeRegressor.apply">(wildboar.tree.ShapeletTreeRegressor method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/wildboar/distance/index.html#wildboar.distance.argmin_distance">argmin_distance() (in module wildboar.distance)</a>
+</li>
+      <li><a href="api/wildboar/distance/index.html#wildboar.distance.argmin_subsequence_distance">argmin_subsequence_distance() (in module wildboar.distance)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="B">B</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.BaggingClassifier">BaggingClassifier (class in wildboar.ensemble)</a>
+</li>
+      <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.BaggingRegressor">BaggingRegressor (class in wildboar.ensemble)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.BaseBagging">BaseBagging (class in wildboar.ensemble)</a>
+</li>
+      <li><a href="api/wildboar/base/index.html#wildboar.base.BaseEstimator">BaseEstimator (class in wildboar.base)</a>
+</li>
+      <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.Bundle">Bundle (class in wildboar.datasets)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="C">C</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/wildboar/linear_model/index.html#wildboar.linear_model.CastorClassifier">CastorClassifier (class in wildboar.linear_model)</a>
+</li>
+      <li><a href="api/wildboar/linear_model/index.html#wildboar.linear_model.CastorRegressor">CastorRegressor (class in wildboar.linear_model)</a>
+</li>
+      <li><a href="api/wildboar/transform/index.html#wildboar.transform.CastorTransform">CastorTransform (class in wildboar.transform)</a>
+</li>
+      <li><a href="api/wildboar/utils/index.html#wildboar.utils.check_array">check_array() (in module wildboar.utils)</a>
+</li>
+      <li><a href="api/wildboar/utils/index.html#wildboar.utils.check_X_y">check_X_y() (in module wildboar.utils)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.clear_cache">clear_cache() (in module wildboar.datasets)</a>
+</li>
+      <li><a href="api/wildboar/metrics/index.html#wildboar.metrics.compactness_score">compactness_score() (in module wildboar.metrics)</a>
+</li>
+      <li><a href="api/wildboar/transform/index.html#wildboar.transform.convolve">convolve() (in module wildboar.transform)</a>
+</li>
+      <li><a href="api/wildboar/base/index.html#wildboar.base.CounterfactualMixin">CounterfactualMixin (class in wildboar.base)</a>
+</li>
+      <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.counterfactuals">counterfactuals() (in module wildboar.explain.counterfactual)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="D">D</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/wildboar/distance/dtw/index.html#wildboar.distance.dtw.ddtw_distance">ddtw_distance() (in module wildboar.distance.dtw)</a>
+</li>
+      <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.BaggingClassifier.decision_function">decision_function() (wildboar.ensemble.BaggingClassifier method)</a>
+
+      <ul>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ExtraShapeletTreesClassifier.decision_function">(wildboar.ensemble.ExtraShapeletTreesClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.IntervalForestClassifier.decision_function">(wildboar.ensemble.IntervalForestClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.PivotForestClassifier.decision_function">(wildboar.ensemble.PivotForestClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ProximityForestClassifier.decision_function">(wildboar.ensemble.ProximityForestClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.RocketForestClassifier.decision_function">(wildboar.ensemble.RocketForestClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ShapeletForestClassifier.decision_function">(wildboar.ensemble.ShapeletForestClassifier method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/wildboar/tree/index.html#wildboar.tree.ExtraShapeletTreeClassifier.decision_path">decision_path() (wildboar.tree.ExtraShapeletTreeClassifier method)</a>
+
+      <ul>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.ExtraShapeletTreeRegressor.decision_path">(wildboar.tree.ExtraShapeletTreeRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.IntervalTreeClassifier.decision_path">(wildboar.tree.IntervalTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.IntervalTreeRegressor.decision_path">(wildboar.tree.IntervalTreeRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.PivotTreeClassifier.decision_path">(wildboar.tree.PivotTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.ProximityTreeClassifier.decision_path">(wildboar.tree.ProximityTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.RocketTreeClassifier.decision_path">(wildboar.tree.RocketTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.RocketTreeRegressor.decision_path">(wildboar.tree.RocketTreeRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.ShapeletTreeClassifier.decision_path">(wildboar.tree.ShapeletTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.ShapeletTreeRegressor.decision_path">(wildboar.tree.ShapeletTreeRegressor method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/wildboar/datasets/outlier/index.html#wildboar.datasets.outlier.density_outliers">density_outliers() (in module wildboar.datasets.outlier)</a>
+</li>
+      <li><a href="api/wildboar/transform/index.html#wildboar.transform.DerivativeTransform">DerivativeTransform (class in wildboar.transform)</a>
+</li>
+      <li><a href="api/wildboar/segment/index.html#wildboar.segment.detect_changepoints">detect_changepoints() (in module wildboar.segment)</a>
+</li>
+      <li><a href="api/wildboar/transform/index.html#wildboar.transform.DiffTransform">DiffTransform (class in wildboar.transform)</a>
+</li>
+      <li><a href="api/wildboar/linear_model/index.html#wildboar.linear_model.DilatedShapeletClassifier">DilatedShapeletClassifier (class in wildboar.linear_model)</a>
+</li>
+      <li><a href="api/wildboar/transform/index.html#wildboar.transform.DilatedShapeletTransform">DilatedShapeletTransform (class in wildboar.transform)</a>
+</li>
+      <li><a href="api/wildboar/distance/index.html#wildboar.distance.distance_profile">distance_profile() (in module wildboar.distance)</a>
+</li>
+      <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.DistanceVarianceThreshold">DistanceVarianceThreshold (class in wildboar.dimension_selection)</a>
+</li>
+      <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.JSONRepository.download_url">download_url (wildboar.datasets.JSONRepository property)</a>
+
+      <ul>
+        <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.Repository.download_url">(wildboar.datasets.Repository property)</a>
+</li>
+      </ul></li>
+      <li><a href="api/wildboar/distance/dtw/index.html#wildboar.distance.dtw.dtw_alignment">dtw_alignment() (in module wildboar.distance.dtw)</a>
+</li>
+      <li><a href="api/wildboar/distance/dtw/index.html#wildboar.distance.dtw.dtw_average">dtw_average() (in module wildboar.distance.dtw)</a>
+</li>
+      <li><a href="api/wildboar/distance/dtw/index.html#wildboar.distance.dtw.dtw_distance">dtw_distance() (in module wildboar.distance.dtw)</a>
+</li>
+      <li><a href="api/wildboar/distance/dtw/index.html#wildboar.distance.dtw.dtw_envelop">dtw_envelop() (in module wildboar.distance.dtw)</a>
+</li>
+      <li><a href="api/wildboar/distance/dtw/index.html#wildboar.distance.dtw.dtw_lb_keogh">dtw_lb_keogh() (in module wildboar.distance.dtw)</a>
+</li>
+      <li><a href="api/wildboar/distance/dtw/index.html#wildboar.distance.dtw.dtw_mapping">dtw_mapping() (in module wildboar.distance.dtw)</a>
+</li>
+      <li><a href="api/wildboar/distance/lb/index.html#wildboar.distance.lb.DtwKeoghLowerBound">DtwKeoghLowerBound (class in wildboar.distance.lb)</a>
+</li>
+      <li><a href="api/wildboar/distance/lb/index.html#wildboar.distance.lb.DtwKimLowerBound">DtwKimLowerBound (class in wildboar.distance.lb)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="E">E</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.ECSSelector">ECSSelector (class in wildboar.dimension_selection)</a>
+</li>
+      <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ElasticEnsembleClassifier">ElasticEnsembleClassifier (class in wildboar.ensemble)</a>
+</li>
+      <li><a href="api/wildboar/datasets/outlier/index.html#wildboar.datasets.outlier.emmott_outliers">emmott_outliers() (in module wildboar.datasets.outlier)</a>
+</li>
+      <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.BaggingClassifier.estimators_samples_">estimators_samples_ (wildboar.ensemble.BaggingClassifier property)</a>
+
+      <ul>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.BaggingRegressor.estimators_samples_">(wildboar.ensemble.BaggingRegressor property)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.BaseBagging.estimators_samples_">(wildboar.ensemble.BaseBagging property)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ExtraShapeletTreesClassifier.estimators_samples_">(wildboar.ensemble.ExtraShapeletTreesClassifier property)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ExtraShapeletTreesRegressor.estimators_samples_">(wildboar.ensemble.ExtraShapeletTreesRegressor property)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.IntervalForestClassifier.estimators_samples_">(wildboar.ensemble.IntervalForestClassifier property)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.IntervalForestRegressor.estimators_samples_">(wildboar.ensemble.IntervalForestRegressor property)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.IsolationShapeletForest.estimators_samples_">(wildboar.ensemble.IsolationShapeletForest property)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.PivotForestClassifier.estimators_samples_">(wildboar.ensemble.PivotForestClassifier property)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ProximityForestClassifier.estimators_samples_">(wildboar.ensemble.ProximityForestClassifier property)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.RocketForestClassifier.estimators_samples_">(wildboar.ensemble.RocketForestClassifier property)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.RocketForestRegressor.estimators_samples_">(wildboar.ensemble.RocketForestRegressor property)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ShapeletForestClassifier.estimators_samples_">(wildboar.ensemble.ShapeletForestClassifier property)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ShapeletForestEmbedding.estimators_samples_">(wildboar.ensemble.ShapeletForestEmbedding property)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ShapeletForestRegressor.estimators_samples_">(wildboar.ensemble.ShapeletForestRegressor property)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.NiceCounterfactual.explain">explain() (wildboar.explain.counterfactual.NiceCounterfactual method)</a>
+</li>
+      <li><a href="api/wildboar/base/index.html#wildboar.base.ExplainerMixin">ExplainerMixin (class in wildboar.base)</a>
+</li>
+      <li><a href="api/wildboar/tree/index.html#wildboar.tree.ExtraShapeletTreeClassifier">ExtraShapeletTreeClassifier (class in wildboar.tree)</a>
+</li>
+      <li><a href="api/wildboar/tree/index.html#wildboar.tree.ExtraShapeletTreeRegressor">ExtraShapeletTreeRegressor (class in wildboar.tree)</a>
+</li>
+      <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ExtraShapeletTreesClassifier">ExtraShapeletTreesClassifier (class in wildboar.ensemble)</a>
+</li>
+      <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ExtraShapeletTreesRegressor">ExtraShapeletTreesRegressor (class in wildboar.ensemble)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="F">F</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/wildboar/transform/index.html#wildboar.transform.FeatureTransform">FeatureTransform (class in wildboar.transform)</a>
+</li>
+      <li><a href="api/wildboar/transform/index.html#wildboar.transform.FftTransform">FftTransform (class in wildboar.transform)</a>
+</li>
+      <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.Interpolate.fit">fit() (wildboar.datasets.preprocess.Interpolate method)</a>
+
+      <ul>
+        <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.MaxAbsScale.fit">(wildboar.datasets.preprocess.MaxAbsScale method)</a>
+</li>
+        <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.MinMaxScale.fit">(wildboar.datasets.preprocess.MinMaxScale method)</a>
+</li>
+        <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.Standardize.fit">(wildboar.datasets.preprocess.Standardize method)</a>
+</li>
+        <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.Truncate.fit">(wildboar.datasets.preprocess.Truncate method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.DistanceVarianceThreshold.fit">(wildboar.dimension_selection.DistanceVarianceThreshold method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.ECSSelector.fit">(wildboar.dimension_selection.ECSSelector method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.SelectDimensionPercentile.fit">(wildboar.dimension_selection.SelectDimensionPercentile method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.SelectDimensionSignificance.fit">(wildboar.dimension_selection.SelectDimensionSignificance method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.SelectDimensionTopK.fit">(wildboar.dimension_selection.SelectDimensionTopK method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.SequentialDimensionSelector.fit">(wildboar.dimension_selection.SequentialDimensionSelector method)</a>
+</li>
+        <li><a href="api/wildboar/distance/index.html#wildboar.distance.KMeans.fit">(wildboar.distance.KMeans method)</a>
+</li>
+        <li><a href="api/wildboar/distance/index.html#wildboar.distance.KMedoids.fit">(wildboar.distance.KMedoids method)</a>
+</li>
+        <li><a href="api/wildboar/distance/index.html#wildboar.distance.KNeighborsClassifier.fit">(wildboar.distance.KNeighborsClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/distance/lb/index.html#wildboar.distance.lb.DtwKeoghLowerBound.fit">(wildboar.distance.lb.DtwKeoghLowerBound method)</a>
+</li>
+        <li><a href="api/wildboar/distance/lb/index.html#wildboar.distance.lb.DtwKimLowerBound.fit">(wildboar.distance.lb.DtwKimLowerBound method)</a>
+</li>
+        <li><a href="api/wildboar/distance/lb/index.html#wildboar.distance.lb.PaaLowerBound.fit">(wildboar.distance.lb.PaaLowerBound method)</a>
+</li>
+        <li><a href="api/wildboar/distance/lb/index.html#wildboar.distance.lb.SaxLowerBound.fit">(wildboar.distance.lb.SaxLowerBound method)</a>
+</li>
+        <li><a href="api/wildboar/distance/index.html#wildboar.distance.NearestNeighbors.fit">(wildboar.distance.NearestNeighbors method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.BaggingClassifier.fit">(wildboar.ensemble.BaggingClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.BaggingRegressor.fit">(wildboar.ensemble.BaggingRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.BaseBagging.fit">(wildboar.ensemble.BaseBagging method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ElasticEnsembleClassifier.fit">(wildboar.ensemble.ElasticEnsembleClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ExtraShapeletTreesClassifier.fit">(wildboar.ensemble.ExtraShapeletTreesClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ExtraShapeletTreesRegressor.fit">(wildboar.ensemble.ExtraShapeletTreesRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.IntervalForestClassifier.fit">(wildboar.ensemble.IntervalForestClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.IntervalForestRegressor.fit">(wildboar.ensemble.IntervalForestRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.IsolationShapeletForest.fit">(wildboar.ensemble.IsolationShapeletForest method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.PivotForestClassifier.fit">(wildboar.ensemble.PivotForestClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ProximityForestClassifier.fit">(wildboar.ensemble.ProximityForestClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.RocketForestClassifier.fit">(wildboar.ensemble.RocketForestClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.RocketForestRegressor.fit">(wildboar.ensemble.RocketForestRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ShapeletForestClassifier.fit">(wildboar.ensemble.ShapeletForestClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ShapeletForestEmbedding.fit">(wildboar.ensemble.ShapeletForestEmbedding method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ShapeletForestRegressor.fit">(wildboar.ensemble.ShapeletForestRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.NiceCounterfactual.fit">(wildboar.explain.counterfactual.NiceCounterfactual method)</a>
+</li>
+        <li><a href="api/wildboar/segment/index.html#wildboar.segment.FlussSegmenter.fit">(wildboar.segment.FlussSegmenter method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.CastorTransform.fit">(wildboar.transform.CastorTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.DerivativeTransform.fit">(wildboar.transform.DerivativeTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.DiffTransform.fit">(wildboar.transform.DiffTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.DilatedShapeletTransform.fit">(wildboar.transform.DilatedShapeletTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.FeatureTransform.fit">(wildboar.transform.FeatureTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.FftTransform.fit">(wildboar.transform.FftTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.HydraTransform.fit">(wildboar.transform.HydraTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.IntervalTransform.fit">(wildboar.transform.IntervalTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.MatrixProfileTransform.fit">(wildboar.transform.MatrixProfileTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.PivotTransform.fit">(wildboar.transform.PivotTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.QuantTransform.fit">(wildboar.transform.QuantTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.RandomShapeletTransform.fit">(wildboar.transform.RandomShapeletTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.RocketTransform.fit">(wildboar.transform.RocketTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.ShapeletTransform.fit">(wildboar.transform.ShapeletTransform method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.ExtraShapeletTreeClassifier.fit">(wildboar.tree.ExtraShapeletTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.ExtraShapeletTreeRegressor.fit">(wildboar.tree.ExtraShapeletTreeRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.IntervalTreeClassifier.fit">(wildboar.tree.IntervalTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.IntervalTreeRegressor.fit">(wildboar.tree.IntervalTreeRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.PivotTreeClassifier.fit">(wildboar.tree.PivotTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.ProximityTreeClassifier.fit">(wildboar.tree.ProximityTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.RocketTreeClassifier.fit">(wildboar.tree.RocketTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.RocketTreeRegressor.fit">(wildboar.tree.RocketTreeRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.ShapeletTreeClassifier.fit">(wildboar.tree.ShapeletTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.ShapeletTreeRegressor.fit">(wildboar.tree.ShapeletTreeRegressor method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/wildboar/base/index.html#wildboar.base.ExplainerMixin.fit_explain">fit_explain() (wildboar.base.ExplainerMixin method)</a>
+
+      <ul>
+        <li><a href="api/wildboar/explain/index.html#wildboar.explain.AmplitudeImportance.fit_explain">(wildboar.explain.AmplitudeImportance method)</a>
+</li>
+        <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.KNeighborsCounterfactual.fit_explain">(wildboar.explain.counterfactual.KNeighborsCounterfactual method)</a>
+</li>
+        <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.NativeGuideCounterfactual.fit_explain">(wildboar.explain.counterfactual.NativeGuideCounterfactual method)</a>
+</li>
+        <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.NiceCounterfactual.fit_explain">(wildboar.explain.counterfactual.NiceCounterfactual method)</a>
+</li>
+        <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.PrototypeCounterfactual.fit_explain">(wildboar.explain.counterfactual.PrototypeCounterfactual method)</a>
+</li>
+        <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.ShapeletForestCounterfactual.fit_explain">(wildboar.explain.counterfactual.ShapeletForestCounterfactual method)</a>
+</li>
+        <li><a href="api/wildboar/explain/index.html#wildboar.explain.FrequencyImportance.fit_explain">(wildboar.explain.FrequencyImportance method)</a>
+</li>
+        <li><a href="api/wildboar/explain/index.html#wildboar.explain.IntervalImportance.fit_explain">(wildboar.explain.IntervalImportance method)</a>
+</li>
+        <li><a href="api/wildboar/explain/index.html#wildboar.explain.ShapeletImportance.fit_explain">(wildboar.explain.ShapeletImportance method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/wildboar/distance/index.html#wildboar.distance.KMeans.fit_predict">fit_predict() (wildboar.distance.KMeans method)</a>
+
+      <ul>
+        <li><a href="api/wildboar/distance/index.html#wildboar.distance.KMedoids.fit_predict">(wildboar.distance.KMedoids method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.IsolationShapeletForest.fit_predict">(wildboar.ensemble.IsolationShapeletForest method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.Interpolate.fit_transform">fit_transform() (wildboar.datasets.preprocess.Interpolate method)</a>
+
+      <ul>
+        <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.MaxAbsScale.fit_transform">(wildboar.datasets.preprocess.MaxAbsScale method)</a>
+</li>
+        <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.MinMaxScale.fit_transform">(wildboar.datasets.preprocess.MinMaxScale method)</a>
+</li>
+        <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.Standardize.fit_transform">(wildboar.datasets.preprocess.Standardize method)</a>
+</li>
+        <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.Truncate.fit_transform">(wildboar.datasets.preprocess.Truncate method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.DistanceVarianceThreshold.fit_transform">(wildboar.dimension_selection.DistanceVarianceThreshold method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.ECSSelector.fit_transform">(wildboar.dimension_selection.ECSSelector method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.SelectDimensionPercentile.fit_transform">(wildboar.dimension_selection.SelectDimensionPercentile method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.SelectDimensionSignificance.fit_transform">(wildboar.dimension_selection.SelectDimensionSignificance method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.SelectDimensionTopK.fit_transform">(wildboar.dimension_selection.SelectDimensionTopK method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.SequentialDimensionSelector.fit_transform">(wildboar.dimension_selection.SequentialDimensionSelector method)</a>
+</li>
+        <li><a href="api/wildboar/distance/index.html#wildboar.distance.KMeans.fit_transform">(wildboar.distance.KMeans method)</a>
+</li>
+        <li><a href="api/wildboar/distance/index.html#wildboar.distance.KMedoids.fit_transform">(wildboar.distance.KMedoids method)</a>
+</li>
+        <li><a href="api/wildboar/distance/lb/index.html#wildboar.distance.lb.DtwKeoghLowerBound.fit_transform">(wildboar.distance.lb.DtwKeoghLowerBound method)</a>
+</li>
+        <li><a href="api/wildboar/distance/lb/index.html#wildboar.distance.lb.DtwKimLowerBound.fit_transform">(wildboar.distance.lb.DtwKimLowerBound method)</a>
+</li>
+        <li><a href="api/wildboar/distance/lb/index.html#wildboar.distance.lb.PaaLowerBound.fit_transform">(wildboar.distance.lb.PaaLowerBound method)</a>
+</li>
+        <li><a href="api/wildboar/distance/lb/index.html#wildboar.distance.lb.SaxLowerBound.fit_transform">(wildboar.distance.lb.SaxLowerBound method)</a>
+</li>
+        <li><a href="api/wildboar/distance/index.html#wildboar.distance.NearestNeighbors.fit_transform">(wildboar.distance.NearestNeighbors method)</a>
+</li>
+        <li><a href="api/wildboar/segment/index.html#wildboar.segment.FlussSegmenter.fit_transform">(wildboar.segment.FlussSegmenter method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.CastorTransform.fit_transform">(wildboar.transform.CastorTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.DerivativeTransform.fit_transform">(wildboar.transform.DerivativeTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.DiffTransform.fit_transform">(wildboar.transform.DiffTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.DilatedShapeletTransform.fit_transform">(wildboar.transform.DilatedShapeletTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.FeatureTransform.fit_transform">(wildboar.transform.FeatureTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.FftTransform.fit_transform">(wildboar.transform.FftTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.HydraTransform.fit_transform">(wildboar.transform.HydraTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.IntervalTransform.fit_transform">(wildboar.transform.IntervalTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.MatrixProfileTransform.fit_transform">(wildboar.transform.MatrixProfileTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.PAA.fit_transform">(wildboar.transform.PAA method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.PivotTransform.fit_transform">(wildboar.transform.PivotTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.ProximityTransform.fit_transform">(wildboar.transform.ProximityTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.QuantTransform.fit_transform">(wildboar.transform.QuantTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.RandomShapeletTransform.fit_transform">(wildboar.transform.RandomShapeletTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.RocketTransform.fit_transform">(wildboar.transform.RocketTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.SAX.fit_transform">(wildboar.transform.SAX method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.ShapeletTransform.fit_transform">(wildboar.transform.ShapeletTransform method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/wildboar/segment/index.html#wildboar.segment.FlussSegmenter">FlussSegmenter (class in wildboar.segment)</a>
+</li>
+      <li><a href="api/wildboar/explain/index.html#wildboar.explain.FrequencyImportance">FrequencyImportance (class in wildboar.explain)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="G">G</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.JSONRepository.get_bundle">get_bundle() (wildboar.datasets.JSONRepository method)</a>
+
+      <ul>
+        <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.Repository.get_bundle">(wildboar.datasets.Repository method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.get_bundles">get_bundles() (in module wildboar.datasets)</a>
+
+      <ul>
+        <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.JSONRepository.get_bundles">(wildboar.datasets.JSONRepository method)</a>
+</li>
+        <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.Repository.get_bundles">(wildboar.datasets.Repository method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.Bundle.get_collection">get_collection() (wildboar.datasets.Bundle method)</a>
+
+      <ul>
+        <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.NpBundle.get_collection">(wildboar.datasets.NpBundle method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.DistanceVarianceThreshold.get_dimensions">get_dimensions() (wildboar.dimension_selection.DistanceVarianceThreshold method)</a>
+
+      <ul>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.ECSSelector.get_dimensions">(wildboar.dimension_selection.ECSSelector method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.SelectDimensionPercentile.get_dimensions">(wildboar.dimension_selection.SelectDimensionPercentile method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.SelectDimensionSignificance.get_dimensions">(wildboar.dimension_selection.SelectDimensionSignificance method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.SelectDimensionTopK.get_dimensions">(wildboar.dimension_selection.SelectDimensionTopK method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.SequentialDimensionSelector.get_dimensions">(wildboar.dimension_selection.SequentialDimensionSelector method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.Bundle.get_filename">get_filename() (wildboar.datasets.Bundle method)</a>
+
+      <ul>
+        <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.NpBundle.get_filename">(wildboar.datasets.NpBundle method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/wildboar/base/index.html#wildboar.base.BaseEstimator.get_metadata_routing">get_metadata_routing() (wildboar.base.BaseEstimator method)</a>
+
+      <ul>
+        <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.Interpolate.get_metadata_routing">(wildboar.datasets.preprocess.Interpolate method)</a>
+</li>
+        <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.MaxAbsScale.get_metadata_routing">(wildboar.datasets.preprocess.MaxAbsScale method)</a>
+</li>
+        <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.MinMaxScale.get_metadata_routing">(wildboar.datasets.preprocess.MinMaxScale method)</a>
+</li>
+        <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.Standardize.get_metadata_routing">(wildboar.datasets.preprocess.Standardize method)</a>
+</li>
+        <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.Truncate.get_metadata_routing">(wildboar.datasets.preprocess.Truncate method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.DistanceVarianceThreshold.get_metadata_routing">(wildboar.dimension_selection.DistanceVarianceThreshold method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.ECSSelector.get_metadata_routing">(wildboar.dimension_selection.ECSSelector method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.SelectDimensionPercentile.get_metadata_routing">(wildboar.dimension_selection.SelectDimensionPercentile method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.SelectDimensionSignificance.get_metadata_routing">(wildboar.dimension_selection.SelectDimensionSignificance method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.SelectDimensionTopK.get_metadata_routing">(wildboar.dimension_selection.SelectDimensionTopK method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.SequentialDimensionSelector.get_metadata_routing">(wildboar.dimension_selection.SequentialDimensionSelector method)</a>
+</li>
+        <li><a href="api/wildboar/distance/index.html#wildboar.distance.KMeans.get_metadata_routing">(wildboar.distance.KMeans method)</a>
+</li>
+        <li><a href="api/wildboar/distance/index.html#wildboar.distance.KMedoids.get_metadata_routing">(wildboar.distance.KMedoids method)</a>
+</li>
+        <li><a href="api/wildboar/distance/index.html#wildboar.distance.KNeighborsClassifier.get_metadata_routing">(wildboar.distance.KNeighborsClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/distance/lb/index.html#wildboar.distance.lb.DtwKeoghLowerBound.get_metadata_routing">(wildboar.distance.lb.DtwKeoghLowerBound method)</a>
+</li>
+        <li><a href="api/wildboar/distance/lb/index.html#wildboar.distance.lb.DtwKimLowerBound.get_metadata_routing">(wildboar.distance.lb.DtwKimLowerBound method)</a>
+</li>
+        <li><a href="api/wildboar/distance/lb/index.html#wildboar.distance.lb.PaaLowerBound.get_metadata_routing">(wildboar.distance.lb.PaaLowerBound method)</a>
+</li>
+        <li><a href="api/wildboar/distance/lb/index.html#wildboar.distance.lb.SaxLowerBound.get_metadata_routing">(wildboar.distance.lb.SaxLowerBound method)</a>
+</li>
+        <li><a href="api/wildboar/distance/index.html#wildboar.distance.MDS.get_metadata_routing">(wildboar.distance.MDS method)</a>
+</li>
+        <li><a href="api/wildboar/distance/index.html#wildboar.distance.NearestNeighbors.get_metadata_routing">(wildboar.distance.NearestNeighbors method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.BaggingClassifier.get_metadata_routing">(wildboar.ensemble.BaggingClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.BaggingRegressor.get_metadata_routing">(wildboar.ensemble.BaggingRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.BaseBagging.get_metadata_routing">(wildboar.ensemble.BaseBagging method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ElasticEnsembleClassifier.get_metadata_routing">(wildboar.ensemble.ElasticEnsembleClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ExtraShapeletTreesClassifier.get_metadata_routing">(wildboar.ensemble.ExtraShapeletTreesClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ExtraShapeletTreesRegressor.get_metadata_routing">(wildboar.ensemble.ExtraShapeletTreesRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.IntervalForestClassifier.get_metadata_routing">(wildboar.ensemble.IntervalForestClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.IntervalForestRegressor.get_metadata_routing">(wildboar.ensemble.IntervalForestRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.IsolationShapeletForest.get_metadata_routing">(wildboar.ensemble.IsolationShapeletForest method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.PivotForestClassifier.get_metadata_routing">(wildboar.ensemble.PivotForestClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ProximityForestClassifier.get_metadata_routing">(wildboar.ensemble.ProximityForestClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.RocketForestClassifier.get_metadata_routing">(wildboar.ensemble.RocketForestClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.RocketForestRegressor.get_metadata_routing">(wildboar.ensemble.RocketForestRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ShapeletForestClassifier.get_metadata_routing">(wildboar.ensemble.ShapeletForestClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ShapeletForestEmbedding.get_metadata_routing">(wildboar.ensemble.ShapeletForestEmbedding method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ShapeletForestRegressor.get_metadata_routing">(wildboar.ensemble.ShapeletForestRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/explain/index.html#wildboar.explain.AmplitudeImportance.get_metadata_routing">(wildboar.explain.AmplitudeImportance method)</a>
+</li>
+        <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.KNeighborsCounterfactual.get_metadata_routing">(wildboar.explain.counterfactual.KNeighborsCounterfactual method)</a>
+</li>
+        <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.NativeGuideCounterfactual.get_metadata_routing">(wildboar.explain.counterfactual.NativeGuideCounterfactual method)</a>
+</li>
+        <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.NiceCounterfactual.get_metadata_routing">(wildboar.explain.counterfactual.NiceCounterfactual method)</a>
+</li>
+        <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.PrototypeCounterfactual.get_metadata_routing">(wildboar.explain.counterfactual.PrototypeCounterfactual method)</a>
+</li>
+        <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.ShapeletForestCounterfactual.get_metadata_routing">(wildboar.explain.counterfactual.ShapeletForestCounterfactual method)</a>
+</li>
+        <li><a href="api/wildboar/explain/index.html#wildboar.explain.FrequencyImportance.get_metadata_routing">(wildboar.explain.FrequencyImportance method)</a>
+</li>
+        <li><a href="api/wildboar/explain/index.html#wildboar.explain.IntervalImportance.get_metadata_routing">(wildboar.explain.IntervalImportance method)</a>
+</li>
+        <li><a href="api/wildboar/explain/index.html#wildboar.explain.ShapeletImportance.get_metadata_routing">(wildboar.explain.ShapeletImportance method)</a>
+</li>
+        <li><a href="api/wildboar/linear_model/index.html#wildboar.linear_model.CastorClassifier.get_metadata_routing">(wildboar.linear_model.CastorClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/linear_model/index.html#wildboar.linear_model.CastorRegressor.get_metadata_routing">(wildboar.linear_model.CastorRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/linear_model/index.html#wildboar.linear_model.DilatedShapeletClassifier.get_metadata_routing">(wildboar.linear_model.DilatedShapeletClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/linear_model/index.html#wildboar.linear_model.HydraClassifier.get_metadata_routing">(wildboar.linear_model.HydraClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/linear_model/index.html#wildboar.linear_model.RandomShapeletClassifier.get_metadata_routing">(wildboar.linear_model.RandomShapeletClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/linear_model/index.html#wildboar.linear_model.RandomShapeletRegressor.get_metadata_routing">(wildboar.linear_model.RandomShapeletRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/linear_model/index.html#wildboar.linear_model.RocketClassifier.get_metadata_routing">(wildboar.linear_model.RocketClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/linear_model/index.html#wildboar.linear_model.RocketRegressor.get_metadata_routing">(wildboar.linear_model.RocketRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/segment/index.html#wildboar.segment.FlussSegmenter.get_metadata_routing">(wildboar.segment.FlussSegmenter method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.CastorTransform.get_metadata_routing">(wildboar.transform.CastorTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.DerivativeTransform.get_metadata_routing">(wildboar.transform.DerivativeTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.DiffTransform.get_metadata_routing">(wildboar.transform.DiffTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.DilatedShapeletTransform.get_metadata_routing">(wildboar.transform.DilatedShapeletTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.FeatureTransform.get_metadata_routing">(wildboar.transform.FeatureTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.FftTransform.get_metadata_routing">(wildboar.transform.FftTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.HydraTransform.get_metadata_routing">(wildboar.transform.HydraTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.IntervalTransform.get_metadata_routing">(wildboar.transform.IntervalTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.MatrixProfileTransform.get_metadata_routing">(wildboar.transform.MatrixProfileTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.PAA.get_metadata_routing">(wildboar.transform.PAA method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.PivotTransform.get_metadata_routing">(wildboar.transform.PivotTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.ProximityTransform.get_metadata_routing">(wildboar.transform.ProximityTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.QuantTransform.get_metadata_routing">(wildboar.transform.QuantTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.RandomShapeletTransform.get_metadata_routing">(wildboar.transform.RandomShapeletTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.RocketTransform.get_metadata_routing">(wildboar.transform.RocketTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.SAX.get_metadata_routing">(wildboar.transform.SAX method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.ShapeletTransform.get_metadata_routing">(wildboar.transform.ShapeletTransform method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.ExtraShapeletTreeClassifier.get_metadata_routing">(wildboar.tree.ExtraShapeletTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.ExtraShapeletTreeRegressor.get_metadata_routing">(wildboar.tree.ExtraShapeletTreeRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.IntervalTreeClassifier.get_metadata_routing">(wildboar.tree.IntervalTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.IntervalTreeRegressor.get_metadata_routing">(wildboar.tree.IntervalTreeRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.PivotTreeClassifier.get_metadata_routing">(wildboar.tree.PivotTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.ProximityTreeClassifier.get_metadata_routing">(wildboar.tree.ProximityTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.RocketTreeClassifier.get_metadata_routing">(wildboar.tree.RocketTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.RocketTreeRegressor.get_metadata_routing">(wildboar.tree.RocketTreeRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.ShapeletTreeClassifier.get_metadata_routing">(wildboar.tree.ShapeletTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.ShapeletTreeRegressor.get_metadata_routing">(wildboar.tree.ShapeletTreeRegressor method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/wildboar/model_selection/index.html#wildboar.model_selection.RepeatedOutlierSplit.get_n_splits">get_n_splits() (wildboar.model_selection.RepeatedOutlierSplit method)</a>
+</li>
+      <li><a href="api/wildboar/base/index.html#wildboar.base.BaseEstimator.get_params">get_params() (wildboar.base.BaseEstimator method)</a>
+
+      <ul>
+        <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.Interpolate.get_params">(wildboar.datasets.preprocess.Interpolate method)</a>
+</li>
+        <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.MaxAbsScale.get_params">(wildboar.datasets.preprocess.MaxAbsScale method)</a>
+</li>
+        <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.MinMaxScale.get_params">(wildboar.datasets.preprocess.MinMaxScale method)</a>
+</li>
+        <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.Standardize.get_params">(wildboar.datasets.preprocess.Standardize method)</a>
+</li>
+        <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.Truncate.get_params">(wildboar.datasets.preprocess.Truncate method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.DistanceVarianceThreshold.get_params">(wildboar.dimension_selection.DistanceVarianceThreshold method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.ECSSelector.get_params">(wildboar.dimension_selection.ECSSelector method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.SelectDimensionPercentile.get_params">(wildboar.dimension_selection.SelectDimensionPercentile method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.SelectDimensionSignificance.get_params">(wildboar.dimension_selection.SelectDimensionSignificance method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.SelectDimensionTopK.get_params">(wildboar.dimension_selection.SelectDimensionTopK method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.SequentialDimensionSelector.get_params">(wildboar.dimension_selection.SequentialDimensionSelector method)</a>
+</li>
+        <li><a href="api/wildboar/distance/index.html#wildboar.distance.KMeans.get_params">(wildboar.distance.KMeans method)</a>
+</li>
+        <li><a href="api/wildboar/distance/index.html#wildboar.distance.KMedoids.get_params">(wildboar.distance.KMedoids method)</a>
+</li>
+        <li><a href="api/wildboar/distance/index.html#wildboar.distance.KNeighborsClassifier.get_params">(wildboar.distance.KNeighborsClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/distance/lb/index.html#wildboar.distance.lb.DtwKeoghLowerBound.get_params">(wildboar.distance.lb.DtwKeoghLowerBound method)</a>
+</li>
+        <li><a href="api/wildboar/distance/lb/index.html#wildboar.distance.lb.DtwKimLowerBound.get_params">(wildboar.distance.lb.DtwKimLowerBound method)</a>
+</li>
+        <li><a href="api/wildboar/distance/lb/index.html#wildboar.distance.lb.PaaLowerBound.get_params">(wildboar.distance.lb.PaaLowerBound method)</a>
+</li>
+        <li><a href="api/wildboar/distance/lb/index.html#wildboar.distance.lb.SaxLowerBound.get_params">(wildboar.distance.lb.SaxLowerBound method)</a>
+</li>
+        <li><a href="api/wildboar/distance/index.html#wildboar.distance.MDS.get_params">(wildboar.distance.MDS method)</a>
+</li>
+        <li><a href="api/wildboar/distance/index.html#wildboar.distance.NearestNeighbors.get_params">(wildboar.distance.NearestNeighbors method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.BaggingClassifier.get_params">(wildboar.ensemble.BaggingClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.BaggingRegressor.get_params">(wildboar.ensemble.BaggingRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.BaseBagging.get_params">(wildboar.ensemble.BaseBagging method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ElasticEnsembleClassifier.get_params">(wildboar.ensemble.ElasticEnsembleClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ExtraShapeletTreesClassifier.get_params">(wildboar.ensemble.ExtraShapeletTreesClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ExtraShapeletTreesRegressor.get_params">(wildboar.ensemble.ExtraShapeletTreesRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.IntervalForestClassifier.get_params">(wildboar.ensemble.IntervalForestClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.IntervalForestRegressor.get_params">(wildboar.ensemble.IntervalForestRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.IsolationShapeletForest.get_params">(wildboar.ensemble.IsolationShapeletForest method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.PivotForestClassifier.get_params">(wildboar.ensemble.PivotForestClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ProximityForestClassifier.get_params">(wildboar.ensemble.ProximityForestClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.RocketForestClassifier.get_params">(wildboar.ensemble.RocketForestClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.RocketForestRegressor.get_params">(wildboar.ensemble.RocketForestRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ShapeletForestClassifier.get_params">(wildboar.ensemble.ShapeletForestClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ShapeletForestEmbedding.get_params">(wildboar.ensemble.ShapeletForestEmbedding method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ShapeletForestRegressor.get_params">(wildboar.ensemble.ShapeletForestRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/explain/index.html#wildboar.explain.AmplitudeImportance.get_params">(wildboar.explain.AmplitudeImportance method)</a>
+</li>
+        <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.KNeighborsCounterfactual.get_params">(wildboar.explain.counterfactual.KNeighborsCounterfactual method)</a>
+</li>
+        <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.NativeGuideCounterfactual.get_params">(wildboar.explain.counterfactual.NativeGuideCounterfactual method)</a>
+</li>
+        <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.NiceCounterfactual.get_params">(wildboar.explain.counterfactual.NiceCounterfactual method)</a>
+</li>
+        <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.PrototypeCounterfactual.get_params">(wildboar.explain.counterfactual.PrototypeCounterfactual method)</a>
+</li>
+        <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.ShapeletForestCounterfactual.get_params">(wildboar.explain.counterfactual.ShapeletForestCounterfactual method)</a>
+</li>
+        <li><a href="api/wildboar/explain/index.html#wildboar.explain.FrequencyImportance.get_params">(wildboar.explain.FrequencyImportance method)</a>
+</li>
+        <li><a href="api/wildboar/explain/index.html#wildboar.explain.IntervalImportance.get_params">(wildboar.explain.IntervalImportance method)</a>
+</li>
+        <li><a href="api/wildboar/explain/index.html#wildboar.explain.ShapeletImportance.get_params">(wildboar.explain.ShapeletImportance method)</a>
+</li>
+        <li><a href="api/wildboar/linear_model/index.html#wildboar.linear_model.CastorClassifier.get_params">(wildboar.linear_model.CastorClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/linear_model/index.html#wildboar.linear_model.CastorRegressor.get_params">(wildboar.linear_model.CastorRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/linear_model/index.html#wildboar.linear_model.DilatedShapeletClassifier.get_params">(wildboar.linear_model.DilatedShapeletClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/linear_model/index.html#wildboar.linear_model.HydraClassifier.get_params">(wildboar.linear_model.HydraClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/linear_model/index.html#wildboar.linear_model.RandomShapeletClassifier.get_params">(wildboar.linear_model.RandomShapeletClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/linear_model/index.html#wildboar.linear_model.RandomShapeletRegressor.get_params">(wildboar.linear_model.RandomShapeletRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/linear_model/index.html#wildboar.linear_model.RocketClassifier.get_params">(wildboar.linear_model.RocketClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/linear_model/index.html#wildboar.linear_model.RocketRegressor.get_params">(wildboar.linear_model.RocketRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/segment/index.html#wildboar.segment.FlussSegmenter.get_params">(wildboar.segment.FlussSegmenter method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.CastorTransform.get_params">(wildboar.transform.CastorTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.DerivativeTransform.get_params">(wildboar.transform.DerivativeTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.DiffTransform.get_params">(wildboar.transform.DiffTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.DilatedShapeletTransform.get_params">(wildboar.transform.DilatedShapeletTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.FeatureTransform.get_params">(wildboar.transform.FeatureTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.FftTransform.get_params">(wildboar.transform.FftTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.HydraTransform.get_params">(wildboar.transform.HydraTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.IntervalTransform.get_params">(wildboar.transform.IntervalTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.MatrixProfileTransform.get_params">(wildboar.transform.MatrixProfileTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.PAA.get_params">(wildboar.transform.PAA method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.PivotTransform.get_params">(wildboar.transform.PivotTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.ProximityTransform.get_params">(wildboar.transform.ProximityTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.QuantTransform.get_params">(wildboar.transform.QuantTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.RandomShapeletTransform.get_params">(wildboar.transform.RandomShapeletTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.RocketTransform.get_params">(wildboar.transform.RocketTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.SAX.get_params">(wildboar.transform.SAX method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.ShapeletTransform.get_params">(wildboar.transform.ShapeletTransform method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.ExtraShapeletTreeClassifier.get_params">(wildboar.tree.ExtraShapeletTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.ExtraShapeletTreeRegressor.get_params">(wildboar.tree.ExtraShapeletTreeRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.IntervalTreeClassifier.get_params">(wildboar.tree.IntervalTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.IntervalTreeRegressor.get_params">(wildboar.tree.IntervalTreeRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.PivotTreeClassifier.get_params">(wildboar.tree.PivotTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.ProximityTreeClassifier.get_params">(wildboar.tree.ProximityTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.RocketTreeClassifier.get_params">(wildboar.tree.RocketTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.RocketTreeRegressor.get_params">(wildboar.tree.RocketTreeRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.ShapeletTreeClassifier.get_params">(wildboar.tree.ShapeletTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.ShapeletTreeRegressor.get_params">(wildboar.tree.ShapeletTreeRegressor method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.get_repository">get_repository() (in module wildboar.datasets)</a>
+</li>
+      <li><a href="api/wildboar/utils/variable_len/index.html#wildboar.utils.variable_len.get_variable_length">get_variable_length() (in module wildboar.utils.variable_len)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="H">H</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/wildboar/linear_model/index.html#wildboar.linear_model.HydraClassifier">HydraClassifier (class in wildboar.linear_model)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/wildboar/transform/index.html#wildboar.transform.HydraTransform">HydraTransform (class in wildboar.transform)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="I">I</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.install_repository">install_repository() (in module wildboar.datasets)</a>
+</li>
+      <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.Interpolate">Interpolate (class in wildboar.datasets.preprocess)</a>
+</li>
+      <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.interpolate">interpolate() (in module wildboar.datasets.preprocess)</a>
+</li>
+      <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.IntervalForestClassifier">IntervalForestClassifier (class in wildboar.ensemble)</a>
+</li>
+      <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.IntervalForestRegressor">IntervalForestRegressor (class in wildboar.ensemble)</a>
+</li>
+      <li><a href="api/wildboar/explain/index.html#wildboar.explain.IntervalImportance">IntervalImportance (class in wildboar.explain)</a>
+</li>
+      <li><a href="api/wildboar/transform/index.html#wildboar.transform.IntervalTransform">IntervalTransform (class in wildboar.transform)</a>
+</li>
+      <li><a href="api/wildboar/tree/index.html#wildboar.tree.IntervalTreeClassifier">IntervalTreeClassifier (class in wildboar.tree)</a>
+</li>
+      <li><a href="api/wildboar/tree/index.html#wildboar.tree.IntervalTreeRegressor">IntervalTreeRegressor (class in wildboar.tree)</a>
+</li>
+      <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.DistanceVarianceThreshold.inverse_transform">inverse_transform() (wildboar.dimension_selection.DistanceVarianceThreshold method)</a>
+
+      <ul>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.ECSSelector.inverse_transform">(wildboar.dimension_selection.ECSSelector method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.SelectDimensionPercentile.inverse_transform">(wildboar.dimension_selection.SelectDimensionPercentile method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.SelectDimensionSignificance.inverse_transform">(wildboar.dimension_selection.SelectDimensionSignificance method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.SelectDimensionTopK.inverse_transform">(wildboar.dimension_selection.SelectDimensionTopK method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.SequentialDimensionSelector.inverse_transform">(wildboar.dimension_selection.SequentialDimensionSelector method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/wildboar/base/index.html#wildboar.base.is_counterfactual">is_counterfactual() (in module wildboar.base)</a>
+</li>
+      <li><a href="api/wildboar/utils/variable_len/index.html#wildboar.utils.variable_len.is_end_of_series">is_end_of_series() (in module wildboar.utils.variable_len)</a>
+</li>
+      <li><a href="api/wildboar/base/index.html#wildboar.base.is_explainer">is_explainer() (in module wildboar.base)</a>
+</li>
+      <li><a href="api/wildboar/utils/variable_len/index.html#wildboar.utils.variable_len.is_variable_length">is_variable_length() (in module wildboar.utils.variable_len)</a>
+</li>
+      <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.IsolationShapeletForest">IsolationShapeletForest (class in wildboar.ensemble)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="J">J</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/wildboar/distance/dtw/index.html#wildboar.distance.dtw.jeong_weight">jeong_weight() (in module wildboar.distance.dtw)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.JSONRepository">JSONRepository (class in wildboar.datasets)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="K">K</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/wildboar/distance/index.html#wildboar.distance.KMeans">KMeans (class in wildboar.distance)</a>
+</li>
+      <li><a href="api/wildboar/datasets/outlier/index.html#wildboar.datasets.outlier.kmeans_outliers">kmeans_outliers() (in module wildboar.datasets.outlier)</a>
+</li>
+      <li><a href="api/wildboar/distance/index.html#wildboar.distance.KMedoids">KMedoids (class in wildboar.distance)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/wildboar/distance/index.html#wildboar.distance.NearestNeighbors.kneighbors">kneighbors() (wildboar.distance.NearestNeighbors method)</a>
+</li>
+      <li><a href="api/wildboar/distance/index.html#wildboar.distance.KNeighborsClassifier">KNeighborsClassifier (class in wildboar.distance)</a>
+</li>
+      <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.KNeighborsCounterfactual">KNeighborsCounterfactual (class in wildboar.explain.counterfactual)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="L">L</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.Bundle.list">list() (wildboar.datasets.Bundle method)</a>
+
+      <ul>
+        <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.NpBundle.list">(wildboar.datasets.NpBundle method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.list_bundles">list_bundles() (in module wildboar.datasets)</a>
+</li>
+      <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.list_collections">list_collections() (in module wildboar.datasets)</a>
+</li>
+      <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.list_datasets">list_datasets() (in module wildboar.datasets)</a>
+</li>
+      <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.list_repositories">list_repositories() (in module wildboar.datasets)</a>
+</li>
+      <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.Bundle.load">load() (wildboar.datasets.Bundle method)</a>
+
+      <ul>
+        <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.NpBundle.load">(wildboar.datasets.NpBundle method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.load_appliances_energy">load_appliances_energy() (in module wildboar.datasets)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.load_articulary_word_recognition">load_articulary_word_recognition() (in module wildboar.datasets)</a>
+</li>
+      <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.load_basic_motions">load_basic_motions() (in module wildboar.datasets)</a>
+</li>
+      <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.load_dataset">load_dataset() (in module wildboar.datasets)</a>
+</li>
+      <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.load_datasets">load_datasets() (in module wildboar.datasets)</a>
+</li>
+      <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.load_ering">load_ering() (in module wildboar.datasets)</a>
+</li>
+      <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.load_flood_modeling">load_flood_modeling() (in module wildboar.datasets)</a>
+</li>
+      <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.load_gun_point">load_gun_point() (in module wildboar.datasets)</a>
+</li>
+      <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.load_synthetic_control">load_synthetic_control() (in module wildboar.datasets)</a>
+</li>
+      <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.load_two_lead_ecg">load_two_lead_ecg() (in module wildboar.datasets)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="M">M</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/wildboar/datasets/outlier/index.html#wildboar.datasets.outlier.majority_outliers">majority_outliers() (in module wildboar.datasets.outlier)</a>
+</li>
+      <li><a href="api/wildboar/distance/index.html#wildboar.distance.matrix_profile">matrix_profile() (in module wildboar.distance)</a>
+</li>
+      <li><a href="api/wildboar/transform/index.html#wildboar.transform.MatrixProfileTransform">MatrixProfileTransform (class in wildboar.transform)</a>
+</li>
+      <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.maxabs_scale">maxabs_scale() (in module wildboar.datasets.preprocess)</a>
+</li>
+      <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.MaxAbsScale">MaxAbsScale (class in wildboar.datasets.preprocess)</a>
+</li>
+      <li><a href="api/wildboar/distance/index.html#wildboar.distance.MDS">MDS (class in wildboar.distance)</a>
+</li>
+      <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.minmax_scale">minmax_scale() (in module wildboar.datasets.preprocess)</a>
+</li>
+      <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.MinMaxScale">MinMaxScale (class in wildboar.datasets.preprocess)</a>
+</li>
+      <li><a href="api/wildboar/datasets/outlier/index.html#wildboar.datasets.outlier.minority_outliers">minority_outliers() (in module wildboar.datasets.outlier)</a>
+</li>
+      <li>
+    module
+
+      <ul>
+        <li><a href="api/wildboar/index.html#module-wildboar">wildboar</a>
+</li>
+        <li><a href="api/wildboar/annotate/index.html#module-wildboar.annotate">wildboar.annotate</a>
+</li>
+        <li><a href="api/wildboar/base/index.html#module-wildboar.base">wildboar.base</a>
+</li>
+        <li><a href="api/wildboar/datasets/index.html#module-wildboar.datasets">wildboar.datasets</a>
+</li>
+        <li><a href="api/wildboar/datasets/outlier/index.html#module-wildboar.datasets.outlier">wildboar.datasets.outlier</a>
+</li>
+        <li><a href="api/wildboar/datasets/preprocess/index.html#module-wildboar.datasets.preprocess">wildboar.datasets.preprocess</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#module-wildboar.dimension_selection">wildboar.dimension_selection</a>
+</li>
+        <li><a href="api/wildboar/distance/index.html#module-wildboar.distance">wildboar.distance</a>
+</li>
+        <li><a href="api/wildboar/distance/dtw/index.html#module-wildboar.distance.dtw">wildboar.distance.dtw</a>
+</li>
+        <li><a href="api/wildboar/distance/lb/index.html#module-wildboar.distance.lb">wildboar.distance.lb</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#module-wildboar.ensemble">wildboar.ensemble</a>
+</li>
+        <li><a href="api/wildboar/explain/index.html#module-wildboar.explain">wildboar.explain</a>
+</li>
+        <li><a href="api/wildboar/explain/counterfactual/index.html#module-wildboar.explain.counterfactual">wildboar.explain.counterfactual</a>
+</li>
+        <li><a href="api/wildboar/linear_model/index.html#module-wildboar.linear_model">wildboar.linear_model</a>
+</li>
+        <li><a href="api/wildboar/metrics/index.html#module-wildboar.metrics">wildboar.metrics</a>
+</li>
+        <li><a href="api/wildboar/model_selection/index.html#module-wildboar.model_selection">wildboar.model_selection</a>
+</li>
+        <li><a href="api/wildboar/segment/index.html#module-wildboar.segment">wildboar.segment</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#module-wildboar.transform">wildboar.transform</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#module-wildboar.tree">wildboar.tree</a>
+</li>
+        <li><a href="api/wildboar/utils/index.html#module-wildboar.utils">wildboar.utils</a>
+</li>
+        <li><a href="api/wildboar/utils/plot/index.html#module-wildboar.utils.plot">wildboar.utils.plot</a>
+</li>
+        <li><a href="api/wildboar/utils/variable_len/index.html#module-wildboar.utils.variable_len">wildboar.utils.variable_len</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/wildboar/annotate/index.html#wildboar.annotate.motifs">motifs() (in module wildboar.annotate)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="N">N</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.JSONRepository.name">name (wildboar.datasets.JSONRepository property)</a>
+
+      <ul>
+        <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.Repository.name">(wildboar.datasets.Repository property)</a>
+</li>
+      </ul></li>
+      <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.named_preprocess">named_preprocess() (in module wildboar.datasets.preprocess)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.NativeGuideCounterfactual">NativeGuideCounterfactual (class in wildboar.explain.counterfactual)</a>
+</li>
+      <li><a href="api/wildboar/distance/index.html#wildboar.distance.NearestNeighbors">NearestNeighbors (class in wildboar.distance)</a>
+</li>
+      <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.NiceCounterfactual">NiceCounterfactual (class in wildboar.explain.counterfactual)</a>
+</li>
+      <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.NpBundle">NpBundle (class in wildboar.datasets)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="O">O</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/wildboar/model_selection/index.html#wildboar.model_selection.outlier_train_test_split">outlier_train_test_split() (in module wildboar.model_selection)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="P">P</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/wildboar/transform/index.html#wildboar.transform.PAA">PAA (class in wildboar.transform)</a>
+</li>
+      <li><a href="api/wildboar/distance/lb/index.html#wildboar.distance.lb.PaaLowerBound">PaaLowerBound (class in wildboar.distance.lb)</a>
+</li>
+      <li><a href="api/wildboar/distance/index.html#wildboar.distance.paired_distance">paired_distance() (in module wildboar.distance)</a>
+</li>
+      <li><a href="api/wildboar/distance/index.html#wildboar.distance.paired_matrix_profile">paired_matrix_profile() (in module wildboar.distance)</a>
+</li>
+      <li><a href="api/wildboar/distance/index.html#wildboar.distance.paired_subsequence_distance">paired_subsequence_distance() (in module wildboar.distance)</a>
+</li>
+      <li><a href="api/wildboar/distance/index.html#wildboar.distance.paired_subsequence_match">paired_subsequence_match() (in module wildboar.distance)</a>
+</li>
+      <li><a href="api/wildboar/distance/index.html#wildboar.distance.pairwise_distance">pairwise_distance() (in module wildboar.distance)</a>
+</li>
+      <li><a href="api/wildboar/distance/index.html#wildboar.distance.pairwise_subsequence_distance">pairwise_subsequence_distance() (in module wildboar.distance)</a>
+</li>
+      <li><a href="api/wildboar/transform/index.html#wildboar.transform.piecewice_aggregate_approximation">piecewice_aggregate_approximation() (in module wildboar.transform)</a>
+</li>
+      <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.PivotForestClassifier">PivotForestClassifier (class in wildboar.ensemble)</a>
+</li>
+      <li><a href="api/wildboar/transform/index.html#wildboar.transform.PivotTransform">PivotTransform (class in wildboar.transform)</a>
+</li>
+      <li><a href="api/wildboar/tree/index.html#wildboar.tree.PivotTreeClassifier">PivotTreeClassifier (class in wildboar.tree)</a>
+</li>
+      <li><a href="api/wildboar/metrics/index.html#wildboar.metrics.plausability_score">plausability_score() (in module wildboar.metrics)</a>
+</li>
+      <li><a href="api/wildboar/base/index.html#wildboar.base.ExplainerMixin.plot">plot() (wildboar.base.ExplainerMixin method)</a>
+
+      <ul>
+        <li><a href="api/wildboar/explain/index.html#wildboar.explain.AmplitudeImportance.plot">(wildboar.explain.AmplitudeImportance method)</a>
+</li>
+        <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.KNeighborsCounterfactual.plot">(wildboar.explain.counterfactual.KNeighborsCounterfactual method)</a>
+</li>
+        <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.NativeGuideCounterfactual.plot">(wildboar.explain.counterfactual.NativeGuideCounterfactual method)</a>
+</li>
+        <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.NiceCounterfactual.plot">(wildboar.explain.counterfactual.NiceCounterfactual method)</a>
+</li>
+        <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.PrototypeCounterfactual.plot">(wildboar.explain.counterfactual.PrototypeCounterfactual method)</a>
+</li>
+        <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.ShapeletForestCounterfactual.plot">(wildboar.explain.counterfactual.ShapeletForestCounterfactual method)</a>
+</li>
+        <li><a href="api/wildboar/explain/index.html#wildboar.explain.FrequencyImportance.plot">(wildboar.explain.FrequencyImportance method)</a>
+</li>
+        <li><a href="api/wildboar/explain/index.html#wildboar.explain.IntervalImportance.plot">(wildboar.explain.IntervalImportance method)</a>
+</li>
+        <li><a href="api/wildboar/explain/index.html#wildboar.explain.ShapeletImportance.plot">(wildboar.explain.ShapeletImportance method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/wildboar/utils/plot/index.html#wildboar.utils.plot.plot_frequency_domain">plot_frequency_domain() (in module wildboar.utils.plot)</a>
+</li>
+      <li><a href="api/wildboar/explain/index.html#wildboar.explain.plot_importances">plot_importances() (in module wildboar.explain)</a>
+</li>
+      <li><a href="api/wildboar/utils/plot/index.html#wildboar.utils.plot.plot_time_domain">plot_time_domain() (in module wildboar.utils.plot)</a>
+</li>
+      <li><a href="api/wildboar/tree/index.html#wildboar.tree.plot_tree">plot_tree() (in module wildboar.tree)</a>
+</li>
+      <li><a href="api/wildboar/distance/index.html#wildboar.distance.KMeans.predict">predict() (wildboar.distance.KMeans method)</a>
+
+      <ul>
+        <li><a href="api/wildboar/distance/index.html#wildboar.distance.KMedoids.predict">(wildboar.distance.KMedoids method)</a>
+</li>
+        <li><a href="api/wildboar/distance/index.html#wildboar.distance.KNeighborsClassifier.predict">(wildboar.distance.KNeighborsClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.BaggingClassifier.predict">(wildboar.ensemble.BaggingClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.BaggingRegressor.predict">(wildboar.ensemble.BaggingRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ElasticEnsembleClassifier.predict">(wildboar.ensemble.ElasticEnsembleClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ExtraShapeletTreesClassifier.predict">(wildboar.ensemble.ExtraShapeletTreesClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ExtraShapeletTreesRegressor.predict">(wildboar.ensemble.ExtraShapeletTreesRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.IntervalForestClassifier.predict">(wildboar.ensemble.IntervalForestClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.IntervalForestRegressor.predict">(wildboar.ensemble.IntervalForestRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.PivotForestClassifier.predict">(wildboar.ensemble.PivotForestClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ProximityForestClassifier.predict">(wildboar.ensemble.ProximityForestClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.RocketForestClassifier.predict">(wildboar.ensemble.RocketForestClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.RocketForestRegressor.predict">(wildboar.ensemble.RocketForestRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ShapeletForestClassifier.predict">(wildboar.ensemble.ShapeletForestClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ShapeletForestEmbedding.predict">(wildboar.ensemble.ShapeletForestEmbedding method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ShapeletForestRegressor.predict">(wildboar.ensemble.ShapeletForestRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/segment/index.html#wildboar.segment.FlussSegmenter.predict">(wildboar.segment.FlussSegmenter method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.ExtraShapeletTreeClassifier.predict">(wildboar.tree.ExtraShapeletTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.ExtraShapeletTreeRegressor.predict">(wildboar.tree.ExtraShapeletTreeRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.IntervalTreeClassifier.predict">(wildboar.tree.IntervalTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.IntervalTreeRegressor.predict">(wildboar.tree.IntervalTreeRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.PivotTreeClassifier.predict">(wildboar.tree.PivotTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.ProximityTreeClassifier.predict">(wildboar.tree.ProximityTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.RocketTreeClassifier.predict">(wildboar.tree.RocketTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.RocketTreeRegressor.predict">(wildboar.tree.RocketTreeRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.ShapeletTreeClassifier.predict">(wildboar.tree.ShapeletTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.ShapeletTreeRegressor.predict">(wildboar.tree.ShapeletTreeRegressor method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.BaggingClassifier.predict_log_proba">predict_log_proba() (wildboar.ensemble.BaggingClassifier method)</a>
+
+      <ul>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ExtraShapeletTreesClassifier.predict_log_proba">(wildboar.ensemble.ExtraShapeletTreesClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.IntervalForestClassifier.predict_log_proba">(wildboar.ensemble.IntervalForestClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.PivotForestClassifier.predict_log_proba">(wildboar.ensemble.PivotForestClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ProximityForestClassifier.predict_log_proba">(wildboar.ensemble.ProximityForestClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.RocketForestClassifier.predict_log_proba">(wildboar.ensemble.RocketForestClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ShapeletForestClassifier.predict_log_proba">(wildboar.ensemble.ShapeletForestClassifier method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/wildboar/distance/index.html#wildboar.distance.KNeighborsClassifier.predict_proba">predict_proba() (wildboar.distance.KNeighborsClassifier method)</a>
+
+      <ul>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.BaggingClassifier.predict_proba">(wildboar.ensemble.BaggingClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ElasticEnsembleClassifier.predict_proba">(wildboar.ensemble.ElasticEnsembleClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ExtraShapeletTreesClassifier.predict_proba">(wildboar.ensemble.ExtraShapeletTreesClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.IntervalForestClassifier.predict_proba">(wildboar.ensemble.IntervalForestClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.PivotForestClassifier.predict_proba">(wildboar.ensemble.PivotForestClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ProximityForestClassifier.predict_proba">(wildboar.ensemble.ProximityForestClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.RocketForestClassifier.predict_proba">(wildboar.ensemble.RocketForestClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ShapeletForestClassifier.predict_proba">(wildboar.ensemble.ShapeletForestClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.ExtraShapeletTreeClassifier.predict_proba">(wildboar.tree.ExtraShapeletTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.IntervalTreeClassifier.predict_proba">(wildboar.tree.IntervalTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.PivotTreeClassifier.predict_proba">(wildboar.tree.PivotTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.ProximityTreeClassifier.predict_proba">(wildboar.tree.ProximityTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.RocketTreeClassifier.predict_proba">(wildboar.tree.RocketTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.ShapeletTreeClassifier.predict_proba">(wildboar.tree.ShapeletTreeClassifier method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.PrototypeCounterfactual">PrototypeCounterfactual (class in wildboar.explain.counterfactual)</a>
+</li>
+      <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.proximity">proximity() (in module wildboar.explain.counterfactual)</a>
+</li>
+      <li><a href="api/wildboar/metrics/index.html#wildboar.metrics.proximity_score">proximity_score() (in module wildboar.metrics)</a>
+</li>
+      <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ProximityForestClassifier">ProximityForestClassifier (class in wildboar.ensemble)</a>
+</li>
+      <li><a href="api/wildboar/transform/index.html#wildboar.transform.ProximityTransform">ProximityTransform (class in wildboar.transform)</a>
+</li>
+      <li><a href="api/wildboar/tree/index.html#wildboar.tree.ProximityTreeClassifier">ProximityTreeClassifier (class in wildboar.tree)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="Q">Q</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/wildboar/transform/index.html#wildboar.transform.QuantTransform">QuantTransform (class in wildboar.transform)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="R">R</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/wildboar/linear_model/index.html#wildboar.linear_model.RandomShapeletClassifier">RandomShapeletClassifier (class in wildboar.linear_model)</a>
+</li>
+      <li><a href="api/wildboar/linear_model/index.html#wildboar.linear_model.RandomShapeletRegressor">RandomShapeletRegressor (class in wildboar.linear_model)</a>
+</li>
+      <li><a href="api/wildboar/transform/index.html#wildboar.transform.RandomShapeletTransform">RandomShapeletTransform (class in wildboar.transform)</a>
+</li>
+      <li><a href="api/wildboar/metrics/index.html#wildboar.metrics.redudancy_score">redudancy_score() (in module wildboar.metrics)</a>
+</li>
+      <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.JSONRepository.refresh">refresh() (wildboar.datasets.JSONRepository method)</a>
+
+      <ul>
+        <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.Repository.refresh">(wildboar.datasets.Repository method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.refresh_repositories">refresh_repositories() (in module wildboar.datasets)</a>
+</li>
+      <li><a href="api/wildboar/metrics/index.html#wildboar.metrics.relative_proximity_score">relative_proximity_score() (in module wildboar.metrics)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/wildboar/model_selection/index.html#wildboar.model_selection.RepeatedOutlierSplit">RepeatedOutlierSplit (class in wildboar.model_selection)</a>
+</li>
+      <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.Repository">Repository (class in wildboar.datasets)</a>
+</li>
+      <li><a href="api/wildboar/linear_model/index.html#wildboar.linear_model.RocketClassifier">RocketClassifier (class in wildboar.linear_model)</a>
+</li>
+      <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.RocketForestClassifier">RocketForestClassifier (class in wildboar.ensemble)</a>
+</li>
+      <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.RocketForestRegressor">RocketForestRegressor (class in wildboar.ensemble)</a>
+</li>
+      <li><a href="api/wildboar/linear_model/index.html#wildboar.linear_model.RocketRegressor">RocketRegressor (class in wildboar.linear_model)</a>
+</li>
+      <li><a href="api/wildboar/transform/index.html#wildboar.transform.RocketTransform">RocketTransform (class in wildboar.transform)</a>
+</li>
+      <li><a href="api/wildboar/tree/index.html#wildboar.tree.RocketTreeClassifier">RocketTreeClassifier (class in wildboar.tree)</a>
+</li>
+      <li><a href="api/wildboar/tree/index.html#wildboar.tree.RocketTreeRegressor">RocketTreeRegressor (class in wildboar.tree)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="S">S</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/wildboar/transform/index.html#wildboar.transform.SAX">SAX (class in wildboar.transform)</a>
+</li>
+      <li><a href="api/wildboar/distance/lb/index.html#wildboar.distance.lb.SaxLowerBound">SaxLowerBound (class in wildboar.distance.lb)</a>
+</li>
+      <li><a href="api/wildboar/base/index.html#wildboar.base.CounterfactualMixin.score">score() (wildboar.base.CounterfactualMixin method)</a>
+
+      <ul>
+        <li><a href="api/wildboar/distance/index.html#wildboar.distance.KNeighborsClassifier.score">(wildboar.distance.KNeighborsClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.BaggingClassifier.score">(wildboar.ensemble.BaggingClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.BaggingRegressor.score">(wildboar.ensemble.BaggingRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ElasticEnsembleClassifier.score">(wildboar.ensemble.ElasticEnsembleClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ExtraShapeletTreesClassifier.score">(wildboar.ensemble.ExtraShapeletTreesClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ExtraShapeletTreesRegressor.score">(wildboar.ensemble.ExtraShapeletTreesRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.IntervalForestClassifier.score">(wildboar.ensemble.IntervalForestClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.IntervalForestRegressor.score">(wildboar.ensemble.IntervalForestRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.PivotForestClassifier.score">(wildboar.ensemble.PivotForestClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ProximityForestClassifier.score">(wildboar.ensemble.ProximityForestClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.RocketForestClassifier.score">(wildboar.ensemble.RocketForestClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.RocketForestRegressor.score">(wildboar.ensemble.RocketForestRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ShapeletForestClassifier.score">(wildboar.ensemble.ShapeletForestClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ShapeletForestEmbedding.score">(wildboar.ensemble.ShapeletForestEmbedding method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ShapeletForestRegressor.score">(wildboar.ensemble.ShapeletForestRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.KNeighborsCounterfactual.score">(wildboar.explain.counterfactual.KNeighborsCounterfactual method)</a>
+</li>
+        <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.NativeGuideCounterfactual.score">(wildboar.explain.counterfactual.NativeGuideCounterfactual method)</a>
+</li>
+        <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.NiceCounterfactual.score">(wildboar.explain.counterfactual.NiceCounterfactual method)</a>
+</li>
+        <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.PrototypeCounterfactual.score">(wildboar.explain.counterfactual.PrototypeCounterfactual method)</a>
+</li>
+        <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.ShapeletForestCounterfactual.score">(wildboar.explain.counterfactual.ShapeletForestCounterfactual method)</a>
+</li>
+        <li><a href="api/wildboar/linear_model/index.html#wildboar.linear_model.CastorClassifier.score">(wildboar.linear_model.CastorClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/linear_model/index.html#wildboar.linear_model.CastorRegressor.score">(wildboar.linear_model.CastorRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/linear_model/index.html#wildboar.linear_model.DilatedShapeletClassifier.score">(wildboar.linear_model.DilatedShapeletClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/linear_model/index.html#wildboar.linear_model.HydraClassifier.score">(wildboar.linear_model.HydraClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/linear_model/index.html#wildboar.linear_model.RandomShapeletClassifier.score">(wildboar.linear_model.RandomShapeletClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/linear_model/index.html#wildboar.linear_model.RandomShapeletRegressor.score">(wildboar.linear_model.RandomShapeletRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/linear_model/index.html#wildboar.linear_model.RocketClassifier.score">(wildboar.linear_model.RocketClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/linear_model/index.html#wildboar.linear_model.RocketRegressor.score">(wildboar.linear_model.RocketRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.ExtraShapeletTreeClassifier.score">(wildboar.tree.ExtraShapeletTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.ExtraShapeletTreeRegressor.score">(wildboar.tree.ExtraShapeletTreeRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.IntervalTreeClassifier.score">(wildboar.tree.IntervalTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.IntervalTreeRegressor.score">(wildboar.tree.IntervalTreeRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.PivotTreeClassifier.score">(wildboar.tree.PivotTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.ProximityTreeClassifier.score">(wildboar.tree.ProximityTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.RocketTreeClassifier.score">(wildboar.tree.RocketTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.RocketTreeRegressor.score">(wildboar.tree.RocketTreeRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.ShapeletTreeClassifier.score">(wildboar.tree.ShapeletTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.ShapeletTreeRegressor.score">(wildboar.tree.ShapeletTreeRegressor method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/wildboar/annotate/index.html#wildboar.annotate.segment">segment() (in module wildboar.annotate)</a>
+</li>
+      <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.SelectDimensionPercentile">SelectDimensionPercentile (class in wildboar.dimension_selection)</a>
+</li>
+      <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.SelectDimensionSignificance">SelectDimensionSignificance (class in wildboar.dimension_selection)</a>
+</li>
+      <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.SelectDimensionTopK">SelectDimensionTopK (class in wildboar.dimension_selection)</a>
+</li>
+      <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.SequentialDimensionSelector">SequentialDimensionSelector (class in wildboar.dimension_selection)</a>
+</li>
+      <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.set_cache_dir">set_cache_dir() (in module wildboar.datasets)</a>
+</li>
+      <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.Interpolate.set_output">set_output() (wildboar.datasets.preprocess.Interpolate method)</a>
+
+      <ul>
+        <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.MaxAbsScale.set_output">(wildboar.datasets.preprocess.MaxAbsScale method)</a>
+</li>
+        <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.MinMaxScale.set_output">(wildboar.datasets.preprocess.MinMaxScale method)</a>
+</li>
+        <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.Standardize.set_output">(wildboar.datasets.preprocess.Standardize method)</a>
+</li>
+        <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.Truncate.set_output">(wildboar.datasets.preprocess.Truncate method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.DistanceVarianceThreshold.set_output">(wildboar.dimension_selection.DistanceVarianceThreshold method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.ECSSelector.set_output">(wildboar.dimension_selection.ECSSelector method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.SelectDimensionPercentile.set_output">(wildboar.dimension_selection.SelectDimensionPercentile method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.SelectDimensionSignificance.set_output">(wildboar.dimension_selection.SelectDimensionSignificance method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.SelectDimensionTopK.set_output">(wildboar.dimension_selection.SelectDimensionTopK method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.SequentialDimensionSelector.set_output">(wildboar.dimension_selection.SequentialDimensionSelector method)</a>
+</li>
+        <li><a href="api/wildboar/distance/index.html#wildboar.distance.KMeans.set_output">(wildboar.distance.KMeans method)</a>
+</li>
+        <li><a href="api/wildboar/distance/index.html#wildboar.distance.KMedoids.set_output">(wildboar.distance.KMedoids method)</a>
+</li>
+        <li><a href="api/wildboar/distance/lb/index.html#wildboar.distance.lb.DtwKeoghLowerBound.set_output">(wildboar.distance.lb.DtwKeoghLowerBound method)</a>
+</li>
+        <li><a href="api/wildboar/distance/lb/index.html#wildboar.distance.lb.DtwKimLowerBound.set_output">(wildboar.distance.lb.DtwKimLowerBound method)</a>
+</li>
+        <li><a href="api/wildboar/distance/lb/index.html#wildboar.distance.lb.PaaLowerBound.set_output">(wildboar.distance.lb.PaaLowerBound method)</a>
+</li>
+        <li><a href="api/wildboar/distance/lb/index.html#wildboar.distance.lb.SaxLowerBound.set_output">(wildboar.distance.lb.SaxLowerBound method)</a>
+</li>
+        <li><a href="api/wildboar/distance/index.html#wildboar.distance.NearestNeighbors.set_output">(wildboar.distance.NearestNeighbors method)</a>
+</li>
+        <li><a href="api/wildboar/segment/index.html#wildboar.segment.FlussSegmenter.set_output">(wildboar.segment.FlussSegmenter method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.CastorTransform.set_output">(wildboar.transform.CastorTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.DerivativeTransform.set_output">(wildboar.transform.DerivativeTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.DiffTransform.set_output">(wildboar.transform.DiffTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.DilatedShapeletTransform.set_output">(wildboar.transform.DilatedShapeletTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.FeatureTransform.set_output">(wildboar.transform.FeatureTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.FftTransform.set_output">(wildboar.transform.FftTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.HydraTransform.set_output">(wildboar.transform.HydraTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.IntervalTransform.set_output">(wildboar.transform.IntervalTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.MatrixProfileTransform.set_output">(wildboar.transform.MatrixProfileTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.PAA.set_output">(wildboar.transform.PAA method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.PivotTransform.set_output">(wildboar.transform.PivotTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.ProximityTransform.set_output">(wildboar.transform.ProximityTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.QuantTransform.set_output">(wildboar.transform.QuantTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.RandomShapeletTransform.set_output">(wildboar.transform.RandomShapeletTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.RocketTransform.set_output">(wildboar.transform.RocketTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.SAX.set_output">(wildboar.transform.SAX method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.ShapeletTransform.set_output">(wildboar.transform.ShapeletTransform method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/wildboar/base/index.html#wildboar.base.BaseEstimator.set_params">set_params() (wildboar.base.BaseEstimator method)</a>
+
+      <ul>
+        <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.Interpolate.set_params">(wildboar.datasets.preprocess.Interpolate method)</a>
+</li>
+        <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.MaxAbsScale.set_params">(wildboar.datasets.preprocess.MaxAbsScale method)</a>
+</li>
+        <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.MinMaxScale.set_params">(wildboar.datasets.preprocess.MinMaxScale method)</a>
+</li>
+        <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.Standardize.set_params">(wildboar.datasets.preprocess.Standardize method)</a>
+</li>
+        <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.Truncate.set_params">(wildboar.datasets.preprocess.Truncate method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.DistanceVarianceThreshold.set_params">(wildboar.dimension_selection.DistanceVarianceThreshold method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.ECSSelector.set_params">(wildboar.dimension_selection.ECSSelector method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.SelectDimensionPercentile.set_params">(wildboar.dimension_selection.SelectDimensionPercentile method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.SelectDimensionSignificance.set_params">(wildboar.dimension_selection.SelectDimensionSignificance method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.SelectDimensionTopK.set_params">(wildboar.dimension_selection.SelectDimensionTopK method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.SequentialDimensionSelector.set_params">(wildboar.dimension_selection.SequentialDimensionSelector method)</a>
+</li>
+        <li><a href="api/wildboar/distance/index.html#wildboar.distance.KMeans.set_params">(wildboar.distance.KMeans method)</a>
+</li>
+        <li><a href="api/wildboar/distance/index.html#wildboar.distance.KMedoids.set_params">(wildboar.distance.KMedoids method)</a>
+</li>
+        <li><a href="api/wildboar/distance/index.html#wildboar.distance.KNeighborsClassifier.set_params">(wildboar.distance.KNeighborsClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/distance/lb/index.html#wildboar.distance.lb.DtwKeoghLowerBound.set_params">(wildboar.distance.lb.DtwKeoghLowerBound method)</a>
+</li>
+        <li><a href="api/wildboar/distance/lb/index.html#wildboar.distance.lb.DtwKimLowerBound.set_params">(wildboar.distance.lb.DtwKimLowerBound method)</a>
+</li>
+        <li><a href="api/wildboar/distance/lb/index.html#wildboar.distance.lb.PaaLowerBound.set_params">(wildboar.distance.lb.PaaLowerBound method)</a>
+</li>
+        <li><a href="api/wildboar/distance/lb/index.html#wildboar.distance.lb.SaxLowerBound.set_params">(wildboar.distance.lb.SaxLowerBound method)</a>
+</li>
+        <li><a href="api/wildboar/distance/index.html#wildboar.distance.MDS.set_params">(wildboar.distance.MDS method)</a>
+</li>
+        <li><a href="api/wildboar/distance/index.html#wildboar.distance.NearestNeighbors.set_params">(wildboar.distance.NearestNeighbors method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.BaggingClassifier.set_params">(wildboar.ensemble.BaggingClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.BaggingRegressor.set_params">(wildboar.ensemble.BaggingRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.BaseBagging.set_params">(wildboar.ensemble.BaseBagging method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ElasticEnsembleClassifier.set_params">(wildboar.ensemble.ElasticEnsembleClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ExtraShapeletTreesClassifier.set_params">(wildboar.ensemble.ExtraShapeletTreesClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ExtraShapeletTreesRegressor.set_params">(wildboar.ensemble.ExtraShapeletTreesRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.IntervalForestClassifier.set_params">(wildboar.ensemble.IntervalForestClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.IntervalForestRegressor.set_params">(wildboar.ensemble.IntervalForestRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.IsolationShapeletForest.set_params">(wildboar.ensemble.IsolationShapeletForest method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.PivotForestClassifier.set_params">(wildboar.ensemble.PivotForestClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ProximityForestClassifier.set_params">(wildboar.ensemble.ProximityForestClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.RocketForestClassifier.set_params">(wildboar.ensemble.RocketForestClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.RocketForestRegressor.set_params">(wildboar.ensemble.RocketForestRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ShapeletForestClassifier.set_params">(wildboar.ensemble.ShapeletForestClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ShapeletForestEmbedding.set_params">(wildboar.ensemble.ShapeletForestEmbedding method)</a>
+</li>
+        <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ShapeletForestRegressor.set_params">(wildboar.ensemble.ShapeletForestRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/explain/index.html#wildboar.explain.AmplitudeImportance.set_params">(wildboar.explain.AmplitudeImportance method)</a>
+</li>
+        <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.KNeighborsCounterfactual.set_params">(wildboar.explain.counterfactual.KNeighborsCounterfactual method)</a>
+</li>
+        <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.NativeGuideCounterfactual.set_params">(wildboar.explain.counterfactual.NativeGuideCounterfactual method)</a>
+</li>
+        <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.NiceCounterfactual.set_params">(wildboar.explain.counterfactual.NiceCounterfactual method)</a>
+</li>
+        <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.PrototypeCounterfactual.set_params">(wildboar.explain.counterfactual.PrototypeCounterfactual method)</a>
+</li>
+        <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.ShapeletForestCounterfactual.set_params">(wildboar.explain.counterfactual.ShapeletForestCounterfactual method)</a>
+</li>
+        <li><a href="api/wildboar/explain/index.html#wildboar.explain.FrequencyImportance.set_params">(wildboar.explain.FrequencyImportance method)</a>
+</li>
+        <li><a href="api/wildboar/explain/index.html#wildboar.explain.IntervalImportance.set_params">(wildboar.explain.IntervalImportance method)</a>
+</li>
+        <li><a href="api/wildboar/explain/index.html#wildboar.explain.ShapeletImportance.set_params">(wildboar.explain.ShapeletImportance method)</a>
+</li>
+        <li><a href="api/wildboar/linear_model/index.html#wildboar.linear_model.CastorClassifier.set_params">(wildboar.linear_model.CastorClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/linear_model/index.html#wildboar.linear_model.CastorRegressor.set_params">(wildboar.linear_model.CastorRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/linear_model/index.html#wildboar.linear_model.DilatedShapeletClassifier.set_params">(wildboar.linear_model.DilatedShapeletClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/linear_model/index.html#wildboar.linear_model.HydraClassifier.set_params">(wildboar.linear_model.HydraClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/linear_model/index.html#wildboar.linear_model.RandomShapeletClassifier.set_params">(wildboar.linear_model.RandomShapeletClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/linear_model/index.html#wildboar.linear_model.RandomShapeletRegressor.set_params">(wildboar.linear_model.RandomShapeletRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/linear_model/index.html#wildboar.linear_model.RocketClassifier.set_params">(wildboar.linear_model.RocketClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/linear_model/index.html#wildboar.linear_model.RocketRegressor.set_params">(wildboar.linear_model.RocketRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/segment/index.html#wildboar.segment.FlussSegmenter.set_params">(wildboar.segment.FlussSegmenter method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.CastorTransform.set_params">(wildboar.transform.CastorTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.DerivativeTransform.set_params">(wildboar.transform.DerivativeTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.DiffTransform.set_params">(wildboar.transform.DiffTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.DilatedShapeletTransform.set_params">(wildboar.transform.DilatedShapeletTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.FeatureTransform.set_params">(wildboar.transform.FeatureTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.FftTransform.set_params">(wildboar.transform.FftTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.HydraTransform.set_params">(wildboar.transform.HydraTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.IntervalTransform.set_params">(wildboar.transform.IntervalTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.MatrixProfileTransform.set_params">(wildboar.transform.MatrixProfileTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.PAA.set_params">(wildboar.transform.PAA method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.PivotTransform.set_params">(wildboar.transform.PivotTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.ProximityTransform.set_params">(wildboar.transform.ProximityTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.QuantTransform.set_params">(wildboar.transform.QuantTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.RandomShapeletTransform.set_params">(wildboar.transform.RandomShapeletTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.RocketTransform.set_params">(wildboar.transform.RocketTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.SAX.set_params">(wildboar.transform.SAX method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.ShapeletTransform.set_params">(wildboar.transform.ShapeletTransform method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.ExtraShapeletTreeClassifier.set_params">(wildboar.tree.ExtraShapeletTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.ExtraShapeletTreeRegressor.set_params">(wildboar.tree.ExtraShapeletTreeRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.IntervalTreeClassifier.set_params">(wildboar.tree.IntervalTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.IntervalTreeRegressor.set_params">(wildboar.tree.IntervalTreeRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.PivotTreeClassifier.set_params">(wildboar.tree.PivotTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.ProximityTreeClassifier.set_params">(wildboar.tree.ProximityTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.RocketTreeClassifier.set_params">(wildboar.tree.RocketTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.RocketTreeRegressor.set_params">(wildboar.tree.RocketTreeRegressor method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.ShapeletTreeClassifier.set_params">(wildboar.tree.ShapeletTreeClassifier method)</a>
+</li>
+        <li><a href="api/wildboar/tree/index.html#wildboar.tree.ShapeletTreeRegressor.set_params">(wildboar.tree.ShapeletTreeRegressor method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ShapeletForestClassifier">ShapeletForestClassifier (class in wildboar.ensemble)</a>
+</li>
+      <li><a href="api/wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.ShapeletForestCounterfactual">ShapeletForestCounterfactual (class in wildboar.explain.counterfactual)</a>
+</li>
+      <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ShapeletForestEmbedding">ShapeletForestEmbedding (class in wildboar.ensemble)</a>
+</li>
+      <li><a href="api/wildboar/ensemble/index.html#wildboar.ensemble.ShapeletForestRegressor">ShapeletForestRegressor (class in wildboar.ensemble)</a>
+</li>
+      <li><a href="api/wildboar/explain/index.html#wildboar.explain.ShapeletImportance">ShapeletImportance (class in wildboar.explain)</a>
+</li>
+      <li><a href="api/wildboar/transform/index.html#wildboar.transform.ShapeletTransform">ShapeletTransform (class in wildboar.transform)</a>
+</li>
+      <li><a href="api/wildboar/tree/index.html#wildboar.tree.ShapeletTreeClassifier">ShapeletTreeClassifier (class in wildboar.tree)</a>
+</li>
+      <li><a href="api/wildboar/tree/index.html#wildboar.tree.ShapeletTreeRegressor">ShapeletTreeRegressor (class in wildboar.tree)</a>
+</li>
+      <li><a href="api/wildboar/metrics/index.html#wildboar.metrics.silhouette_samples">silhouette_samples() (in module wildboar.metrics)</a>
+</li>
+      <li><a href="api/wildboar/metrics/index.html#wildboar.metrics.silhouette_score">silhouette_score() (in module wildboar.metrics)</a>
+</li>
+      <li><a href="api/wildboar/model_selection/index.html#wildboar.model_selection.RepeatedOutlierSplit.split">split() (wildboar.model_selection.RepeatedOutlierSplit method)</a>
+</li>
+      <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.Standardize">Standardize (class in wildboar.datasets.preprocess)</a>
+</li>
+      <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.standardize">standardize() (in module wildboar.datasets.preprocess)</a>
+</li>
+      <li><a href="api/wildboar/distance/index.html#wildboar.distance.subsequence_match">subsequence_match() (in module wildboar.distance)</a>
+</li>
+      <li><a href="api/wildboar/transform/index.html#wildboar.transform.symbolic_aggregate_approximation">symbolic_aggregate_approximation() (in module wildboar.transform)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="T">T</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.Interpolate.transform">transform() (wildboar.datasets.preprocess.Interpolate method)</a>
+
+      <ul>
+        <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.MaxAbsScale.transform">(wildboar.datasets.preprocess.MaxAbsScale method)</a>
+</li>
+        <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.MinMaxScale.transform">(wildboar.datasets.preprocess.MinMaxScale method)</a>
+</li>
+        <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.Standardize.transform">(wildboar.datasets.preprocess.Standardize method)</a>
+</li>
+        <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.Truncate.transform">(wildboar.datasets.preprocess.Truncate method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.DistanceVarianceThreshold.transform">(wildboar.dimension_selection.DistanceVarianceThreshold method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.ECSSelector.transform">(wildboar.dimension_selection.ECSSelector method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.SelectDimensionPercentile.transform">(wildboar.dimension_selection.SelectDimensionPercentile method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.SelectDimensionSignificance.transform">(wildboar.dimension_selection.SelectDimensionSignificance method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.SelectDimensionTopK.transform">(wildboar.dimension_selection.SelectDimensionTopK method)</a>
+</li>
+        <li><a href="api/wildboar/dimension_selection/index.html#wildboar.dimension_selection.SequentialDimensionSelector.transform">(wildboar.dimension_selection.SequentialDimensionSelector method)</a>
+</li>
+        <li><a href="api/wildboar/distance/index.html#wildboar.distance.KMeans.transform">(wildboar.distance.KMeans method)</a>
+</li>
+        <li><a href="api/wildboar/distance/index.html#wildboar.distance.KMedoids.transform">(wildboar.distance.KMedoids method)</a>
+</li>
+        <li><a href="api/wildboar/distance/lb/index.html#wildboar.distance.lb.DtwKeoghLowerBound.transform">(wildboar.distance.lb.DtwKeoghLowerBound method)</a>
+</li>
+        <li><a href="api/wildboar/distance/lb/index.html#wildboar.distance.lb.DtwKimLowerBound.transform">(wildboar.distance.lb.DtwKimLowerBound method)</a>
+</li>
+        <li><a href="api/wildboar/distance/lb/index.html#wildboar.distance.lb.PaaLowerBound.transform">(wildboar.distance.lb.PaaLowerBound method)</a>
+</li>
+        <li><a href="api/wildboar/distance/lb/index.html#wildboar.distance.lb.SaxLowerBound.transform">(wildboar.distance.lb.SaxLowerBound method)</a>
+</li>
+        <li><a href="api/wildboar/segment/index.html#wildboar.segment.FlussSegmenter.transform">(wildboar.segment.FlussSegmenter method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.CastorTransform.transform">(wildboar.transform.CastorTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.DerivativeTransform.transform">(wildboar.transform.DerivativeTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.DiffTransform.transform">(wildboar.transform.DiffTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.DilatedShapeletTransform.transform">(wildboar.transform.DilatedShapeletTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.FeatureTransform.transform">(wildboar.transform.FeatureTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.FftTransform.transform">(wildboar.transform.FftTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.HydraTransform.transform">(wildboar.transform.HydraTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.IntervalTransform.transform">(wildboar.transform.IntervalTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.MatrixProfileTransform.transform">(wildboar.transform.MatrixProfileTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.PivotTransform.transform">(wildboar.transform.PivotTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.QuantTransform.transform">(wildboar.transform.QuantTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.RandomShapeletTransform.transform">(wildboar.transform.RandomShapeletTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.RocketTransform.transform">(wildboar.transform.RocketTransform method)</a>
+</li>
+        <li><a href="api/wildboar/transform/index.html#wildboar.transform.ShapeletTransform.transform">(wildboar.transform.ShapeletTransform method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.Truncate">Truncate (class in wildboar.datasets.preprocess)</a>
+</li>
+      <li><a href="api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.truncate">truncate() (in module wildboar.datasets.preprocess)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="V">V</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/wildboar/metrics/index.html#wildboar.metrics.validity_score">validity_score() (in module wildboar.metrics)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.JSONRepository.version">version (wildboar.datasets.JSONRepository property)</a>
+
+      <ul>
+        <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.Repository.version">(wildboar.datasets.Repository property)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="W">W</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/wildboar/distance/dtw/index.html#wildboar.distance.dtw.wddtw_distance">wddtw_distance() (in module wildboar.distance.dtw)</a>
+</li>
+      <li><a href="api/wildboar/distance/dtw/index.html#wildboar.distance.dtw.wdtw_alignment">wdtw_alignment() (in module wildboar.distance.dtw)</a>
+</li>
+      <li><a href="api/wildboar/distance/dtw/index.html#wildboar.distance.dtw.wdtw_distance">wdtw_distance() (in module wildboar.distance.dtw)</a>
+</li>
+      <li>
+    wildboar
+
+      <ul>
+        <li><a href="api/wildboar/index.html#module-wildboar">module</a>
+</li>
+      </ul></li>
+      <li>
+    wildboar.annotate
+
+      <ul>
+        <li><a href="api/wildboar/annotate/index.html#module-wildboar.annotate">module</a>
+</li>
+      </ul></li>
+      <li>
+    wildboar.base
+
+      <ul>
+        <li><a href="api/wildboar/base/index.html#module-wildboar.base">module</a>
+</li>
+      </ul></li>
+      <li>
+    wildboar.datasets
+
+      <ul>
+        <li><a href="api/wildboar/datasets/index.html#module-wildboar.datasets">module</a>
+</li>
+      </ul></li>
+      <li>
+    wildboar.datasets.outlier
+
+      <ul>
+        <li><a href="api/wildboar/datasets/outlier/index.html#module-wildboar.datasets.outlier">module</a>
+</li>
+      </ul></li>
+      <li>
+    wildboar.datasets.preprocess
+
+      <ul>
+        <li><a href="api/wildboar/datasets/preprocess/index.html#module-wildboar.datasets.preprocess">module</a>
+</li>
+      </ul></li>
+      <li>
+    wildboar.dimension_selection
+
+      <ul>
+        <li><a href="api/wildboar/dimension_selection/index.html#module-wildboar.dimension_selection">module</a>
+</li>
+      </ul></li>
+      <li>
+    wildboar.distance
+
+      <ul>
+        <li><a href="api/wildboar/distance/index.html#module-wildboar.distance">module</a>
+</li>
+      </ul></li>
+      <li>
+    wildboar.distance.dtw
+
+      <ul>
+        <li><a href="api/wildboar/distance/dtw/index.html#module-wildboar.distance.dtw">module</a>
+</li>
+      </ul></li>
+      <li>
+    wildboar.distance.lb
+
+      <ul>
+        <li><a href="api/wildboar/distance/lb/index.html#module-wildboar.distance.lb">module</a>
+</li>
+      </ul></li>
+      <li>
+    wildboar.ensemble
+
+      <ul>
+        <li><a href="api/wildboar/ensemble/index.html#module-wildboar.ensemble">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    wildboar.explain
+
+      <ul>
+        <li><a href="api/wildboar/explain/index.html#module-wildboar.explain">module</a>
+</li>
+      </ul></li>
+      <li>
+    wildboar.explain.counterfactual
+
+      <ul>
+        <li><a href="api/wildboar/explain/counterfactual/index.html#module-wildboar.explain.counterfactual">module</a>
+</li>
+      </ul></li>
+      <li>
+    wildboar.linear_model
+
+      <ul>
+        <li><a href="api/wildboar/linear_model/index.html#module-wildboar.linear_model">module</a>
+</li>
+      </ul></li>
+      <li>
+    wildboar.metrics
+
+      <ul>
+        <li><a href="api/wildboar/metrics/index.html#module-wildboar.metrics">module</a>
+</li>
+      </ul></li>
+      <li>
+    wildboar.model_selection
+
+      <ul>
+        <li><a href="api/wildboar/model_selection/index.html#module-wildboar.model_selection">module</a>
+</li>
+      </ul></li>
+      <li>
+    wildboar.segment
+
+      <ul>
+        <li><a href="api/wildboar/segment/index.html#module-wildboar.segment">module</a>
+</li>
+      </ul></li>
+      <li>
+    wildboar.transform
+
+      <ul>
+        <li><a href="api/wildboar/transform/index.html#module-wildboar.transform">module</a>
+</li>
+      </ul></li>
+      <li>
+    wildboar.tree
+
+      <ul>
+        <li><a href="api/wildboar/tree/index.html#module-wildboar.tree">module</a>
+</li>
+      </ul></li>
+      <li>
+    wildboar.utils
+
+      <ul>
+        <li><a href="api/wildboar/utils/index.html#module-wildboar.utils">module</a>
+</li>
+      </ul></li>
+      <li>
+    wildboar.utils.plot
+
+      <ul>
+        <li><a href="api/wildboar/utils/plot/index.html#module-wildboar.utils.plot">module</a>
+</li>
+      </ul></li>
+      <li>
+    wildboar.utils.variable_len
+
+      <ul>
+        <li><a href="api/wildboar/utils/variable_len/index.html#module-wildboar.utils.variable_len">module</a>
+</li>
+      </ul></li>
+      <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.JSONRepository.wildboar_requires">wildboar_requires (wildboar.datasets.JSONRepository property)</a>
+
+      <ul>
+        <li><a href="api/wildboar/datasets/index.html#wildboar.datasets.Repository.wildboar_requires">(wildboar.datasets.Repository property)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2023, Isak Samsten.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.1.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

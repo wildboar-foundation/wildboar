@@ -1,0 +1,1980 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" data-theme="auto">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>wildboar.datasets &#8212; Wildboar 1.3.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "auto";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "auto";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=451fe87e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/tabs.css?v=4c969af8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css?v=584e34e5" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/pygments-override.css?v=9e853fe2" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
+
+    <script src="../../../_static/documentation_options.js?v=1f29e9d3"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/tabs.js?v=3ee01567"></script>
+    <script src="../../../_static/toggleprompt.js?v=5801b3bb"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/wildboar/datasets/index';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://wildboar.dev/_versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '1.3';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../../../_static/js/fa.js?v=744fd48f"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="wildboar.datasets.outlier" href="outlier/index.html" />
+    <link rel="prev" title="wildboar.base" href="../base/index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.3.0" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="auto">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/logo.png" class="logo__image only-light" alt=""/>
+    <img src="../../../_static/logo.png" class="logo__image only-dark pst-js-only" alt=""/>
+  
+  
+    <p class="title logo__title">Wildboar</p>
+  
+</a></div>
+    
+      <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../install.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../index.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../more/whatsnew.html">
+    What’s new
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/wildboar-foundation/wildboar/" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/wildboar/" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-custom fa-lg" data-prefix="fa-custom" data-icon="pypi" aria-hidden="true"></i><span class="visually-hidden">PyPI</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../install.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../index.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../more/whatsnew.html">
+    What’s new
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/wildboar-foundation/wildboar/" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/wildboar/" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-custom fa-lg" data-prefix="fa-custom" data-icon="pypi" aria-hidden="true"></i><span class="visually-hidden">PyPI</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../annotate/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.annotate</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.base</span></code></a></li>
+<li class="toctree-l1 current active"><a aria-current="page" class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="outlier/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.outlier</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="preprocess/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.preprocess</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dimension_selection/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.dimension_selection</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../distance/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../distance/dtw/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance.dtw</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../distance/lb/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance.lb</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ensemble/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.ensemble</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../explain/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../explain/counterfactual/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain.counterfactual</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../linear_model/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.linear_model</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../metrics/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.metrics</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model_selection/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.model_selection</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../segment/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.segment</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../transform/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.transform</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tree/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.tree</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utils/plot/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.plot</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utils/variable_len/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.variable_len</span></code></a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">API Reference</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets</span></code></span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-wildboar.datasets">
+<span id="wildboar-datasets"></span><h1><a class="reference internal" href="#module-wildboar.datasets" title="wildboar.datasets"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets</span></code></a><a class="headerlink" href="#module-wildboar.datasets" title="Link to this heading">#</a></h1>
+<p>Dataset loading utilities.</p>
+<p>See the dataset section in the <a class="reference internal" href="../../../guide/explain.html#guide-datasets"><span class="std std-ref">User Guide</span></a> for
+more details and examples.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">wildboar.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dataset</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">"GunPoint"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(200, 60)</span>
+</pre></div>
+</div>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.datasets.Bundle" title="wildboar.datasets.Bundle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Bundle</span></code></a></p></td>
+<td><p>Base class for handling dataset bundles.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.datasets.JSONRepository" title="wildboar.datasets.JSONRepository"><code class="xref py py-obj docutils literal notranslate"><span class="pre">JSONRepository</span></code></a></p></td>
+<td><p>A repository is a collection of bundles.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.datasets.NpBundle" title="wildboar.datasets.NpBundle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NpBundle</span></code></a></p></td>
+<td><p>Bundle of numpy binary files.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.datasets.Repository" title="wildboar.datasets.Repository"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Repository</span></code></a></p></td>
+<td><p>A repository is a collection of bundles.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.datasets.clear_cache" title="wildboar.datasets.clear_cache"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clear_cache</span></code></a>([repository, cache_dir, keep_last_version])</p></td>
+<td><p>Clear the cache by deleting cached datasets.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.datasets.get_bundles" title="wildboar.datasets.get_bundles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_bundles</span></code></a>(repository, *[, refresh, timeout])</p></td>
+<td><p>Get all bundles in the repository.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.datasets.get_repository" title="wildboar.datasets.get_repository"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_repository</span></code></a>(repository)</p></td>
+<td><p>Get repository by name.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.datasets.install_repository" title="wildboar.datasets.install_repository"><code class="xref py py-obj docutils literal notranslate"><span class="pre">install_repository</span></code></a>(repository, *[, refresh, timeout, ...])</p></td>
+<td><p>Install repository.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.datasets.list_bundles" title="wildboar.datasets.list_bundles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_bundles</span></code></a>(repository, *[, refresh, timeout])</p></td>
+<td><p>Get a list of all bundle names in the specified repository.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.datasets.list_collections" title="wildboar.datasets.list_collections"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_collections</span></code></a>(repository)</p></td>
+<td><p>List the collections of the repository.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.datasets.list_datasets" title="wildboar.datasets.list_datasets"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_datasets</span></code></a>([repository, collection, cache_dir, ...])</p></td>
+<td><p>List the datasets in the repository.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.datasets.list_repositories" title="wildboar.datasets.list_repositories"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_repositories</span></code></a>(*[, refresh, timeout, cache_dir])</p></td>
+<td><p>List the key of all installed repositories.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.datasets.load_appliances_energy" title="wildboar.datasets.load_appliances_energy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_appliances_energy</span></code></a>([merge_train_test])</p></td>
+<td><p>Load the AppliancesEnergy extrinsic regression dataset.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.datasets.load_articulary_word_recognition" title="wildboar.datasets.load_articulary_word_recognition"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_articulary_word_recognition</span></code></a>([merge_train_test])</p></td>
+<td><p>Load the ArticularyWordRecognition multivariate dataset.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.datasets.load_basic_motions" title="wildboar.datasets.load_basic_motions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_basic_motions</span></code></a>([merge_train_test])</p></td>
+<td><p>Load the BasicMotions multivariate dataset.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.datasets.load_dataset" title="wildboar.datasets.load_dataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_dataset</span></code></a>(name, *[, repository, dtype, preprocess, ...])</p></td>
+<td><p>Load a dataset from a repository.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.datasets.load_datasets" title="wildboar.datasets.load_datasets"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_datasets</span></code></a>([repository, collection, cache_dir, ...])</p></td>
+<td><p>Load all datasets as a generator.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.datasets.load_ering" title="wildboar.datasets.load_ering"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_ering</span></code></a>([merge_train_test])</p></td>
+<td><p>Load the ERing multivariate dataset.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.datasets.load_flood_modeling" title="wildboar.datasets.load_flood_modeling"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_flood_modeling</span></code></a>([merge_train_test])</p></td>
+<td><p>Load the FloodModeling1 extrinsic regression dataset.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.datasets.load_gun_point" title="wildboar.datasets.load_gun_point"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_gun_point</span></code></a>([merge_train_test])</p></td>
+<td><p>Load the GunPoint dataset.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.datasets.load_synthetic_control" title="wildboar.datasets.load_synthetic_control"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_synthetic_control</span></code></a>([merge_train_test])</p></td>
+<td><p>Load the Synthetic_Control dataset.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.datasets.load_two_lead_ecg" title="wildboar.datasets.load_two_lead_ecg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_two_lead_ecg</span></code></a>([merge_train_test])</p></td>
+<td><p>Load the TwoLeadECG dataset.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.datasets.refresh_repositories" title="wildboar.datasets.refresh_repositories"><code class="xref py py-obj docutils literal notranslate"><span class="pre">refresh_repositories</span></code></a>([repository, timeout, cache_dir])</p></td>
+<td><p>Refresh the installed repositories.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.datasets.set_cache_dir" title="wildboar.datasets.set_cache_dir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_cache_dir</span></code></a>([cache_dir])</p></td>
+<td><p>Change the global cache directory.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<br /><dl class="py class">
+<dt class="sig sig-object py" id="wildboar.datasets.Bundle">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">Bundle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arrays</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collections</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets/_repository.py#L747-L1013"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.Bundle" title="Link to this definition">#</a></dt>
+<dd><p>Base class for handling dataset bundles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>key</strong><span class="classifier">str</span></dt><dd><p>A unique key of the bundle.</p>
+</dd>
+<dt><strong>version</strong><span class="classifier">str</span></dt><dd><p>The version of the bundle.</p>
+</dd>
+<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>Human-readable name of the bundle.</p>
+</dd>
+<dt><strong>tag</strong><span class="classifier">str, optional</span></dt><dd><p>A bundle tag.</p>
+</dd>
+<dt><strong>arrays</strong><span class="classifier">list</span></dt><dd><p>The arrays of the dataset.</p>
+</dd>
+<dt><strong>description</strong><span class="classifier">str</span></dt><dd><p>Description of the bundle.</p>
+</dd>
+<dt><strong>collections</strong><span class="classifier">dict, optional</span></dt><dd><p>A list of collections.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.datasets.Bundle.get_collection">
+<span class="sig-name descname"><span class="pre">get_collection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">collection</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets/_repository.py#L813-L833"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.Bundle.get_collection" title="Link to this definition">#</a></dt>
+<dd><p>Get a dataset collection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>collection</strong><span class="classifier">str, optional</span></dt><dd><p>The name of the collection.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>list</dt><dd><p>List of datasets in the collection.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.datasets.Bundle.get_filename">
+<span class="sig-name descname"><span class="pre">get_filename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets/_repository.py#L788-L811"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.Bundle.get_filename" title="Link to this definition">#</a></dt>
+<dd><p>Get the cache name of the bundle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>version</strong><span class="classifier">str, optional</span></dt><dd><p>The bundle version.</p>
+</dd>
+<dt><strong>tag</strong><span class="classifier">str, optional</span></dt><dd><p>The tag.</p>
+</dd>
+<dt><strong>ext</strong><span class="classifier">str, optional</span></dt><dd><p>The extension of the file.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>str</dt><dd><p>The filename.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.datasets.Bundle.list">
+<span class="sig-name descname"><span class="pre">list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">archive</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets/_repository.py#L835-L864"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.Bundle.list" title="Link to this definition">#</a></dt>
+<dd><p>List all datasets in this bundle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>archive</strong><span class="classifier">ZipFile</span></dt><dd><p>The bundle file.</p>
+</dd>
+<dt><strong>collection</strong><span class="classifier">str, optional</span></dt><dd><p>The collection name.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>list</dt><dd><p>A sorted list of datasets in the bundle.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.datasets.Bundle.load">
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">archive</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets/_repository.py#L866-L970"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.Bundle.load" title="Link to this definition">#</a></dt>
+<dd><p>Load a dataset from the bundle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>Name of the dataset.</p>
+</dd>
+<dt><strong>archive</strong><span class="classifier">ZipFile</span></dt><dd><p>The zip-file bundle.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">ndarray</span></dt><dd><p>Data samples.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">ndarray</span></dt><dd><p>Data labels.</p>
+</dd>
+<dt><strong>n_training_samples</strong><span class="classifier">int</span></dt><dd><p>Number of samples that are for training. The value is &lt;= x.shape[0].</p>
+</dd>
+<dt><strong>extras</strong><span class="classifier">dict, optional</span></dt><dd><p>Extra numpy arrays.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="wildboar.datasets.JSONRepository">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">JSONRepository</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets/_repository.py#L526-L622"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.JSONRepository" title="Link to this definition">#</a></dt>
+<dd><p>A repository is a collection of bundles.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.datasets.JSONRepository.get_bundle">
+<span class="sig-name descname"><span class="pre">get_bundle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets/_repository.py#L353-L370"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.JSONRepository.get_bundle" title="Link to this definition">#</a></dt>
+<dd><p>Get a bundle with the specified key.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>key</strong><span class="classifier">str</span></dt><dd><p>Key of the bundle.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>Bundle, optional</dt><dd><p>A bundle or None.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.datasets.JSONRepository.get_bundles">
+<span class="sig-name descname"><span class="pre">get_bundles</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets/_repository.py#L553-L554"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.JSONRepository.get_bundles" title="Link to this definition">#</a></dt>
+<dd><p>Get all bundles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>dict</dt><dd><p>A dictionary of key and bundle.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.datasets.JSONRepository.refresh">
+<span class="sig-name descname"><span class="pre">refresh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets/_repository.py#L453-L459"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.JSONRepository.refresh" title="Link to this definition">#</a></dt>
+<dd><p>Refresh the repository.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="wildboar.datasets.JSONRepository.download_url">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">download_url</span></span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.JSONRepository.download_url" title="Link to this definition">#</a></dt>
+<dd><p>The url template for downloading bundles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>str</dt><dd><p>The download url.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="wildboar.datasets.JSONRepository.name">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">name</span></span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.JSONRepository.name" title="Link to this definition">#</a></dt>
+<dd><p>Name of the repository.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>str</dt><dd><p>The name of the repository.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="wildboar.datasets.JSONRepository.version">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">version</span></span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.JSONRepository.version" title="Link to this definition">#</a></dt>
+<dd><p>The repository version.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>str</dt><dd><p>The version of the repository.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="wildboar.datasets.JSONRepository.wildboar_requires">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">wildboar_requires</span></span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.JSONRepository.wildboar_requires" title="Link to this definition">#</a></dt>
+<dd><p>The minimum required wildboar version.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>str</dt><dd><p>The min version.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="wildboar.datasets.NpBundle">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">NpBundle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arrays</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collections</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets/_repository.py#L1016-L1033"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.NpBundle" title="Link to this definition">#</a></dt>
+<dd><p>Bundle of numpy binary files.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.datasets.NpBundle.get_collection">
+<span class="sig-name descname"><span class="pre">get_collection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">collection</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets/_repository.py#L813-L833"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.NpBundle.get_collection" title="Link to this definition">#</a></dt>
+<dd><p>Get a dataset collection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>collection</strong><span class="classifier">str, optional</span></dt><dd><p>The name of the collection.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>list</dt><dd><p>List of datasets in the collection.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.datasets.NpBundle.get_filename">
+<span class="sig-name descname"><span class="pre">get_filename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets/_repository.py#L788-L811"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.NpBundle.get_filename" title="Link to this definition">#</a></dt>
+<dd><p>Get the cache name of the bundle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>version</strong><span class="classifier">str, optional</span></dt><dd><p>The bundle version.</p>
+</dd>
+<dt><strong>tag</strong><span class="classifier">str, optional</span></dt><dd><p>The tag.</p>
+</dd>
+<dt><strong>ext</strong><span class="classifier">str, optional</span></dt><dd><p>The extension of the file.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>str</dt><dd><p>The filename.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.datasets.NpBundle.list">
+<span class="sig-name descname"><span class="pre">list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">archive</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets/_repository.py#L835-L864"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.NpBundle.list" title="Link to this definition">#</a></dt>
+<dd><p>List all datasets in this bundle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>archive</strong><span class="classifier">ZipFile</span></dt><dd><p>The bundle file.</p>
+</dd>
+<dt><strong>collection</strong><span class="classifier">str, optional</span></dt><dd><p>The collection name.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>list</dt><dd><p>A sorted list of datasets in the bundle.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.datasets.NpBundle.load">
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">archive</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets/_repository.py#L866-L970"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.NpBundle.load" title="Link to this definition">#</a></dt>
+<dd><p>Load a dataset from the bundle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>Name of the dataset.</p>
+</dd>
+<dt><strong>archive</strong><span class="classifier">ZipFile</span></dt><dd><p>The zip-file bundle.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">ndarray</span></dt><dd><p>Data samples.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">ndarray</span></dt><dd><p>Data labels.</p>
+</dd>
+<dt><strong>n_training_samples</strong><span class="classifier">int</span></dt><dd><p>Number of samples that are for training. The value is &lt;= x.shape[0].</p>
+</dd>
+<dt><strong>extras</strong><span class="classifier">dict, optional</span></dt><dd><p>Extra numpy arrays.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="wildboar.datasets.Repository">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">Repository</span></span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets/_repository.py#L266-L463"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.Repository" title="Link to this definition">#</a></dt>
+<dd><p>A repository is a collection of bundles.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.datasets.Repository.get_bundle">
+<span class="sig-name descname"><span class="pre">get_bundle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets/_repository.py#L353-L370"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.Repository.get_bundle" title="Link to this definition">#</a></dt>
+<dd><p>Get a bundle with the specified key.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>key</strong><span class="classifier">str</span></dt><dd><p>Key of the bundle.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>Bundle, optional</dt><dd><p>A bundle or None.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.datasets.Repository.get_bundles">
+<span class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">get_bundles</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets/_repository.py#L337-L347"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.Repository.get_bundles" title="Link to this definition">#</a></dt>
+<dd><p>Get all bundles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>dict</dt><dd><p>A dictionary of key and bundle.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.datasets.Repository.refresh">
+<span class="sig-name descname"><span class="pre">refresh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets/_repository.py#L453-L459"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.Repository.refresh" title="Link to this definition">#</a></dt>
+<dd><p>Refresh the repository.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="wildboar.datasets.Repository.download_url">
+<span class="property"><span class="k"><span class="pre">abstract</span></span><span class="w"> </span><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">download_url</span></span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.Repository.download_url" title="Link to this definition">#</a></dt>
+<dd><p>The url template for downloading bundles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>str</dt><dd><p>The download url.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="wildboar.datasets.Repository.name">
+<span class="property"><span class="k"><span class="pre">abstract</span></span><span class="w"> </span><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">name</span></span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.Repository.name" title="Link to this definition">#</a></dt>
+<dd><p>Name of the repository.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>str</dt><dd><p>The name of the repository.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="wildboar.datasets.Repository.version">
+<span class="property"><span class="k"><span class="pre">abstract</span></span><span class="w"> </span><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">version</span></span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.Repository.version" title="Link to this definition">#</a></dt>
+<dd><p>The repository version.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>str</dt><dd><p>The version of the repository.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="wildboar.datasets.Repository.wildboar_requires">
+<span class="property"><span class="k"><span class="pre">abstract</span></span><span class="w"> </span><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">wildboar_requires</span></span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.Repository.wildboar_requires" title="Link to this definition">#</a></dt>
+<dd><p>The minimum required wildboar version.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>str</dt><dd><p>The min version.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="wildboar.datasets.clear_cache">
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">clear_cache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repository</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_last_version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets/__init__.py#L799-L821"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.clear_cache" title="Link to this definition">#</a></dt>
+<dd><p>Clear the cache by deleting cached datasets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>repository</strong><span class="classifier">str, optional</span></dt><dd><p>The name of the repository to clear cache.</p>
+<ul class="simple">
+<li><p>if None, clear cache of all repositories.</p></li>
+</ul>
+</dd>
+<dt><strong>cache_dir</strong><span class="classifier">str, optional</span></dt><dd><p>The cache directory.</p>
+</dd>
+<dt><strong>keep_last_version</strong><span class="classifier">bool, optional</span></dt><dd><p>If true, keep the latest version of each repository.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="wildboar.datasets.get_bundles">
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">get_bundles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repository</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">refresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets/__init__.py#L896-L922"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.get_bundles" title="Link to this definition">#</a></dt>
+<dd><p>Get all bundles in the repository.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>repository</strong><span class="classifier">str</span></dt><dd><p>Name of the repository.</p>
+</dd>
+<dt><strong>refresh</strong><span class="classifier">bool, optional</span></dt><dd><p>Refresh the repository.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 1.1.</span></p>
+</div>
+</dd>
+<dt><strong>timeout</strong><span class="classifier">float, optional</span></dt><dd><p>Timeout for json request.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 1.1.</span></p>
+</div>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>dict</dt><dd><p>A dict of key Bundle pairs.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="wildboar.datasets.get_repository">
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">get_repository</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repository</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets/__init__.py#L825-L839"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.get_repository" title="Link to this definition">#</a></dt>
+<dd><p>Get repository by name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>repository</strong><span class="classifier">str</span></dt><dd><p>Repository name.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>Repository</dt><dd><p>A repository.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="wildboar.datasets.install_repository">
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">install_repository</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repository</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">refresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets/__init__.py#L843-L870"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.install_repository" title="Link to this definition">#</a></dt>
+<dd><p>Install repository.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>repository</strong><span class="classifier">str or Repository</span></dt><dd><p>A repository.</p>
+</dd>
+<dt><strong>refresh</strong><span class="classifier">bool, optional</span></dt><dd><p>Refresh the repository.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 1.1.</span></p>
+</div>
+</dd>
+<dt><strong>timeout</strong><span class="classifier">float, optional</span></dt><dd><p>Timeout for json request.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 1.1.</span></p>
+</div>
+</dd>
+<dt><strong>cache_dir</strong><span class="classifier">str, optional</span></dt><dd><p>Cache directory.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 1.1.</span></p>
+</div>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="wildboar.datasets.list_bundles">
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">list_bundles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repository</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">refresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets/__init__.py#L925-L953"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.list_bundles" title="Link to this definition">#</a></dt>
+<dd><p>Get a list of all bundle names in the specified repository.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>repository</strong><span class="classifier">str</span></dt><dd><p>The name of the repository.</p>
+</dd>
+<dt><strong>refresh</strong><span class="classifier">bool, optional</span></dt><dd><p>Refresh the repository.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 1.1.</span></p>
+</div>
+</dd>
+<dt><strong>timeout</strong><span class="classifier">float, optional</span></dt><dd><p>Timeout for json request.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 1.1.</span></p>
+</div>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>list</dt><dd><p>A list of bundle names.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">wildboar.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">list_bundles</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">list_bundles</span><span class="p">(</span><span class="s2">"wildboar"</span><span class="p">)</span>
+<span class="go">["ucr", "ucr-tiny", ...]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="wildboar.datasets.list_collections">
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">list_collections</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repository</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets/__init__.py#L956-L985"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.list_collections" title="Link to this definition">#</a></dt>
+<dd><p>List the collections of the repository.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>repository</strong><span class="classifier">str or Bundle, optional</span></dt><dd><p>The data repository</p>
+<ul class="simple">
+<li><p>if str load a named bundle, format {repository}/{bundle}.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>collections</dt><dd><p>A list of collections.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">wildboar.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">list_collections</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">list_collections</span><span class="p">(</span><span class="s2">"wildboar/ucr"</span><span class="p">)</span>
+<span class="go">["bake-off", ...]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="wildboar.datasets.list_datasets">
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">list_datasets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repository</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'wildboar/ucr'</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">collection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">create_cache_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets/__init__.py#L734-L795"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.list_datasets" title="Link to this definition">#</a></dt>
+<dd><p>List the datasets in the repository.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>repository</strong><span class="classifier">str or Bundle, optional</span></dt><dd><p>The data repository</p>
+<ul class="simple">
+<li><p>if str load a named bundle, format <cite>{repository}/{bundle}</cite>.</p></li>
+</ul>
+</dd>
+<dt><strong>collection</strong><span class="classifier">str, optional</span></dt><dd><p>A collection of named datasets.</p>
+</dd>
+<dt><strong>cache_dir</strong><span class="classifier">str, optional</span></dt><dd><p>The directory where downloaded files are cached (default=’wildboar_cache’).</p>
+</dd>
+<dt><strong>create_cache_dir</strong><span class="classifier">bool, optional</span></dt><dd><p>Create cache directory if missing (default=True).</p>
+</dd>
+<dt><strong>progress</strong><span class="classifier">bool, optional</span></dt><dd><p>Show a progress bar while downloading a bundle.</p>
+</dd>
+<dt><strong>force</strong><span class="classifier">bool, optional</span></dt><dd><p>Force re-download of cached bundle.</p>
+</dd>
+<dt><strong>refresh</strong><span class="classifier">bool, optional</span></dt><dd><p>Refresh the repository.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 1.1.</span></p>
+</div>
+</dd>
+<dt><strong>timeout</strong><span class="classifier">float, optional</span></dt><dd><p>Timeout for json request.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 1.1.</span></p>
+</div>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>set</dt><dd><p>A set of dataset names.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="wildboar.datasets.list_repositories">
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">list_repositories</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">refresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets/__init__.py#L988-L1026"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.list_repositories" title="Link to this definition">#</a></dt>
+<dd><p>List the key of all installed repositories.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>refresh</strong><span class="classifier">bool, optional</span></dt><dd><p>Refresh all repositories.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 1.1.</span></p>
+</div>
+</dd>
+<dt><strong>timeout</strong><span class="classifier">float, optional</span></dt><dd><p>Timeout for json request.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 1.1.</span></p>
+</div>
+</dd>
+<dt><strong>cache_dir</strong><span class="classifier">str, optional</span></dt><dd><p>Cache directory.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 1.1.</span></p>
+</div>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>repositories</dt><dd><p>A list of installed repositories.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">wildboar.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">list_repositories</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">list_repositories</span><span class="p">()</span>
+<span class="go">["wildboar", ...]</span>
+</pre></div>
+</div>
+<p>We can also refresh the repositories, to load any newly added
+but still pending repositories.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">list_repositories</span><span class="p">(</span><span class="n">refresh</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="wildboar.datasets.load_appliances_energy">
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">load_appliances_energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">merge_train_test</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets/__init__.py#L384-L419"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.load_appliances_energy" title="Link to this definition">#</a></dt>
+<dd><p>Load the AppliancesEnergy extrinsic regression dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>merge_train_test</strong><span class="classifier">bool, optional</span></dt><dd><p>Merge the existing training and testing partitions.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The samples if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The labels, if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>x_train</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The training samples if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>x_test</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The testing samples if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>y_train</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The training labels if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>y_test</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The testing labels if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>extras</strong><span class="classifier">dict, optional</span></dt><dd><p>The optional extras if <cite>return_extras=True</cite>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#wildboar.datasets.load_dataset" title="wildboar.datasets.load_dataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_dataset</span></code></a></dt><dd><p>load a named dataset</p>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="wildboar.datasets.load_articulary_word_recognition">
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">load_articulary_word_recognition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">merge_train_test</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets/__init__.py#L270-L305"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.load_articulary_word_recognition" title="Link to this definition">#</a></dt>
+<dd><p>Load the ArticularyWordRecognition multivariate dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>merge_train_test</strong><span class="classifier">bool, optional</span></dt><dd><p>Merge the existing training and testing partitions.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The samples if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The labels, if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>x_train</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The training samples if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>x_test</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The testing samples if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>y_train</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The training labels if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>y_test</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The testing labels if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>extras</strong><span class="classifier">dict, optional</span></dt><dd><p>The optional extras if <cite>return_extras=True</cite>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#wildboar.datasets.load_dataset" title="wildboar.datasets.load_dataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_dataset</span></code></a></dt><dd><p>load a named dataset</p>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="wildboar.datasets.load_basic_motions">
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">load_basic_motions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">merge_train_test</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets/__init__.py#L308-L343"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.load_basic_motions" title="Link to this definition">#</a></dt>
+<dd><p>Load the BasicMotions multivariate dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>merge_train_test</strong><span class="classifier">bool, optional</span></dt><dd><p>Merge the existing training and testing partitions.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The samples if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The labels, if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>x_train</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The training samples if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>x_test</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The testing samples if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>y_train</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The training labels if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>y_test</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The testing labels if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>extras</strong><span class="classifier">dict, optional</span></dt><dd><p>The optional extras if <cite>return_extras=True</cite>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#wildboar.datasets.load_dataset" title="wildboar.datasets.load_dataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_dataset</span></code></a></dt><dd><p>load a named dataset</p>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="wildboar.datasets.load_dataset">
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">load_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">repository</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'wildboar/ucr'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preprocess</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contiguous</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">merge_train_test</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">create_cache_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_extras</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets/__init__.py#L544-L730"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.load_dataset" title="Link to this definition">#</a></dt>
+<dd><p>Load a dataset from a repository.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>The name of the dataset to load.</p>
+</dd>
+<dt><strong>repository</strong><span class="classifier">str, optional</span></dt><dd><p>The data repository formatted as
+<code class="docutils literal notranslate"><span class="pre">{repository}/{bundle}[:{version}][:{tag}]</span></code>. Read more in the
+<a class="reference internal" href="../../../guide/datasets/repositories.html#guide-datasets-repositories"><span class="std std-ref">User guide</span></a>.</p>
+</dd>
+<dt><strong>dtype</strong><span class="classifier">dtype, optional</span></dt><dd><p>The data type of x (train and test).</p>
+</dd>
+<dt><strong>preprocess</strong><span class="classifier">str, list or callable, optional</span></dt><dd><p>Preprocess the dataset</p>
+<ul class="simple">
+<li><p>if str, use named preprocess function (see <code class="docutils literal notranslate"><span class="pre">preprocess._PREPROCESS.keys()</span></code>
+for valid keys).</p></li>
+<li><p>if callable, function taking a np.ndarray and returns the
+preprocessed dataset.</p></li>
+<li><p>if list, a list of callable or str.</p></li>
+</ul>
+</dd>
+<dt><strong>contiguous</strong><span class="classifier">bool, optional</span></dt><dd><p>Ensure that the returned dataset is memory contiguous.</p>
+</dd>
+<dt><strong>merge_train_test</strong><span class="classifier">bool, optional</span></dt><dd><p>Merge the existing training and testing partitions.</p>
+</dd>
+<dt><strong>cache_dir</strong><span class="classifier">str, optional</span></dt><dd><p>The directory where downloaded files are cached.</p>
+</dd>
+<dt><strong>create_cache_dir</strong><span class="classifier">bool, optional</span></dt><dd><p>Create cache directory if missing (default=True).</p>
+</dd>
+<dt><strong>progress</strong><span class="classifier">bool, optional</span></dt><dd><p>Show a progress bar while downloading a bundle.</p>
+</dd>
+<dt><strong>return_extras</strong><span class="classifier">bool, optional</span></dt><dd><p>Return optional extras.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 1.1.</span></p>
+</div>
+</dd>
+<dt><strong>force</strong><span class="classifier">bool, optional</span></dt><dd><p>Force re-download of already cached bundle.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 1.0.4.</span></p>
+</div>
+</dd>
+<dt><strong>refresh</strong><span class="classifier">bool, optional</span></dt><dd><p>Refresh the repository.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 1.1.</span></p>
+</div>
+</dd>
+<dt><strong>timeout</strong><span class="classifier">float, optional</span></dt><dd><p>Timeout for json request.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 1.1.</span></p>
+</div>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The samples if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The labels, if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>x_train</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The training samples if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>x_test</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The testing samples if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>y_train</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The training labels if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>y_test</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The testing labels if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>extras</strong><span class="classifier">dict, optional</span></dt><dd><p>The optional extras if <cite>return_extras=True</cite>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Load a dataset from the default repository</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">"SyntheticControl"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(600, 60)</span>
+</pre></div>
+</div>
+<p>or if original training and testing splits are to be preserved</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="s2">"SyntheticControl"</span><span class="p">,</span> <span class="n">merge_train_test</span><span class="o">=</span><span class="kc">False</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+<p>or for a specific version of the dataset</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="s2">"SyntheticControl"</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">repository</span><span class="o">=</span><span class="s1">'wildboar/ucr-tiny:1.0.1'</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">merge_train_test</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="wildboar.datasets.load_datasets">
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">load_datasets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repository</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'wildboar/ucr'</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">collection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">create_cache_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets/__init__.py#L422-L541"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.load_datasets" title="Link to this definition">#</a></dt>
+<dd><p>Load all datasets as a generator.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>repository</strong><span class="classifier">str</span></dt><dd><p>The repository string.</p>
+</dd>
+<dt><strong>collection</strong><span class="classifier">str, optional</span></dt><dd><p>A collection of named datasets.</p>
+</dd>
+<dt><strong>cache_dir</strong><span class="classifier">str, optional</span></dt><dd><p>The cache directory for downloaded dataset repositories.</p>
+</dd>
+<dt><strong>create_cache_dir</strong><span class="classifier">bool, optional</span></dt><dd><p>Create the cache directory if it does not exist.</p>
+</dd>
+<dt><strong>progress</strong><span class="classifier">bool, optional</span></dt><dd><p>If progress indicator is shown while downloading the repository.</p>
+</dd>
+<dt><strong>force</strong><span class="classifier">bool, optional</span></dt><dd><p>Force re-download of cached repository.</p>
+</dd>
+<dt><strong>filter</strong><span class="classifier">str, dict, list or callable, optional</span></dt><dd><p>Filter the datasets</p>
+<ul class="simple">
+<li><p>if callable, only yield those datasets for which the callable returns
+<cite>True</cite>. <code class="docutils literal notranslate"><span class="pre">f(dataset,</span> <span class="pre">x,</span> <span class="pre">y)</span> <span class="pre">-&gt;</span> <span class="pre">bool</span></code></p></li>
+<li><p>if dict, filter based on the keys and values, where keys are
+attributes and values comparison specs</p></li>
+<li><p>if list, filter based on conjunction of attribute comparisons</p></li>
+<li><p>if str, filter based on attribute comparison</p></li>
+</ul>
+<p>Read more in the <a class="reference internal" href="../../../guide/datasets.html#datasets-filter"><span class="std std-ref">User guide</span></a>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If the parameter <code class="docutils literal notranslate"><span class="pre">merge_train_test</span></code> is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the filter is
+applied on the <em>training</em> part of the data.</p>
+</div>
+</dd>
+<dt><strong>kwargs</strong><span class="classifier">dict</span></dt><dd><p>Optional arguments to <a class="reference internal" href="#wildboar.datasets.load_dataset" title="wildboar.datasets.load_dataset"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_dataset</span></code></a>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Yields<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>The dataset name</p>
+</dd>
+<dt><strong>dataset</strong><span class="classifier">list</span></dt><dd><p>Depends on the <code class="docutils literal notranslate"><span class="pre">kwargs</span></code>.</p>
+<ul class="simple">
+<li><p>If <code class="docutils literal notranslate"><span class="pre">merge_train_test=True</span></code> (default), dataset is a tuple of
+<code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y)</span></code>.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">merge_train_test=False</span></code>, dataset is a tuple of
+<code class="docutils literal notranslate"><span class="pre">(x_train,</span> <span class="pre">x_test,</span> <span class="pre">y_train,</span> <span class="pre">y_test)</span></code>.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">return_extras=True</span></code>, the last element of the tuple contains
+optional extra (or <code class="docutils literal notranslate"><span class="pre">None</span></code>).</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Load all datasets in a repository:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">dataset</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="n">load_datasets</span><span class="p">(</span><span class="n">repository</span><span class="o">=</span><span class="s1">'wildboar/ucr-tiny'</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="go">Beef (60, 470) (60,)</span>
+<span class="go">Coffee (56, 286) (56,)</span>
+<span class="go">GunPoint (200, 150) (200,)</span>
+<span class="go">SyntheticControl (600, 60) (600,)</span>
+<span class="go">TwoLeadECG (1162, 82) (1162,)</span>
+</pre></div>
+</div>
+<p>Print the names of datasets with more than 200 samples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">dataset</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="n">load_datasets</span><span class="p">(</span>
+<span class="gp">... </span>   <span class="n">repository</span><span class="o">=</span><span class="s1">'wildboar/ucr-tiny'</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">{</span><span class="s2">"n_samples"</span><span class="p">:</span> <span class="s2">"&gt;200"</span><span class="p">}</span>
+<span class="gp">... </span><span class="p">):</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+<span class="go">SyntheticControl</span>
+<span class="go">TwoLeadECG</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">dataset</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="n">load_datasets</span><span class="p">(</span>
+<span class="gp">... </span>   <span class="n">repository</span><span class="o">=</span><span class="s1">'wildboar/ucr-tiny'</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="s2">"n_samples&gt;200"</span>
+<span class="gp">... </span><span class="p">):</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+<span class="go">SyntheticControl</span>
+<span class="go">TwoLeadECG</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="wildboar.datasets.load_ering">
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">load_ering</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">merge_train_test</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets/__init__.py#L232-L267"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.load_ering" title="Link to this definition">#</a></dt>
+<dd><p>Load the ERing multivariate dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>merge_train_test</strong><span class="classifier">bool, optional</span></dt><dd><p>Merge the existing training and testing partitions.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The samples if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The labels, if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>x_train</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The training samples if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>x_test</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The testing samples if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>y_train</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The training labels if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>y_test</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The testing labels if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>extras</strong><span class="classifier">dict, optional</span></dt><dd><p>The optional extras if <cite>return_extras=True</cite>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#wildboar.datasets.load_dataset" title="wildboar.datasets.load_dataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_dataset</span></code></a></dt><dd><p>load a named dataset</p>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="wildboar.datasets.load_flood_modeling">
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">load_flood_modeling</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">merge_train_test</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets/__init__.py#L346-L381"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.load_flood_modeling" title="Link to this definition">#</a></dt>
+<dd><p>Load the FloodModeling1 extrinsic regression dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>merge_train_test</strong><span class="classifier">bool, optional</span></dt><dd><p>Merge the existing training and testing partitions.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The samples if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The labels, if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>x_train</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The training samples if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>x_test</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The testing samples if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>y_train</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The training labels if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>y_test</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The testing labels if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>extras</strong><span class="classifier">dict, optional</span></dt><dd><p>The optional extras if <cite>return_extras=True</cite>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#wildboar.datasets.load_dataset" title="wildboar.datasets.load_dataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_dataset</span></code></a></dt><dd><p>load a named dataset</p>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="wildboar.datasets.load_gun_point">
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">load_gun_point</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">merge_train_test</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets/__init__.py#L194-L229"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.load_gun_point" title="Link to this definition">#</a></dt>
+<dd><p>Load the GunPoint dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>merge_train_test</strong><span class="classifier">bool, optional</span></dt><dd><p>Merge the existing training and testing partitions.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The samples if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The labels, if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>x_train</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The training samples if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>x_test</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The testing samples if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>y_train</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The training labels if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>y_test</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The testing labels if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>extras</strong><span class="classifier">dict, optional</span></dt><dd><p>The optional extras if <cite>return_extras=True</cite>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#wildboar.datasets.load_dataset" title="wildboar.datasets.load_dataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_dataset</span></code></a></dt><dd><p>load a named dataset</p>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="wildboar.datasets.load_synthetic_control">
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">load_synthetic_control</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">merge_train_test</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets/__init__.py#L116-L151"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.load_synthetic_control" title="Link to this definition">#</a></dt>
+<dd><p>Load the Synthetic_Control dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>merge_train_test</strong><span class="classifier">bool, optional</span></dt><dd><p>Merge the existing training and testing partitions.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The samples if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The labels, if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>x_train</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The training samples if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>x_test</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The testing samples if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>y_train</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The training labels if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>y_test</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The testing labels if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>extras</strong><span class="classifier">dict, optional</span></dt><dd><p>The optional extras if <cite>return_extras=True</cite>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#wildboar.datasets.load_dataset" title="wildboar.datasets.load_dataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_dataset</span></code></a></dt><dd><p>load a named dataset</p>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="wildboar.datasets.load_two_lead_ecg">
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">load_two_lead_ecg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">merge_train_test</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets/__init__.py#L155-L190"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.load_two_lead_ecg" title="Link to this definition">#</a></dt>
+<dd><p>Load the TwoLeadECG dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>merge_train_test</strong><span class="classifier">bool, optional</span></dt><dd><p>Merge the existing training and testing partitions.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The samples if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The labels, if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>x_train</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The training samples if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>x_test</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The testing samples if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>y_train</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The training labels if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>y_test</strong><span class="classifier">ndarray, optional</span></dt><dd><p>The testing labels if <cite>merge_train_test=False</cite>.</p>
+</dd>
+<dt><strong>extras</strong><span class="classifier">dict, optional</span></dt><dd><p>The optional extras if <cite>return_extras=True</cite>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#wildboar.datasets.load_dataset" title="wildboar.datasets.load_dataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_dataset</span></code></a></dt><dd><p>load a named dataset</p>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="wildboar.datasets.refresh_repositories">
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">refresh_repositories</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repository</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets/__init__.py#L874-L892"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.refresh_repositories" title="Link to this definition">#</a></dt>
+<dd><p>Refresh the installed repositories.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>repository</strong><span class="classifier">str, optional</span></dt><dd><p>The repository. None means all repositories.</p>
+</dd>
+<dt><strong>timeout</strong><span class="classifier">float, optional</span></dt><dd><p>Timeout for request.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 1.1.</span></p>
+</div>
+</dd>
+<dt><strong>cache_dir</strong><span class="classifier">str, optional</span></dt><dd><p>Cache directory.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 1.1.</span></p>
+</div>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="wildboar.datasets.set_cache_dir">
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.</span></span><span class="sig-name descname"><span class="pre">set_cache_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cache_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.3.0/src/wildboar/datasets/__init__.py#L95-L108"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.set_cache_dir" title="Link to this definition">#</a></dt>
+<dd><p>Change the global cache directory.</p>
+<p>If called without arguments, the cache directory is reset to the default
+directory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>cache_dir</strong><span class="classifier">str, optional</span></dt><dd><p>The cache directory root.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../base/index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.base</span></code></p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="outlier/index.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.outlier</span></code></p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#classes">Classes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions">Functions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.Bundle"><code class="docutils literal notranslate"><span class="pre">Bundle</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.Bundle.get_collection"><code class="docutils literal notranslate"><span class="pre">Bundle.get_collection</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.Bundle.get_filename"><code class="docutils literal notranslate"><span class="pre">Bundle.get_filename</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.Bundle.list"><code class="docutils literal notranslate"><span class="pre">Bundle.list</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.Bundle.load"><code class="docutils literal notranslate"><span class="pre">Bundle.load</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.JSONRepository"><code class="docutils literal notranslate"><span class="pre">JSONRepository</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.JSONRepository.get_bundle"><code class="docutils literal notranslate"><span class="pre">JSONRepository.get_bundle</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.JSONRepository.get_bundles"><code class="docutils literal notranslate"><span class="pre">JSONRepository.get_bundles</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.JSONRepository.refresh"><code class="docutils literal notranslate"><span class="pre">JSONRepository.refresh</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.JSONRepository.download_url"><code class="docutils literal notranslate"><span class="pre">JSONRepository.download_url</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.JSONRepository.name"><code class="docutils literal notranslate"><span class="pre">JSONRepository.name</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.JSONRepository.version"><code class="docutils literal notranslate"><span class="pre">JSONRepository.version</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.JSONRepository.wildboar_requires"><code class="docutils literal notranslate"><span class="pre">JSONRepository.wildboar_requires</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.NpBundle"><code class="docutils literal notranslate"><span class="pre">NpBundle</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.NpBundle.get_collection"><code class="docutils literal notranslate"><span class="pre">NpBundle.get_collection</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.NpBundle.get_filename"><code class="docutils literal notranslate"><span class="pre">NpBundle.get_filename</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.NpBundle.list"><code class="docutils literal notranslate"><span class="pre">NpBundle.list</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.NpBundle.load"><code class="docutils literal notranslate"><span class="pre">NpBundle.load</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.Repository"><code class="docutils literal notranslate"><span class="pre">Repository</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.Repository.get_bundle"><code class="docutils literal notranslate"><span class="pre">Repository.get_bundle</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.Repository.get_bundles"><code class="docutils literal notranslate"><span class="pre">Repository.get_bundles</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.Repository.refresh"><code class="docutils literal notranslate"><span class="pre">Repository.refresh</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.Repository.download_url"><code class="docutils literal notranslate"><span class="pre">Repository.download_url</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.Repository.name"><code class="docutils literal notranslate"><span class="pre">Repository.name</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.Repository.version"><code class="docutils literal notranslate"><span class="pre">Repository.version</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.Repository.wildboar_requires"><code class="docutils literal notranslate"><span class="pre">Repository.wildboar_requires</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.clear_cache"><code class="docutils literal notranslate"><span class="pre">clear_cache</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.get_bundles"><code class="docutils literal notranslate"><span class="pre">get_bundles</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.get_repository"><code class="docutils literal notranslate"><span class="pre">get_repository</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.install_repository"><code class="docutils literal notranslate"><span class="pre">install_repository</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.list_bundles"><code class="docutils literal notranslate"><span class="pre">list_bundles</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.list_collections"><code class="docutils literal notranslate"><span class="pre">list_collections</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.list_datasets"><code class="docutils literal notranslate"><span class="pre">list_datasets</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.list_repositories"><code class="docutils literal notranslate"><span class="pre">list_repositories</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.load_appliances_energy"><code class="docutils literal notranslate"><span class="pre">load_appliances_energy</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.load_articulary_word_recognition"><code class="docutils literal notranslate"><span class="pre">load_articulary_word_recognition</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.load_basic_motions"><code class="docutils literal notranslate"><span class="pre">load_basic_motions</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.load_dataset"><code class="docutils literal notranslate"><span class="pre">load_dataset</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.load_datasets"><code class="docutils literal notranslate"><span class="pre">load_datasets</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.load_ering"><code class="docutils literal notranslate"><span class="pre">load_ering</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.load_flood_modeling"><code class="docutils literal notranslate"><span class="pre">load_flood_modeling</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.load_gun_point"><code class="docutils literal notranslate"><span class="pre">load_gun_point</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.load_synthetic_control"><code class="docutils literal notranslate"><span class="pre">load_synthetic_control</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.load_two_lead_ecg"><code class="docutils literal notranslate"><span class="pre">load_two_lead_ecg</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.refresh_repositories"><code class="docutils literal notranslate"><span class="pre">refresh_repositories</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#wildboar.datasets.set_cache_dir"><code class="docutils literal notranslate"><span class="pre">set_cache_dir</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../../_sources/api/wildboar/datasets/index.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2023, Isak Samsten.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.1.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" data-theme="auto">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Repositories &#8212; Wildboar 1.3.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "auto";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "auto";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=451fe87e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/tabs.css?v=4c969af8" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=584e34e5" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/pygments-override.css?v=9e853fe2" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
+
+    <script src="../../_static/documentation_options.js?v=1f29e9d3"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/tabs.js?v=3ee01567"></script>
+    <script src="../../_static/toggleprompt.js?v=5801b3bb"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'guide/datasets/repositories';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://wildboar.dev/_versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '1.3';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../../_static/js/fa.js?v=744fd48f"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Pre-processing" href="preprocess.html" />
+    <link rel="prev" title="Datasets" href="../datasets.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.3.0" />
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="auto">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logo.png" class="logo__image only-light" alt=""/>
+    <img src="../../_static/logo.png" class="logo__image only-dark pst-js-only" alt=""/>
+  
+  
+    <p class="title logo__title">Wildboar</p>
+  
+</a></div>
+    
+      <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../install.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api/index.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../more/whatsnew.html">
+    What’s new
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/wildboar-foundation/wildboar/" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/wildboar/" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-custom fa-lg" data-prefix="fa-custom" data-icon="pypi" aria-hidden="true"></i><span class="visually-hidden">PyPI</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../install.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api/index.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../more/whatsnew.html">
+    What’s new
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/wildboar-foundation/wildboar/" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/wildboar/" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-custom fa-lg" data-prefix="fa-custom" data-icon="pypi" aria-hidden="true"></i><span class="visually-hidden">PyPI</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../basics.html">Time series</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../datasets.html">Datasets</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active"><a aria-current="page" class="current reference internal" href="#">Repositories</a></li>
+<li class="toctree-l2"><a class="reference internal" href="preprocess.html">Pre-processing</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../annotate.html">Annotate</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../metrics.html">Metrics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../metrics/distance.html">Distance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../metrics/elastic.html">Elastic metrics</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../dimension_selection.html">Dimension selection</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../supervised.html">Supervised learning</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../supervised/trees.html">Tree-based estimators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../supervised/ensemble.html">Ensemble estimators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../supervised/transform.html">Transform-based estimators</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../unsupervised.html">Unsupervised learning</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../unsupervised/outlier.html">Outlier detection</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../unsupervised/outlier/generation.html">Outlier detection benchmarks</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../unsupervised/segmentation.html">Segmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../unsupervised/transform.html">Time series transform</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../explain.html">Interpretability</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../explain/counterfactuals.html">Counterfactual explanations</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../guide.html" class="nav-link">User Guide</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../datasets.html" class="nav-link">Datasets</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Repositories</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="repositories">
+<span id="guide-datasets-repositories"></span><h1>Repositories<a class="headerlink" href="#repositories" title="Link to this heading">#</a></h1>
+<p>We can either initialize repositories directly or use them together with the
+<a class="reference internal" href="../../api/wildboar/datasets/index.html#wildboar.datasets.load_dataset" title="wildboar.datasets.load_dataset"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_dataset</span></code></a>-function:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">wildboar.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dataset</span>
+<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s1">'GunPoint'</span><span class="p">,</span> <span class="n">repository</span><span class="o">=</span><span class="s1">'wildboar/ucr'</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Installed repositories and dataset bundles can be listed using the function
+<a class="reference internal" href="../../api/wildboar/datasets/index.html#wildboar.datasets.list_repositories" title="wildboar.datasets.list_repositories"><code class="xref py py-func docutils literal notranslate"><span class="pre">list_repositories</span></code></a> and <a class="reference internal" href="../../api/wildboar/datasets/index.html#wildboar.datasets.list_bundles" title="wildboar.datasets.list_bundles"><code class="xref py py-func docutils literal notranslate"><span class="pre">list_bundles</span></code></a>
+respectively.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">wildboar.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">list_repositories</span><span class="p">,</span> <span class="n">list_bundles</span><span class="p">,</span> <span class="n">list_datasets</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">list_repositories</span><span class="p">()</span>
+<span class="go">['wildboar']</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">list_bundles</span><span class="p">(</span><span class="s2">"wildboar"</span><span class="p">)</span>
+<span class="go">['ucr', 'ucr-tiny', ... (and more)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">list_datasets</span><span class="p">(</span><span class="s2">"wildboar/ucr-tiny"</span><span class="p">)</span>
+<span class="go">['Beef', 'Coffee', 'GunPoint', 'SyntheticControl', 'TwoLeadECG']</span>
+</pre></div>
+</div>
+<section id="repository-definitions">
+<h2>Repository definitions<a class="headerlink" href="#repository-definitions" title="Link to this heading">#</a></h2>
+<p>A wildboar repository string is composed of 2 required and one optional
+components written as:</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 1.2: </span>The <code class="docutils literal notranslate"><span class="pre">{version}</span></code> specifier has been removed. The version is determined by the repository.</p>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>{repository}/{bundle}[:{tag}]
+└─────┬────┘ └───┬──┘└───┬──┘
+      │          │       └── (optional) The tag as defined below.
+      │          └── (required) The bundle as listed by list_bundles().
+      └── (required) The repository as listed by list_repositories().
+</pre></div>
+</div>
+<p>Each part of the repository has the following requirements:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">{repository}</span></code></dt><dd><p>The repository identifier, as listed by <a class="reference internal" href="../../api/wildboar/datasets/index.html#wildboar.datasets.list_repositories" title="wildboar.datasets.list_repositories"><code class="xref py py-func docutils literal notranslate"><span class="pre">datasets.list_repositories</span></code></a>.
+The identifier is composed of letters, i.e., matching the regular
+expression, <cite>w+</cite>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">{bundle}</span></code></dt><dd><p>The bundle identifier, as listed by <a class="reference internal" href="../../api/wildboar/datasets/index.html#wildboar.datasets.list_bundles" title="wildboar.datasets.list_bundles"><code class="xref py py-func docutils literal notranslate"><span class="pre">datasets.list_bundles</span></code></a>. The
+identifier is composed of alphanumeric characters and <code class="docutils literal notranslate"><span class="pre">-</span></code>, matching the
+regular expression <code class="docutils literal notranslate"><span class="pre">[a-zA-Z0-9\-]+</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">{tag}</span></code></dt><dd><p>The bundle tag (defaults to <code class="docutils literal notranslate"><span class="pre">default</span></code>). The bundle tag is composed of
+letters and <code class="docutils literal notranslate"><span class="pre">-</span></code>, matching the regular expression <code class="docutils literal notranslate"><span class="pre">[a-zA-Z-]+</span></code>.</p>
+</dd>
+</dl>
+<p>To exemplify, these are valid repository declarations:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">wildboar/ucr</span></code></dt><dd><p>The <code class="docutils literal notranslate"><span class="pre">ucr</span></code> bundle from the <code class="docutils literal notranslate"><span class="pre">wildboar</span></code> repository using the default tag.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">wildboar/ucr-tiny</span></code></dt><dd><p>The <code class="docutils literal notranslate"><span class="pre">ucr-tiny</span></code> bundle from the <code class="docutils literal notranslate"><span class="pre">wildboar</span></code> repository using the default tag.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">wildboar/outlier:hard</span></code></dt><dd><p>The <code class="docutils literal notranslate"><span class="pre">outlier</span></code> bundle, from the <code class="docutils literal notranslate"><span class="pre">wildboar</span></code> repository using the tag <code class="docutils literal notranslate"><span class="pre">hard</span></code>.</p>
+</dd>
+</dl>
+</section>
+<section id="installing-repositories">
+<h2>Installing repositories<a class="headerlink" href="#installing-repositories" title="Link to this heading">#</a></h2>
+<p>A repository implements the interface of the class
+<a class="reference internal" href="../../api/wildboar/datasets/index.html#wildboar.datasets.Repository" title="wildboar.datasets.Repository"><code class="xref py py-class docutils literal notranslate"><span class="pre">Repository</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The default repository (<code class="docutils literal notranslate"><span class="pre">wildboar</span></code>) is loaded by the class
+<a class="reference internal" href="../../api/wildboar/datasets/index.html#wildboar.datasets.JSONRepository" title="wildboar.datasets.JSONRepository"><code class="xref py py-class docutils literal notranslate"><span class="pre">JSONRepository</span></code></a>, which can load datasets specified by a
+JSON endpoint.</p>
+</div>
+<p>Repositories are installed using the function
+<a class="reference internal" href="../../api/wildboar/datasets/index.html#wildboar.datasets.install_repository" title="wildboar.datasets.install_repository"><code class="xref py py-func docutils literal notranslate"><span class="pre">install_repository</span></code></a> which takes either a URL to a JSON-file or
+an instance of (or a class implementing the interface of)
+<a class="reference internal" href="../../api/wildboar/datasets/index.html#wildboar.datasets.Repository" title="wildboar.datasets.Repository"><code class="xref py py-class docutils literal notranslate"><span class="pre">Repository</span></code></a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">wildboar.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">install_repository</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">install_repository</span><span class="p">(</span><span class="s2">"https://www.example.org/repo.json"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">list_repositories</span><span class="p">(</span><span class="s2">"example"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">load_dataset</span><span class="p">(</span><span class="s2">"example"</span><span class="p">,</span> <span class="n">repository</span><span class="o">=</span><span class="s2">"example/example"</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Repositories can be refreshed using <a class="reference internal" href="../../api/wildboar/datasets/index.html#wildboar.datasets.refresh_repositories" title="wildboar.datasets.refresh_repositories"><code class="xref py py-func docutils literal notranslate"><span class="pre">datasets.refresh_repositories</span></code></a>,
+which accepts a repository name to refresh a specific repository or <code class="code highlight python docutils literal highlight-python"><span class="kc">None</span></code>
+(default) to refresh all repositories. Additionally, we can specify an optional
+refresh timeout (in seconds), and an optional cache location.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 1.1: </span>Wildboar caches the repository definition locally to allow cached datasets to be
+used while offline.</p>
+</div>
+<section id="local-cache">
+<h3>Local cache<a class="headerlink" href="#local-cache" title="Link to this heading">#</a></h3>
+<p>Wildboar downloads, on-demand, datasets the first time we request a bundle and
+caches it to disk in a directory determined by the operating system.
+Wildboar caches datasets and repositories in the following directories:</p>
+<dl class="simple">
+<dt><strong>Windows</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">%LOCALAPPDATA%\cache\wildboar</span></code></p>
+</dd>
+<dt><strong>GNU/Linux</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">$XDG_CACHE_HOME/wildboar</span></code>. If <code class="docutils literal notranslate"><span class="pre">$XDG_CACHE_HOME</span></code> is unset, we default to <cite>.cache</cite>.</p>
+</dd>
+<dt><strong>macOS</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">~/LibraryCaches/wildboar</span></code>.</p>
+</dd>
+<dt><strong>Fallback</strong></dt><dd><p><code class="docutils literal notranslate"><span class="pre">~/.cache/wildboar</span></code></p>
+</dd>
+</dl>
+<p>The user can change the cache directory, either globally (for as long as the
+current Python session lasts) with <a class="reference internal" href="../../api/wildboar/datasets/index.html#wildboar.datasets.set_cache_dir" title="wildboar.datasets.set_cache_dir"><code class="xref py py-func docutils literal notranslate"><span class="pre">datasets.set_cache_dir</span></code></a> or locally
+(for a specific operation) with then <code class="docutils literal notranslate"><span class="pre">cache_dir</span></code>-parameter:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">wildboar.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">set_cache_dir</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">set_cache_dir</span><span class="p">(</span><span class="s2">"/path/to/wildboar-cache/"</span><span class="p">)</span> <span class="c1"># Set the global cache</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">load_dataset</span><span class="p">(</span><span class="s2">"GunPoint"</span><span class="p">,</span> <span class="n">cache_dir</span><span class="o">=</span><span class="s2">"/path/to/another/wildboar-cache/"</span><span class="p">)</span> <span class="c1"># Another, local, cache here</span>
+</pre></div>
+</div>
+<p>If called without arguments, <a class="reference internal" href="../../api/wildboar/datasets/index.html#wildboar.datasets.set_cache_dir" title="wildboar.datasets.set_cache_dir"><code class="xref py py-func docutils literal notranslate"><span class="pre">set_cache_dir</span></code></a> resets the cache
+to the default location based on the operating system.</p>
+</section>
+</section>
+<section id="json-repositories">
+<h2>JSON repositories<a class="headerlink" href="#json-repositories" title="Link to this heading">#</a></h2>
+<p>By default, repositories installed with {func}`datasets.install_repository`
+should point to a JSON-file, which describes the available datasets and the
+location where Wildboar can download them. The repository declaration is a
+JSON-file:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">   </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"example"</span><span class="p">,</span><span class="w"> </span><span class="c1">// required</span>
+<span class="w">   </span><span class="nt">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.0"</span><span class="p">,</span><span class="w">  </span><span class="c1">// required</span>
+<span class="w">   </span><span class="nt">"wildboar_requires"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.1"</span><span class="p">,</span><span class="w"> </span><span class="c1">// required, the minimum required wildboar version</span>
+<span class="w">   </span><span class="nt">"bundle_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://example.org/download/{key}/{tag}-v{version}"</span><span class="p">,</span><span class="w"> </span><span class="c1">// required, the data endpoint</span>
+<span class="w">   </span><span class="nt">"bundles"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="c1">// required</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"example"</span><span class="p">,</span><span class="w"> </span><span class="c1">// required, unique key of the bundle</span>
+<span class="w">      </span><span class="nt">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.0"</span><span class="p">,</span><span class="w"> </span><span class="c1">// required, the default version of dataset</span>
+<span class="w">      </span><span class="nt">"tag"</span><span class="p">:</span><span class="w"> </span><span class="nt">"default"</span><span class="w">  </span><span class="c1">// optional, the default tag</span>
+<span class="w">      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"UCR Time series repository"</span><span class="p">,</span><span class="w"> </span><span class="c1">// required</span>
+<span class="w">      </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Example dataset"</span><span class="p">,</span><span class="w"> </span><span class="c1">// optional</span>
+<span class="w">      </span><span class="nt">"arrays"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"x"</span><span class="p">,</span><span class="w"> </span><span class="s2">"y"</span><span class="p">]</span><span class="w"> </span><span class="c1">// optional</span>
+<span class="w">      </span><span class="nt">"collections"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"key"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"example1"</span><span class="p">,</span><span class="w"> </span><span class="s2">"example"</span><span class="p">]}</span><span class="w"> </span><span class="c1">// optional</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">   </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>The attributes <code class="docutils literal notranslate"><span class="pre">{key}</span></code>, <code class="docutils literal notranslate"><span class="pre">{version}</span></code> and <code class="docutils literal notranslate"><span class="pre">{tag}</span></code> in the <code class="docutils literal notranslate"><span class="pre">bundle_url</span></code> are
+replaced with the bundle-key, bundle-version and bundle tag from the
+repository string. All attributes are required in the URL.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">arrays</span></code> attribute is optional. However, if it is not present, the dataset
+is assumed to be a single Numpy array, where the last column contains the
+class label or a Numpy-dict with both <code class="docutils literal notranslate"><span class="pre">x</span></code>, and <code class="docutils literal notranslate"><span class="pre">y</span></code> keys.</p>
+<ul>
+<li><p>if any other value except <code class="docutils literal notranslate"><span class="pre">x</span></code> and/or <code class="docutils literal notranslate"><span class="pre">y</span></code> is present in the
+<code class="docutils literal notranslate"><span class="pre">arrays</span></code>-list, it will be loaded as an <cite>extras</cite>-dictionary and only
+returned if requested by the user.</p></li>
+<li><p>if <cite>y</cite> is not present in arrays <a class="reference internal" href="../../api/wildboar/datasets/index.html#wildboar.datasets.load_dataset" title="wildboar.datasets.load_dataset"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_dataset</span></code></a> return
+<code class="code highlight python docutils literal highlight-python"><span class="kc">None</span></code> for <cite>y</cite></p></li>
+</ul>
+</li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">bundles/version</span></code> attribute, is the version of the bundle.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">bundles/tag</span></code> attribute is the default tag of the bundle which is used
+unless the user specifies an alternative bundle. If not specified, the tag is
+<cite>default</cite>.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">bundles/collections</span></code> attribute is a dictionary of named collections of
+datasets which can be specified when using
+<code class="code highlight python docutils literal highlight-python"><span class="n">load_datasets</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">collection</span><span class="o">=</span><span class="s2">"key"</span><span class="p">)</span></code></p></li>
+</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">bundle_url</span></code> points to a remote location that for each bundle <code class="docutils literal notranslate"><span class="pre">key</span></code>,
+contains two files with extensions <code class="docutils literal notranslate"><span class="pre">.zip</span></code> and <code class="docutils literal notranslate"><span class="pre">.sha</span></code> respectively. In the
+example, <code class="docutils literal notranslate"><span class="pre">bundle_url</span></code> should contain the two files
+<code class="docutils literal notranslate"><span class="pre">example/default-v1.0.zip</span></code> and <code class="docutils literal notranslate"><span class="pre">example/default-v1.0.sha</span></code> The <code class="docutils literal notranslate"><span class="pre">.sha</span></code>-file
+should contain the <code class="docutils literal notranslate"><span class="pre">sha1</span></code> hash of the <code class="docutils literal notranslate"><span class="pre">.zip</span></code>-file to ensure the integrity
+of the downloaded file. The <code class="docutils literal notranslate"><span class="pre">zip</span></code>-file should contain the datasets.</p>
+<p>By default, wildboar supports dataset bundles formatted as <code class="docutils literal notranslate"><span class="pre">zip</span></code>-files
+containing <cite>npy</cite> or <cite>npz</cite>-files, as created by <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.save.html#numpy.save" title="(in NumPy v2.5)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.save</span></code></a> and
+<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.savez.html#numpy.savez" title="(in NumPy v2.5)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.savez</span></code></a>. The datasets in the <code class="docutils literal notranslate"><span class="pre">zip</span></code>-file must be named according
+to the regular expression <code class="docutils literal notranslate"><span class="pre">{dataset_name}(_TRAIN|_TEST)?.(npy|npz)</span></code>. That is,
+the dataset name (as specified when using <cite>load_dataset</cite>) and optionally
+<cite>_TRAIN</cite> or <code class="docutils literal notranslate"><span class="pre">_TEST</span></code> followed by the extension <code class="docutils literal notranslate"><span class="pre">npy</span></code> or <code class="docutils literal notranslate"><span class="pre">npz</span></code>. If there
+are multiple datasets with the same name but different training or testing
+tags, they will be merged. As such, if both <code class="docutils literal notranslate"><span class="pre">_TRAIN</span></code> and <code class="docutils literal notranslate"><span class="pre">_TEST</span></code> files are
+present for the same name, <code class="docutils literal notranslate"><span class="pre">load_dataset</span></code> can return these train and test
+samples separately by setting <code class="code highlight python docutils literal highlight-python"><span class="n">merge_train_test</span><span class="o">=</span><span class="kc">False</span></code>. For example,
+the <code class="docutils literal notranslate"><span class="pre">ucr</span></code>-bundle provides the default train/test splits from the UCR time
+series repository.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">wildboar.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dataset</span>
+<span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span>
+   <span class="s1">'GunPoint'</span><span class="p">,</span> <span class="n">repository</span><span class="o">=</span><span class="s1">'wildboar/ucr'</span><span class="p">,</span> <span class="n">merge_train_test</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../datasets.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Datasets</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="preprocess.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Pre-processing</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#repository-definitions">Repository definitions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing-repositories">Installing repositories</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#local-cache">Local cache</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#json-repositories">JSON repositories</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../_sources/guide/datasets/repositories.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2023, Isak Samsten.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.1.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

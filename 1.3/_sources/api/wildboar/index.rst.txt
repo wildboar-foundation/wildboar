@@ -1,0 +1,40 @@
+
+******************
+:py:mod:`wildboar`
+******************
+
+.. py:module:: wildboar
+
+.. autoapi-nested-parse::
+
+   
+   Wildboar - a library for temporal machine learning.
+
+   Wildboar includes numerous temporal machine learning algorithms and seamlessly
+   integrates them with `scikit-learn <https://scikit-learn.org>`__.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+
+
+
+.. raw:: html
+
+   <br />
+
+
