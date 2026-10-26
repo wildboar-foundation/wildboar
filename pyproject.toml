@@ -5,10 +5,10 @@ description = "Time series learning with Python."
 dynamic = ["version", "readme"]
 license = "BSD-3-Clause"
 license-files = ["LICENSE"]
-requires-python = ">=3.11"
+requires-python = ">=3.12"
 dependencies = [
-  "numpy>=1.22.0",
-  "scipy>=1.8.0",
+  "numpy>=1.24.1",
+  "scipy>=1.10.0",
   "scikit-learn>=1.8"
 ]
 classifiers = [
@@ -42,7 +42,6 @@ write_to = "src/wildboar/version.py"
 version_scheme = "release-branch-semver"
 
 [tool.setuptools.dynamic]
-version = { attr = "wildboar.__version__" }
 readme = { file = ["README.md"] }
 
 [tool.setuptools.packages.find]
@@ -55,7 +54,7 @@ where = ["src"]
 requires = [
     "setuptools>=77.0",
     "wheel",
-    "cython>=3.0.10",
+    "cython>=3.1.2,<3.2.6",
     "setuptools-scm>=8",
     "numpy>=2",
     "scikit-learn>=1.8",
@@ -63,6 +62,27 @@ requires = [
 ]
 
 build-backend = "setuptools.build_meta"
+
+
+[dependency-groups]
+build = [
+    "setuptools>=77.0",
+    "wheel",
+    "cython>=3.0.10",
+    "setuptools-scm>=8",
+    "numpy>=2",
+    "scikit-learn>=1.8",
+    "scipy>=1.8.0",
+]
+dev = [
+    { include-group = "build" },
+    "pytest",
+    "pytest-benchmark",
+    "networkx",
+    "pre-commit",
+    "flake8==6.0.0",
+    "black==26.3.1",
+]
 
 
 [tool.ruff]

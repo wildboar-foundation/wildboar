@@ -51,28 +51,59 @@ features or pull requests. The process is simple.
 
          apt install build-essential python3-dev python3-pip
 
-3. Optionally create a new
-   `virtual environment <https://docs.python.org/3/tutorial/venv.html>`_.
-
-4. Install the required Python-packages using pip
+3. Install `uv <https://docs.astral.sh/uv/getting-started/installation/>`_
+   and enter the repository:
 
    .. code-block:: shell
 
-      pip install -r requirements.txt
+      cd wildboar
+      uv sync
 
-5. Build the project in editable mode to ease development
+   This creates ``.venv``, installs Wildboar in editable mode, and installs the
+   development dependencies. On systems with Make, ``make deps`` runs the same
+   command. Run it again when dependencies change.
 
-   .. code-block:: shell
+Incremental development builds
+==============================
 
-      pip install --verbose --no-build-isolation --editable .
+After editing Cython code, rebuild extensions without reinstalling the package:
 
-   Alternatively, if you just want to install Wildboar run:
+.. code-block:: shell
 
-   .. code-block:: shell
+   make build
 
-      pip install .
+Run tests with:
 
-   .. note::
-      The environment variable ``WILDBOAR_BUILD`` is used to control arguments to
-      the build environment. Setting ``WILDBOAR_BUILD=optimized`` can build a
-      version optimized for the current processor architecture.
+.. code-block:: shell
+
+   make test
+
+To build the documentation, run ``make docs-deps`` followed by ``make docs``.
+Run ``make docs-deps`` again after syncing if uv removed the documentation tools.
+
+Build options
+=============
+
+The environment variable ``WILDBOAR_BUILD`` controls compiler options. Supported
+values are ``default``, ``debug`` and ``optimize``. For example:
+
+.. code-block:: shell
+
+   WILDBOAR_BUILD=optimize make rebuild
+
+Use ``make rebuild`` when changing compiler flags or build mode.
+
+Additional ``build_ext`` options can be passed through Make, for example:
+
+.. code-block:: shell
+
+   make build BUILD_EXT_ARGS="--parallel 4"
+
+Regular installation
+====================
+
+If you only want to install Wildboar from source rather than develop it, use:
+
+.. code-block:: shell
+
+   uv pip install .

@@ -1,39 +1,37 @@
-VENV           = .venv
-VENV_PYTHON    = $(VENV)/bin/python
-SYSTEM_PYTHON  = $(or $(shell which python3), $(shell which python))
-PYTHON         = $(or $(wildcard $(VENV_PYTHON)), $(SYSTEM_PYTHON))
+UV ?= uv
+BUILD_EXT_ARGS ?=
+TESTS ?= tests
+PYTEST_ARGS ?=
+DEPS_STAMP = .venv/.wildboar-deps
+DEPS_INPUTS = pyproject.toml $(wildcard uv.lock)
 
 .DEFAULT_GOAL := build
 
-$(VENV_PYTHON):
-	rm -rf $(VENV)
-	$(SYSTEM_PYTHON) -m venv $(VENV)
+# Sync once, then again only when dependency metadata changes.
+$(DEPS_STAMP): $(DEPS_INPUTS)
+	$(UV) sync
+	touch $@
 
-venv: $(VENV_PYTHON)
+deps: $(DEPS_STAMP)
 
+# Reuse compilation artifacts between dependency syncs.
+build: deps
+	$(UV) run --no-sync python setup.py build_ext --inplace $(BUILD_EXT_ARGS)
 
-deps:
-	$(PYTHON) -m pip install -r requirements-dev.txt
+rebuild: deps
+	$(UV) run --no-sync python setup.py build_ext --inplace --force $(BUILD_EXT_ARGS)
 
-.PHONY: venv deps
+test: deps
+	$(UV) run --no-sync python -m pytest --benchmark-skip $(TESTS) $(PYTEST_ARGS)
 
-test:
-	$(PYTHON) -m pytest --benchmark-skip tests 
-
-.PHONY: test
-
-build:
-	$(PYTHON) -m pip install --verbose --no-build-isolation --editable .
-
+# Install a regular (non-editable) build into the project environment.
 install:
-	$(SYSTEM_PYTHON) -m pip install .
+	$(UV) pip install .
 
-.PHONY: build install
-
-docs-deps:
-	$(PYTHON) -m pip install -r docs/requirements.txt
+docs-deps: deps
+	$(UV) pip install -r docs/requirements.txt
 
 docs:
-	$(PYTHON) -m sphinx docs build/html
+	$(UV) run --no-sync python -m sphinx docs build/html
 
-.PHONY: docs docs-deps
+.PHONY: deps build rebuild test install docs-deps docs
