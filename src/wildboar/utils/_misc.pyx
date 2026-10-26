@@ -9,6 +9,8 @@
 
 import numpy as np
 
+from cpython.pyport cimport PY_SSIZE_T_MAX
+
 from libc.math cimport M_PI, cos, log, log2, sin, sqrt, INFINITY, fabs
 from libc.stdlib cimport realloc, malloc, free
 from libc.string cimport memset
@@ -62,7 +64,13 @@ cdef void _heap_shift_up(
 cdef class Heap:
 
     def __cinit__(self, Py_ssize_t max_elements):
+        if max_elements <= 0:
+            raise ValueError("max_elements must be positive")
+        if max_elements > PY_SSIZE_T_MAX // sizeof(HeapElement):
+            raise MemoryError("Heap capacity is too large")
         self.heap = <HeapElement*> malloc(sizeof(HeapElement) * max_elements)
+        if self.heap == NULL:
+            raise MemoryError()
         self.n_elements = 0
         self.max_elements = max_elements
 
