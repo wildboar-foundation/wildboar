@@ -42,7 +42,7 @@ write_to = "src/wildboar/version.py"
 version_scheme = "release-branch-semver"
 
 [tool.setuptools.dynamic]
-readme = { file = ["README.md"] }
+readme = { file = ["README.md"], content-type = "text/markdown" }
 
 [tool.setuptools.packages.find]
 where = ["src"]
