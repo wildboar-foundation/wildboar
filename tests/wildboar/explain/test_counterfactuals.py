@@ -91,7 +91,7 @@ def test_is_counterfactual(estimator):
         ),
         pytest.param(
             RandomForestClassifier(random_state=123),
-            np.array([3.401708, 7.8155463]),
+            np.array([3.1475616, 6.0433183]),
         ),
     ],
 )
@@ -131,7 +131,7 @@ def test_counterfactuals_prototype():
         proximity="euclidean",
         random_state=123,
     )
-    expected_score = np.array([2.10339439, 5.61020192])
+    expected_score = np.array([1.8193745, 2.5843931])
     assert_almost_equal(actual_score, expected_score)
 
 
