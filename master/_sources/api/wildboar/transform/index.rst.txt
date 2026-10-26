@@ -170,7 +170,7 @@ Functions
 
       :Parameters:
 
-          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+          **x** : array-like of shape (n_samples, n_timestep) or (n_samples, n_dimensions, n_timestep)
               The time series dataset.
 
           **y** : None, optional
@@ -205,7 +205,7 @@ Functions
 
       :Parameters:
 
-          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+          **x** : array-like of shape (n_samples, n_timestep) or (n_samples, n_dimensions, n_timestep)
               The time series dataset.
 
           **y** : None, optional
@@ -301,8 +301,9 @@ Functions
       
       Set output container.
 
-      See :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py`
-      for an example on how to use the API.
+      Refer to the :ref:`user guide <df_output_transform>` for more details
+      and :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py` for an
+      example on how to use the API.
 
       :Parameters:
 
@@ -382,7 +383,7 @@ Functions
 
       :Parameters:
 
-          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+          **x** : array-like of shape (n_samples, n_timestep) or (n_samples, n_dimensions, n_timestep)
               The time series dataset.
 
 
@@ -493,7 +494,7 @@ Functions
           **X** : array-like of shape (n_samples, n_features)
               Input samples.
 
-          **y** :  array-like of shape (n_samples,) or (n_samples, n_outputs),                 default=None
+          **y** :  array-like of shape (n_samples,) or (n_samples, n_outputs), default=None
               Target values (None for unsupervised transformations).
 
           **\*\*fit_params** : dict
@@ -590,8 +591,9 @@ Functions
       
       Set output container.
 
-      See :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py`
-      for an example on how to use the API.
+      Refer to the :ref:`user guide <df_output_transform>` for more details
+      and :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py` for an
+      example on how to use the API.
 
       :Parameters:
 
@@ -772,7 +774,7 @@ Functions
           **X** : array-like of shape (n_samples, n_features)
               Input samples.
 
-          **y** :  array-like of shape (n_samples,) or (n_samples, n_outputs),                 default=None
+          **y** :  array-like of shape (n_samples,) or (n_samples, n_outputs), default=None
               Target values (None for unsupervised transformations).
 
           **\*\*fit_params** : dict
@@ -869,8 +871,9 @@ Functions
       
       Set output container.
 
-      See :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py`
-      for an example on how to use the API.
+      Refer to the :ref:`user guide <df_output_transform>` for more details
+      and :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py` for an
+      example on how to use the API.
 
       :Parameters:
 
@@ -1075,7 +1078,7 @@ Functions
 
       :Parameters:
 
-          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+          **x** : array-like of shape (n_samples, n_timestep) or (n_samples, n_dimensions, n_timestep)
               The time series dataset.
 
           **y** : None, optional
@@ -1110,7 +1113,7 @@ Functions
 
       :Parameters:
 
-          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+          **x** : array-like of shape (n_samples, n_timestep) or (n_samples, n_dimensions, n_timestep)
               The time series dataset.
 
           **y** : None, optional
@@ -1206,8 +1209,9 @@ Functions
       
       Set output container.
 
-      See :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py`
-      for an example on how to use the API.
+      Refer to the :ref:`user guide <df_output_transform>` for more details
+      and :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py` for an
+      example on how to use the API.
 
       :Parameters:
 
@@ -1287,7 +1291,7 @@ Functions
 
       :Parameters:
 
-          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+          **x** : array-like of shape (n_samples, n_timestep) or (n_samples, n_dimensions, n_timestep)
               The time series dataset.
 
 
@@ -1369,7 +1373,7 @@ Functions
 
       :Parameters:
 
-          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+          **x** : array-like of shape (n_samples, n_timestep) or (n_samples, n_dimensions, n_timestep)
               The time series dataset.
 
           **y** : None, optional
@@ -1404,7 +1408,7 @@ Functions
 
       :Parameters:
 
-          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+          **x** : array-like of shape (n_samples, n_timestep) or (n_samples, n_dimensions, n_timestep)
               The time series dataset.
 
           **y** : None, optional
@@ -1500,8 +1504,9 @@ Functions
       
       Set output container.
 
-      See :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py`
-      for an example on how to use the API.
+      Refer to the :ref:`user guide <df_output_transform>` for more details
+      and :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py` for an
+      example on how to use the API.
 
       :Parameters:
 
@@ -1581,7 +1586,7 @@ Functions
 
       :Parameters:
 
-          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+          **x** : array-like of shape (n_samples, n_timestep) or (n_samples, n_dimensions, n_timestep)
               The time series dataset.
 
 
@@ -1682,7 +1687,7 @@ Functions
           **X** : array-like of shape (n_samples, n_features)
               Input samples.
 
-          **y** :  array-like of shape (n_samples,) or (n_samples, n_outputs),                 default=None
+          **y** :  array-like of shape (n_samples,) or (n_samples, n_outputs), default=None
               Target values (None for unsupervised transformations).
 
           **\*\*fit_params** : dict
@@ -1779,8 +1784,9 @@ Functions
       
       Set output container.
 
-      See :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py`
-      for an example on how to use the API.
+      Refer to the :ref:`user guide <df_output_transform>` for more details
+      and :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py` for an
+      example on how to use the API.
 
       :Parameters:
 
@@ -1995,7 +2001,7 @@ Functions
 
       :Parameters:
 
-          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+          **x** : array-like of shape (n_samples, n_timestep) or (n_samples, n_dimensions, n_timestep)
               The time series dataset.
 
           **y** : None, optional
@@ -2030,7 +2036,7 @@ Functions
 
       :Parameters:
 
-          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+          **x** : array-like of shape (n_samples, n_timestep) or (n_samples, n_dimensions, n_timestep)
               The time series dataset.
 
           **y** : None, optional
@@ -2126,8 +2132,9 @@ Functions
       
       Set output container.
 
-      See :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py`
-      for an example on how to use the API.
+      Refer to the :ref:`user guide <df_output_transform>` for more details
+      and :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py` for an
+      example on how to use the API.
 
       :Parameters:
 
@@ -2207,7 +2214,7 @@ Functions
 
       :Parameters:
 
-          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+          **x** : array-like of shape (n_samples, n_timestep) or (n_samples, n_dimensions, n_timestep)
               The time series dataset.
 
 
@@ -2371,7 +2378,7 @@ Functions
 
       :Parameters:
 
-          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+          **x** : array-like of shape (n_samples, n_timestep) or (n_samples, n_dimensions, n_timestep)
               The time series dataset.
 
           **y** : None, optional
@@ -2406,7 +2413,7 @@ Functions
 
       :Parameters:
 
-          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+          **x** : array-like of shape (n_samples, n_timestep) or (n_samples, n_dimensions, n_timestep)
               The time series dataset.
 
           **y** : None, optional
@@ -2502,8 +2509,9 @@ Functions
       
       Set output container.
 
-      See :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py`
-      for an example on how to use the API.
+      Refer to the :ref:`user guide <df_output_transform>` for more details
+      and :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py` for an
+      example on how to use the API.
 
       :Parameters:
 
@@ -2583,7 +2591,7 @@ Functions
 
       :Parameters:
 
-          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+          **x** : array-like of shape (n_samples, n_timestep) or (n_samples, n_dimensions, n_timestep)
               The time series dataset.
 
 
@@ -2666,7 +2674,7 @@ Functions
 
       :Parameters:
 
-          **x** : array-like of shape (n_samples, n_timesteps)         or (n_samples, n_dims, n_timesteps)
+          **x** : array-like of shape (n_samples, n_timesteps) or (n_samples, n_dims, n_timesteps)
               The samples.
 
           **y** : ignored
@@ -2706,7 +2714,7 @@ Functions
           **X** : array-like of shape (n_samples, n_features)
               Input samples.
 
-          **y** :  array-like of shape (n_samples,) or (n_samples, n_outputs),                 default=None
+          **y** :  array-like of shape (n_samples,) or (n_samples, n_outputs), default=None
               Target values (None for unsupervised transformations).
 
           **\*\*fit_params** : dict
@@ -2803,8 +2811,9 @@ Functions
       
       Set output container.
 
-      See :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py`
-      for an example on how to use the API.
+      Refer to the :ref:`user guide <df_output_transform>` for more details
+      and :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py` for an
+      example on how to use the API.
 
       :Parameters:
 
@@ -2884,7 +2893,7 @@ Functions
 
       :Parameters:
 
-          **x** : array-like of shape (n_samples, n_timesteps)         or (n_samples, n_dims, n_timesteps)
+          **x** : array-like of shape (n_samples, n_timesteps) or (n_samples, n_dims, n_timesteps)
               The samples.
 
 
@@ -2953,7 +2962,7 @@ Functions
           **X** : array-like of shape (n_samples, n_features)
               Input samples.
 
-          **y** :  array-like of shape (n_samples,) or (n_samples, n_outputs),                 default=None
+          **y** :  array-like of shape (n_samples,) or (n_samples, n_outputs), default=None
               Target values (None for unsupervised transformations).
 
           **\*\*fit_params** : dict
@@ -3050,8 +3059,9 @@ Functions
       
       Set output container.
 
-      See :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py`
-      for an example on how to use the API.
+      Refer to the :ref:`user guide <df_output_transform>` for more details
+      and :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py` for an
+      example on how to use the API.
 
       :Parameters:
 
@@ -3191,7 +3201,7 @@ Functions
 
       :Parameters:
 
-          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+          **x** : array-like of shape (n_samples, n_timestep) or (n_samples, n_dimensions, n_timestep)
               The time series dataset.
 
           **y** : None, optional
@@ -3226,7 +3236,7 @@ Functions
 
       :Parameters:
 
-          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+          **x** : array-like of shape (n_samples, n_timestep) or (n_samples, n_dimensions, n_timestep)
               The time series dataset.
 
           **y** : None, optional
@@ -3322,8 +3332,9 @@ Functions
       
       Set output container.
 
-      See :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py`
-      for an example on how to use the API.
+      Refer to the :ref:`user guide <df_output_transform>` for more details
+      and :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py` for an
+      example on how to use the API.
 
       :Parameters:
 
@@ -3403,7 +3414,7 @@ Functions
 
       :Parameters:
 
-          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+          **x** : array-like of shape (n_samples, n_timestep) or (n_samples, n_dimensions, n_timestep)
               The time series dataset.
 
 
@@ -3500,7 +3511,7 @@ Functions
           **X** : array-like of shape (n_samples, n_features)
               Input samples.
 
-          **y** :  array-like of shape (n_samples,) or (n_samples, n_outputs),                 default=None
+          **y** :  array-like of shape (n_samples,) or (n_samples, n_outputs), default=None
               Target values (None for unsupervised transformations).
 
           **\*\*fit_params** : dict
@@ -3597,8 +3608,9 @@ Functions
       
       Set output container.
 
-      See :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py`
-      for an example on how to use the API.
+      Refer to the :ref:`user guide <df_output_transform>` for more details
+      and :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py` for an
+      example on how to use the API.
 
       :Parameters:
 
@@ -3784,7 +3796,7 @@ Functions
           **X** : array-like of shape (n_samples, n_features)
               Input samples.
 
-          **y** :  array-like of shape (n_samples,) or (n_samples, n_outputs),                 default=None
+          **y** :  array-like of shape (n_samples,) or (n_samples, n_outputs), default=None
               Target values (None for unsupervised transformations).
 
           **\*\*fit_params** : dict
@@ -3881,8 +3893,9 @@ Functions
       
       Set output container.
 
-      See :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py`
-      for an example on how to use the API.
+      Refer to the :ref:`user guide <df_output_transform>` for more details
+      and :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py` for an
+      example on how to use the API.
 
       :Parameters:
 
@@ -4093,7 +4106,7 @@ Functions
 
       :Parameters:
 
-          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+          **x** : array-like of shape (n_samples, n_timestep) or (n_samples, n_dimensions, n_timestep)
               The time series dataset.
 
           **y** : None, optional
@@ -4128,7 +4141,7 @@ Functions
 
       :Parameters:
 
-          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+          **x** : array-like of shape (n_samples, n_timestep) or (n_samples, n_dimensions, n_timestep)
               The time series dataset.
 
           **y** : None, optional
@@ -4224,8 +4237,9 @@ Functions
       
       Set output container.
 
-      See :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py`
-      for an example on how to use the API.
+      Refer to the :ref:`user guide <df_output_transform>` for more details
+      and :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py` for an
+      example on how to use the API.
 
       :Parameters:
 
@@ -4305,7 +4319,7 @@ Functions
 
       :Parameters:
 
-          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+          **x** : array-like of shape (n_samples, n_timestep) or (n_samples, n_dimensions, n_timestep)
               The time series dataset.
 
 
@@ -4453,7 +4467,7 @@ Functions
 
       :Parameters:
 
-          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+          **x** : array-like of shape (n_samples, n_timestep) or (n_samples, n_dimensions, n_timestep)
               The time series dataset.
 
           **y** : None, optional
@@ -4488,7 +4502,7 @@ Functions
 
       :Parameters:
 
-          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+          **x** : array-like of shape (n_samples, n_timestep) or (n_samples, n_dimensions, n_timestep)
               The time series dataset.
 
           **y** : None, optional
@@ -4584,8 +4598,9 @@ Functions
       
       Set output container.
 
-      See :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py`
-      for an example on how to use the API.
+      Refer to the :ref:`user guide <df_output_transform>` for more details
+      and :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py` for an
+      example on how to use the API.
 
       :Parameters:
 
@@ -4665,7 +4680,7 @@ Functions
 
       :Parameters:
 
-          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+          **x** : array-like of shape (n_samples, n_timestep) or (n_samples, n_dimensions, n_timestep)
               The time series dataset.
 
 
@@ -4767,7 +4782,7 @@ Functions
           **X** : array-like of shape (n_samples, n_features)
               Input samples.
 
-          **y** :  array-like of shape (n_samples,) or (n_samples, n_outputs),                 default=None
+          **y** :  array-like of shape (n_samples,) or (n_samples, n_outputs), default=None
               Target values (None for unsupervised transformations).
 
           **\*\*fit_params** : dict
@@ -4864,8 +4879,9 @@ Functions
       
       Set output container.
 
-      See :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py`
-      for an example on how to use the API.
+      Refer to the :ref:`user guide <df_output_transform>` for more details
+      and :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py` for an
+      example on how to use the API.
 
       :Parameters:
 
@@ -5096,7 +5112,7 @@ Functions
 
       :Parameters:
 
-          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+          **x** : array-like of shape (n_samples, n_timestep) or (n_samples, n_dimensions, n_timestep)
               The time series dataset.
 
           **y** : None, optional
@@ -5131,7 +5147,7 @@ Functions
 
       :Parameters:
 
-          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+          **x** : array-like of shape (n_samples, n_timestep) or (n_samples, n_dimensions, n_timestep)
               The time series dataset.
 
           **y** : None, optional
@@ -5227,8 +5243,9 @@ Functions
       
       Set output container.
 
-      See :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py`
-      for an example on how to use the API.
+      Refer to the :ref:`user guide <df_output_transform>` for more details
+      and :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py` for an
+      example on how to use the API.
 
       :Parameters:
 
@@ -5308,7 +5325,7 @@ Functions
 
       :Parameters:
 
-          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+          **x** : array-like of shape (n_samples, n_timestep) or (n_samples, n_dimensions, n_timestep)
               The time series dataset.
 
 

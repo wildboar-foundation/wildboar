@@ -132,7 +132,7 @@ Classes
           **X** : array-like of shape (n_samples, n_features)
               Input samples.
 
-          **y** :  array-like of shape (n_samples,) or (n_samples, n_outputs),                 default=None
+          **y** :  array-like of shape (n_samples,) or (n_samples, n_outputs), default=None
               Target values (None for unsupervised transformations).
 
           **\*\*fit_params** : dict
@@ -229,8 +229,9 @@ Classes
       
       Set output container.
 
-      See :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py`
-      for an example on how to use the API.
+      Refer to the :ref:`user guide <df_output_transform>` for more details
+      and :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py` for an
+      example on how to use the API.
 
       :Parameters:
 
@@ -408,7 +409,7 @@ Classes
           **X** : array-like of shape (n_samples, n_features)
               Input samples.
 
-          **y** :  array-like of shape (n_samples,) or (n_samples, n_outputs),                 default=None
+          **y** :  array-like of shape (n_samples,) or (n_samples, n_outputs), default=None
               Target values (None for unsupervised transformations).
 
           **\*\*fit_params** : dict
@@ -505,8 +506,9 @@ Classes
       
       Set output container.
 
-      See :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py`
-      for an example on how to use the API.
+      Refer to the :ref:`user guide <df_output_transform>` for more details
+      and :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py` for an
+      example on how to use the API.
 
       :Parameters:
 
@@ -700,7 +702,7 @@ Classes
           **X** : array-like of shape (n_samples, n_features)
               Input samples.
 
-          **y** :  array-like of shape (n_samples,) or (n_samples, n_outputs),                 default=None
+          **y** :  array-like of shape (n_samples,) or (n_samples, n_outputs), default=None
               Target values (None for unsupervised transformations).
 
           **\*\*fit_params** : dict
@@ -797,8 +799,9 @@ Classes
       
       Set output container.
 
-      See :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py`
-      for an example on how to use the API.
+      Refer to the :ref:`user guide <df_output_transform>` for more details
+      and :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py` for an
+      example on how to use the API.
 
       :Parameters:
 
@@ -995,7 +998,7 @@ Classes
           **X** : array-like of shape (n_samples, n_features)
               Input samples.
 
-          **y** :  array-like of shape (n_samples,) or (n_samples, n_outputs),                 default=None
+          **y** :  array-like of shape (n_samples,) or (n_samples, n_outputs), default=None
               Target values (None for unsupervised transformations).
 
           **\*\*fit_params** : dict
@@ -1092,8 +1095,9 @@ Classes
       
       Set output container.
 
-      See :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py`
-      for an example on how to use the API.
+      Refer to the :ref:`user guide <df_output_transform>` for more details
+      and :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py` for an
+      example on how to use the API.
 
       :Parameters:
 

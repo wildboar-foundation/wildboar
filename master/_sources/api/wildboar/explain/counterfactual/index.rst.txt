@@ -1000,28 +1000,201 @@ Functions
           !! processed by numpydoc !!
 
 
-.. py:class:: PrototypeCounterfactual(metric='euclidean', *, r=1.0, g=0.05, max_iter=100, step_size=0.1, n_prototypes='auto', target='predict', method='sample', min_shapelet_size=0.0, max_shapelet_size=1.0, random_state=None, verbose=False)
+.. py:class:: PrototypeCounterfactual(metric='euclidean', *, r=1.0, g=0.05, max_iter=100, step_size='adaptive', n_prototypes='auto', target='predict', method='sample', sampling_temperature=1.0, optimizer='greedy', beam_width=5, n_branches=3, refine=['path', 'global'], refine_iter=5, min_shapelet_size=0.0, max_shapelet_size=1.0, n_shapelets=1000, k_best_shapelets=10, random_state=None, n_jobs=None)
 
 
 
    
    Model agnostic approach for constructing counterfactual explanations.
 
+   This method generates counterfactual explanations by iteratively moving
+   a sample toward prototypes of the target class until the classifier's
+   prediction changes. The movement is guided by the selected metric
+   (Euclidean or DTW-based), and the process can be optimized using
+   different search strategies.
 
+   :Parameters:
+
+       **metric** : {'euclidean', 'dtw', 'wdtw'}, optional
+           The distance metric used to compute the movement direction toward
+           prototypes.
+           
+           - 'euclidean': Standard Euclidean distance. Fast but sensitive to
+             temporal misalignment.
+           - 'dtw': Dynamic Time Warping. Handles temporal shifts but slower.
+           - 'wdtw': Weighted DTW with penalty for large warping. Balances
+             flexibility and stability.
+
+       **r** : float, optional
+           The Sakoe-Chiba warping window size as a fraction of the time series
+           length. Only used when ``metric='dtw'`` or ``metric='wdtw'``. A value
+           of 1.0 allows unrestricted warping, while smaller values constrain
+           the warping path to stay close to the diagonal. Default is 1.0.
+
+       **g** : float, optional
+           The penalty parameter for weighted DTW. Only used when
+           ``metric='wdtw'``. Controls how much large warpings are penalized.
+           Larger values result in behavior closer to Euclidean distance.
+           Default is 0.05.
+
+       **max_iter** : int, optional
+           Maximum number of iterations for the optimization process. The search
+           terminates when this limit is reached, even if no valid counterfactual
+           has been found. Default is 100.
+
+       **step_size** : {"adaptive"} or float, optional
+           Controls how far the sample moves toward the prototype at each step.
+           
+           - 'adaptive': Automatically estimates an appropriate step size using
+             a Lipschitz-based estimate of the distance to the decision boundary.
+             This typically leads to faster convergence.
+           - float: Uses a fixed step size computed as ``step_size * mean_dist``,
+             where ``mean_dist`` is the mean positive pairwise distance in the
+             training data. For example, ``step_size=0.2`` moves 20% of the
+             typical inter-sample spacing per iteration.
+           
+           Default is 'adaptive'.
+
+       **n_prototypes** : int, float, or {'auto'}, optional
+           The number of prototypes to consider when selecting movement targets.
+           
+           - 'auto': Automatically determines the number based on dataset size.
+           - int: Uses exactly this many prototypes per class.
+           - float: Uses this fraction of training samples per class as prototypes.
+           
+           Default is 'auto'.
+
+       **sampling_temperature** : float, optional
+           Temperature parameter for prototype sampling when ``method`` is
+           'nearest' or 'nearest_shapelet'. Controls the randomness of prototype
+           selection using softmax weighting: ``exp(-distance / temperature)``.
+           
+           - High values (e.g., 10.0): More uniform sampling across prototypes.
+           - Low values (e.g., 0.1): Greedy selection of nearest prototypes.
+           - 1.0: Balanced sampling weighted by distance.
+           
+           Default is 1.0.
+
+       **target** : float or {'predict'}, optional
+           Defines when a counterfactual is considered successful.
+           
+           - 'predict': The counterfactual is valid when the classifier's
+             predicted probability for the target class becomes the argmax.
+           - float (0.5-1.0): The counterfactual is valid when the predicted
+             probability for the target class exceeds this threshold. Higher
+             values produce more confident counterfactuals but may require
+             larger modifications.
+           
+           Default is 'predict'.
+
+       **method** : {'sample', 'shapelet', 'nearest', 'nearest_shapelet', 'discriminative_shapelet'}, optional
+           Strategy for selecting prototypes to move toward.
+           
+           - 'sample': Uniformly samples a prototype from all training samples
+             of the target class.
+           - 'shapelet': Samples a shapelet (subsequence) from a randomly
+             selected prototype. Produces more localized changes.
+           - 'nearest': Samples from the k-nearest prototypes to the current
+             sample, weighted by distance and temperature.
+           - 'nearest_shapelet': Combines 'nearest' and 'shapelet' - samples
+             shapelets from nearby prototypes.
+           - 'discriminative_shapelet': Uses shapelets that are most
+             discriminative between classes, based on Cohen's d effect size.
+           
+           Default is 'sample'.
+
+       **optimizer** : {'greedy', 'best_first', 'beam'}, optional
+           Search strategy for finding counterfactuals.
+           
+           - 'greedy': At each step, commits to a single move. Fast but may
+             get stuck in local optima.
+           - 'best_first': Explores the most promising states first using a
+             priority queue. More thorough but slower.
+           - 'beam': Maintains multiple candidate solutions in parallel,
+             keeping the top ``beam_width`` candidates at each step. Balances
+             exploration and efficiency.
+           
+           Default is 'greedy'.
+
+       **beam_width** : int, optional
+           Number of candidate solutions to maintain when ``optimizer='beam'``.
+           Larger values explore more of the search space but increase
+           computation time. Default is 5.
+
+       **n_branches** : int, optional
+           Number of different moves to try from each state during expansion.
+           Only used when ``optimizer`` is 'best_first' or 'beam'. Higher values
+           increase diversity but slow down the search. Default is 3.
+
+       **refine** : str, list, callable, or None, optional
+           Refinement strategy applied after finding a valid counterfactual to
+           minimize the distance from the original sample while maintaining
+           validity.
+           
+           - None: No refinement. Returns the counterfactual as-is.
+           - 'path': Backtracks along the search path to find the minimal
+             modification that still produces a valid counterfactual.
+           - 'global': Nudges the counterfactual back toward the original sample
+             in small steps until validity is lost.
+           - callable: Custom refinement function with signature
+             ``(cf, x_original, y_target, path, target_evaluator) -> cf_refined``.
+           - list: Applies multiple refinements in sequence (e.g.,
+             ``['path', 'global']``).
+           
+           Default is ``['path', 'global']``.
+
+       **refine_iter** : int, optional
+           Maximum number of iterations for each built-in refinement strategy.
+           Higher values may produce closer counterfactuals but increase
+           computation time. Ignored for custom callable refinements.
+           Default is 5.
+
+       **min_shapelet_size** : float, optional
+           Minimum shapelet length as a fraction of the time series length.
+           Only used when ``method`` is 'shapelet', 'nearest_shapelet', or
+           'discriminative_shapelet'. Default is 0.0 (no minimum).
+
+       **max_shapelet_size** : float, optional
+           Maximum shapelet length as a fraction of the time series length.
+           Only used when ``method`` is 'shapelet', 'nearest_shapelet', or
+           'discriminative_shapelet'. Default is 1.0 (full length).
+
+       **n_shapelets** : int, optional
+           Number of candidate shapelets to extract during shapelet discovery.
+           Only used when ``method='discriminative_shapelet'``. More candidates
+           increase the chance of finding discriminative patterns but slow down
+           fitting. Default is 1000.
+
+       **k_best_shapelets** : int, optional
+           Number of top-scoring shapelets to retain per class. Only used when
+           ``method='discriminative_shapelet'``. Shapelets are ranked by Cohen's
+           d effect size. Default is 10.
+
+       **random_state** : int, RandomState instance, or None, optional
+           Controls randomness for reproducibility. Pass an int for reproducible
+           results across multiple function calls. Default is None.
+
+       **n_jobs** : int or None, optional
+           Number of parallel jobs for shapelet extraction. Only used when
+           ``method='discriminative_shapelet'``. None means 1 job, -1 means
+           using all processors. Default is None.
 
    :Attributes:
 
        **estimator_** : object
-           The estimator for which counterfactuals are computed
+           The fitted estimator for which counterfactuals are computed.
 
-       **classes_** : ndarray
-           The classes
+       **classes_** : ndarray of shape (n_classes,)
+           The unique class labels from the training data.
 
        **partitions_** : dict
-           Dictionary of classes and PrototypeSampler
+           Dictionary mapping each class label to its corresponding
+           PrototypeSampler instance containing the prototypes for that class.
 
        **target_** : TargetEvaluator
-           The target evaluator
+           The evaluator used to determine if a candidate counterfactual is
+           valid (either PredictEvaluator or ProbabilityEvaluator depending
+           on the ``target`` parameter).
 
 
 

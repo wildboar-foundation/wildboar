@@ -63,10 +63,10 @@ Functions
 
    :Parameters:
 
-       **x_factual** : array-like of shape (n_samples, n_timesteps)             or (n_samples, n_dims, n_timeteps)
+       **x_factual** : array-like of shape (n_samples, n_timesteps) or (n_samples, n_dims, n_timeteps)
            The true samples.
 
-       **x_counterfactual** : array-like of shape (n_samples, n_timesteps)             or (n_samples, n_dims, n_timeteps)
+       **x_counterfactual** : array-like of shape (n_samples, n_timesteps) or (n_samples, n_dims, n_timeteps)
            The counterfactual samples.
 
        **window** : int, optional
